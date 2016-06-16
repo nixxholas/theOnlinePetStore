@@ -163,6 +163,8 @@ namespace WEBACA.APIs
                     newBrand.BrandCategory.Add(newBrandCategory);
                 }
 
+
+
                 //I cannot save the employee information into database yet. The 
                 //UploadBrandPhotoAndSaveEmployeeData has logic to upload the binary file to
                 //Cloudinary first, then it will save employee data into the database.
@@ -274,7 +276,9 @@ namespace WEBACA.APIs
                             break;
                         } 
                     }
-                    if (exists == false)
+                    // If an UpdatedBC does not exist in foundOneBrand,
+                    // We need to add it in
+                    if (exists == false && UpdatedBC.BrandId == foundOneBrand.BrandId)
                     {
                         foundOneBrand.BrandCategory.Add(UpdatedBC);
                     }
@@ -390,9 +394,57 @@ namespace WEBACA.APIs
             //Also get the current employee Photo information.
             var oneBrand = Database.Brands
                 .Where(Brand => Brand.BrandId == brandToBeUpdated.BrandId)
+                .Include(Brand => Brand.BrandCategory)
                 .Include(Brand => Brand.BrandPhoto).Single();
             oneBrand.BrandName = brandToBeUpdated.BrandName;
-            oneBrand.BrandCategory = brandToBeUpdated.BrandCategory;
+
+            // For loop to delete deleted entries
+            foreach (BrandCategory bc in oneBrand.BrandCategory)
+            {
+                bool exists = false;
+                foreach (BrandCategory UpdatedBC in brandToBeUpdated.BrandCategory)
+                {
+                    // Let BTBU be brandToBeUpdated
+                    // if the brandcategory is found in BTBU.BrandCategory
+                    if (bc.CatId == UpdatedBC.CatId && bc.BrandId == brandToBeUpdated.BrandId)
+                    {
+                        // Do no shit
+                        exists = true;
+                        break;
+                    }
+                }
+                if (exists == false && bc.DeletedAt == null)
+                {
+                    bc.DeletedAt = DateTime.Now;
+                }
+            }
+
+            // For loop to add entries
+            // Basically this creates new rows
+            // If the new brandcategory does not exist, create a new row
+            // if it already exists, set its deletedAt property to null
+            foreach (BrandCategory UpdatedBC in brandToBeUpdated.BrandCategory)
+            {
+                bool exists = false;
+                foreach (BrandCategory bc in oneBrand.BrandCategory)
+                {
+                    // If a brandcategory is found in updated bc, we make sure its
+                    // DeletedAt is null to make sure it is not marked as deleted.
+                    if (bc.CatId == UpdatedBC.CatId && bc.BrandId == brandToBeUpdated.BrandId)
+                    {
+                        bc.DeletedAt = null;
+                        exists = true;
+                        break;
+                    }
+                }
+                // If an UpdatedBC does not exist in foundOneBrand,
+                // We need to add it in
+                if (exists == false && UpdatedBC.BrandId == oneBrand.BrandId)
+                {
+                    oneBrand.BrandCategory.Add(UpdatedBC);
+                }
+            }
+
             var oneFile = fileInput[0];
             var fileName = ContentDispositionHeaderValue
                         .Parse(oneFile.ContentDisposition)
@@ -418,6 +470,7 @@ namespace WEBACA.APIs
                 oneBrand.BrandPhoto.Url = currentBrandPhoto.Url;
                 oneBrand.BrandPhoto.SecureUrl = currentBrandPhoto.SecureUrl;
             }
+
             Database.Brands.Update(oneBrand);
             Database.SaveChanges();
             var successRequestResultMessage = new

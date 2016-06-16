@@ -17040,7 +17040,7 @@
     "runtime.any.System.Linq.Expressions/4.0.11-beta-23516": {
       "type": "package",
       "serviceable": true,
-      "sha512": "P5nzo1Ye0GxB4BYdWian6Y427eTrhn1JS3jLWZq5bMWVn8hS/OIfyylASN0A/qqeLn4rGA0fOzmJSYqFSKvxgQ==",
+      "sha512": "4sPxQCjllMJ1uZNlwz/EataPyHSH+AqSDlOIPPqcy/88R2B+abfhPPC78rd7gvHp8KmMX4qbJF6lcCeDIQpmVg==",
       "files": [
         "lib/DNXCore50/System.Linq.Expressions.dll",
         "lib/MonoAndroid10/_._",
@@ -17062,7 +17062,7 @@
     "runtime.any.System.Xml.XmlSerializer/4.0.11-beta-23516": {
       "type": "package",
       "serviceable": true,
-      "sha512": "4dErKP2MaSljUyRkKQZ3gbdMzzGZyDvKMrFOpdPk2ig9hOJRNtWudadgqr1EcXMkUvbBm2Yib3FcREKoVEjGhQ==",
+      "sha512": "hDKjxtGcVgA9Ui1FwEggNXoUGgYT0/EpBIlrv+0beNsc+7FX4KiMjDYsmqydrmp27A96POGYys3yzf9QvHT2Uw==",
       "files": [
         "lib/DNXCore50/System.Xml.XmlSerializer.dll",
         "lib/MonoAndroid10/_._",
@@ -21290,7 +21290,7 @@
     "System.Xml.XmlSerializer/4.0.11-beta-23516": {
       "type": "package",
       "serviceable": true,
-      "sha512": "UeGNnA//E/z78qyfaOjcKlcu25Cir08Z6kj1lBCAOgxRNenrXfb8+eGT3wPkYLvak+mJaCR6rtv4/hzqGam7+g==",
+      "sha512": "1WhtxaWJBlql8Xxatd79PrAL8FPjWpjr98u+VOb6IGspUNaMfC78s3vfUkHFYaG/6s3BWGuXRESXmZi8MIlwaQ==",
       "files": [
         "lib/MonoAndroid10/_._",
         "lib/MonoTouch10/_._",
@@ -21354,7 +21354,9 @@
       "EntityFramework.Core >= 7.0.0-rc1-final",
       "EntityFramework.MicrosoftSqlServer >= 7.0.0-rc1-final",
       "Microsoft.AspNet.Diagnostics >= 1.0.0-rc1-final",
+      "Microsoft.AspNet.Diagnostics.Entity >= 7.0.0-rc1-final",
       "Microsoft.AspNet.Http.Features >= 1.0.0-rc1-final",
+      "Microsoft.AspNet.Identity.EntityFramework >= 3.0.0-rc1-final",
       "Microsoft.AspNet.IISPlatformHandler >= 1.0.0-rc1-final",
       "Microsoft.AspNet.Mvc >= 6.0.0-rc1-final",
       "Microsoft.AspNet.Mvc.TagHelpers >= 6.0.0-rc1-final",
@@ -21368,10 +21370,8 @@
       "Microsoft.Extensions.Logging >= 1.0.0-rc1-final",
       "Microsoft.Extensions.Logging.Console >= 1.0.0-rc1-final",
       "Microsoft.Extensions.Logging.Debug >= 1.0.0-rc1-final",
-      "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.0.0-rc1-final",
       "Microsoft.Net.Http >= 2.2.22",
-      "Microsoft.AspNet.Identity.EntityFramework >= 3.0.0-rc1-final",
-      "Microsoft.AspNet.Diagnostics.Entity >= 7.0.0-rc1-final"
+      "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.0.0-rc1-final"
     ],
     "DNX,Version=v4.5.1": [],
     "DNXCore,Version=v5.0": []

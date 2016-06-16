@@ -24,7 +24,7 @@ namespace WEBACA.APIs
         {
             List<object> brandCategoryList = new List<object>();
             var brandCategories = Database.BrandCategory
-                .Where(eachBrandCategoryEntity => eachBrandCategoryEntity.DeletedAt != null)
+                .Where(eachBrandCategoryEntity => eachBrandCategoryEntity.DeletedAt == null)
             .Include(eachBrandCategoryEntity => eachBrandCategoryEntity.Brand)
             .Include(eachBrandCategoryEntity => eachBrandCategoryEntity.Category);
 
