@@ -1,0 +1,135 @@
+﻿<div class="row">
+    <div class="col-md-offset-2 col-sm-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="panel-title">Create Brand Record</div>
+            </div>
+            <div class="panel-body">
+                <form id="dataForm" role="form" class="form-horizontal">
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-4" for="brandNameInput">Brand Name</label>
+                        <input type="text" id="brandNameInput" class="form-control font-bold"
+                               maxlength="100" placeholder="Brand name" value="" />
+                    </div><!-- End of div element containing label and input for company name -->
+                    <div class="form-group">
+                        <label class="control-label col-md-4 photoUploadMarginFix" for="brandPhotoUploadInput">Photo</label>
+                        <div class="col-md-8">
+                            <input id="fileInput" name="fileInput" type="file" class="file input-group-lg" multiple/>
+                        </div>
+                    </div>
+                    <label class="control-label col-md-4 categoryMarginFix" for="categoriesInput">Categories</label>
+                    <div class="form-group col-md-7">
+                        <div class="form-group" id="categoriesList"></div>
+                    </div><!-- End of div element containing label and input for address -->
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-1"></label>
+                        <div class="col-md-10">
+                            <div class="pull-right">
+                                <input type="button" class="btn btn-primary" value="Save" id="saveButton" />
+                                <a class="btn btn-default" asp-action="Index" asp-controler="Brands">Cancel</a>
+                            </div>
+                        </div>
+                    </div><!-- End of div element containing the Save and Cancel Button -->
+                </form>
+            </div><!-- end of div element which has the class="panel-body" -->
+        </div><!-- end of the div element which has the class="panel" -->
+    </div><!-- end of the div element which as the  class="col-md-offset-2 col-sm-8"-->
+</div><!-- end of div element with class="row" -->
+
+<script>
+    var msCategoryList = $('#categoriesList').magicSuggest({
+        method: 'get',
+        data: 'http://localhost:4992/API/Categories',
+        dataType: 'json',
+        displayField: 'CatName',
+        valueField: 'CatId',
+        allowFreeEntries: false,
+        autoSelect: false
+    });
+    
+    window.$brandPhotoInputElement = $('#fileInput');
+
+    var footerTemplate = '<div class="file-thumbnail-footer">\n' +
+    '    <div class="file-caption-name" style="width:{width}">{caption}</div>\n' +
+    '    {actions}\n' +
+    '</div>';
+    var actionTemplate = '<div class="file-actions">\n' +
+     '       <div class="file-footer-buttons">\n {delete} </div>\n' +
+     '    <div class="file-upload-indicator" tabindex="-1" title="{indicatorTitle}">{indicator}</div>\n' +
+     '    <div class="clearfix"></div>\n' +
+     '</div>';
+
+    $('#fileInput').fileinput({
+        previewFileType: 'image',
+        allowedFileTypes: ['image'],
+        uploadUrl: '/API/Brands/UploadBrandPhotoAndSaveBrandData',
+        uploadAsync: false,
+        maxFileCount: 1,
+        layoutTemplates: { footer: footerTemplate, actions: actionTemplate },
+        type: 'post',
+        msgInvalidFileType: 'Invalid type for file "{name}". Only "{types}" files are supported.',
+        autoReplace: true,
+        overwriteInitial: false,
+        showUploadedThumbs: false,
+        showUpload: false,
+        showRemove: false,
+        browseClass: 'btn btn-primary btn-md pull-right',
+        previewFileIcon: '<i class="glyphicon glyphicon-king"></i>',
+        allowedFileExtensions: ['jpg', 'jpeg', 'png'],
+        uploadExtraData: function () {  // callback example
+            var out = {};
+            return out;
+        }
+    });
+    window.$brandPhotoInputElement.on('filebatchuploadsuccess',
+                         function (event, data, previewId, index) {
+                             var form = data.form, files = data.files, extra = data.extra,
+                                 response = data.response, reader = data.reader;
+                             console.log(data.Message);
+                             console.log(event);
+                             console.dir(data);
+                             noty({
+                                 text: data.jqXHR.responseJSON.Message,
+                                 type: 'success',
+                                 layout: 'center',
+                                 template: '<div class="noty_message"><span class="noty_text"></span>'
+                             });
+                         });
+
+    //Using a function to create a JavaScript class, WebFormData
+    function WebFormData(inBrandName, inCategories) {
+        this.BrandName = inBrandName;
+        this.BrandCategories = inCategories;
+    }
+
+    //Use jQuery library function, jQuery() to find the Save button by id.
+    //Then, call the on() method, to define a click event handler to handle the click event.
+    //Provide an annoymous function which has all the necessary code to send the user data
+    //to the Web API controller, Companies using the HTTP POST request.
+    $('#saveButton').on('click', function () {
+        //Collect data from input elements
+        var collectedBrandName = $('#brandNameInput').val();
+        var collectedCategories = JSON.stringify(msCategoryList.getValue()); // Category Id Array!!
+
+        var webFormData = new WebFormData(collectedBrandName, collectedCategories);
+        var webFormDataInString = JSON.stringify(webFormData);
+
+        $saveBrandHandler = jQuery.ajax({
+            method: 'post',
+            contentType: 'application/json',
+            url: '/Api/Brands/SaveNewBrandInformationInSession',
+            data: "'" + webFormDataInString + "'"
+        });
+        $saveBrandHandler.done(function (data, textStatus, jqXHR) {
+            window.$brandPhotoInputElement.fileinput('upload');
+        });
+        $saveBrandHandler.fail(function (data, textStatus, jqXHR) {
+            noty({
+                text: data.responseJSON.Message,
+                type: 'error',
+                layout: 'center',
+                template: '<div class="noty_message"><span class="noty_text"></span>'
+            });
+        });				
+    });
+</script>

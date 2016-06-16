@@ -1,0 +1,272 @@
+﻿<div class="row">
+    <div class="col-md-offset-2  col-md-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="panel-title">Update Category Record</div>
+                <div class="btn-group pull-right">
+
+                </div>
+            </div>
+            <div class="panel-body">
+                <form id="dataForm" role="form" class="form-horizontal">
+                    <div class="form-group col-md-12">
+                        <label class="control-label  col-md-4" for="catNameInput">Category Name</label>
+
+                        <input type="text" id="catNameInput" class="form-control font-bold"
+                               maxlength="50" placeholder="Category Name" value="" />
+
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label  col-md-4" for="visibilityInput">Visibility</label>
+                        <div id="visibilityRadioList"></div>
+                    </div>
+                    <div class="form-group col-md-12 hidden" id="startDateSegment">
+                        <label class="control-label col-md-4" for="startDateInput">Start Date</label>
+                        <div id="jqxStartDate" name="jqxStartDate"></div>
+                    </div>
+                    <div class="form-group col-md-12 hidden" id="endDateSegment">
+                        <label class="control-label col-md-4" for="endDateInput">End Date</label>
+                        <div id="jqxEndDate" name="jqxEndDate"></div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <div class="col-md-12">
+                            <div class="pull-left">
+                                <input type="button" class="btn btn-primary btn-danger" value="Delete" id="deleteButton" />
+                            </div>
+                            <div class="pull-right">
+                                <input type="button" class="btn btn-primary" value="Save" id="saveButton" />
+                                <a class="btn btn-default" asp-action="Index" asp-controler="Categories">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- end of div element which has the class="panel-body" -->
+        </div><!-- end of the div element which has the class="panel" -->
+    </div><!-- end of the div element which as the  class="col-md-offset-2 col-sm-8"-->
+</div><!-- end of div element with class="row" -->
+
+
+<script>
+    $("#jqxStartDate").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'dd/MM/yyyy', animationType: 'fade' });
+    $("#jqxEndDate").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'dd/MM/yyyy', animationType: 'fade' });
+    var startDateInput;
+    var endDateInput;
+    $('#jqxStartDate').on('change', function (event) {
+        startDateInput = event.args.date;
+    });
+    $('#jqxEndDate').on('change', function (event) {
+        endDateInput = event.args.date;
+    });
+
+    //Declare a document scope variable, g_studentId.
+    //A document scope variable value can be accessed anywhere in the web page during the
+    //entire life cycle at the web browser (till the user refresh the page)
+    //Naming convention: begin with g_ prefix
+    //This variable will contain the student id value
+    //which will be extracted from the address bar.
+    //The variable will be used in the first Ajax() call, to retrieve JSON structured
+    //information about the student
+    var g_catId = getCatIdFromAddressBar();
+    function getCatIdFromAddressBar() {
+        //Get studentId from the url string in the browser's address bar
+        var urlArray = window.location.href.split('/');
+        var catId = urlArray[urlArray.length - 1];
+        return catId;
+    };
+
+    //Call the JavaScript sub program (JavaScript function) to
+    //make an ajax call obtaining all the student Type data so that
+    //the drop down listbox, studentTypeIdInput can be populated
+    //with option elements.
+    setupvisibilityRadioListBox();
+    //After setting up the dropdownlist, then call the next sub-program (JavaScript function)
+    //getstudentDetails() to populate the input controls with student details
+    getCategoryDetails();
+
+    function setupvisibilityRadioListBox() {
+        var $dataCommunicationTracker = jQuery.ajax({
+            contentType: 'application/json',
+            method: 'get',
+            url: 'http://localhost:4992/API/Visibility/GetAllVisibilities',
+        });
+
+        /**
+            So now, we will have to throw in all of the elements into
+            the dropdown box
+        **/
+        $dataCommunicationTracker.done(function (data, textStatus, jqXHR) {
+            // Like the previous cshtml, let's define a variable for
+            // the courseIdInput box
+            var $visibilityRadioListElement = $('#visibilityRadioList');
+            // We then initialize the element container
+            // for each element
+            var $optionElement = null;
+
+            // Then we implement a for loop to make things dynamic
+            // for each course in the array called data
+            for (index = 0; index < data.length; index++) {
+                // We first define the course from the data array
+                oneVisibility = data[index];
+                // Then we put it into the element container
+                $optionElement = $('<input type="radio" name="Visibility" onClick="checkRadio()" value="'
+                    + oneVisibility.VisibilityId + '"/>' + '<span>' + oneVisibility.VisibilityName + '&nbsp;&nbsp;&nbsp;' + '</span>');
+                // Then we add the element into the courseIdInput dropdown box
+                $visibilityRadioListElement.append($optionElement);
+            }
+        });
+
+        $dataCommunicationTracker.fail(function (data, textStatus, jqXHR) {
+            console.dir(data);
+            console.dir(textStatus);
+            console.dir(jqXHR);
+        });
+    } //End of setupCourseListBox() function
+
+    function checkRadio() {
+        if ($('input[name="Visibility"]:checked').val() == 1) {
+            $("#startDateSegment").addClass('hidden');
+            $("#endDateSegment").addClass('hidden');
+        } else if ($('input[name="Visibility"]:checked').val() == 2) {
+            $("#startDateSegment").removeClass('hidden');
+            $("#endDateSegment").removeClass('hidden');
+        } else {
+            $("#startDateSegment").addClass('hidden');
+            $("#endDateSegment").addClass('hidden');
+        }
+
+    }
+
+    function getCategoryDetails() {
+        $loadCategoryHandler = jQuery.ajax({
+            type: 'GET',
+            url: '/API/Categories/' + g_catId,
+            dataType: 'json',
+            cache: false,
+        })
+        $loadCategoryHandler.done(function (data, textStatus, jqXHR) {
+            //After inspecting the data object with the console.log
+            //I have clear picture of the structure and used
+            //the following variable to reference(represent) the data variable.
+            var category = data;
+            //Copy out the student information
+            var catId = category.CatId;
+            var catName = category.CatName;
+            var visibilityId = category.VisibilityId;
+            var startDate = category.StartDate; // Format: yyyy-mm-dd
+            var endDate = category.EndDate;
+            //Populate the respective input controls with the user details.
+            //For example, find the text input control, studentNameInput and set the text input control
+            //'s value with the studentName variable's content.
+            $('#catNameInput').val(catName);
+            var elements = document.getElementsByName('Visibility');
+            for (i = 0; i < elements.length; i++) {
+                if (elements[i].value == visibilityId) {
+                    elements[i].checked = true;
+                }
+            }
+            checkRadio();
+            $('input[name="jqxStartDate"]').val(moment(startDate).format("DD/MM/YYYY"));
+            $('input[name="jqxEndDate"]').val(moment(endDate).format("DD/MM/YYYY"));
+        })//end of the done() method;
+        $loadCategoryHandler.fail(function (data, textStatus, jqXHR) {
+            console.dir(textStatus);//Have a habit in using console.log to inspect the parameter variable content
+            console.dir(data);
+            console.dir(jqXHR);
+            noty({
+                text: data.statusText, type: 'error',
+                layout: 'center',
+                template: '<div class="noty_message"><span class="noty_text"></span>'
+            });
+        });//end of $loadstudentHandler.error()
+    }//end of getstudentDetails();
+
+    //Using a function to create a JavaScript class, WebFormData
+    function WebFormData(inCatName, inVisibilityId, inStartDate, inEndDate) {
+        this.CatName = inCatName;
+        this.VisibilityId = inVisibilityId;
+        this.StartDate = inStartDate;
+        this.EndDate = inEndDate;
+    }
+
+    $('#saveButton').on('click', function () {
+        var collectedCatName = $('#catNameInput').val();
+        var collectedVisibilityId = $('input[name="Visibility"]:checked').val();
+        var collectedStartDate = moment(startDateInput).format("DD/MM/YYYY");
+        var collectedEndDate = moment(endDateInput).format("DD/MM/YYYY");
+        //Create a WebFormData object, webFormData. Have its field values
+        //populated with the collected student data
+        if (collectedVisibilityId == 2) {
+            var webFormData = new WebFormData(collectedCatName, collectedVisibilityId, collectedStartDate, collectedEndDate);
+        } else {
+            var webFormData = new WebFormData(collectedCatName, collectedVisibilityId, null, null);
+        }
+
+        //Convert the webFromData into a JSON string
+        var webFormDataInString = JSON.stringify(webFormData);
+
+        $updateCategoryHandler = jQuery.ajax({
+            type: 'PUT',
+            url: '/API/Categories/' + g_catId,
+            dataType: 'json',
+            contentType: 'application/json;',
+            data: "'" + webFormDataInString + "'"
+        })//end of jQuery.ajax() call
+        $updateCategoryHandler.done(function (data, textStatus, jqXHR) {
+            noty({
+                text: data.Message, type: 'success',
+                layout: 'center',
+                template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>'
+            });//end of noty()
+        });//end of $updatestudentHandler.done()
+
+        $updateCategoryHandler.error(function (data, textStatus, jqXHR) {
+            noty({
+                text: data.responseJSON.Message, type: 'error',
+                layout: 'center',
+                template: '<div class="noty_message"><span class="noty_text"></span>'
+            });//end of noty()
+        });//end of $updatestudentHandler.error()
+
+    });// end of $('#saveButton').on('click', function () { ...}
+
+
+    $('#deleteButton').on('click', function () {
+
+        $deleteCategoryHandler = jQuery.ajax({
+            type: 'DELETE',
+            url: '/API/Categories/' + g_catId
+        })//end of jQuery.ajax() call
+        $deleteCategoryHandler.done(function (data, textStatus, jqXHR) {
+            noty({
+                text: data.Message, type: 'success',
+                layout: 'center',
+                template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>',
+                buttons: [
+                    {
+                        addClass: 'btn btn-primary', text: 'Ok', onClick: function ($noty) {
+                            $noty.close();
+                            $('body').fadeOut(2000, redirectPage);
+                        }
+                    }
+                ]
+            });//end of noty()
+        });//end of $deletestudentHandler.done()
+
+        $deleteCategoryHandler.fail(function (data, textStatus, jqXHR) {
+            console.log(data);
+            noty({
+                text: data.responseJSON.Message, type: 'error',
+                layout: 'center',
+                template: '<div class="noty_message"><span class="noty_text"></span>'
+            });//end of noty()
+        });//end of $deletestudentHandler.fail()
+
+    });// end of $('#deleteButton').on('click', function () { ...}
+    function redirectPage() {
+        location.replace('/Categories/Index');
+    }// end of redirectPage() method (function)
+</script>
+
+
+
+

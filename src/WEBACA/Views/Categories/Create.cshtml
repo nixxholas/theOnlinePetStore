@@ -1,0 +1,159 @@
+﻿<div class="row">
+    <div class="col-md-offset-2  col-md-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="panel-title">Create Category Record</div>
+                <div class="btn-group pull-right">
+
+                </div>
+            </div>
+            <div class="panel-body">
+                <form id="dataForm" role="form" class="form-horizontal">
+                    <div class="form-group col-md-12">
+                        <label class="control-label  col-md-4" for="catNameInput">Category Name</label>
+
+                        <input type="text" id="catNameInput" class="form-control font-bold"
+                               maxlength="50" placeholder="Category Name" value="" />
+
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label  col-md-4" for="visibilityInput">Visibility</label>
+                        <div id="visibilityRadioList"></div>
+                    </div>
+                    <div class="form-group col-md-12 hidden" id="startDateSegment">
+                        <label class="control-label col-md-4" for="startDateInput">Start Date</label>
+                        <div id="jqxStartDate"></div>
+                    </div>
+                    <div class="form-group col-md-12 hidden" id="endDateSegment">
+                        <label class="control-label col-md-4" for="endDateInput">End Date</label>
+                        <div id="jqxEndDate"></div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-1"></label>
+                        <div class="col-md-10">
+                            <div class="pull-right">
+                                <input type="button" class="btn btn-primary" value="Save" id="saveButton" />
+                                <a class="btn btn-default" asp-action="Index" asp-controler="Categories">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- end of div element which has the class="panel-body" -->
+        </div><!-- end of the div element which has the class="panel" -->
+    </div><!-- end of the div element which as the  class="col-md-offset-2 col-sm-8"-->
+</div><!-- end of div element with class="row" -->
+
+<script>
+    $("#jqxStartDate").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'dd/MM/yyyy', animationType: 'fade' });
+    $("#jqxEndDate").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'dd/MM/yyyy', animationType: 'fade' });
+    var startDateInput;
+    var endDateInput;
+    $('#jqxStartDate').on('change', function (event) {
+        startDateInput = event.args.date;
+    });
+    $('#jqxEndDate').on('change', function (event) {
+        endDateInput = event.args.date;
+    });
+
+    setupvisibilityRadioListBox();
+
+    //Using a function technique to create a JavaScript class, WebFormData
+    function WebFormData(inCatName, inVisibilityId, inStartDate, inEndDate) {
+        this.CatName = inCatName;
+        this.VisibilityId = inVisibilityId;
+        this.StartDate = inStartDate;
+        this.EndDate = inEndDate;
+    }
+
+    $('#saveButton').on('click', function () {
+        var collectedCatName = $('#catNameInput').val();
+        var collectedVisibilityId = $('input[name="Visibility"]:checked').val();
+        var collectedStartDate = moment(startDateInput).format("DD/MM/YYYY");
+        var collectedEndDate = moment(endDateInput).format("DD/MM/YYYY");
+        //Create a JavaScript object to contain the type name information
+        if (collectedVisibilityId == 2) {
+            var webFormData = new WebFormData(collectedCatName, collectedVisibilityId, collectedStartDate, collectedEndDate);
+        } else {
+            var webFormData = new WebFormData(collectedCatName, collectedVisibilityId, null, null);
+        }
+
+        //Serialize the webFormData object which contains the type name
+        //data into a flat string. So that, it can be sent accross the Internet network successfully.
+        var webFormDataInString = JSON.stringify(webFormData);
+
+        $saveCategoryHandler = jQuery.ajax({
+            type: 'POST',
+            url: '/API/Categories/',
+            dataType: 'json',
+            contentType: 'application/json;',
+            data: "'" + webFormDataInString + "'"
+        })//end of ajax() call
+        $saveCategoryHandler.done(function (data, textStatus, jqXHR) {
+            noty({
+                text: data.Message, type: 'success',
+                layout: 'center',
+                template: '<div class="noty_message"><span class="noty_text"></span>'
+            });
+        });//end of $saveCompanyTypeHandler.done();
+        $saveCategoryHandler.fail(function (data, textStatus, jqXHR) {
+            noty({
+                text: data.statusText, type: 'error',
+                layout: 'center',
+                template: '<div class="noty_message"><span class="noty_text"></span>'
+            });
+        });//end of $saveCompanyTypeHandler.fail();
+    });//end of $('#saveButton').on('click', function () {
+
+    function setupvisibilityRadioListBox() {
+        var $dataCommunicationTracker = jQuery.ajax({
+            contentType: 'application/json',
+            method: 'get',
+            url: 'http://localhost:4992/API/Visibility/GetAllVisibilities',
+        });
+
+        /**
+            So now, we will have to throw in all of the elements into
+            the dropdown box
+        **/
+        $dataCommunicationTracker.done(function (data, textStatus, jqXHR) {
+            // Like the previous cshtml, let's define a variable for
+            // the courseIdInput box
+            var $visibilityRadioListElement = $('#visibilityRadioList');
+            // We then initialize the element container
+            // for each element
+            var $optionElement = null;
+
+            // Then we implement a for loop to make things dynamic
+            // for each course in the array called data
+            for (index = 0; index < data.length; index++) {
+                // We first define the course from the data array
+                oneVisibility = data[index];
+                // Then we put it into the element container
+                $optionElement = $('<input type="radio" name="Visibility" onClick="checkRadio()" value="'
+                    + oneVisibility.VisibilityId + '"/>' + '<span>' + oneVisibility.VisibilityName + '&nbsp;&nbsp;&nbsp;' + '</span>');
+                // Then we add the element into the courseIdInput dropdown box
+                $visibilityRadioListElement.append($optionElement);
+            }
+        });
+
+        $dataCommunicationTracker.fail(function (data, textStatus, jqXHR) {
+            console.dir(data);
+            console.dir(textStatus);
+            console.dir(jqXHR);
+        });
+    } //End of setupCourseListBox() function
+
+    function checkRadio() {
+        if ($('input[name="Visibility"]:checked').val() == 1) {
+            $("#startDateSegment").addClass('hidden');
+            $("#endDateSegment").addClass('hidden');
+        } else if ($('input[name="Visibility"]:checked').val() == 2) {
+            $("#startDateSegment").removeClass('hidden');
+            $("#endDateSegment").removeClass('hidden');
+        } else {
+            $("#startDateSegment").addClass('hidden');
+            $("#endDateSegment").addClass('hidden');
+        }
+
+    }
+</script>
