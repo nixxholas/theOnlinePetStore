@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.Mvc;
-using Microsoft.Data.Entity;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ namespace WEBACA.APIs
                 brandCategoryList.Add(new
                 {
                     BrandId = oneCategoryBrand.BrandId,
-                    BrandName = oneCategoryBrand.Brand.BrandId,
+                    BrandName = oneCategoryBrand.Brand.BrandName,
                     CatId = oneCategoryBrand.CatId,
                     CatName = oneCategoryBrand.Category.CatName
                 });
@@ -54,18 +54,22 @@ namespace WEBACA.APIs
         {
             try
             {
-                var categoryIds = "";
+                List<object> brandCategoryList = new List<object>();
                 var foundBrandCategories = Database.BrandCategory
                      .Where(eachBrandCategory => eachBrandCategory.BrandId == id)
                      .Include(eachBrandCategory => eachBrandCategory.Category)
                      .Include(eachBrandCategory => eachBrandCategory.Brand);
                 foreach (var brandCategory in foundBrandCategories)
                 {
-                    categoryIds += brandCategory.Category.CatName;
-                    categoryIds += ", ";
-                    //need to trim the end 
+                    brandCategoryList.Add(new
+                    {
+                        BrandId = brandCategory.BrandId,
+                        BrandName = brandCategory.Brand.BrandName,
+                        CatId = brandCategory.CatId,
+                        CatName = brandCategory.Category.CatName
+                    });
                 }//end of foreach loop which builds the categoryList .
-                return new JsonResult(categoryIds);
+                return new JsonResult(brandCategoryList);
             }
             catch (Exception exceptionObject)
             {
@@ -75,7 +79,7 @@ namespace WEBACA.APIs
                 object httpFailRequestResultMessage =
                                     new { Message = "Unable to obtain Brand Category information." };
                 //Return a bad http response message to the client
-                return HttpBadRequest(httpFailRequestResultMessage);
+                return BadRequest(httpFailRequestResultMessage);
             }
         }
 
@@ -113,7 +117,7 @@ namespace WEBACA.APIs
                 object httpFailRequestResultMessage =
                                     new { Message = "Unable to obtain Brand Category information." };
                 //Return a bad http response message to the client
-                return HttpBadRequest(httpFailRequestResultMessage);
+                return BadRequest(httpFailRequestResultMessage);
             }
         }
 
@@ -153,7 +157,7 @@ namespace WEBACA.APIs
                     //This anonymous object's Message property contains a simple string message
                     object httpFailRequestResultMessage = new { Message = customMessage };
                     //Return a bad http request message to the client
-                    return HttpBadRequest(httpFailRequestResultMessage);
+                    return BadRequest(httpFailRequestResultMessage);
                 }
             }//End of Try..Catch block
 
@@ -169,11 +173,11 @@ namespace WEBACA.APIs
                 Message = "Saved Category record"
             };
 
-            //Create a HttpOkObjectResult class instance, httpOkResult.
+            //Create a OkObjectResult class instance, httpOkResult.
             //When creating the object, provide the previous message object into it.
-            HttpOkObjectResult httpOkResult =
-                        new HttpOkObjectResult(successRequestResultMessage);
-            //Send the HttpOkObjectResult class object back to the client.
+            OkObjectResult httpOkResult =
+                        new OkObjectResult(successRequestResultMessage);
+            //Send the OkObjectResult class object back to the client.
             return httpOkResult;
         }
 
@@ -245,7 +249,7 @@ namespace WEBACA.APIs
                     //This anonymous object's Message property contains a simple string message
                     object httpFailRequestResultMessage = new { Message = customMessage };
                     //Return a bad http request message to the client
-                    return HttpBadRequest(httpFailRequestResultMessage);
+                    return BadRequest(httpFailRequestResultMessage);
                 }
             }//End of try .. catch block on saving data
              //Construct a custom message for the client
@@ -256,11 +260,11 @@ namespace WEBACA.APIs
                 Message = "Saved Category record"
             };
 
-            //Create a HttpOkObjectResult class instance, httpOkResult.
+            //Create a OkObjectResult class instance, httpOkResult.
             //When creating the object, provide the previous message object into it.
-            HttpOkObjectResult httpOkResult =
-               new HttpOkObjectResult(successRequestResultMessage);
-            //Send the HttpOkObjectResult class object back to the client.
+            OkObjectResult httpOkResult =
+               new OkObjectResult(successRequestResultMessage);
+            //Send the OkObjectResult class object back to the client.
             return httpOkResult;
         }
 

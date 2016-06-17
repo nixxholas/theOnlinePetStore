@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.Mvc;
-using Microsoft.Data.Entity;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -71,7 +71,7 @@ namespace WEBACA.APIs
                 object httpFailRequestResultMessage =
                                     new { Message = "Unable to obtain Category information." };
                 //Return a bad http response message to the client
-                return HttpBadRequest(httpFailRequestResultMessage);
+                return BadRequest(httpFailRequestResultMessage);
             }
         }
 
@@ -114,7 +114,7 @@ namespace WEBACA.APIs
                     //This anonymous object's Message property contains a simple string message
                     object httpFailRequestResultMessage = new { Message = customMessage };
                     //Return a bad http request message to the client
-                    return HttpBadRequest(httpFailRequestResultMessage);
+                    return BadRequest(httpFailRequestResultMessage);
                 }
             }//End of Try..Catch block
 
@@ -130,11 +130,11 @@ namespace WEBACA.APIs
                 Message = "Saved Category record"
             };
 
-            //Create a HttpOkObjectResult class instance, httpOkResult.
+            //Create a OkObjectResult class instance, httpOkResult.
             //When creating the object, provide the previous message object into it.
-            HttpOkObjectResult httpOkResult =
-                        new HttpOkObjectResult(successRequestResultMessage);
-            //Send the HttpOkObjectResult class object back to the client.
+            OkObjectResult httpOkResult =
+                        new OkObjectResult(successRequestResultMessage);
+            //Send the OkObjectResult class object back to the client.
             return httpOkResult;
         }
 
@@ -189,7 +189,7 @@ namespace WEBACA.APIs
                     //This anonymous object's Message property contains a simple string message
                     object httpFailRequestResultMessage = new { Message = customMessage };
                     //Return a bad http request message to the client
-                    return HttpBadRequest(httpFailRequestResultMessage);
+                    return BadRequest(httpFailRequestResultMessage);
                 }
             }//End of try .. catch block on saving data
              //Construct a custom message for the client
@@ -200,11 +200,11 @@ namespace WEBACA.APIs
                 Message = "Saved Category record"
             };
 
-            //Create a HttpOkObjectResult class instance, httpOkResult.
+            //Create a OkObjectResult class instance, httpOkResult.
             //When creating the object, provide the previous message object into it.
-            HttpOkObjectResult httpOkResult =
-                   new HttpOkObjectResult(successRequestResultMessage);
-            //Send the HttpOkObjectResult class object back to the client.
+            OkObjectResult httpOkResult =
+                   new OkObjectResult(successRequestResultMessage);
+            //Send the OkObjectResult class object back to the client.
             return httpOkResult;
         }
 
@@ -240,7 +240,7 @@ namespace WEBACA.APIs
                     //This anonymous object's Message property contains a simple string message
                     object httpFailRequestResultMessage = new { Message = customMessage };
                     //Return a bad http request message to the client
-                    return HttpBadRequest(httpFailRequestResultMessage);
+                    return BadRequest(httpFailRequestResultMessage);
                 }
             }//End of try .. catch block on saving data
              //Construct a custom message for the client
@@ -251,11 +251,11 @@ namespace WEBACA.APIs
                 Message = "The category has been restored."
             };
 
-            //Create a HttpOkObjectResult class instance, httpOkResult.
+            //Create a OkObjectResult class instance, httpOkResult.
             //When creating the object, provide the previous message object into it.
-            HttpOkObjectResult httpOkResult =
-                   new HttpOkObjectResult(successRequestResultMessage);
-            //Send the HttpOkObjectResult class object back to the client.
+            OkObjectResult httpOkResult =
+                   new OkObjectResult(successRequestResultMessage);
+            //Send the OkObjectResult class object back to the client.
             return httpOkResult;
         }
 
@@ -286,7 +286,7 @@ namespace WEBACA.APIs
                 customMessage = "Unable to delete category record.";
                 object httpFailRequestResultMessage = new { Message = customMessage };
                 //Return a bad http request message to the client
-                return HttpBadRequest(httpFailRequestResultMessage);
+                return BadRequest(httpFailRequestResultMessage);
             }//End of try .. catch block on manage data
 
             //Build a custom message for the client
@@ -297,11 +297,11 @@ namespace WEBACA.APIs
                 Message = "Deleted category record"
             };
 
-            //Create a HttpOkObjectResult class instance, httpOkResult.
+            //Create a OkObjectResult class instance, httpOkResult.
             //When creating the object, provide the previous message object into it.
-            HttpOkObjectResult httpOkResult =
-                                            new HttpOkObjectResult(successRequestResultMessage);
-            //Send the HttpOkObjectResult class object back to the client.
+            OkObjectResult httpOkResult =
+                                            new OkObjectResult(successRequestResultMessage);
+            //Send the OkObjectResult class object back to the client.
             return httpOkResult;
         }      
     }

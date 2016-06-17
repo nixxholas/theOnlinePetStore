@@ -1,5 +1,5 @@
 ﻿<div class="container">
-    <div class="col-md-offset-1 col-md-10">
+    <div class="col-md-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="panel-title">Update Brand Record</div>
@@ -48,7 +48,16 @@
 </div><!-- end of div element which has the class="container" -->
 
 <script>
-    var brandCategories;
+    var brandCategories = [];
+
+    //------------------------------------ Client-side Load Data logic -----------------------------------
+    var g_brandId = getBrandIdFromAddressBar();
+    function getBrandIdFromAddressBar() {
+        //Get employee id from the url string in the browser's address bar
+        var urlArray = window.location.href.split('/');
+        var id = urlArray[urlArray.length - 1];
+        return id;
+    };
 
     var msCategoryList = $('#categoriesList').magicSuggest({
         method: 'get',
@@ -60,32 +69,25 @@
         autoSelect: false
     });
 
-    //------------------------------------ Client-side Load Data logic -----------------------------------
-    var g_brandId = getBrandIdFromAddressBar();
-    function getBrandIdFromAddressBar() {
-        //Get employee id from the url string in the browser's address bar
-        var urlArray = window.location.href.split('/');
-        var id = urlArray[urlArray.length - 1];
-        return id;
-    };
-
-    $loadBrandsDataHandler = jQuery.ajax({
-            contentType: 'application/json',
-            method: 'get',
-            url: 'http://localhost:4992/API/BrandCategory',
-        })
-        $loadBrandsDataHandler.done(function (data, textStatus, jqXHR) {
-            brandCategories = data;
-        }//end of JavaScript anonymous function
+    $loadSelectedCategoriesDataHandler = jQuery.ajax({
+        contentType: 'application/json',
+        method: 'get',
+        url: 'http://localhost:4992/API/BrandCategory/' + g_brandId,
+    })
+    $loadSelectedCategoriesDataHandler.done(function (data, textStatus, jqXHR) {
+        var selectedCategories = data;
+        msCategoryList.setSelection(selectedCategories);
+        //msCategoryList.setSelection()
+    } //end of JavaScript anonymous function
 
           )//end of the done() method;
-        $loadBrandsDataHandler.fail(function (data, textStatus, jqXHR) {
-            noty({
-                text: 'Ajax fail fired : ' + data.responseJSON.Message, type: 'error',
-                layout: 'center',
-                template: '<div class="noty_message"><span class="noty_text"></span>'
-            });//end of noty()
-        })//end of $loadCompanyDataHandler.fail()
+    $loadSelectedCategoriesDataHandler.fail(function (data, textStatus, jqXHR) {
+        noty({
+            text: 'Ajax fail fired : ' + data.responseJSON.Message, type: 'error',
+            layout: 'center',
+            template: '<div class="noty_message"><span class="noty_text"></span>'
+        });//end of noty()
+    })//end of $loadCompanyDataHandler.fail()
 
     //Note: jQuery.ajax(..) is also often written is $.ajax(..)
     $loadBrandHandler = jQuery.ajax({

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.Data.Entity;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 /**
  * DECLARE @sql NVARCHAR(max)=''
@@ -40,6 +37,12 @@ namespace WEBACA.Models
 
         protected override void OnModelCreating(ModelBuilder mb)
         {
+            // Microsoft's fix for RC1 updated applications
+            foreach (var entity in mb.Model.GetEntityTypes())
+            {
+                entity.Relational().TableName = entity.DisplayName();
+            }
+
             // -------------- Defining Product Entity --------------- //
             //mb.Entity<Product>()
             //    .HasKey(input => input.ProdId)

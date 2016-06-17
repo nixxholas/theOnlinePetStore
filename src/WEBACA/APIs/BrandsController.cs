@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using WEBACA.Models;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using WEBACA.Helper;
 using Newtonsoft.Json;
-using Microsoft.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -86,7 +86,7 @@ namespace WEBACA.APIs
                 object httpFailRequestResultMessage =
                                     new { Message = "Unable to obtain employee information." };
                 //Return a bad http response message to the client
-                return HttpBadRequest(httpFailRequestResultMessage);
+                return BadRequest(httpFailRequestResultMessage);
             }
         }
 
@@ -113,7 +113,7 @@ namespace WEBACA.APIs
                 customMessage = "Unable to delete employee record.";
                 object httpFailRequestResultMessage = new { Message = customMessage };
                 //Return a bad http request message to the client
-                return HttpBadRequest(httpFailRequestResultMessage);
+                return BadRequest(httpFailRequestResultMessage);
             }//End of try .. catch block on manage data
 
             //Build a custom message for the client
@@ -124,11 +124,11 @@ namespace WEBACA.APIs
                 Message = "Deleted Brand record"
             };
 
-            //Create a HttpOkObjectResult class instance, httpOkResult.
+            //Create a OkObjectResult class instance, httpOkResult.
             //When creating the object, provide the previous message object into it.
-            HttpOkObjectResult httpOkResult =
-                                                            new HttpOkObjectResult(successRequestResultMessage);
-            //Send the HttpOkObjectResult class object back to the client.
+            OkObjectResult httpOkResult =
+                                                            new OkObjectResult(successRequestResultMessage);
+            //Send the OkObjectResult class object back to the client.
             return httpOkResult;
         }//end of Delete(id) Web API method with /API/Employees/digit URL pattern route
 
@@ -180,7 +180,7 @@ namespace WEBACA.APIs
                 //This anonymous object's Message property contains a simple string message
                 object httpFailRequestResultMessage = new { Message = customMessage };
                 //Return a bad http request message to the client
-                return HttpBadRequest(httpFailRequestResultMessage);
+                return BadRequest(httpFailRequestResultMessage);
             }//End of Try..Catch block
              //If there is no runtime error in the try catch block, the code execution
              //should reach here. Sending success message back to the client.
@@ -194,11 +194,11 @@ namespace WEBACA.APIs
                 Message = "Saved employee into session"
             };
 
-            //Create a HttpOkObjectResult class instance, httpOkResult.
+            //Create a OkObjectResult class instance, httpOkResult.
             //When creating the object, provide the previous message object into it.
-            HttpOkObjectResult httpOkResult =
-                                        new HttpOkObjectResult(successRequestResultMessage);
-            //Send the HttpOkObjectResult class object back to the client.
+            OkObjectResult httpOkResult =
+                                        new OkObjectResult(successRequestResultMessage);
+            //Send the OkObjectResult class object back to the client.
             return httpOkResult;
 
         }//End of SaveNewEmployeeInformationInSession() method
@@ -297,7 +297,7 @@ namespace WEBACA.APIs
                 //This anonymous object's Message property contains a simple string message
                 object httpFailRequestResultMessage = new { Message = customMessage };
                 //Return a bad http request message to the client
-                return HttpBadRequest(httpFailRequestResultMessage);
+                return BadRequest(httpFailRequestResultMessage);
             }//End of Try..Catch block
 
             //If there is no runtime error in the try catch block, the code execution
@@ -310,11 +310,11 @@ namespace WEBACA.APIs
             {
                 Message = customMessage
             };
-            //Create a HttpOkObjectResult class instance, httpOkResult.
+            //Create a OkObjectResult class instance, httpOkResult.
             //When creating the object, provide the previous message object into it.
-            HttpOkObjectResult httpOkResult =
-                                                                    new HttpOkObjectResult(successRequestResultMessage);
-            //Send the HttpOkObjectResult class object back to the client.
+            OkObjectResult httpOkResult =
+                                                                    new OkObjectResult(successRequestResultMessage);
+            //Send the OkObjectResult class object back to the client.
             return httpOkResult;
         }//End of SaveEmployeeUpdateInformationIntoDatabase() method
 
@@ -362,7 +362,7 @@ namespace WEBACA.APIs
                 //This anonymous object's Message property contains a simple string message
                 object httpFailRequestResultMessage = new { Message = customMessage };
                 //Return a bad http request message to the client
-                return HttpBadRequest(httpFailRequestResultMessage);
+                return BadRequest(httpFailRequestResultMessage);
             }//End of Try..Catch block
 
             //If there is no runtime error in the try catch block, the code execution
@@ -375,11 +375,11 @@ namespace WEBACA.APIs
             {
                 Message = customMessage
             };
-            //Create a HttpOkObjectResult class instance, httpOkResult.
+            //Create a OkObjectResult class instance, httpOkResult.
             //When creating the object, provide the previous message object into it.
-            HttpOkObjectResult httpOkResult =
-                            new HttpOkObjectResult(successRequestResultMessage);
-            //Send the HttpOkObjectResult class object back to the client.
+            OkObjectResult httpOkResult =
+                            new OkObjectResult(successRequestResultMessage);
+            //Send the OkObjectResult class object back to the client.
             return httpOkResult;
         }//End of SaveEmployeeUpdateInformationIntoSession() method
 
@@ -478,8 +478,8 @@ namespace WEBACA.APIs
                 Message = "Saved brand.",
                 NewImageUrl = oneBrand.BrandPhoto.Url
             };
-            HttpOkObjectResult httpOkResult =
-                                        new HttpOkObjectResult(successRequestResultMessage);
+            OkObjectResult httpOkResult =
+                                        new OkObjectResult(successRequestResultMessage);
             return httpOkResult;
         }//End of UploadEmployeePhotoAndUpdateEmployeeData()
 
@@ -517,8 +517,8 @@ namespace WEBACA.APIs
                 Message = "Saved Brand"
             };
 
-            HttpOkObjectResult httpOkResult =
-                new HttpOkObjectResult(successRequestResultMessage);
+            OkObjectResult httpOkResult =
+                new OkObjectResult(successRequestResultMessage);
             return httpOkResult;
 
         }//End of UploadBrandPhotoAndSaveBrandData()
