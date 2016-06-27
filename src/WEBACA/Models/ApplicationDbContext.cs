@@ -31,17 +31,20 @@ namespace WEBACA.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server = tcp:nixholas.database.windows.net, 1433; Data Source = nixholas.database.windows.net; Initial Catalog = WEBACA1; Persist Security Info = False; User ID = nixholas; Password = Nicholaschen29; Pooling = False; MultipleActiveResultSets = True; Encrypt = True; TrustServerCertificate = False;");
-            //optionsBuilder.UseSqlServer(@"Server=NIXH\SQLEXPRESS;Database=WEBACA;Trusted_Connection=True;MultipleActiveResultSets=True");
+            //optionsBuilder.UseSqlServer(@"Server = tcp:nixholas.database.windows.net, 1433; Data Source = nixholas.database.windows.net; Initial Catalog = WEBACA1; Persist Security Info = False; User ID = nixholas; Password = IL0veW3b4; Pooling = False; MultipleActiveResultSets = True; Encrypt = True; TrustServerCertificate = False;");
+            // Database=nixholasweba;Data Source=ap-cdbr-azure-southeast-b.cloudapp.net;User Id=b8db53fe60141d;Password=1a79511a
+            optionsBuilder.UseSqlServer(@"Server=NIXH\SQLEXPRESS;Database=WEBACA;Trusted_Connection=True;MultipleActiveResultSets=True");
         }
 
         protected override void OnModelCreating(ModelBuilder mb)
         {
+            // I've ported the DbContext to follow RC2's standards.
+            // Thus, I won't need this anymore
             // Microsoft's fix for RC1 updated applications
-            foreach (var entity in mb.Model.GetEntityTypes())
-            {
-                entity.Relational().TableName = entity.DisplayName();
-            }
+            //foreach (var entity in mb.Model.GetEntityTypes())
+            //{
+            //    entity.Relational().TableName = entity.DisplayName();
+            //}
 
             // -------------- Defining Product Entity --------------- //
             //mb.Entity<Product>()
@@ -165,7 +168,8 @@ namespace WEBACA.Models
                 .Property(input => input.NoOfProducts)
                 .HasColumnName("NoOfProducts")
                 .HasColumnType("int")
-                .IsRequired();
+                .HasDefaultValue(0)
+                .IsRequired(false);
 
             mb.Entity<Brands>()
                 .Property(input => input.CreatedAt)
@@ -225,7 +229,6 @@ namespace WEBACA.Models
             .HasColumnName("Version")
             .HasColumnType("int")
             .HasDefaultValue(0);
-
 
             // Width
             mb.Entity<BrandPhoto>()
@@ -320,6 +323,16 @@ namespace WEBACA.Models
                 .HasColumnName("VisibilityId")
                 .HasColumnType("int")
                 .IsRequired();
+
+            mb.Entity<Category>()
+                .Property(input => input.StartDate)
+                .HasColumnName("StartDate")
+                .IsRequired(false);
+
+            mb.Entity<Category>()
+                .Property(input => input.EndDate)
+                .HasColumnName("EndDate")
+                .IsRequired(false);
 
             mb.Entity<Category>()
                 .Property(input => input.CreatedAt)

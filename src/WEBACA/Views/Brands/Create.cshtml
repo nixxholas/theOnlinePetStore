@@ -10,7 +10,7 @@
                         <label class="control-label col-md-4" for="brandNameInput">Brand Name</label>
                         <input type="text" id="brandNameInput" class="form-control font-bold"
                                maxlength="100" placeholder="Brand name" value="" />
-                    </div><!-- End of div element containing label and input for company name -->
+                    </div><!-- End of div element containing label and input for brand name -->
                     <div class="form-group">
                         <label class="control-label col-md-4 photoUploadMarginFix" for="brandPhotoUploadInput">Photo</label>
                         <div class="col-md-8">
@@ -20,7 +20,7 @@
                     <label class="control-label col-md-4 categoryMarginFix" for="categoriesInput">Categories</label>
                     <div class="form-group col-md-7">
                         <div class="form-group" id="categoriesList"></div>
-                    </div><!-- End of div element containing label and input for address -->
+                    </div>
                     <div class="form-group col-md-12">
                         <label class="control-label col-md-1"></label>
                         <div class="col-md-10">
@@ -105,10 +105,18 @@
     //Use jQuery library function, jQuery() to find the Save button by id.
     //Then, call the on() method, to define a click event handler to handle the click event.
     //Provide an annoymous function which has all the necessary code to send the user data
-    //to the Web API controller, Companies using the HTTP POST request.
+    //to the Web API controller, Brands using the HTTP POST request.
     $('#saveButton').on('click', function () {
         //Collect data from input elements
         var collectedBrandName = $('#brandNameInput').val();
+        if (collectedBrandName == null || collectedBrandName == "") {
+            noty({
+                text: "Please input a Brand Name.", type: 'error',
+                layout: 'center',
+                template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>'
+            });//end of noty()
+            return; // Break out of the function
+        }
         var collectedCategories = JSON.stringify(msCategoryList.getValue()); // Category Id Array!!
 
         var webFormData = new WebFormData(collectedBrandName, collectedCategories);
@@ -121,7 +129,33 @@
             data: "'" + webFormDataInString + "'"
         });
         $saveBrandHandler.done(function (data, textStatus, jqXHR) {
-            window.$brandPhotoInputElement.fileinput('upload');
+            // If no images are uploaded, we'll post with a stock image
+            if ($('#fileInput').get(0).files.length == 0) {
+                $saveBrandDBHandler = jQuery.ajax({
+                    method: 'post',
+                    contentType: 'application/json',
+                    url: '/Api/Brands/SaveBrandData',
+                    data: "'" + webFormDataInString + "'"
+                });
+                $saveBrandDBHandler.done(function (data, textStatus, jqXHR) {
+                    noty({
+                        text: "Saved Brand into Database. (A default image has been utilized for this brand)",
+                        type: 'success',
+                        layout: 'center',
+                        template: '<div class="noty_message"><span class="noty_text"></span>'
+                    });
+                });
+                $saveBrandDBHandler.fail(function (data, textStatus, jqXHR) {
+                    noty({
+                        text: data.responseJSON.Message,
+                        type: 'error',
+                        layout: 'center',
+                        template: '<div class="noty_message"><span class="noty_text"></span>'
+                    });
+                });
+            } else {
+                window.$brandPhotoInputElement.fileinput('upload');
+            }
         });
         $saveBrandHandler.fail(function (data, textStatus, jqXHR) {
             noty({

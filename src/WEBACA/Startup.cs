@@ -56,6 +56,7 @@ namespace WEBACA
                 app.UseExceptionHandler("/Home/Error");
             }
             
+            // Deprecated in RC2
             //app.UseIISPlatformHandler(); The static void main uses the UseIISIntegration method instead
 
             app.UseStaticFiles();

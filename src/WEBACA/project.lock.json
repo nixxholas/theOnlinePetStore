@@ -4269,6 +4269,7 @@
       "sha512": "2vVd6xlfDKxl7pln5VOSczVo5bdJK6VLF6LR62Tb+le6e0COju7diAPHujFcXQlX/eLq2GrctN5vbIMeQ6vRTg==",
       "type": "package",
       "files": [
+        "Microsoft.AspNet.Http.1.0.0-rc1-final.nupkg",
         "Microsoft.AspNet.Http.1.0.0-rc1-final.nupkg.sha512",
         "Microsoft.AspNet.Http.nuspec",
         "lib/dotnet5.4/Microsoft.AspNet.Http.dll",
@@ -4281,6 +4282,7 @@
       "sha512": "sfzc1WJMl8wGCF+rChVfJ7otT6tTv24RNXUej2r8tlQ2RDNnAozYyGb0SCW2mxpHrC31On99Wt0rksgF0c2WUw==",
       "type": "package",
       "files": [
+        "Microsoft.AspNet.Http.Abstractions.1.0.0-rc1-final.nupkg",
         "Microsoft.AspNet.Http.Abstractions.1.0.0-rc1-final.nupkg.sha512",
         "Microsoft.AspNet.Http.Abstractions.nuspec",
         "lib/dotnet5.4/Microsoft.AspNet.Http.Abstractions.dll",
@@ -4293,6 +4295,7 @@
       "sha512": "rsjbxD9W6NfqP0WNHMRyetIh6ZoKRbK1ea0V5xWdVAx53WdvgBy0HmkSwXt506+xU65jjZP19F4Ua4YjZdPHfQ==",
       "type": "package",
       "files": [
+        "Microsoft.AspNet.Http.Extensions.1.0.0-rc1-final.nupkg",
         "Microsoft.AspNet.Http.Extensions.1.0.0-rc1-final.nupkg.sha512",
         "Microsoft.AspNet.Http.Extensions.nuspec",
         "lib/dotnet5.4/Microsoft.AspNet.Http.Extensions.dll",
@@ -4305,6 +4308,7 @@
       "sha512": "WlscfdAvN8XaaK1iv1Iewp5emei7+0SlXNkUh7kMJpeaS6K0GhwNmwqZR6VrT1oN+Maw98nEONHS34/suqQwOA==",
       "type": "package",
       "files": [
+        "Microsoft.AspNet.Http.Features.1.0.0-rc1-final.nupkg",
         "Microsoft.AspNet.Http.Features.1.0.0-rc1-final.nupkg.sha512",
         "Microsoft.AspNet.Http.Features.nuspec",
         "lib/dotnet5.4/Microsoft.AspNet.Http.Features.dll",
@@ -4317,6 +4321,7 @@
       "sha512": "scDY0KQZnOvQTYDd6InIFhn4QnF5UxLtV7VoQXOlpsaEUQ0c6jDVoHvL4ylUy5zcKJkjRDUy/B7Q8TDk05kl2w==",
       "type": "package",
       "files": [
+        "Microsoft.AspNet.IISPlatformHandler.1.0.0-rc1-final.nupkg",
         "Microsoft.AspNet.IISPlatformHandler.1.0.0-rc1-final.nupkg.sha512",
         "Microsoft.AspNet.IISPlatformHandler.nuspec",
         "lib/dotnet5.4/Microsoft.AspNet.IISPlatformHandler.dll",
@@ -4329,6 +4334,7 @@
       "sha512": "0D80xroAEiWlB9X5eR/JUya1H2saIYnt4d7bPru5RRf5L/66X+9WWhf3hFkLUF3W13K6g6K9Is9dCTaEfFFKTA==",
       "type": "package",
       "files": [
+        "Microsoft.AspNet.WebUtilities.1.0.0-rc1-final.nupkg",
         "Microsoft.AspNet.WebUtilities.1.0.0-rc1-final.nupkg.sha512",
         "Microsoft.AspNet.WebUtilities.nuspec",
         "lib/dotnet5.4/Microsoft.AspNet.WebUtilities.dll",
@@ -5525,6 +5531,7 @@
       "sha512": "wt47w3Zu7JvuD7CfRSCaz0IZL5EzpuzicRm6Qcidteb2TVeB98Psg7YGiwIBeYB1b52YFTBgqC+ySKk/GRhy2A==",
       "type": "package",
       "files": [
+        "Microsoft.Extensions.WebEncoders.Core.1.0.0-rc1-final.nupkg",
         "Microsoft.Extensions.WebEncoders.Core.1.0.0-rc1-final.nupkg.sha512",
         "Microsoft.Extensions.WebEncoders.Core.nuspec",
         "lib/dotnet5.4/Microsoft.Extensions.WebEncoders.Core.dll",

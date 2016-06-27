@@ -1,12 +1,12 @@
 ﻿<div class="row">
-    <div class="col-md-offset-2  col-md-8">
+    <div class="col-md-12">
         <div class="panel panel-primary">
             <div class="panel-heading clearfix">
                 <div class="panel-title">
                     Manage Brands
                     <div class="btn-group pull-right">
                         <a asp-action="Create" asp-controller="Brands" class="btn btn-default btn-group-lg ">Create new brand</a>
-                        <a href="#" class="btn btn-danger  btn-group-lg ">Delete</a>
+                        <!-- <a href="#" class="btn btn-danger  btn-group-lg ">Delete</a> -->
                     </div>
                 </div>
             </div>
@@ -38,20 +38,13 @@
 
 <script>
     var brandCategories;
-
-    loadBrandsData();
-    loadBrandCategoryData();
-
-    function loadBrandCategoryData() {
-        //Note: jQuery.ajax(..) is also often written is $.ajax(..)
-        var $loadBrandsDataHandler = jQuery.ajax({
+    
+    $loadBrandCategoryDataHandler = jQuery.ajax({
             contentType: 'application/json',
             method: 'get',
             url: 'http://localhost:4992/API/BrandCategory',
         })
-        $loadBrandsDataHandler.done(function (data, textStatus, jqXHR) {
-            //// Like the previous cshtml, let's define a variable for
-            //// the courseIdInput box
+    $loadBrandCategoryDataHandler.done(function (data, textStatus, jqXHR) {
             //var $visibilityRadioListElement = $('#visibilityRadioList');
             //// We then initialize the element container
             //// for each element
@@ -60,17 +53,17 @@
             var brandId = '';
 
             brandCategories = data;
-        }//end of JavaScript anonymous function
 
+            loadBrandsData();
+        }//end of JavaScript anonymous function
           )//end of the done() method;
-        $loadBrandsDataHandler.fail(function (data, textStatus, jqXHR) {
+    $loadBrandCategoryDataHandler.fail(function (data, textStatus, jqXHR) {
             noty({
                 text: 'Ajax fail fired : ' + data.responseJSON.Message, type: 'error',
                 layout: 'center',
                 template: '<div class="noty_message"><span class="noty_text"></span>'
             });//end of noty()
-        })//end of $loadCompanyDataHandler.fail()
-    }//end of loadCompanyData();
+    })//end of $loadBrandCategoryDataHandler.fail()
 
     function loadBrandsData() {
         //Note: jQuery.ajax(..) is also often written is $.ajax(..)
@@ -85,9 +78,6 @@
             //The (data) input parameter automatically captures the response from the
             //Get() api method
 
-            //After inspecting the data object with the console.log
-            //I have clear picture of the structure and used
-            //the following variable to represent the response.d
             var brandsList = data;
             var brandCategory;
             var categories = '';
@@ -106,13 +96,13 @@
 
             //I want to build rows and cells (using tr and td HTML elements) so that
             //I can display company name, address, postal code, created at, updated at information
-            //within the HTML table element, companyTableBody. Recall that, I have already asked the
+            //within the HTML table element, brandsTableBody. Recall that, I have already asked the
             //$tableBodyElement variable to represent (reference) the table element.
 
             //-------- Begin creating <tr> and <td> HTML element ------
             for (index = 0; index < brandsList.length; index++) {
                 //Set this company variable to reference a company object
-                //inside the companyList Array.
+                //inside the brandsList Array.
                 brand = brandsList[index];
                 //Copy out the company information
                 brandId = brand.BrandId;
@@ -158,14 +148,10 @@
                 //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
                 $hyperLinkElement = $('<a>Edit Brand</a>').attr('href', '/Brands/Update/' + brandId);
                 $hyperLinkElement.addClass('btn btn-primary');
-                //The $hyperLinkElement eventually represents (references) a HTML element which is:
-                //<a href="/Companies/Update/<company id>" class="btn btn-primary" >Edit Company</a>
                 //-----------------Using jQuery() to creating the 6th cell for the row----------------------
                 $cellElement = $('<td></td>');
                 //-----------------Add the previous created hyperlink element, $hyperLinkElement
                 //                 into the newly created 6th cell.
-                //As a result, $cellElement references an element defined by:
-                //<td><a href="/Companies/Update/<company id>" class="btn btn-primary" >Edit Company</a></td>
                 $cellElement.append($hyperLinkElement);
 
                 //---------------Add the 6th cell into the row represented by the $rowElement
@@ -173,7 +159,7 @@
                 //Insert the $rowElement into the table element represented by $tableElement.
                 $tableBodyElement.append($rowElement);
                 //----End of creating one row to display one company by using <tr> and <td> HTML element ---
-                //       Proceed to the next company object in the companyList Array.
+                //       Proceed to the next brand object in the brandsList Array.
                 categories = '';
             }//end of for loop.
         }//end of JavaScript anonymous function
@@ -185,10 +171,10 @@
                 layout: 'center',
                 template: '<div class="noty_message"><span class="noty_text"></span>'
             });//end of noty()
-        })//end of $loadCompanyDataHandler.fail()
+        })//end of $loadBrandsDataHandler.fail()
 
 
-    }//end of loadCompanyData();
+    }//end of loadBrandsData();
 
 </script>
 

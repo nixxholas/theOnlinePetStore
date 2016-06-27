@@ -44,8 +44,8 @@
 </div><!-- end of div element with class="row" -->
 
 <script>
-    $("#jqxStartDate").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'dd/MM/yyyy', animationType: 'fade' });
-    $("#jqxEndDate").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'dd/MM/yyyy', animationType: 'fade' });
+    $("#jqxStartDate").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'dd/MM/yyyy', animationType: 'fade', min: new Date() });
+    $("#jqxEndDate").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'dd/MM/yyyy', animationType: 'fade', min: new Date() });
     var startDateInput;
     var endDateInput;
     $('#jqxStartDate').on('change', function (event) {
@@ -67,11 +67,36 @@
 
     $('#saveButton').on('click', function () {
         var collectedCatName = $('#catNameInput').val();
+        if (collectedCatName == null || collectedCatName == "") {
+            noty({
+                text: "Please input a Category Name.", type: 'error',
+                layout: 'center',
+                template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>'
+            });//end of noty()
+            return; // Break out of the function
+        }
         var collectedVisibilityId = $('input[name="Visibility"]:checked').val();
-        var collectedStartDate = moment(startDateInput).format("DD/MM/YYYY");
-        var collectedEndDate = moment(endDateInput).format("DD/MM/YYYY");
+        if (collectedVisibilityId == null) {
+            noty({
+                text: "Please select a Visibility Mode.", type: 'error',
+                layout: 'center',
+                template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>'
+            });//end of noty()
+            return;
+        }
         //Create a JavaScript object to contain the type name information
         if (collectedVisibilityId == 2) {
+            var collectedStartDate = moment(startDateInput).format("DD/MM/YYYY");
+            var collectedEndDate = moment(endDateInput).format("DD/MM/YYYY");
+            // Check if the start date is earlier than the end date
+            if (!moment(collectedStartDate).isBefore(collectedEndDate)) {
+                noty({
+                    text: "Please input a start date earlier than the end date.", type: 'error',
+                    layout: 'center',
+                    template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>'
+                });//end of noty()
+                return;
+            }
             var webFormData = new WebFormData(collectedCatName, collectedVisibilityId, collectedStartDate, collectedEndDate);
         } else {
             var webFormData = new WebFormData(collectedCatName, collectedVisibilityId, null, null);
@@ -94,14 +119,14 @@
                 layout: 'center',
                 template: '<div class="noty_message"><span class="noty_text"></span>'
             });
-        });//end of $saveCompanyTypeHandler.done();
+        });//end of $saveCategoryHandler.done();
         $saveCategoryHandler.fail(function (data, textStatus, jqXHR) {
             noty({
                 text: data.statusText, type: 'error',
                 layout: 'center',
                 template: '<div class="noty_message"><span class="noty_text"></span>'
             });
-        });//end of $saveCompanyTypeHandler.fail();
+        });//end of $saveCategoryHandler.fail();
     });//end of $('#saveButton').on('click', function () {
 
     function setupvisibilityRadioListBox() {
@@ -117,7 +142,7 @@
         **/
         $dataCommunicationTracker.done(function (data, textStatus, jqXHR) {
             // Like the previous cshtml, let's define a variable for
-            // the courseIdInput box
+            // the visibilityRadioList box
             var $visibilityRadioListElement = $('#visibilityRadioList');
             // We then initialize the element container
             // for each element
@@ -126,12 +151,12 @@
             // Then we implement a for loop to make things dynamic
             // for each course in the array called data
             for (index = 0; index < data.length; index++) {
-                // We first define the course from the data array
+                // We first define the visibility from the data array
                 oneVisibility = data[index];
                 // Then we put it into the element container
                 $optionElement = $('<input type="radio" name="Visibility" onClick="checkRadio()" value="'
                     + oneVisibility.VisibilityId + '"/>' + '<span>' + oneVisibility.VisibilityName + '&nbsp;&nbsp;&nbsp;' + '</span>');
-                // Then we add the element into the courseIdInput dropdown box
+                // Then we add the element into the visibilityRadioList radio box
                 $visibilityRadioListElement.append($optionElement);
             }
         });
@@ -141,7 +166,7 @@
             console.dir(textStatus);
             console.dir(jqXHR);
         });
-    } //End of setupCourseListBox() function
+    } //End of setupvisibilityRadioListBox() function
 
     function checkRadio() {
         if ($('input[name="Visibility"]:checked').val() == 1) {

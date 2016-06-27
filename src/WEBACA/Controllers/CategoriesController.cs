@@ -30,5 +30,9 @@ namespace WEBACA.Controllers
         {
             return View();
         }
+        public IActionResult BrandsUnderCategory()
+        {
+            return View();
+        }
     }
 }

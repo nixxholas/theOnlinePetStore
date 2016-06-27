@@ -31,7 +31,7 @@ namespace WEBACA.APIs
                     VisibilityId = visibility.VisibilityId,
                     VisibilityName = visibility.VisibilityName
                 });
-            }//end of foreach loop which builds the categoryList .
+            }//end of foreach loop which builds the visibilityList .
             return new JsonResult(visibilityList);
         }
     }

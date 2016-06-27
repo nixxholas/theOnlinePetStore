@@ -37,12 +37,12 @@ namespace WEBACA.APIs
             .Include(eachBrandEntity => eachBrandEntity.BrandCategory)
             .Include(eachBrandEntity => eachBrandEntity.BrandPhoto).AsNoTracking();
 
-            //After obtaining all the Employee entity rows (records) from the database,
-            //the employees variable will become an container holding these 
-            //Employee class entity rows.
-            //I need to loop through each  Employee instance inside employees
+            //After obtaining all the Brand entity rows (records) from the database,
+            //the brandss variable will become an container holding these 
+            //Brand class entity rows.
+            //I need to loop through each  Brand instance inside brandss
             //to construct a List container of anonymous objects (which has 6 properties).
-            //Then use the new JsonResult(employeeList) technique to generate the
+            //Then use the new JsonResult(brandsList) technique to generate the
             //JSON formatted string data which can be sent back to the web browser client.
             foreach (var oneBrand in brands)
             {
@@ -50,14 +50,50 @@ namespace WEBACA.APIs
                 {
                     BrandId = oneBrand.BrandId,
                     BrandName = oneBrand.BrandName,
-                    PhotoUrl = oneBrand.BrandPhoto.Url,
+                    // Save this for later
+                    // PhotoUrl = oneBrand.BrandPhoto.Url,
                     NoOfProducts = oneBrand.NoOfProducts,
                     CreatedAt = oneBrand.CreatedAt,
                     UpdatedAt = oneBrand.UpdatedAt
                 });
-            }//end of foreach loop which builds the employeeList .
+            }//end of foreach loop which builds the brandsList .
             return new JsonResult(brandList);
         }
+
+
+        // GET BrandsUnderCategory
+        // Takes in an integer as a Category Id
+        [HttpGet("GetBrandsUnderCategory/{id}")]
+        public JsonResult BrandsUnderCategory(int id)
+        {
+            List<object> brandList = new List<object>();
+
+            var brands = Database.Brands
+            .Include(eachBrandEntity => eachBrandEntity.BrandCategory)
+            .Include(eachBrandEntity => eachBrandEntity.BrandPhoto).AsNoTracking();
+
+            foreach (var oneBrand in brands)
+            {
+                foreach (var brandCat in oneBrand.BrandCategory)
+                {
+                    if (brandCat.CatId == id)
+                    {
+                        brandList.Add(new
+                        {
+                            BrandId = oneBrand.BrandId,
+                            BrandName = oneBrand.BrandName,
+                            // Save this for later
+                            // PhotoUrl = oneBrand.BrandPhoto.Url,
+                            NoOfProducts = oneBrand.NoOfProducts,
+                            CreatedAt = oneBrand.CreatedAt,
+                            UpdatedAt = oneBrand.UpdatedAt
+                        });
+                    }
+                }
+            }//end of foreach loop which builds the brandsList .
+            return new JsonResult(brandList);
+        }
+
 
         // GET api/values/5
         [HttpGet("{id}")]
@@ -84,7 +120,7 @@ namespace WEBACA.APIs
                 //This anonymous object only has one Message property 
                 //which contains a simple string message
                 object httpFailRequestResultMessage =
-                                    new { Message = "Unable to obtain employee information." };
+                                    new { Message = "Unable to obtain Category information." };
                 //Return a bad http response message to the client
                 return BadRequest(httpFailRequestResultMessage);
             }
@@ -95,7 +131,7 @@ namespace WEBACA.APIs
         public IActionResult Delete(int id)
         {
             //You are making a soft delete (not hard delete).
-            //Therefore, the Employee binary photo image at Cloudinary will remain.
+            //Therefore, the Brand binary photo image at Cloudinary will remain.
             string customMessage = "";
             try
             {
@@ -110,7 +146,7 @@ namespace WEBACA.APIs
             }
             catch (Exception ex)
             {
-                customMessage = "Unable to delete employee record.";
+                customMessage = "Unable to delete brands record.";
                 object httpFailRequestResultMessage = new { Message = customMessage };
                 //Return a bad http request message to the client
                 return BadRequest(httpFailRequestResultMessage);
@@ -130,20 +166,22 @@ namespace WEBACA.APIs
                                                             new OkObjectResult(successRequestResultMessage);
             //Send the OkObjectResult class object back to the client.
             return httpOkResult;
-        }//end of Delete(id) Web API method with /API/Employees/digit URL pattern route
+        }//end of Delete(id) Web API method with /API/Brands/digit URL pattern route
 
-        // POST /api/Employees/SaveNewEmployeeInformationInSession
+        // POST /api/Brands/SaveNewBrandInformationInSession
         [HttpPost("SaveNewBrandInformationInSession")]
         public IActionResult SaveNewBrandInformationInSession([FromBody]string value)
         {
             string customMessage = "";
+            // Issue: Should I add a "'" into a the Brand name String, the received from the
+            // Client results in an unended json object..
             //Reconstruct a useful object from the input string value. 
             var brandNewInput = JsonConvert.DeserializeObject<dynamic>(value);
 
             Brands newBrand = new Brands();
             try
             {
-                //Copy out all the employee data into the new Brand instance,
+                //Copy out all the brands data into the new Brand instance,
                 //newBrand.
                 newBrand.BrandName = brandNewInput.BrandName.Value;
                 newBrand.BrandCategory = new List<BrandCategory>();
@@ -163,19 +201,17 @@ namespace WEBACA.APIs
                     newBrand.BrandCategory.Add(newBrandCategory);
                 }
 
-
-
-                //I cannot save the employee information into database yet. The 
-                //UploadBrandPhotoAndSaveEmployeeData has logic to upload the binary file to
-                //Cloudinary first, then it will save employee data into the database.
-                //Therefore, I need to save the employee data as a Session variable first.
-                //The command below will save the employee data inside a
-                //Session variable, Employee (I can use other names...it is just a name)
+                //I cannot save the brands information into database yet. The 
+                //UploadBrandPhotoAndSaveBrandData has logic to upload the binary file to
+                //Cloudinary first, then it will save brands data into the database.
+                //Therefore, I need to save the brands data as a Session variable first.
+                //The command below will save the brand data inside a
+                //Session variable, Brand (I can use other names...it is just a name)
                 HttpContext.Session.SetObjectAsJson("Brands", newBrand);
             }
             catch (Exception exceptionObject)
             {
-                customMessage = "Unable to save employee into session.";
+                customMessage = "Unable to save brand into session.";
                 //Create a fail message anonymous object that has one property, Message.
                 //This anonymous object's Message property contains a simple string message
                 object httpFailRequestResultMessage = new { Message = customMessage };
@@ -191,7 +227,7 @@ namespace WEBACA.APIs
             //Message member variable (property)
             var successRequestResultMessage = new
             {
-                Message = "Saved employee into session"
+                Message = "Saved brand into session"
             };
 
             //Create a OkObjectResult class instance, httpOkResult.
@@ -201,9 +237,66 @@ namespace WEBACA.APIs
             //Send the OkObjectResult class object back to the client.
             return httpOkResult;
 
-        }//End of SaveNewEmployeeInformationInSession() method
+        }//End of SaveNewBrandInformationInSession() method
 
-        // PUT /api/Employees/SaveEmployeeUpdateInformationIntoDatabase
+        // POST /api/Brands/SaveNewBrandInformationInSession
+        [HttpPost("SaveBrandData")]
+        public IActionResult SaveBrandDataInDatabase([FromBody]string value)
+        {
+            string customMessage = "";
+            // Issue: Should I add a "'" into a the Brand name String, the received from the
+            // Client results in an unended json object..
+            //Reconstruct a useful object from the input string value. 
+            Brands newBrand = HttpContext.Session.GetObjectFromJson<Brands>("Brands");
+
+            try
+            {
+                newBrand.BrandPhoto = new BrandPhoto()
+                {
+                    Format = "jpg",
+                    Height = 120,
+                    ImageSize = 1692,
+                    PublicCloudinaryId = "Brands/u0ofsgsn9b1q6tlwrkxg",
+                    SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466794773/Brands/u0ofsgsn9b1q6tlwrkxg.jpg",
+                    Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466794773/Brands/u0ofsgsn9b1q6tlwrkxg.jpg",
+                    Version = 1466794773,
+                    Width = 171
+                };
+                //Add the brand record first, so that the newBrand
+                //object's BrandId property is updated with the new record's
+                //id.
+                Database.Brands.Add(newBrand);
+                Database.SaveChanges();
+
+
+                //******************************************************
+                //Construct a custom message for the client
+                //Create a success message anonymous object which has a 
+                //Message member variable (property)
+                var successRequestResultMessage = new
+                {
+                    Message = "Saved brand into session"
+                };
+
+                //Create a OkObjectResult class instance, httpOkResult.
+                //When creating the object, provide the previous message object into it.
+                OkObjectResult httpOkResult =
+                                            new OkObjectResult(successRequestResultMessage);
+                //Send the OkObjectResult class object back to the client.
+                return httpOkResult;
+            }
+            catch (Exception exceptionObject)
+            {
+                customMessage = "Unable to save brand into session.";
+                //Create a fail message anonymous object that has one property, Message.
+                //This anonymous object's Message property contains a simple string message
+                object httpFailRequestResultMessage = new { Message = customMessage };
+                //Return a bad http request message to the client
+                return BadRequest(httpFailRequestResultMessage);
+            }//End of Try..Catch block
+        }//End of SaveNewBrandInformationInSession() method
+
+        // PUT /api/Brands/SaveBrandUpdateInformationIntoDatabase
         [HttpPut("SaveBrandUpdateInformationIntoDatabase/{id}")]
         public IActionResult SaveBrandUpdateInformationIntoDatabase(int id, [FromBody]string value)
         {
@@ -218,18 +311,23 @@ namespace WEBACA.APIs
                 brandToBeUpdated.BrandCategory = new List<BrandCategory>();
 
                 var categories = brandChangeInput.BrandCategories.Value;
-                categories = categories.TrimEnd(']');
-                categories = categories.TrimStart('[');
 
-                foreach (string catId in categories.Split(','))
+                // Check if there are any categories i
+                if (categories != null)
                 {
-                    int CatId = Int32.Parse(catId);
+                    categories = categories.TrimEnd(']');
+                    categories = categories.TrimStart('[');
 
-                    // Create the necessary object to store the composites
-                    BrandCategory newBrandCategory = new BrandCategory();
-                    newBrandCategory.BrandId = id;
-                    newBrandCategory.CatId = CatId;
-                    brandToBeUpdated.BrandCategory.Add(newBrandCategory);
+                    foreach (string catId in categories.Split(','))
+                    {
+                        int CatId = Int32.Parse(catId);
+
+                        // Create the necessary object to store the composites
+                        BrandCategory newBrandCategory = new BrandCategory();
+                        newBrandCategory.BrandId = id;
+                        newBrandCategory.CatId = CatId;
+                        brandToBeUpdated.BrandCategory.Add(newBrandCategory);
+                    }
                 }
 
                 var foundOneBrand = Database.Brands
@@ -274,7 +372,7 @@ namespace WEBACA.APIs
                             bc.DeletedAt = null;
                             exists = true;
                             break;
-                        } 
+                        }
                     }
                     // If an UpdatedBC does not exist in foundOneBrand,
                     // We need to add it in
@@ -316,9 +414,9 @@ namespace WEBACA.APIs
                                                                     new OkObjectResult(successRequestResultMessage);
             //Send the OkObjectResult class object back to the client.
             return httpOkResult;
-        }//End of SaveEmployeeUpdateInformationIntoDatabase() method
+        }//End of SaveBrandUpdateInformationIntoDatabase() method
 
-        // PUT /api/Employees/SaveEmployeeUpdateInformationIntoSession
+        // PUT /api/Brands/SaveBrandUpdateInformationIntoSession
         [HttpPut("SaveBrandUpdateInformationIntoSession/{id}")]
         public IActionResult SaveBrandUpdateInformationIntoSession(int id, [FromBody]string value)
         {
@@ -330,25 +428,29 @@ namespace WEBACA.APIs
             Brands brandToBeUpdated = new Brands();
             try
             {
-                //Copy out all the employee data into the new Brand instance,
+                //Copy out all the brands data into the new Brand instance,
                 //newBrand.
                 brandToBeUpdated.BrandId = id;
                 brandToBeUpdated.BrandName = brandChangeInput.BrandName.Value;
-                brandToBeUpdated.BrandCategory = new List<BrandCategory>();
 
-                var categories = brandChangeInput.BrandCategories.Value;
-                categories = categories.TrimEnd(']');
-                categories = categories.TrimStart('[');
-
-                foreach (string catId in categories.Split(','))
+                if (brandChangeInput.BrandCategories.Value != null)
                 {
-                    int CatId = Int32.Parse(catId);
+                    brandToBeUpdated.BrandCategory = new List<BrandCategory>();
 
-                    // Create the necessary object to store the composites
-                    BrandCategory newBrandCategory = new BrandCategory();
-                    newBrandCategory.BrandId = id;
-                    newBrandCategory.CatId = CatId;
-                    brandToBeUpdated.BrandCategory.Add(newBrandCategory);
+                    var categories = brandChangeInput.BrandCategories.Value;
+                    categories = categories.TrimEnd(']');
+                    categories = categories.TrimStart('[');
+
+                    foreach (string catId in categories.Split(','))
+                    {
+                        int CatId = Int32.Parse(catId);
+
+                        // Create the necessary object to store the composites
+                        BrandCategory newBrandCategory = new BrandCategory();
+                        newBrandCategory.BrandId = id;
+                        newBrandCategory.CatId = CatId;
+                        brandToBeUpdated.BrandCategory.Add(newBrandCategory);
+                    }
                 }
 
                 //Saved it into a Session variable
@@ -381,17 +483,17 @@ namespace WEBACA.APIs
                             new OkObjectResult(successRequestResultMessage);
             //Send the OkObjectResult class object back to the client.
             return httpOkResult;
-        }//End of SaveEmployeeUpdateInformationIntoSession() method
+        }//End of SaveBrandUpdateInformationIntoSession() method
 
-        //POST /Api/Employees/UploadEmployeePhotoAndUpdateEmployeeData
+        //POST /Api/Brands/UploadBrandPhotoAndUpdateBrandData
         [HttpPost("UploadBrandPhotoAndUpdateBrandData")]
         public async Task<IActionResult> UploadBrandPhotoAndUpdateBrandData(IList<IFormFile> fileInput)
         {
-            //Retrieve the employee data which is stashed inside the Session, "Employee".
+            //Retrieve the brands data which is stashed inside the Session, "Brand".
             //http://benjii.me/2015/07/using-sessions-and-httpcontext-in-aspnet5-and-mvc6/
             Brands brandToBeUpdated = HttpContext.Session.GetObjectFromJson<Brands>("Brands");
-            //Get the current employee data from the database.
-            //Also get the current employee Photo information.
+            //Get the current brands data from the database.
+            //Also get the current brands Photo information.
             var oneBrand = Database.Brands
                 .Where(Brand => Brand.BrandId == brandToBeUpdated.BrandId)
                 .Include(Brand => Brand.BrandCategory)
@@ -452,9 +554,9 @@ namespace WEBACA.APIs
                         .Trim('"');
             string contentType = oneFile.ContentType;
             //Upload the binary file first
-            var currentBrandPhoto = await Cloudinary.CloudinaryAPIs.UploadBrandImageToCloudinary(oneFile.OpenReadStream(), contentType, fileName, "Employees");
+            var currentBrandPhoto = await Cloudinary.CloudinaryAPIs.UploadBrandImageToCloudinary(oneFile.OpenReadStream(), contentType, fileName, "Brands");
             //Delete the existing binary file
-            //Obtain the Cloudinary public id value from the foundOneEmployee's EmployeePhoto navigation property
+            //Obtain the Cloudinary public id value from the foundOneBrand's BrandPhoto navigation property
             string originalCloudinaryPublicId = oneBrand.BrandPhoto.PublicCloudinaryId;
             //Use the Cloudinary public id value as an input argument for the DeleteImageInCloudinary to delete the binary
             //file resource.
@@ -481,7 +583,7 @@ namespace WEBACA.APIs
             OkObjectResult httpOkResult =
                                         new OkObjectResult(successRequestResultMessage);
             return httpOkResult;
-        }//End of UploadEmployeePhotoAndUpdateEmployeeData()
+        }//End of UploadBrandPhotoAndUpdateBrandData()
 
 
         //POST /Api/Brands/UploadBrandPhotoAndSaveBrandData
@@ -497,15 +599,15 @@ namespace WEBACA.APIs
             string contentType = oneFile.ContentType;
             newBrandPhoto = await Cloudinary.CloudinaryAPIs.UploadBrandImageToCloudinary(oneFile.OpenReadStream(), contentType, fileName, "Brands");
 
-            //Retrieve the new employee data which is stashed inside the Session, "Brand".
+            //Retrieve the new brands data which is stashed inside the Session, "Brand".
             Brands newBrand = HttpContext.Session.GetObjectFromJson<Brands>("Brands");
             if (newBrandPhoto.PublicCloudinaryId != "")
             {
-                //Add the employ record first, so that the newBrand
+                //Add the Brand record first, so that the newBrand
                 //object's BrandId property is updated with the new record's
                 //id.
                 Database.Brands.Add(newBrand);
-                //Copy over the new employee id information to the BrandPhoto object,
+                //Copy over the new brands id information to the BrandPhoto object,
                 //newBrandPhoto. 
                 newBrandPhoto.BrandId = newBrand.BrandId;
                 Database.BrandPhotos.Add(newBrandPhoto);

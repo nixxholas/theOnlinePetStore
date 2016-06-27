@@ -19,12 +19,14 @@ namespace WEBACA.APIs
         {
             Database = new ApplicationDbContext();
         }
+
         // GET: api/values
         [HttpGet]
         public JsonResult Get()
         {
             List<object> categoryList = new List<object>();
             var categories = Database.Categories
+                 .Where(category => category.DeletedAt == null)
                  .Include(input => input.Visibility);
             foreach (var category in categories)
             {
@@ -43,7 +45,7 @@ namespace WEBACA.APIs
             return new JsonResult(categoryList);
         }
 
-        // GET api/values/5
+        // GET BrandsUnderCategory
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -75,6 +77,7 @@ namespace WEBACA.APIs
             }
         }
 
+
         // POST api/values
         [HttpPost]
         public IActionResult Post([FromBody]string value)
@@ -99,6 +102,10 @@ namespace WEBACA.APIs
                     newCategory.StartDate = null;
                     newCategory.EndDate = null;
                 }
+
+                // Change the string of Category Name to uppercase
+                newCategory.CatName.ToUpper();
+
                 Database.Categories.Add(newCategory);
                 Database.SaveChanges();//Telling the database model to save the changes
             }
@@ -168,7 +175,10 @@ namespace WEBACA.APIs
                     foundOneCategory.StartDate = null;
                     foundOneCategory.EndDate = null;
                 }
-                
+
+                // Turn the category name input to upper case
+                foundOneCategory.CatName.ToUpper();
+
                 // Not needed, we don't have to modify the id.
                 // foundOneCategory.CatId = Int32.Parse(categoryChangeInput.CatId.Value);
                 foundOneCategory.UpdatedAt = DateTime.Now;
@@ -266,8 +276,8 @@ namespace WEBACA.APIs
             string customMessage = "";
 
             //The following command should not be used. Although can work too.
-            // var existingOneCompany = Database.Categories
-            //    .Where(item => item.CompanyId == id).FirstOrDefault();
+            // var existingOneCategory = Database.Categories
+            //    .Where(item => item.CategoryId == id).FirstOrDefault();
             //--------------------------------------------------------------------------------------------
             try
             {

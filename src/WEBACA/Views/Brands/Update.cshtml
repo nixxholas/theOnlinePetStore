@@ -23,7 +23,7 @@
                         <label class="control-label col-md-3 updateBrandCategoryListLabelFix" for="categoriesInput">Categories</label>
                         <div class="form-group col-md-9">
                             <div class="form-group" id="categoriesList"></div>
-                        </div><!-- End of div element containing label and input for address -->
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3" for="brandPhotoUploadInput">Photo</label>
@@ -75,9 +75,7 @@
         url: 'http://localhost:4992/API/BrandCategory/' + g_brandId,
     })
     $loadSelectedCategoriesDataHandler.done(function (data, textStatus, jqXHR) {
-        var selectedCategories = data;
-        msCategoryList.setSelection(selectedCategories);
-        //msCategoryList.setSelection()
+        msCategoryList.setSelection(data);
     } //end of JavaScript anonymous function
 
           )//end of the done() method;
@@ -87,7 +85,7 @@
             layout: 'center',
             template: '<div class="noty_message"><span class="noty_text"></span>'
         });//end of noty()
-    })//end of $loadCompanyDataHandler.fail()
+    })//end of $loadBrandDataHandler.fail()
 
     //Note: jQuery.ajax(..) is also often written is $.ajax(..)
     $loadBrandHandler = jQuery.ajax({
@@ -95,9 +93,6 @@
         url: '/API/Brands/' + g_brandId,
     })
     $loadBrandHandler.done(function (data, textStatus, jqXHR) {
-        //After inspecting the data object with the console.log
-        //I have clear picture of the structure and used
-        //the following variable to reference(represent) the data variable.
         var brand = data;
         //Copy out the brand information
         var brandId = brand.BrandId;
@@ -111,13 +106,8 @@
                 categories.push(brandCategories[i].CatId);
             }
         }
-
-        // The loop causes the last two characters to be ", ". Let's remove it.
-        //categories = categories.substring(0, categories.length - 2)
-
-        //Populate the respective input controls with the employee details.
-        //For example, find the text input control, fullNameInput and set the
-        //text input control's value with the fullName variable's content.
+        
+        //Populate the respective input controls with the brand details.
         $('#brandNameInput').val(brandName);
         $('#currentPhotoImage').attr('src', brandPhotoUrl);
         msCategoryList.setValue(categories);
@@ -187,7 +177,22 @@
     $('#saveButton').on('click', function () {
         //Collect data from input elements
         var collectedBrandName = $('#brandNameInput').val();
-        var collectedCategories = JSON.stringify(msCategoryList.getValue()); // Category Id Array!!
+        if (collectedBrandName == null || collectedBrandName == "") {
+            noty({
+                text: "Please input a Brand Name.", type: 'error',
+                layout: 'center',
+                template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>'
+            });//end of noty()
+            return; // Break out of the function
+        }
+        var collectedCategories;
+
+        if (msCategoryList.getValue().length != 0) {
+            collectedCategories = JSON.stringify(msCategoryList.getValue()); // Category Id Array!!
+        } else {
+            collectedCategories = null;
+        }
+
 
         var fileName = $brandPhotoInputElement.val();
 

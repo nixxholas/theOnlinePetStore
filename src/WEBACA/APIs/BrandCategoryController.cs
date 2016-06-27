@@ -28,12 +28,12 @@ namespace WEBACA.APIs
             .Include(eachBrandCategoryEntity => eachBrandCategoryEntity.Brand)
             .Include(eachBrandCategoryEntity => eachBrandCategoryEntity.Category);
 
-            //After obtaining all the Employee entity rows (records) from the database,
-            //the employees variable will become an container holding these 
-            //Employee class entity rows.
-            //I need to loop through each  Employee instance inside employees
-            //to construct a List container of anonymous objects (which has 6 properties).
-            //Then use the new JsonResult(employeeList) technique to generate the
+            //After obtaining all the BrandCategory entity rows (records) from the database,
+            //the brandcategory variable will become an container holding these 
+            //BrandCategory class entity rows.
+            //I need to loop through each BrandCategory instance inside BrandCategories
+            //to construct a List container of anonymous objects.
+            //Then use the new JsonResult(brandCategoryList) technique to generate the
             //JSON formatted string data which can be sent back to the web browser client.
             foreach (var oneCategoryBrand in brandCategories)
             {
@@ -44,43 +44,8 @@ namespace WEBACA.APIs
                     CatId = oneCategoryBrand.CatId,
                     CatName = oneCategoryBrand.Category.CatName
                 });
-            }//end of foreach loop which builds the employeeList .
+            }//end of foreach loop which builds the brandCategoryList .
             return new JsonResult(brandCategoryList);
-        }
-
-        // GET: api/values
-        [HttpGet("GetCatIds/{id}")]
-        public IActionResult GetCatIds(int id)
-        {
-            try
-            {
-                List<object> brandCategoryList = new List<object>();
-                var foundBrandCategories = Database.BrandCategory
-                     .Where(eachBrandCategory => eachBrandCategory.BrandId == id)
-                     .Include(eachBrandCategory => eachBrandCategory.Category)
-                     .Include(eachBrandCategory => eachBrandCategory.Brand);
-                foreach (var brandCategory in foundBrandCategories)
-                {
-                    brandCategoryList.Add(new
-                    {
-                        BrandId = brandCategory.BrandId,
-                        BrandName = brandCategory.Brand.BrandName,
-                        CatId = brandCategory.CatId,
-                        CatName = brandCategory.Category.CatName
-                    });
-                }//end of foreach loop which builds the categoryList .
-                return new JsonResult(brandCategoryList);
-            }
-            catch (Exception exceptionObject)
-            {
-                //Create a fail message anonymous object
-                //This anonymous object only has one Message property 
-                //which contains a simple string message
-                object httpFailRequestResultMessage =
-                                    new { Message = "Unable to obtain Brand Category information." };
-                //Return a bad http response message to the client
-                return BadRequest(httpFailRequestResultMessage);
-            }
         }
 
         // We're parsing in the integer for the BrandId, gotta
@@ -121,6 +86,76 @@ namespace WEBACA.APIs
             }
         }
 
+        // GET: api/values
+        [HttpGet("GetCatIds/{id}")]
+        public IActionResult GetCatIds(int id)
+        {
+            try
+            {
+                List<object> brandCategoryList = new List<object>();
+                var foundBrandCategories = Database.BrandCategory
+                     .Where(eachBrandCategory => eachBrandCategory.BrandId == id)
+                     .Include(eachBrandCategory => eachBrandCategory.Category)
+                     .Include(eachBrandCategory => eachBrandCategory.Brand);
+                foreach (var brandCategory in foundBrandCategories)
+                {
+                    brandCategoryList.Add(new
+                    {
+                        BrandId = brandCategory.BrandId,
+                        BrandName = brandCategory.Brand.BrandName,
+                        CatId = brandCategory.CatId,
+                        CatName = brandCategory.Category.CatName
+                    });
+                }//end of foreach loop which builds the brandCategoryList .
+                return new JsonResult(brandCategoryList);
+            }
+            catch (Exception exceptionObject)
+            {
+                //Create a fail message anonymous object
+                //This anonymous object only has one Message property 
+                //which contains a simple string message
+                object httpFailRequestResultMessage =
+                                    new { Message = "Unable to obtain Brand Category information." };
+                //Return a bad http response message to the client
+                return BadRequest(httpFailRequestResultMessage);
+            }
+        }
+
+        // GET: api/values
+        [HttpGet("GetBrandsUnderCat/{id}")]
+        public IActionResult GetBrandsUnderCat(int id)
+        {
+            try
+            {
+                List<object> brandCategoryList = new List<object>();
+                var foundBrandCategories = Database.BrandCategory
+                     .Where(eachBrandCategory => eachBrandCategory.CatId == id)
+                     .Include(eachBrandCategory => eachBrandCategory.Category)
+                     .Include(eachBrandCategory => eachBrandCategory.Brand);
+                foreach (var brandCategory in foundBrandCategories)
+                {
+                    brandCategoryList.Add(new
+                    {
+                        BrandId = brandCategory.BrandId,
+                        BrandName = brandCategory.Brand.BrandName,
+                        CatId = brandCategory.CatId,
+                        CatName = brandCategory.Category.CatName
+                    });
+                }//end of foreach loop which builds the brandCategoryList .
+                return new JsonResult(brandCategoryList);
+            }
+            catch (Exception exceptionObject)
+            {
+                //Create a fail message anonymous object
+                //This anonymous object only has one Message property 
+                //which contains a simple string message
+                object httpFailRequestResultMessage =
+                                    new { Message = "Unable to obtain Brand Category information." };
+                //Return a bad http response message to the client
+                return BadRequest(httpFailRequestResultMessage);
+            }
+        }
+                
         /**
          * This POST method takes in the web form data
          * and parses in the Brand Object and the Category Object together.

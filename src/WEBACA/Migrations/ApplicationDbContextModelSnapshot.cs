@@ -105,7 +105,7 @@ namespace WEBACA.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("BrandPhoto");
+                    b.ToTable("BrandPhotos");
                 });
 
             modelBuilder.Entity("WEBACA.Models.Brands", b =>
@@ -127,9 +127,11 @@ namespace WEBACA.Migrations
 
                     b.Property<DateTime?>("DeletedAt");
 
-                    b.Property<int>("NoOfProducts")
+                    b.Property<int?>("NoOfProducts")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("NoOfProducts")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
@@ -164,9 +166,11 @@ namespace WEBACA.Migrations
 
                     b.Property<DateTime?>("DeletedAt");
 
-                    b.Property<DateTime?>("EndDate");
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnName("EndDate");
 
-                    b.Property<DateTime?>("StartDate");
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnName("StartDate");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
@@ -185,7 +189,7 @@ namespace WEBACA.Migrations
 
                     b.HasIndex("VisibilityId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("WEBACA.Models.Visibility", b =>
@@ -198,7 +202,7 @@ namespace WEBACA.Migrations
                     b.HasKey("VisibilityId")
                         .HasName("PrimaryKey_VisibilityId");
 
-                    b.ToTable("Visibility");
+                    b.ToTable("Visibilities");
                 });
 
             modelBuilder.Entity("WEBACA.Models.BrandCategory", b =>
