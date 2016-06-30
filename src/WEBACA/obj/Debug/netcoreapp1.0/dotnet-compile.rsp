@@ -1,5 +1,5 @@
---temp-output:C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\obj\Debug\netcoreapp1.0\
---out:C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\bin\Debug\netcoreapp1.0\WEBACA.dll
+--temp-output:D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\obj\Debug\netcoreapp1.0\
+--out:D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\bin\Debug\netcoreapp1.0\WEBACA.dll
 --define:DEBUG
 --define:TRACE
 --define:NETCOREAPP1_0
@@ -228,29 +228,29 @@
 --reference:C:\Users\Nicholas\.nuget\packages\System.Threading.Timer\4.0.1-rc2-24027\ref\netstandard1.2\System.Threading.Timer.dll
 --reference:C:\Users\Nicholas\.nuget\packages\System.Xml.ReaderWriter\4.0.11-rc2-24027\ref\netstandard1.3\System.Xml.ReaderWriter.dll
 --reference:C:\Users\Nicholas\.nuget\packages\System.Xml.XDocument\4.0.11-rc2-24027\ref\netstandard1.3\System.Xml.XDocument.dll
---resource:"C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\obj\Debug\netcoreapp1.0\WEBACAdotnet-compile.deps.json",WEBACA.deps.json
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Startup.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\APIs\BrandCategoryController.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\APIs\BrandsController.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\APIs\CategoriesController.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\APIs\VisibilityController.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Cloudinary\Base64Encoder.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Cloudinary\CloudinaryAPIs.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Cloudinary\CloudinaryURISignature.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Controllers\BrandCategoryController.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Controllers\BrandsController.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Controllers\CategoriesController.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Controllers\HomeController.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Helper\SessionExtensions.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Helper\UnixTime.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Migrations\20160623161802_setupdb.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Migrations\20160623161802_setupdb.Designer.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Migrations\ApplicationDbContextModelSnapshot.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Models\ApplicationDbContext.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Models\BrandCategory.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Models\BrandPhoto.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Models\Brands.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Models\Category.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Models\DataSeeder.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Models\ImageFile.cs
-C:\Users\Nicholas\Documents\GitHub\theOnlinePetStore\src\WEBACA\Models\Visibility.cs
+--resource:"D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\obj\Debug\netcoreapp1.0\WEBACAdotnet-compile.deps.json",WEBACA.deps.json
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Startup.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\APIs\BrandCategoryController.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\APIs\BrandsController.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\APIs\CategoriesController.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\APIs\VisibilityController.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Cloudinary\Base64Encoder.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Cloudinary\CloudinaryAPIs.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Cloudinary\CloudinaryURISignature.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Controllers\BrandCategoryController.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Controllers\BrandsController.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Controllers\CategoriesController.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Controllers\HomeController.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Helper\SessionExtensions.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Helper\UnixTime.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Migrations\20160623161802_setupdb.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Migrations\20160623161802_setupdb.Designer.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Migrations\ApplicationDbContextModelSnapshot.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Models\ApplicationDbContext.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Models\BrandCategory.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Models\BrandPhoto.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Models\Brands.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Models\Category.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Models\DataSeeder.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Models\ImageFile.cs
+D:\Drive Core\School\DIT 2nd Year\WEBA\CA2WEBA\NicholasChen_1444728_2A02\src\WEBACA\Models\Visibility.cs

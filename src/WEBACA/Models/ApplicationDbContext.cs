@@ -31,20 +31,18 @@ namespace WEBACA.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer(@"Server = tcp:nixholas.database.windows.net, 1433; Data Source = nixholas.database.windows.net; Initial Catalog = WEBACA1; Persist Security Info = False; User ID = nixholas; Password = IL0veW3b4; Pooling = False; MultipleActiveResultSets = True; Encrypt = True; TrustServerCertificate = False;");
+            optionsBuilder.UseSqlServer(@"Server = tcp:nixholas.database.windows.net, 1433; Data Source = nixholas.database.windows.net; Initial Catalog = WEBACA1; Persist Security Info = False; User ID = nixholas; Password = IL0veW3b4; Pooling = False; MultipleActiveResultSets = True; Encrypt = True; TrustServerCertificate = False;");
             // Database=nixholasweba;Data Source=ap-cdbr-azure-southeast-b.cloudapp.net;User Id=b8db53fe60141d;Password=1a79511a
-            optionsBuilder.UseSqlServer(@"Server=NIXH\SQLEXPRESS;Database=WEBACA;Trusted_Connection=True;MultipleActiveResultSets=True");
+            //optionsBuilder.UseSqlServer(@"Server=NIXH\SQLEXPRESS;Database=WEBACA;Trusted_Connection=True;MultipleActiveResultSets=True");
         }
 
         protected override void OnModelCreating(ModelBuilder mb)
         {
-            // I've ported the DbContext to follow RC2's standards.
-            // Thus, I won't need this anymore
             // Microsoft's fix for RC1 updated applications
-            //foreach (var entity in mb.Model.GetEntityTypes())
-            //{
-            //    entity.Relational().TableName = entity.DisplayName();
-            //}
+            foreach (var entity in mb.Model.GetEntityTypes())
+            {
+                entity.Relational().TableName = entity.DisplayName();
+            }
 
             // -------------- Defining Product Entity --------------- //
             //mb.Entity<Product>()
