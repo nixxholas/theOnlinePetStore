@@ -80,11 +80,7 @@
 
           )//end of the done() method;
     $loadSelectedCategoriesDataHandler.fail(function (data, textStatus, jqXHR) {
-        noty({
-            text: 'Ajax fail fired : ' + data.responseJSON.Message, type: 'error',
-            layout: 'center',
-            template: '<div class="noty_message"><span class="noty_text"></span>'
-        });//end of noty()
+        swal("Oh no!", data.responseJSON.message, "error");
     })//end of $loadBrandDataHandler.fail()
 
     //Note: jQuery.ajax(..) is also often written is $.ajax(..)
@@ -158,12 +154,7 @@
                       //select a new file.
                       var form = data.form, files = data.files, extra = data.extra,
                       response = data.response, reader = data.reader;
-                      noty({
-                          text: data.jqXHR.responseJSON.Message,
-                          type: 'success',
-                          layout: 'center',
-                          template: '<div class="noty_message"><span class="noty_text"></span>'
-                      });
+                      swal("Hurray!", data.responseJSON.message, "Success");
                       var newImageUrl = data.jqXHR.responseJSON.NewImageUrl;
                       $('#currentPhotoImage').attr('src', newImageUrl);
                   });
@@ -175,11 +166,7 @@
         //Collect data from input elements
         var collectedBrandName = $('#brandNameInput').val();
         if (collectedBrandName == null || collectedBrandName == "") {
-            noty({
-                text: "Please input a Brand Name.", type: 'error',
-                layout: 'center',
-                template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>'
-            });//end of noty()
+            swal("Oh no!", "Please enter a brand name!", "error");
             return; // Break out of the function
         }
         var collectedCategories;
@@ -214,21 +201,11 @@
                     //Using this command will get the FileUpload widget to begin upload
                     window.$brandPhotoInputElement.fileinput('upload');
                 } else {
-                    noty({
-                        text: data.Message,
-                        type: 'success',
-                        layout: 'center',
-                        template: '<div class="noty_message"><span class="noty_text"></span>'
-                    });
+                    swal("Hurray!", data.responseJSON.message, "success");
                 }
             });
             $saveBrandHandler.fail(function (data, textStatus, jqXHR) {
-                noty({
-                    text: data.responseJSON.Message,
-                    type: 'error',
-                    layout: 'center',
-                    template: '<div class="noty_message"><span class="noty_text"></span>'
-                });
+                swal("Oh no!", data.responseJSON.message, "error");
             });
         }//end of if (numberOfFiles>0) condition block
 
@@ -240,20 +217,10 @@
                 data: "'" + webFormDataInString + "'"
             });
             $saveBrandHandler.done(function (data, textStatus, jqXHR) {
-                noty({
-                    text: data.Message,
-                    type: 'success',
-                    layout: 'center',
-                    template: '<div class="noty_message"><span class="noty_text"></span>'
-                });
+                swal("Hurray!", "Your amazing brand has been updated!", "success");
             });
             $saveBrandHandler.fail(function (data, textStatus, jqXHR) {
-                noty({
-                    text: data.responseJSON.Message,
-                    type: 'error',
-                    layout: 'center',
-                    template: '<div class="noty_message"><span class="noty_text"></span>'
-                });
+                swal("Oh no!", data.responseJSON.message, "error");
             });
 
         }//end of if (numberOfFiles==0) condition block
@@ -276,28 +243,21 @@
             url: '/API/Brands/' + g_brandId
         })//end of jQuery.ajax() call
         $deleteBrandHandler.done(function (data, textStatus, jqXHR) {
-            noty({
-                text: data.Message, type: 'success',
-                layout: 'center',
-                template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>',
-                buttons: [
-                        {
-                            addClass: 'btn btn-primary', text: 'Ok', onClick: function ($noty) {
-                                $noty.close();
-                                $('body').fadeOut(2000, redirectPage);
-                            }
-                        }
-                ]
-            });//end of noty()
+            swal({
+                title: "Success!",
+                text: data.responseJSON.message,
+                type: "success",
+                showCancelButton: false,
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true,
+            },
+            function () {
+                $('body').fadeOut(2000, redirectPage);
+            });
         });//end of $deleteEmployeeHandler.done()
 
         $deleteBrandHandler.fail(function (data, textStatus, jqXHR) {
-            console.log(data);
-            noty({
-                text: data.responseJSON.Message, type: 'error',
-                layout: 'center',
-                template: '<div class="noty_message"><span class="noty_text"></span>'
-            });//end of noty()
+            swal("Oh no!", data.responseJSON.message, "error");
         });//end of $deleteEmployeeHandler.fail()
 
     });// end of $('#deleteButton').on('click', function () { ...}

@@ -107,6 +107,7 @@
     });
 
     $dataCommunicationTracker.fail(function (data, textStatus, jqXHR) {
+        swal("Oh no!", data.responseJSON.message, "error");
     });
 
     function checkRadio() {
@@ -220,7 +221,6 @@
         });//end of $updateCategoryHandler.done()
 
         $updateCategoryHandler.error(function (data, textStatus, jqXHR) {
-            console.dir(data);
             swal("Oh no!", data.responseJSON.message, "error");
         });//end of $updateCategoryHandler.error()
 

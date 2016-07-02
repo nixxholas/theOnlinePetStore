@@ -108,18 +108,10 @@
             data: "'" + webFormDataInString + "'"
         })//end of ajax() call
         $saveCategoryHandler.done(function (data, textStatus, jqXHR) {
-            noty({
-                text: data.Message, type: 'success',
-                layout: 'center',
-                template: '<div class="noty_message"><span class="noty_text"></span>'
-            });
+            swal("Hurray!", data.responseJSON.message, "Success");
         });//end of $saveCategoryHandler.done();
         $saveCategoryHandler.fail(function (data, textStatus, jqXHR) {
-            noty({
-                text: data.statusText, type: 'error',
-                layout: 'center',
-                template: '<div class="noty_message"><span class="noty_text"></span>'
-            });
+            swal("Oh no!", data.responseJSON.message, "error");
         });//end of $saveCategoryHandler.fail();
     });//end of $('#saveButton').on('click', function () {
 
@@ -156,9 +148,7 @@
         });
 
         $dataCommunicationTracker.fail(function (data, textStatus, jqXHR) {
-            console.dir(data);
-            console.dir(textStatus);
-            console.dir(jqXHR);
+            swal("Oh no!", data.responseJSON.message, "error");
         });
     } //End of setupvisibilityRadioListBox() function
 

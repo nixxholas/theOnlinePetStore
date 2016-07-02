@@ -218,7 +218,7 @@ namespace WEBA_ASSIGNMENT.APIs
              //Message member variable (property)
             var successRequestResultMessage = new
             {
-                Message = "Saved Category record"
+                Message = "The amazing category record has been saved!"
             };
 
             //Create a OkObjectResult class instance, httpOkResult.
@@ -269,7 +269,7 @@ namespace WEBA_ASSIGNMENT.APIs
              //Message member variable (property)
             var successRequestResultMessage = new
             {
-                Message = "The category has been restored."
+                Message = "The category has been restored to glory!"
             };
 
             //Create a OkObjectResult class instance, httpOkResult.

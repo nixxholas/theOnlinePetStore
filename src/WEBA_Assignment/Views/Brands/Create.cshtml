@@ -85,12 +85,7 @@
                          function (event, data, previewId, index) {
                              var form = data.form, files = data.files, extra = data.extra,
                                  response = data.response, reader = data.reader;
-                             noty({
-                                 text: data.jqXHR.responseJSON.Message,
-                                 type: 'success',
-                                 layout: 'center',
-                                 template: '<div class="noty_message"><span class="noty_text"></span>'
-                             });
+                             swal("Hurray!", data.responseJSON.message, "Success");
                          });
 
     //Using a function to create a JavaScript class, WebFormData
@@ -107,11 +102,7 @@
         //Collect data from input elements
         var collectedBrandName = $('#brandNameInput').val();
         if (collectedBrandName == null || collectedBrandName == "") {
-            noty({
-                text: "Please input a Brand Name.", type: 'error',
-                layout: 'center',
-                template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>'
-            });//end of noty()
+            swal("Error!", "Please enter an appropriate brand name!", "error")
             return; // Break out of the function
         }
         var collectedCategories = JSON.stringify(msCategoryList.getValue()); // Category Id Array!!
@@ -135,32 +126,17 @@
                     data: "'" + webFormDataInString + "'"
                 });
                 $saveBrandDBHandler.done(function (data, textStatus, jqXHR) {
-                    noty({
-                        text: "Saved Brand into Database. (A default image has been utilized for this brand)",
-                        type: 'success',
-                        layout: 'center',
-                        template: '<div class="noty_message"><span class="noty_text"></span>'
-                    });
+                    swal("Hurray!", data.responseJSON.message, "Success");
                 });
                 $saveBrandDBHandler.fail(function (data, textStatus, jqXHR) {
-                    noty({
-                        text: data.responseJSON.Message,
-                        type: 'error',
-                        layout: 'center',
-                        template: '<div class="noty_message"><span class="noty_text"></span>'
-                    });
+                    swal("Oh no!", data.responseJSON.message, "error");
                 });
             } else {
                 window.$brandPhotoInputElement.fileinput('upload');
             }
         });
         $saveBrandHandler.fail(function (data, textStatus, jqXHR) {
-            noty({
-                text: data.responseJSON.Message,
-                type: 'error',
-                layout: 'center',
-                template: '<div class="noty_message"><span class="noty_text"></span>'
-            });
+            swal("Oh no!", data.responseJSON.message, "error");
         });				
     });
 </script>

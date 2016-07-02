@@ -280,7 +280,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 //Message member variable (property)
                 var successRequestResultMessage = new
                 {
-                    Message = "Saved brand into session"
+                    Message = "Your amazing brand has been saved!"
                 };
 
                 //Create a OkObjectResult class instance, httpOkResult.

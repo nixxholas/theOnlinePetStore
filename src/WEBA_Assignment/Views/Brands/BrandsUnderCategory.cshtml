@@ -59,23 +59,16 @@
         //the following variable to reference(represent) the data variable.
         var category = data;
         // Pull the Category's Data
-        var catId = category.CatId;
-        var catName = category.CatName;
-        var visibilityId = category.VisibilityId;
-        var startDate = category.StartDate; // Format: yyyy-mm-dd
-        var endDate = category.EndDate;
+        var catId = category.catId;
+        var catName = category.catName;
+        var visibilityId = category.visibilityId;
+        var startDate = category.startDate; // Format: yyyy-mm-dd
+        var endDate = category.endDate;
 
         textTitle.innerHTML = 'BRANDS UNDER ' + catName;
     })//end of the done() method;
     $loadCategoryHandler.fail(function (data, textStatus, jqXHR) {
-        console.dir(textStatus);//Have a habit in using console.log to inspect the parameter variable content
-        console.dir(data);
-        console.dir(jqXHR);
-        noty({
-            text: data.statusText, type: 'error',
-            layout: 'center',
-            template: '<div class="noty_message"><span class="noty_text"></span>'
-        });
+        swal("Oh no!", data.responseJSON.message, "error");
     });//end of $loadCategoryHandler.error()
     // End of Pulling the category specific data
 
@@ -101,11 +94,7 @@
     }//end of JavaScript anonymous function
           )//end of the done() method;
     $loadBrandCategoryDataHandler.fail(function (data, textStatus, jqXHR) {
-        noty({
-            text: 'Ajax fail fired : ' + data.responseJSON.Message, type: 'error',
-            layout: 'center',
-            template: '<div class="noty_message"><span class="noty_text"></span>'
-        });//end of noty()
+        swal("Oh no!", data.responseJSON.message, "error");
     })//end of $loadBrandCategoryDataHandler.fail()
 
     function loadBrandsData() {
@@ -144,18 +133,18 @@
                 //inside the brandList Array.
                 brand = brandsList[index];
                 //Copy out the brand information
-                brandId = brand.BrandId;
-                brandName = brand.BrandName;
-                noofProducts = brand.NoOfProducts;
-                createdAt = new Date(brand.CreatedAt).toDateString();
-                updatedAt = new Date(brand.UpdatedAt).toDateString();
+                brandId = brand.brandId;
+                brandName = brand.brandName;
+                noofProducts = brand.noOfProducts;
+                createdAt = new Date(brand.createdAt).toDateString();
+                updatedAt = new Date(brand.updatedAt).toDateString();
 
                 // For each Brand Category in the Brand Category Table
                 for (i = 0; i < brandCategories.length; i++) {
                     // If the Brand Id is equivalent to the one we have
-                    if (brandCategories[i].BrandId == brandId) {
+                    if (brandCategories[i].brandId == brandId) {
                         // Add it into the column categories
-                        categories += brandCategories[i].CatName;
+                        categories += brandCategories[i].catName;
                         categories += ", ";
                     }
                 }
@@ -205,23 +194,10 @@
 
          )//end of the done() method;
         $loadBrandsDataHandler.fail(function (data, textStatus, jqXHR) {
-            noty({
-                text: 'Ajax fail fired : ' + data.responseJSON.Message, type: 'error',
-                layout: 'center',
-                template: '<div class="noty_message"><span class="noty_text"></span>'
-            });//end of noty()
+            swal("Oh no!", data.responseJSON.message, "error");
         })//end of $loadBrandDataHandler.fail()
     }
-
-    // Highlight function for Table
-    $('#dataTable').on('click', 'tbody tr', function (event) {
-        if (!$(this).hasClass('highlight') && !$(this).hasClass('highlightred')) {
-            $(this).addClass('highlight');
-        } else if ($(this).hasClass('highlight')) {
-            $(this).removeClass('highlight');
-        }
-    });
-
+    
     function WebFormData(inCatId) {
         this.CatId = inCatId;
     }
@@ -241,27 +217,20 @@
             data: "'" + webFormDataInString + "'"
         })//end of jQuery.ajax() call
         $updateCategoryHandler.done(function (data, textStatus, jqXHR) {
-            noty({
-                text: data.Message, type: 'success',
-                layout: 'center',
-                template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>',
-                buttons: [
-                    {
-                        addClass: 'btn btn-primary', text: 'Ok', onClick: function ($noty) {
-                            $noty.close();
-                            $('body').fadeOut(2000, redirectPage);
-                        }
-                    }
-                ]
-            });//end of noty()
+            swal({
+                title: "Hooray! The brand is restored!",
+                text: "I will close in 2 seconds.",
+                timer: 2000,
+                type: "success",
+                showConfirmButton: false
+            },
+            function () {
+                $('body').fadeOut(2000, redirectPage);
+            });
         });//end of $updateCategoryHandler.done()
 
         $updateCategoryHandler.error(function (data, textStatus, jqXHR) {
-            noty({
-                text: data.responseJSON.Message, type: 'error',
-                layout: 'center',
-                template: '<div class="noty_message"><span class="noty_text"></span>'
-            });//end of noty()
+            swal("Oh no!", data.responseJSON.message, "error");
         });//end of $updateCategoryHandler.error()
     }
 
@@ -269,38 +238,4 @@
         location.replace('/Categories/Index');
     }// end of redirectPage() method (function)
 
-    $('#deleteButton').on('click', function () {
-        $('#dataTable tr').each(function () {
-            if ($(this).hasClass('highlight')) {
-                var CatId = $(this).attr('value');
-                $deleteCategoryHandler = jQuery.ajax({
-                    type: 'DELETE',
-                    url: '/API/Categories/' + CatId
-                })//end of jQuery.ajax() call
-            }
-        });
-        $deleteCategoryHandler.done(function (data, textStatus, jqXHR) {
-            noty({
-                text: data.Message, type: 'success',
-                layout: 'center',
-                template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>',
-                buttons: [
-                    {
-                        addClass: 'btn btn-primary', text: 'Ok', onClick: function ($noty) {
-                            $noty.close();
-                            $('body').fadeOut(2000, redirectPage);
-                        }
-                    }
-                ]
-            });//end of noty()
-        });//end of $updatestudentHandler.done
-        $deleteCategoryHandler.fail(function (data, textStatus, jqXHR) {
-            console.log(data);
-            noty({
-                text: data.responseJSON.Message, type: 'error',
-                layout: 'center',
-                template: '<div class="noty_message"><span class="noty_text"></span>'
-            });//end of noty()
-        });//end of $deleteCategoryHandler.fail()
-    });// end of $('#saveButton').on('click', function () { ...}
 </script>

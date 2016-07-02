@@ -64,6 +64,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 List<object> brandCategoryList = new List<object>();
                 var foundBrandCategories = Database.BrandCategory
                      .Where(eachBrandCategory => eachBrandCategory.BrandId == id)
+                     .Where(eachBrandCategory => eachBrandCategory.DeletedAt == null)
                      .Include(eachBrandCategory => eachBrandCategory.Category)
                      .Include(eachBrandCategory => eachBrandCategory.Brand);
                 foreach (var brandCategory in foundBrandCategories)
