@@ -45,6 +45,10 @@ namespace WEBA_ASSIGNMENT.Models
         /// </summary>
         public DateTime CreatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
+        public string CreatedById { get; set; }
+        public string DeletedById { get; set; }
+        public ApplicationUser CreatedBy { get; set; }
+        public ApplicationUser DeletedBy { get; set; }
         /// <summary>
         /// The size of the uploaded image in bytes
         /// </summary>

@@ -20,7 +20,10 @@
                                     <th>Category Name</th>
                                     <th>Visibility</th>
                                     <!-- <th>No. of Sub-Categories</th> -->
+                                    <th>Created At</th>
+                                    <th>Created By</th>
                                     <th>Updated At</th>
+                                    <th>Updated By</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
@@ -55,9 +58,11 @@
             var CatId = '';
             var CatName = '';
             //var noofBrands = '';
-            var createdAt = "";
-            var updatedAt = "";
-            var deletedAt = "";
+            var CreatedAt = "";
+            var CreatedBy = "";
+            var UpdatedAt = "";
+            var UpdatedBy = "";
+            var DeletedAt = "";
             var $tableElement = null;
             var $cellElement = null;
             var $rowElement = null;
@@ -80,11 +85,15 @@
                 CatId = category.catId;
                 CatName = category.catName;
                 VisibilityName = category.visibility;
+                CreatedAt = category.createdAt;
+                CreatedBy = category.createdBy;
+                UpdatedAt = category.updatedAt;
+                UpdatedBy = category.updatedBy;
+                console.dir(CreatedBy);
                 //noofBrands = category.BrandCategory.length;
                 // Have not added BrandsOfCategories here
                 // noofProducts = brand.NoOfProducts;
                 //createdAt = new Date(brand.CreatedAt).toDateString();
-                updatedAt = category.updatedAt;
                 if (category.deletedAt == null) {
                     deletedAt = null;
                 } else {
@@ -108,10 +117,16 @@
                 $cellElement = $('<td></td>', { text: VisibilityName });
                 $rowElement.append($cellElement);
                 //Create the 4th cell element which display created at information
-                //$cellElement = $('<td></td>', { text: createdAt });
-                //$rowElement.append($cellElement);
-                //Create the 5th cell element which display updated at information
-                $cellElement = $('<td></td>', { text: moment(updatedAt).format('DD/MM/YYYY HH:mm ZZ') });
+                $cellElement = $('<td></td>', { text: moment(CreatedAt).format('DD/MM/YYYY HH:mm ZZ') });
+                $rowElement.append($cellElement);
+                //Create the 5th cell element which display created at information
+                $cellElement = $('<td></td>', { text: CreatedBy });
+                $rowElement.append($cellElement);
+                //Create the 6th cell element which display updated at information
+                $cellElement = $('<td></td>', { text: moment(UpdatedAt).format('DD/MM/YYYY HH:mm ZZ') });
+                $rowElement.append($cellElement);
+                //Create the 7th cell element which display created at information
+                $cellElement = $('<td></td>', { text: UpdatedBy });
                 $rowElement.append($cellElement);
                 if (deletedAt == null) {
                     //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------

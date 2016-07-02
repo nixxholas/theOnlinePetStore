@@ -31,8 +31,9 @@ namespace WEBA_ASSIGNMENT.Models
             //RoleStore needs using Microsoft.AspNet.Identity.EntityFramework;
             var identityRoleStore = new RoleStore<IdentityRole>(db);
             var identityRoleManager = new RoleManager<IdentityRole>(identityRoleStore, null, null, null, null, null);
-
-
+            
+            var superAdminRole = new IdentityRole { Name = "SUPER ADMIN" };
+            await identityRoleManager.CreateAsync(superAdminRole);
 
             var adminRole = new IdentityRole { Name = "ADMIN" };
             await identityRoleManager.CreateAsync(adminRole);
@@ -273,119 +274,153 @@ namespace WEBA_ASSIGNMENT.Models
             Clearance = new Category()
             {
                 CatName = "CLEARANCE SALE",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(Clearance);
 
             Donate = new Category()
             {
                 CatName = "DONATE",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(Donate);
 
             DogFood = new Category()
             {
                 CatName = "DOG FOOD",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(DogFood);
 
             CatFood = new Category()
             {
                 CatName = "CAT FOOD",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(CatFood);
 
             SmallAnimal = new Category()
             {
                 CatName = "SMALL ANIMAL",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(SmallAnimal);
 
             Treats = new Category()
             {
                 CatName = "TREATS",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(Treats);
 
             Shampoo = new Category()
             {
                 CatName = "SHAMPOO",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(Shampoo);
 
             Grooming = new Category()
             {
                 CatName = "GROOMING",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(Grooming);
 
             DentalCare = new Category()
             {
                 CatName = "DENTAL CARE",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(DentalCare);
 
             Supplements = new Category()
             {
                 CatName = "SUPPLEMENTS",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(Supplements);
 
             Toys = new Category()
             {
                 CatName = "TOYS",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(Toys);
 
             Accessories = new Category()
             {
                 CatName = "ACCESSORIES",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(Accessories);
 
             ToiletryNeeds = new Category()
             {
                 CatName = "TOILETRY NEEDS",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(ToiletryNeeds);
 
             TrainingAids = new Category()
             {
                 CatName = "TRAINING AIDS",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(TrainingAids);
 
             FleaNTickControl = new Category()
             {
                 CatName = "FLEA & TICK CONTROL",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(FleaNTickControl);
 
             GiftVouchers = new Category()
             {
                 CatName = "GIFT VOUCHERS",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(GiftVouchers);
 
             PwP = new Category()
             {
                 CatName = "PURCHASE WITH PURCHASE",
-                VisibilityId = VisibleIgnored.VisibilityId
+                VisibilityId = VisibleIgnored.VisibilityId,
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Categories.Add(PwP);
 
@@ -446,7 +481,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466703383,
                     Width = 380
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(AddMate);
 
@@ -464,7 +501,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466734352,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Addiction);
 
@@ -482,7 +521,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466740096,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Advocate);
 
@@ -500,7 +541,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466740233,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Aeolus);
 
@@ -518,7 +561,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466740327,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(AlfalfaKing);
 
@@ -536,7 +581,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466066280,
                     Width = 201
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(AmericanPetDiner);
 
@@ -554,7 +601,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466743616,
                     Width = 150
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Angels);
 
@@ -572,7 +621,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466747277,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(AngelsEye);
 
@@ -590,7 +641,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466747523,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(APT1022);
 
@@ -608,7 +661,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466747612,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(AvoDerm);
 
@@ -626,7 +681,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466750904,
                     Width = 500
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Azmira);
 
@@ -644,7 +701,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466751162,
                     Width = 752
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(B2K);
 
@@ -662,7 +721,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466751231,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Bark2Basics);
 
@@ -680,7 +741,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466751422,
                     Width = 220
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(BasicInstinct);
 
@@ -698,7 +761,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466751518,
                     Width = 1300
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Beaphar);
 
@@ -716,7 +781,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466751586,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Bosch);
 
@@ -734,7 +801,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466751678,
                     Width = 300
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(BreederCelect);
 
@@ -752,7 +821,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466751806,
                     Width = 366
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(BritCare);
 
@@ -770,7 +841,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466751918,
                     Width = 350
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(BudleBudle);
 
@@ -788,7 +861,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466753177,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Burgess);
 
@@ -806,7 +881,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466753483,
                     Width = 289
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(ByNature);
 
@@ -824,7 +901,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466753863,
                     Width = 640
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(CanadaLitter);
 
@@ -842,7 +921,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466755982,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(CanineTribute);
 
@@ -860,7 +941,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466756050,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(CanzRealMeat);
 
@@ -878,7 +961,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466751678,
                     Width = 300
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(CatsBest);
 
@@ -896,7 +981,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466756145,
                     Width = 180
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(CatanDogs);
 
@@ -914,7 +1001,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466756199,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(CatIt);
 
@@ -932,7 +1021,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466756258,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Chitocure);
 
@@ -950,7 +1041,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466264399,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(CloudStar);
 
@@ -968,7 +1061,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466756377,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(CoatHandler);
 
@@ -986,7 +1081,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466756449,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(DailyDelight);
 
@@ -1004,7 +1101,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466756540,
                     Width = 500
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(DancingPaws);
 
@@ -1022,7 +1121,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466262801,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(DermCare);
 
@@ -1040,7 +1141,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466756705,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(DogIt);
 
@@ -1058,7 +1161,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466756785,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(EaglePack);
 
@@ -1076,7 +1181,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466756926,
                     Width = 169
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(EaglePro);
 
@@ -1094,7 +1201,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466756987,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(EarthBath);
 
@@ -1113,7 +1222,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466262801,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(EcoBiopet);
 
@@ -1131,7 +1242,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466757634,
                     Width = 3198
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Espree);
 
@@ -1149,7 +1262,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466757696,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(EVO);
 
@@ -1167,7 +1282,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466757887,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(EyeEnvy);
 
@@ -1185,7 +1302,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466757938,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(FelineTribute);
 
@@ -1203,7 +1322,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466758045,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Ferplast);
 
@@ -1221,7 +1342,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466758148,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Fish4Pets);
 
@@ -1239,7 +1362,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466758221,
                     Width = 250
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Forbis);
 
@@ -1257,7 +1382,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466758323,
                     Width = 600
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Frontline);
 
@@ -1275,7 +1402,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466758402,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(FussieCat);
 
@@ -1293,7 +1422,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466758473,
                     Width = 300
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Gex);
 
@@ -1311,7 +1442,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466758554,
                     Width = 801
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(GreedyDog);
 
@@ -1329,7 +1462,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466758686,
                     Width = 2927
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Hagen);
 
@@ -1347,7 +1482,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466758742,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(HappiDoggy);
 
@@ -1365,7 +1502,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466758802,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(HiTekNaturals);
 
@@ -1402,7 +1541,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466759009,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(HolisticSelect);
 
@@ -1420,7 +1561,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466759051,
                     Width = 265
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(IDPets);
 
@@ -1438,7 +1581,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466759240,
                     Width = 1200
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(JML);
 
@@ -1456,7 +1601,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466759285,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(JustFish);
 
@@ -1474,7 +1621,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466759326,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(JW);
 
@@ -1493,7 +1642,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466262801,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Kaning);
 
@@ -1511,7 +1662,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466759578,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(KarenPryor);
 
@@ -1529,7 +1682,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466702593,
                     Width = 300
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(KitCat);
 
@@ -1548,7 +1703,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466702593,
                     Width = 300
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(KittyLitty);
 
@@ -1566,7 +1723,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466759844,
                     Width = 200
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(KMR);
 
@@ -1584,7 +1743,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466759961,
                     Width = 880
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Life4K9);
 
@@ -1602,7 +1763,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466760065,
                     Width = 677
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Loveem);
 
@@ -1620,7 +1783,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466760157,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Marukan);
 
@@ -1638,7 +1803,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466139306,
                     Width = 270
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(MediterraneanNatural);
 
@@ -1656,7 +1823,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466760331,
                     Width = 900
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(Merrick);
 
@@ -2304,7 +2473,9 @@ namespace WEBA_ASSIGNMENT.Models
                     Version = 1466264430,
                     Width = 202
                 },
-                BrandCategory = new List<BrandCategory>()
+                BrandCategory = new List<BrandCategory>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = thomasUser.Id
             };
             db.Brands.Add(SolidGold);
 

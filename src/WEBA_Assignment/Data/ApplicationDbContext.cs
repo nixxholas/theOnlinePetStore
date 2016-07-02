@@ -177,6 +177,25 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasIndex(input => input.BrandName).IsUnique()
                 .HasName("Brand_BrandName_UniqueConstraint");
 
+            //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
+            modelBuilder.Entity<Brands>()
+             .HasOne(userClass => userClass.CreatedBy)
+             .WithMany()
+             .HasForeignKey(userClass => userClass.CreatedById)
+             .OnDelete(DeleteBehavior.Restrict)
+             .IsRequired();
+            modelBuilder.Entity<Brands>()
+                .HasOne(userClass => userClass.UpdatedBy)
+                .WithMany()
+                .HasForeignKey(userClass => userClass.UpdatedById)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+            modelBuilder.Entity<Brands>()
+                .HasOne(userClass => userClass.DeletedBy)
+                .WithMany()
+                .HasForeignKey(userClass => userClass.DeletedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // -------------- Defining Brand Entity --------------- //
             // END.
 
@@ -345,6 +364,25 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasOne(input => input.Visibility)
                 .WithMany(input => input.Categories)
                 .HasForeignKey(input => input.VisibilityId);
+
+            //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
+            modelBuilder.Entity<Category>()
+             .HasOne(userClass => userClass.CreatedBy)
+             .WithMany()
+             .HasForeignKey(userClass => userClass.CreatedById)
+             .OnDelete(DeleteBehavior.Restrict)
+             .IsRequired();
+            modelBuilder.Entity<Category>()
+                .HasOne(userClass => userClass.UpdatedBy)
+                .WithMany()
+                .HasForeignKey(userClass => userClass.UpdatedById)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+            modelBuilder.Entity<Category>()
+                .HasOne(userClass => userClass.DeletedBy)
+                .WithMany()
+                .HasForeignKey(userClass => userClass.DeletedById)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // -------------- Defining Category Entity --------------- //
             // END.

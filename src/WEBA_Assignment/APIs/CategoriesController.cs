@@ -9,6 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using WEBA_ASSIGNMENT.Services;
+using Microsoft.Extensions.Logging;
+using WEBA_ASSIGNMENT.Controllers;
 
 namespace WEBA_ASSIGNMENT.APIs
 {
@@ -16,12 +20,27 @@ namespace WEBA_ASSIGNMENT.APIs
     [Route("api/[controller]")]
     public class CategoriesController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IEmailSender _emailSender;
+        private readonly ISmsSender _smsSender;
+        private readonly ILogger _logger;
+
         //Every Web API controller class need to have an ApplicationDbContext
         //type property. I have declared one here, called Database.
         public ApplicationDbContext Database { get; }
-        public CategoriesController()
+        public CategoriesController(UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IEmailSender emailSender,
+            ISmsSender smsSender,
+            ILoggerFactory loggerFactory)
         {
             Database = new ApplicationDbContext();
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _emailSender = emailSender;
+            _smsSender = smsSender;
+            _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
         // GET: api/values
@@ -31,7 +50,9 @@ namespace WEBA_ASSIGNMENT.APIs
             List<object> categoryList = new List<object>();
             var categories = Database.Categories
                  .Where(category => category.DeletedAt == null)
-                 .Include(input => input.Visibility);
+                 .Include(input => input.Visibility)
+                                 .Include(eachUser => eachUser.CreatedBy)
+                                 .Include(eachUser => eachUser.UpdatedBy);
             foreach (var category in categories)
             {
                 categoryList.Add(new
@@ -42,6 +63,7 @@ namespace WEBA_ASSIGNMENT.APIs
                     Visibility = category.Visibility.VisibilityName,
                     Brands = category.BrandCategory,
                     CreatedAt = category.CreatedAt,
+                    CreatedBy = category.CreatedBy,
                     UpdatedAt = category.UpdatedAt,
                     DeletedAt = category.DeletedAt
                 });
@@ -101,7 +123,8 @@ namespace WEBA_ASSIGNMENT.APIs
                 {
                     newCategory.StartDate = DateTime.ParseExact(categoryNewInput.StartDate.Value, format, System.Globalization.CultureInfo.InvariantCulture);
                     newCategory.EndDate = DateTime.ParseExact(categoryNewInput.EndDate.Value, format, System.Globalization.CultureInfo.InvariantCulture);
-                } else
+                }
+                else
                 {
                     newCategory.StartDate = null;
                     newCategory.EndDate = null;
@@ -181,7 +204,8 @@ namespace WEBA_ASSIGNMENT.APIs
                         //Return a bad http request message to the client
                         return BadRequest(httpFailRequestResultMessage);
                     }
-                } else
+                }
+                else
                 {
                     foundOneCategory.StartDate = null;
                     foundOneCategory.EndDate = null;
@@ -324,6 +348,6 @@ namespace WEBA_ASSIGNMENT.APIs
                                             new OkObjectResult(successRequestResultMessage);
             //Send the OkObjectResult class object back to the client.
             return httpOkResult;
-        }      
+        }
     }
 }
