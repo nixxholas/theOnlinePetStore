@@ -1,0 +1,177 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <div class="panel-title">
+                    Manage Brands
+                    <div class="btn-group pull-right">
+                        <a asp-action="Create" asp-controller="Brands" class="btn btn-default btn-group-lg ">Create new brand</a>
+                        <!-- <a href="#" class="btn btn-danger  btn-group-lg ">Delete</a> -->
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Brand Id</th>
+                                    <th>Brand Name</th>
+                                    <th>Categories</th>
+                                    <th>No. of Products</th>
+                                    <th>Created At</th>
+                                    <th>Updated At</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody id="brandsTableBody"></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div> <!-- end of div element with class="panel-body" -->
+        </div><!-- end of div element with class="panel" -->
+    </div> <!-- end of div element with  class="col-md-offset-2  col-md-8"-->
+</div><!-- end of div element with class="row"-->
+
+
+<script>
+    var brandCategories;
+    
+    $loadBrandCategoryDataHandler = jQuery.ajax({
+            contentType: 'application/json',
+            method: 'get',
+            url: 'http://localhost:5008/API/BrandCategory',
+        })
+    $loadBrandCategoryDataHandler.done(function (data, textStatus, jqXHR) {
+            //var $visibilityRadioListElement = $('#visibilityRadioList');
+            //// We then initialize the element container
+            //// for each element
+            var parentElement = $("#brandsTableBody");
+            var $categoryElement = null;
+            brandCategories = data;
+
+            loadBrandsData();
+        }//end of JavaScript anonymous function
+          )//end of the done() method;
+    $loadBrandCategoryDataHandler.fail(function (data, textStatus, jqXHR) {
+            noty({
+                text: 'Ajax fail fired : ' + data.responseJSON.Message, type: 'error',
+                layout: 'center',
+                template: '<div class="noty_message"><span class="noty_text"></span>'
+            });//end of noty()
+    })//end of $loadBrandCategoryDataHandler.fail()
+
+    function loadBrandsData() {
+        //Note: jQuery.ajax(..) is also often written is $.ajax(..)
+        $loadBrandsDataHandler = jQuery.ajax({
+            url: '/Api/Brands',
+            method: 'GET',
+            dataType: 'json',
+            cache: false,
+        })
+        $loadBrandsDataHandler.done(function (data, textStatus, jqXHR) {
+            //This done method will
+            //The (data) input parameter automatically captures the response from the
+            //Get() api method
+
+            var brandsList = data;
+            var categories = '';
+            var brandId = '';
+            var brandName = '';
+            var noofProducts = '';
+            var createdAt = "";
+            var updatedAt = "";
+            var $tableElement = null;
+            var $cellElement = null;
+            var $rowElement = null;
+            //-------- Find the table element -----------
+            //I am using the $tableElement variable
+            //to represent the found HTML element which has a matching id of companyTableBody
+            $tableBodyElement = $('#brandsTableBody');
+
+            //I want to build rows and cells (using tr and td HTML elements) so that
+            //I can display company name, address, postal code, created at, updated at information
+            //within the HTML table element, brandsTableBody. Recall that, I have already asked the
+            //$tableBodyElement variable to represent (reference) the table element.
+
+            //-------- Begin creating <tr> and <td> HTML element ------
+            for (index = 0; index < brandsList.length; index++) {
+                //Set this company variable to reference a company object
+                //inside the brandsList Array.
+                brand = brandsList[index];
+                //Copy out the company information
+                brandId = brand.brandId;
+                brandName = brand.brandName;
+                noofProducts = brand.noOfProducts;
+                createdAt = new Date(brand.createdAt).toDateString();
+                updatedAt = new Date(brand.updatedAt).toDateString();
+
+                // For each Brand Category in the Brand Category Table
+                for (i = 0; i < brandCategories.length; i++) {
+                    // If the Brand Id is equivalent to the one we have
+                    if (brandCategories[i].brandId == brandId) {
+                        // Add it into the column categories
+                        categories += brandCategories[i].catName;
+                        categories += ", ";
+                    }
+                }
+
+                // The loop causes the last two characters to be ", ". Let's remove it.
+                categories = categories.substring(0, categories.length - 2)
+
+                //Create new HTML <tr> element.
+                //At the same time let the $rowElement variable to represent it.
+                $rowElement = $('<tr id="row' + brandId + '"></tr>');
+                //Create the 1st cell element which display Brand Id
+                $cellElement = $('<td id="brandIdis' + brandId + '">' + brandId + '</td>');
+                $rowElement.append($cellElement);
+                //Create the 2nd cell element which display address
+                $cellElement = $('<td></td>', { text: brandName });
+                $rowElement.append($cellElement);
+                //Create the 3rd cell element which display postal code
+                $cellElement = $('<td></td>', { text: categories });
+                $rowElement.append($cellElement);
+                //Create the 3rd cell element which display postal code
+                $cellElement = $('<td></td>', { text: noofProducts });
+                $rowElement.append($cellElement);
+                //Create the 4th cell element which display created at information
+                $cellElement = $('<td></td>', { text: createdAt });
+                $rowElement.append($cellElement);
+                //Create the 5th cell element which display updated at information
+                $cellElement = $('<td></td>', { text: updatedAt });
+                $rowElement.append($cellElement);
+                //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
+                $hyperLinkElement = $('<a>Edit Brand</a>').attr('href', '/Brands/Update/' + brandId);
+                $hyperLinkElement.addClass('btn btn-primary');
+                //-----------------Using jQuery() to creating the 6th cell for the row----------------------
+                $cellElement = $('<td></td>');
+                //-----------------Add the previous created hyperlink element, $hyperLinkElement
+                //                 into the newly created 6th cell.
+                $cellElement.append($hyperLinkElement);
+
+                //---------------Add the 6th cell into the row represented by the $rowElement
+                $rowElement.append($cellElement);
+                //Insert the $rowElement into the table element represented by $tableElement.
+                $tableBodyElement.append($rowElement);
+                //----End of creating one row to display one company by using <tr> and <td> HTML element ---
+                //       Proceed to the next brand object in the brandsList Array.
+                categories = '';
+            }//end of for loop.
+        }//end of JavaScript anonymous function
+
+         )//end of the done() method;
+        $loadBrandsDataHandler.fail(function (data, textStatus, jqXHR) {
+            noty({
+                text: 'Ajax fail fired : ' + data.responseJSON.Message, type: 'error',
+                layout: 'center',
+                template: '<div class="noty_message"><span class="noty_text"></span>'
+            });//end of noty()
+        })//end of $loadBrandsDataHandler.fail()
+
+
+    }//end of loadBrandsData();
+
+</script>
+
