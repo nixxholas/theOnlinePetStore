@@ -41,8 +41,8 @@ namespace WEBA_ASSIGNMENT.Models
             var officerRole = new IdentityRole { Name = "OFFICER" };
             await identityRoleManager.CreateAsync(officerRole);
 
-            //var customerRole = new IdentityRole { Name = "USER" };
-            //await identityRoleManager.CreateAsync(officerRole);
+            var customerRole = new IdentityRole { Name = "USER" };
+            await identityRoleManager.CreateAsync(customerRole);
             
             var userStore = new UserStore<ApplicationUser>(db);
             var userManager = new UserManager<ApplicationUser>(userStore, null, null, null, null, null, null, null, null);

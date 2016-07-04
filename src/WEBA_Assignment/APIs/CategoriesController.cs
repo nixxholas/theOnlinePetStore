@@ -63,8 +63,9 @@ namespace WEBA_ASSIGNMENT.APIs
                     Visibility = category.Visibility.VisibilityName,
                     Brands = category.BrandCategory,
                     CreatedAt = category.CreatedAt,
-                    CreatedBy = category.CreatedBy,
+                    CreatedBy = category.CreatedBy.FullName,
                     UpdatedAt = category.UpdatedAt,
+                    UpdatedBy = category.UpdatedBy.FullName,
                     DeletedAt = category.DeletedAt
                 });
             }//end of foreach loop which builds the categoryList .
@@ -85,9 +86,7 @@ namespace WEBA_ASSIGNMENT.APIs
                     CatName = foundCategory.CatName,
                     VisibilityId = foundCategory.VisibilityId,
                     StartDate = foundCategory.StartDate,
-                    EndDate = foundCategory.EndDate,
-                    CreatedAt = foundCategory.CreatedAt,
-                    UpdatedAt = foundCategory.UpdatedAt
+                    EndDate = foundCategory.EndDate
                 };//end of creation of the response object
                 return new JsonResult(response);
             }
@@ -123,12 +122,28 @@ namespace WEBA_ASSIGNMENT.APIs
                 {
                     newCategory.StartDate = DateTime.ParseExact(categoryNewInput.StartDate.Value, format, System.Globalization.CultureInfo.InvariantCulture);
                     newCategory.EndDate = DateTime.ParseExact(categoryNewInput.EndDate.Value, format, System.Globalization.CultureInfo.InvariantCulture);
+                    // The one big reason why I implemented server-sided validation.
+                    // http://net-informations.com/faq/asp/validation.htm
+                    //
+                    // Let's compare the two dates to make sure the StartDate is later than EndDate
+                    if (DateTime.Compare(newCategory.StartDate.Value, newCategory.EndDate.Value) > 0)
+                    {
+                        // But if it is later, we'll toss them an error for SweetAlert to throw out.
+                        customMessage = "Please enter your start date that is before your end date.";
+                        object httpFailRequestResultMessage = new { Message = customMessage };
+                        // Return a bad http request message to the client
+                        // Good job to the user who's trolling with me, good try
+                        return BadRequest(httpFailRequestResultMessage);
+                    }
                 }
                 else
                 {
                     newCategory.StartDate = null;
                     newCategory.EndDate = null;
                 }
+
+                newCategory.CreatedById = _userManager.GetUserId(User);
+                newCategory.UpdatedById = _userManager.GetUserId(User);
 
                 // Change the string of Category Name to uppercase
                 newCategory.CatName.ToUpper();
@@ -197,11 +212,17 @@ namespace WEBA_ASSIGNMENT.APIs
                 {
                     foundOneCategory.StartDate = DateTime.ParseExact(categoryChangeInput.StartDate.Value, format, System.Globalization.CultureInfo.InvariantCulture);
                     foundOneCategory.EndDate = DateTime.ParseExact(categoryChangeInput.EndDate.Value, format, System.Globalization.CultureInfo.InvariantCulture);
+                    // The one big reason why I implemented server-sided validation.
+                    // http://net-informations.com/faq/asp/validation.htm
+                    //
+                    // Let's compare the two dates to make sure the StartDate is later than EndDate
                     if (DateTime.Compare(foundOneCategory.StartDate.Value, foundOneCategory.EndDate.Value) > 0)
                     {
+                        // But if it is later, we'll toss them an error for SweetAlert to throw out.
                         customMessage = "Please enter your start date that is before your end date.";
                         object httpFailRequestResultMessage = new { Message = customMessage };
-                        //Return a bad http request message to the client
+                        // Return a bad http request message to the client
+                        // Good job to the user who's trolling with me, good try
                         return BadRequest(httpFailRequestResultMessage);
                     }
                 }
@@ -211,12 +232,14 @@ namespace WEBA_ASSIGNMENT.APIs
                     foundOneCategory.EndDate = null;
                 }
 
+
                 // Turn the category name input to upper case
                 foundOneCategory.CatName.ToUpper();
 
                 // Not needed, we don't have to modify the id.
                 // foundOneCategory.CatId = Int32.Parse(categoryChangeInput.CatId.Value);
                 foundOneCategory.UpdatedAt = DateTime.Now;
+                foundOneCategory.UpdatedById = _userManager.GetUserId(User);
 
                 //Tell the database model to commit/persist the changes to the database, 
                 //I use the following command.
@@ -267,8 +290,11 @@ namespace WEBA_ASSIGNMENT.APIs
                 //http://geekswithblogs.net/BlackRabbitCoder/archive/2011/04/14/c.net-little-wonders-first-and-single---similar-yet-different.aspx
                 var foundOneCategory = Database.Categories
                                     .Single(item => item.CatId == id);
+                // No validation checks required, no user provided data.
                 foundOneCategory.DeletedAt = null;
+                foundOneCategory.DeletedById = null;
                 foundOneCategory.UpdatedAt = DateTime.Now;
+                foundOneCategory.UpdatedById = _userManager.GetUserId(User);
                 //Tell the database model to commit/persist the changes to the database, 
                 //I use the following command.
                 Database.SaveChanges();
@@ -319,6 +345,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 var foundOneCategory = Database.Categories
                            .Single(item => item.CatId == id);
                 foundOneCategory.DeletedAt = DateTime.Now;
+                foundOneCategory.DeletedById = _userManager.GetUserId(User);
 
                 //Update the database model
                 Database.Update(foundOneCategory);

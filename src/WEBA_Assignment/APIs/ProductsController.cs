@@ -25,7 +25,7 @@ namespace WEBA_ASSIGNMENT.APIs
 {
     [Authorize("RequireAdminRole")]
     [Route("api/[controller]")]
-    public class BrandsController : Controller
+    public class ProductsController : Controller
 
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -38,25 +38,25 @@ namespace WEBA_ASSIGNMENT.APIs
         //type property. I have declared one here, called Database.
         public ApplicationDbContext Database { get; }
 
-        public BrandsController(UserManager<ApplicationUser> userManager,
+        public ProductsController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
             ILoggerFactory loggerFactory)
         {
             Database = new ApplicationDbContext();
-        _userManager = userManager;
+            _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
-    // GET: api/values
-    [HttpGet]
+        // GET: api/values
+        [HttpGet]
         public JsonResult Get()
         {
-            List<object> brandList = new List<object>();
+            List<object> productList = new List<object>();
             var brands = Database.Brands
             .Where(eachBrandEntity => eachBrandEntity.DeletedAt == null)
             .Include(eachBrandEntity => eachBrandEntity.BrandCategory)
@@ -71,7 +71,7 @@ namespace WEBA_ASSIGNMENT.APIs
             //JSON formatted string data which can be sent back to the web browser client.
             foreach (var oneBrand in brands)
             {
-                brandList.Add(new
+                productList.Add(new
                 {
                     BrandId = oneBrand.BrandId,
                     BrandName = oneBrand.BrandName,

@@ -16,6 +16,7 @@ namespace WEBA_ASSIGNMENT.Data
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<Product> Products { get; set; }
         public DbSet<ShopUser> ShopUsers { get; set; }
         public DbSet<Brands> Brands { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -36,98 +37,75 @@ namespace WEBA_ASSIGNMENT.Data
                 entity.Relational().TableName = entity.DisplayName();
             }
             // -------------- Defining Product Entity --------------- //
-            //modelBuilder.Entity<Product>()
-            //    .HasKey(input => input.ProdId)
-            //    .HasName("PrimaryKey_ProdId");
+            modelBuilder.Entity<Product>()
+                .HasKey(input => input.ProdId)
+                .HasName("PrimaryKey_ProdId");
 
-            //modelBuilder.Entity<Product>()
-            //    .Property(input => input.ProdId)
-            //    .HasColumnName("ProdId")
-            //    .HasColumnType("int")
-            //    .ValueGeneratedOnAdd()
-            //    .IsRequired();
+            modelBuilder.Entity<Product>()
+                .Property(input => input.ProdId)
+                .HasColumnName("ProdId")
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd()
+                .IsRequired();
 
-            //modelBuilder.Entity<Product>()
-            //    .Property(input => input.ProdName)
-            //    .HasColumnName("ProdName")
-            //    .HasColumnType("VARCHAR(100)")
-            //    .IsRequired();
+            modelBuilder.Entity<Product>()
+                .Property(input => input.ProdName)
+                .HasColumnName("ProdName")
+                .HasColumnType("VARCHAR(100)")
+                .IsRequired();
+            
+            modelBuilder.Entity<Product>()
+                .Property(input => input.Description)
+                .HasColumnName("Description")
+                .HasColumnType("VARCHAR(MAX)")
+                .IsRequired();
 
-            //modelBuilder.Entity<Product>()
-            //    .Property(input => input.Description)
-            //    .HasColumnName("Description")
-            //    .HasColumnType("VARCHAR(30000)")
-            //    .IsRequired();
+            modelBuilder.Entity<Product>()
+                .Property(input => input.Price)
+                .HasColumnName("Price")
+                .HasColumnType("DECIMAL(10, 2)")
+                .IsRequired();
 
-            //modelBuilder.Entity<Product>()
-            //    .Property(input => input.Price)
-            //    .HasColumnName("Price")
-            //    .HasColumnType("FLOAT(5,2)")
-            //    .IsRequired();
+            modelBuilder.Entity<Product>()
+                .Property(input => input.Quantity)
+                .HasColumnName("Quantity")
+                .HasColumnType("int")
+                .IsRequired();
 
-            //modelBuilder.Entity<Product>()
-            //    .Property(input => input.BrandId)
-            //    .HasColumnName("BrandId")
-            //    .HasColumnType("int")
-            //    .IsRequired();
+            modelBuilder.Entity<Product>()
+                .Property(input => input.ThresholdInvertoryQuantity)
+                .HasColumnName("ThresholdInventoryQuantity")
+                .HasColumnType("int")
+                .IsRequired();
 
-            //modelBuilder.Entity<Product>()
-            //    .Property(input => input.Quantity)
-            //    .HasColumnName("Quantity")
-            //    .HasColumnType("int")
-            //    .IsRequired();
+            modelBuilder.Entity<Product>()
+                .Property(input => input.Published)
+                .HasColumnName("Published")
+                .HasColumnType("int")
+                .IsRequired();
 
-            //modelBuilder.Entity<Product>()
-            //    .Property(input => input.ThresholdInvertoryQuantity)
-            //    .HasColumnName("ThresholdInventoryQuantity")
-            //    .HasColumnType("int")
-            //    .IsRequired();
+            modelBuilder.Entity<Product>()
+                .Property(input => input.CreatedAt)
+                .HasDefaultValueSql("GETDATE()");
 
-            //modelBuilder.Entity<Product>()
-            //    .Property(input => input.Published)
-            //    .HasColumnName("Published")
-            //    .HasColumnType("int")
-            //    .IsRequired();
+            modelBuilder.Entity<Product>()
+                .Property(input => input.UpdatedAt)
+                .HasDefaultValueSql("GETDATE()");
 
-            //modelBuilder.Entity<Product>()
-            //    .Property(input => input.SpecialId)
-            //    .HasColumnName("SpecialId")
-            //    .HasColumnType("int")
-            //    .IsRequired(false);
+            modelBuilder.Entity<Product>()
+                .Property(input => input.DeletedAt)
+                .IsRequired(false);
 
-            //modelBuilder.Entity<Product>()
-            //    .Property(input => input.MetricId)
-            //    .HasColumnName("MetricId")
-            //    .HasColumnType("int")
-            //    .IsRequired(false);
+            //Foreign Key Initializations
+            modelBuilder.Entity<Product>()
+                .HasOne(input => input.Brand)
+                .WithMany(input => input.Products)
+                .HasForeignKey(input => input.BrandId);
 
-            //modelBuilder.Entity<Product>()
-            //    .Property(input => input.CreatedAt)
-            //    .HasDefaultValueSql("GETDATE()");
-
-            //modelBuilder.Entity<Product>()
-            //    .Property(input => input.UpdatedAt)
-            //    .HasDefaultValueSql("GETDATE()");
-
-            //modelBuilder.Entity<Product>()
-            //    .Property(input => input.DeletedAt)
-            //    .IsRequired(false);
-
-            // Foreign Key Initializations
-            //modelBuilder.Entity<Product>()
-            //    .HasOne(input => input.Brand)
-            //    .WithMany(input => input.Products)
-            //    .HasForeignKey(input => input.BrandId);
-
-            //modelBuilder.Entity<Product>()
-            //    .HasOne(input => input.Special)
-            //    .WithMany(input => input.Products)
-            //    .HasForeignKey(input => input.SpecialId);
-
-            //modelBuilder.Entity<Product>()
-            //    .HasOne(input => input.Metrics)
-            //    .WithMany(input => input.Products)
-            //    .HasForeignKey(input => input.MetricId);
+            modelBuilder.Entity<Product>()
+                .HasOne(input => input.Special)
+                .WithMany(input => input.Products)
+                .HasForeignKey(input => input.SpecialId);
 
             // -------------- Defining Product Entity --------------- //
             // END.
