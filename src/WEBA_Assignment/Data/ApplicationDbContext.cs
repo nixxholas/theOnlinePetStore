@@ -16,12 +16,18 @@ namespace WEBA_ASSIGNMENT.Data
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public DbSet<Product> Products { get; set; }
         public DbSet<ShopUser> ShopUsers { get; set; }
         public DbSet<Brands> Brands { get; set; }
         public DbSet<Category> Categories { get; set; }
-        //public DbSet<Product> Products { get; set; }
+        public DbSet<Metrics> Metrics { get; set; }
+        public DbSet<PresetMetric> PresetMetrics { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductPhoto> ProductPhotos { get; set; }
         public DbSet<BrandCategory> BrandCategory { get; set; }
+        public DbSet<Specials> Specials { get; set; }
+        public DbSet<ProductSpecials> ProductSpecials { get; set; }
+        public DbSet<BrandSpecials> BrandSpecials { get; set; }
+        public DbSet<CategorySpecials> CategorySpecials { get; set; }
         public DbSet<Visibility> Visibilities { get; set; }
         public DbSet<BrandPhoto> BrandPhotos { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
@@ -102,12 +108,104 @@ namespace WEBA_ASSIGNMENT.Data
                 .WithMany(input => input.Products)
                 .HasForeignKey(input => input.BrandId);
 
-            modelBuilder.Entity<Product>()
-                .HasOne(input => input.Special)
-                .WithMany(input => input.Products)
-                .HasForeignKey(input => input.SpecialId);
+            //----------------------------------------------------------------------------
+            //Define One to Many relationship between Product and ProductPhoto
+            //----------------------------------------------------------------------------
+
+            modelBuilder.Entity<ProductPhoto>()
+                .HasOne(input => input.Product)
+                .WithMany(input => input.ProductPhotos)
+                .HasForeignKey(input => input.ProdId);
+                          
 
             // -------------- Defining Product Entity --------------- //
+            // END.
+
+
+            // -------------- Defining ProductPhoto Entity --------------- //
+
+            modelBuilder.Entity<ProductPhoto>()
+            .HasKey(ProductPhotoObject => ProductPhotoObject.ProductPhotoId)
+            .HasName("PrimaryKey_ProductPhotoId");
+
+            modelBuilder.Entity<ProductPhoto>()
+            .Property(ProductPhotoObject => ProductPhotoObject.ProductPhotoId)
+            .HasColumnName("ProductPhotoId")
+            .HasColumnType("int")
+            .UseSqlServerIdentityColumn()
+            .ValueGeneratedOnAdd()
+            .IsRequired(true);
+
+            // Created At
+            modelBuilder.Entity<ProductPhoto>()
+            .Property(ProductPhotoObject => ProductPhotoObject.CreatedAt)
+            .HasDefaultValueSql("GetDate()");
+
+            // Deleted At
+            modelBuilder.Entity<ProductPhoto>()
+            .Property(ProductPhotoObject => ProductPhotoObject.DeletedAt)
+            .IsRequired(false);
+
+            // Public Cloudinary ID
+            modelBuilder.Entity<ProductPhoto>()
+            .Property(ProductPhotoObject => ProductPhotoObject.PublicCloudinaryId)
+            .HasColumnName("PublicCloudinaryId")
+            .HasColumnType("VARCHAR(100)")
+            .HasDefaultValue("")
+            .IsRequired(false);
+
+            // Version
+            modelBuilder.Entity<ProductPhoto>()
+            .Property(ProductPhotoObject => ProductPhotoObject.Version)
+            .HasColumnName("Version")
+            .HasColumnType("int")
+            .HasDefaultValue(0);
+
+            // Width
+            modelBuilder.Entity<ProductPhoto>()
+            .Property(ProductPhotoObject => ProductPhotoObject.Width)
+            .HasColumnName("Width")
+            .HasColumnType("int")
+            .HasDefaultValue(0);
+            // Height
+            modelBuilder.Entity<ProductPhoto>()
+            .Property(ProductPhotoObject => ProductPhotoObject.Height)
+            .HasColumnName("Height")
+            .HasColumnType("int")
+            .HasDefaultValue(0);
+
+            // Format
+            modelBuilder.Entity<ProductPhoto>()
+            .Property(ProductPhotoObject => ProductPhotoObject.Format)
+            .HasColumnName("Format")
+            .HasColumnType("VARCHAR(14)")
+            .HasDefaultValue("")
+            .IsRequired(true);
+
+            // ImageSize
+            modelBuilder.Entity<ProductPhoto>()
+            .Property(ProductPhotoObject => ProductPhotoObject.ImageSize)
+            .HasColumnName("ImageSize")
+            .HasColumnType("int")
+            .HasDefaultValue(0);
+
+            // Image URL
+            modelBuilder.Entity<ProductPhoto>()
+            .Property(ProductPhotoObject => ProductPhotoObject.Url)
+            .HasColumnName("Url")
+            .HasColumnType("VARCHAR(300)")
+            .HasDefaultValue("")
+            .IsRequired(true);
+
+            // Secure Image URL
+            modelBuilder.Entity<ProductPhoto>()
+            .Property(ProductPhotoObject => ProductPhotoObject.SecureUrl)
+            .HasColumnName("SecureUrl")
+            .HasColumnType("VARCHAR(300)")
+            .HasDefaultValue("")
+            .IsRequired(false);
+
+            // -------------- Defining ProductPhoto Entity --------------- //
             // END.
 
             // -------------- Defining Brand Entity --------------- //

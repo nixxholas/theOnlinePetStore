@@ -68,7 +68,7 @@ namespace WEBA_ASSIGNMENT.Models
         /// <summary>
         /// Foreign Key
         /// </summary>
-        public int ProductId { get; set; }
+        public int ProdId { get; set; }
 
     }
 }
