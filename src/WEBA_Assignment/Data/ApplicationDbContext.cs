@@ -42,6 +42,246 @@ namespace WEBA_ASSIGNMENT.Data
             {
                 entity.Relational().TableName = entity.DisplayName();
             }
+
+            // Foreign Key Relations are undone
+
+            // -------------- Defining Specials Entity ----------------- //
+
+            modelBuilder.Entity<Specials>()
+                .HasKey(input => input.SpecialId)
+                .HasName("PrimaryKey_SpecialId");
+
+            modelBuilder.Entity<Specials>()
+                .Property(input => input.SpecialId)
+                .HasColumnName("SpecialId")
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd()
+                .IsRequired();
+
+            modelBuilder.Entity<Specials>()
+                .Property(input => input.SpecialName)
+                .HasColumnName("SpecialName")
+                .HasColumnType("VARCHAR(MAX)")
+                .IsRequired();
+
+            modelBuilder.Entity<Specials>()
+                .Property(input => input.StartDate)
+                .HasColumnName("StartDate")
+                .IsRequired(false);
+
+            modelBuilder.Entity<Specials>()
+                .Property(input => input.EndDate)
+                .HasColumnName("EndDate")
+                .IsRequired(false);
+
+            modelBuilder.Entity<Specials>()
+                .Property(input => input.CreatedAt)
+                .HasDefaultValueSql("GetDate()");
+
+            modelBuilder.Entity<Specials>()
+                .Property(input => input.UpdatedAt)
+                .HasDefaultValueSql("GetDate()");
+
+            modelBuilder.Entity<Specials>()
+                .Property(input => input.DeletedAt)
+                .IsRequired(false);
+            
+            //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
+            modelBuilder.Entity<Specials>()
+             .HasOne(userClass => userClass.CreatedBy)
+             .WithMany()
+             .HasForeignKey(userClass => userClass.CreatedById)
+             .OnDelete(DeleteBehavior.Restrict)
+             .IsRequired();
+            modelBuilder.Entity<Specials>()
+                .HasOne(userClass => userClass.UpdatedBy)
+                .WithMany()
+                .HasForeignKey(userClass => userClass.UpdatedById)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+            modelBuilder.Entity<Specials>()
+                .HasOne(userClass => userClass.DeletedBy)
+                .WithMany()
+                .HasForeignKey(userClass => userClass.DeletedById)
+                .OnDelete(DeleteBehavior.Restrict);
+            
+            // ------------ End of Defining Specials Entity ------------ //
+
+            // -------------- Defining CategorySpecials Entity ----------------- //
+
+            modelBuilder.Entity<CategorySpecials>()
+                .HasKey(input => new { input.CatId, input.SpecialId })
+                .HasName("BrandsOfCategories_CompositeKey");
+
+            // ------------ End of Defining CategorySpecials Entity ------------ //
+
+            // -------------- Defining BrandSpecials Entity ----------------- //
+
+            modelBuilder.Entity<BrandSpecials>()
+                .HasKey(input => new { input.BrandId, input.SpecialId })
+                .HasName("BrandsOfCategories_CompositeKey");
+
+            // ------------ End of Defining BrandSpecials Entity ------------ //
+
+            // -------------- Defining ProductSpecials Entity ----------------- //
+
+            modelBuilder.Entity<ProductSpecials>()
+                .HasKey(input => new { input.ProdId, input.SpecialId })
+                .HasName("BrandsOfCategories_CompositeKey");
+
+            // ------------ End of Defining ProductSpecials Entity ------------ //
+
+            // -------------- Defining Price Entity ----------------- //
+
+            modelBuilder.Entity<Price>()
+                .HasKey(input => input.PriceId)
+                .HasName("PrimaryKey_PriceId");
+
+            modelBuilder.Entity<Price>()
+                .Property(input => input.PriceId)
+                .HasColumnName("PriceId")
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd()
+                .IsRequired();
+
+            modelBuilder.Entity<Price>()
+                .Property(input => input.MetricId)
+                .HasColumnName("MetricId")
+                .HasColumnType("int")
+                .IsRequired();
+
+            modelBuilder.Entity<Price>()
+                .Property(input => input.Value)
+                .HasColumnName("Value")
+                .HasColumnType("DECIMAL(6,2)")
+                .IsRequired();
+
+            modelBuilder.Entity<Price>()
+                .Property(input => input.CreatedAt)
+                .HasDefaultValueSql("GETDATE()");
+            
+            modelBuilder.Entity<Price>()
+                .Property(input => input.DeletedAt)
+                .IsRequired(false);
+
+            // Two sets of Many to One relationship between User and ApplicationUser  entity (Start)
+            modelBuilder.Entity<Price>()
+             .HasOne(userClass => userClass.CreatedBy)
+             .WithMany()
+             .HasForeignKey(userClass => userClass.CreatedById)
+             .OnDelete(DeleteBehavior.Restrict)
+             .IsRequired();
+
+            modelBuilder.Entity<Price>()
+                .HasOne(userClass => userClass.DeletedBy)
+                .WithMany()
+                .HasForeignKey(userClass => userClass.DeletedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // ------------ End of Defining Price Entity ------------ //
+
+            // --------------- Defining Metric Entity --------------- //
+
+            modelBuilder.Entity<Metrics>()
+                .HasKey(input => input.MetricId)
+                .HasName("PrimaryKey_MetricId");
+
+            modelBuilder.Entity<Metrics>()
+                .Property(input => input.MetricId)
+                .HasColumnName("MetricId")
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd()
+                .IsRequired();
+
+            modelBuilder.Entity<Metrics>()
+                .Property(input => input.ProdId)
+                .HasColumnName("ProdId")
+                .HasColumnType("int")
+                .IsRequired();
+
+            modelBuilder.Entity<Metrics>()
+                .Property(input => input.MetricName)
+                .HasColumnName("MetricName")
+                .HasColumnType("VARCHAR(200)")
+                .IsRequired();
+
+            modelBuilder.Entity<Metrics>()
+                .Property(input => input.Quantity)
+                .HasColumnName("Quantity")
+                .HasColumnType("int")
+                .IsRequired();
+
+            modelBuilder.Entity<Metrics>()
+                .Property(input => input.PriceId)
+                .HasColumnName("PriceId")
+                .HasColumnType("int")
+                .IsRequired();
+
+            modelBuilder.Entity<Metrics>()
+                .Property(input => input.CreatedAt)
+                .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<Metrics>()
+                .Property(input => input.UpdatedAt)
+                .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<Metrics>()
+                .Property(input => input.DeletedAt)
+                .IsRequired(false);
+
+            //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
+            modelBuilder.Entity<Metrics>()
+             .HasOne(userClass => userClass.CreatedBy)
+             .WithMany()
+             .HasForeignKey(userClass => userClass.CreatedById)
+             .OnDelete(DeleteBehavior.Restrict)
+             .IsRequired();
+            modelBuilder.Entity<Metrics>()
+                .HasOne(userClass => userClass.UpdatedBy)
+                .WithMany()
+                .HasForeignKey(userClass => userClass.UpdatedById)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+            modelBuilder.Entity<Metrics>()
+                .HasOne(userClass => userClass.DeletedBy)
+                .WithMany()
+                .HasForeignKey(userClass => userClass.DeletedById)
+                .OnDelete(DeleteBehavior.Restrict);
+            
+            // -------------- End of Defining Metric Entity --------- //
+
+            // -------------- Defining PresetMetric Entity ---------- //
+
+            modelBuilder.Entity<PresetMetric>()
+                .HasKey(input => input.PMetricId)
+                .HasName("PrimaryKey_PMetricId");
+
+            modelBuilder.Entity<PresetMetric>()
+                .Property(input => input.PMetricId)
+                .HasColumnName("PMetricId")
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd()
+                .IsRequired();
+
+            modelBuilder.Entity<PresetMetric>()
+                .Property(input => input.MetricType)
+                .HasColumnName("MetricType")
+                .HasColumnType("VARCHAR(100)")
+                .IsRequired();
+
+            modelBuilder.Entity<PresetMetric>()
+                .Property(input => input.MetricSubType)
+                .HasColumnName("MetricSubType")
+                .HasColumnType("VARCHAR(100)")
+                .IsRequired();
+
+            // No need to have any user tracking data as there
+            // won't be any chance that the admin will be able to 
+            // change a single shit unless the SI Unit had a 
+            // massive revolution.
+
+            // -------- End of Defining PresetMetric Entity -------- //
+
             // -------------- Defining Product Entity --------------- //
             modelBuilder.Entity<Product>()
                 .HasKey(input => input.ProdId)
@@ -103,13 +343,36 @@ namespace WEBA_ASSIGNMENT.Data
                 .IsRequired(false);
 
             //Foreign Key Initializations
+
             modelBuilder.Entity<Product>()
                 .HasOne(input => input.Brand)
                 .WithMany(input => input.Products)
                 .HasForeignKey(input => input.BrandId);
+            
+            //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
+            modelBuilder.Entity<Product>()
+             .HasOne(userClass => userClass.CreatedBy)
+             .WithMany()
+             .HasForeignKey(userClass => userClass.CreatedById)
+             .OnDelete(DeleteBehavior.Restrict)
+             .IsRequired();
+            modelBuilder.Entity<Product>()
+                .HasOne(userClass => userClass.UpdatedBy)
+                .WithMany()
+                .HasForeignKey(userClass => userClass.UpdatedById)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+            modelBuilder.Entity<Product>()
+                .HasOne(userClass => userClass.DeletedBy)
+                .WithMany()
+                .HasForeignKey(userClass => userClass.DeletedById)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //----------------------------------------------------------------------------
-            //Define One to Many relationship between Product and ProductPhoto
+            // Define One to Many relationship between Product and ProductPhoto
+            //
+            // This ensures that many ProductPhoto objects/rows can be directed to just
+            // one entity of Product.
             //----------------------------------------------------------------------------
 
             modelBuilder.Entity<ProductPhoto>()
@@ -205,6 +468,21 @@ namespace WEBA_ASSIGNMENT.Data
             .HasDefaultValue("")
             .IsRequired(false);
 
+
+            //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
+            modelBuilder.Entity<ProductPhoto>()
+             .HasOne(userClass => userClass.CreatedBy)
+             .WithMany()
+             .HasForeignKey(userClass => userClass.CreatedById)
+             .OnDelete(DeleteBehavior.Restrict)
+             .IsRequired();
+
+            modelBuilder.Entity<ProductPhoto>()
+                .HasOne(userClass => userClass.DeletedBy)
+                .WithMany()
+                .HasForeignKey(userClass => userClass.DeletedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // -------------- Defining ProductPhoto Entity --------------- //
             // END.
 
@@ -271,7 +549,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .WithMany()
                 .HasForeignKey(userClass => userClass.DeletedById)
                 .OnDelete(DeleteBehavior.Restrict);
-
+            
             // -------------- Defining Brand Entity --------------- //
             // END.
 
@@ -357,6 +635,20 @@ namespace WEBA_ASSIGNMENT.Data
             .HasColumnType("VARCHAR(300)")
             .HasDefaultValue("")
             .IsRequired(false);
+            
+            // Two sets of Many to One relationship between User and ApplicationUser  entity (Start)
+            modelBuilder.Entity<BrandPhoto>()
+             .HasOne(userClass => userClass.CreatedBy)
+             .WithMany()
+             .HasForeignKey(userClass => userClass.CreatedById)
+             .OnDelete(DeleteBehavior.Restrict)
+             .IsRequired();
+
+            modelBuilder.Entity<BrandPhoto>()
+                .HasOne(userClass => userClass.DeletedBy)
+                .WithMany()
+                .HasForeignKey(userClass => userClass.DeletedById)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //----------------------------------------------------------------------------
             //Define One to One relationship
@@ -464,6 +756,7 @@ namespace WEBA_ASSIGNMENT.Data
             // END.
 
             // -------------- Defining BrandsOfCategories Entity --------------- //
+
             modelBuilder.Entity<BrandCategory>()
                 .HasKey(input => new { input.BrandId, input.CatId })
                 .HasName("BrandsOfCategories_CompositeKey");
@@ -581,9 +874,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasForeignKey(userClass => userClass.DeletedById)
                 .OnDelete(DeleteBehavior.Restrict);
             //----------- Defining Student Entity - End --------------
-
-
-
+            
             base.OnModelCreating(modelBuilder);
 
         }

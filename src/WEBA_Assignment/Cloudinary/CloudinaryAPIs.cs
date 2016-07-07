@@ -23,6 +23,7 @@ namespace WEBA_ASSIGNMENT.Cloudinary
         private const string CLOUDINARY_SECRETKEY = "nvqH9yk5j2WeD8ZAG0BbH0ySrYk";
         // If we need to upload another type (eg. Products), we'll need to make this again. 
         private const string CLOUDINARY_UPLOADPRESET_FOR_BRANDS = "upload_to_brands";
+        private const string CLOUDINARY_UPLOADPRESET_FOR_PRODUCTS = "upload_to_products";
 
 
         // Constants - Don't touch this!
@@ -157,7 +158,117 @@ public static async Task<BrandPhoto> UploadBrandImageToCloudinary(Stream inImage
             return null;
 				}//UploadBrandImageToCloudinary()
 
-				public static async Task<Boolean> DeleteImageInCloudinary(string inImagePublicId)
+        // As stated above, we'll need to make another method for another class if so,
+        public static async Task<ProductPhoto> UploadProductImageToCloudinary(Stream inImageStream,
+                                                                                      string inContentType, string inImageName, string inTagName)
+        {
+            // File upload information
+            long unixTime_Seconds = UnixTime.GetTimeBySeconds();
+            string public_id = inImageName;
+
+            // File upload signature to ensure the integrity of the multipart form data 
+            // when transporting over the internet
+            Dictionary<string, object> imageInformation = new Dictionary<string, object>();
+            //imageInformation.Add("public_id", public_id);
+            imageInformation.Add("tags", inTagName);
+            imageInformation.Add("timestamp", unixTime_Seconds.ToString());
+            //Use the preset value which is tied to the Brand folder created at Cloudinary.
+            imageInformation.Add("upload_preset", CLOUDINARY_UPLOADPRESET_FOR_PRODUCTS);
+            //Only public_id and timestamp is needed for signature
+            //Thus we sign here, before adding all the required file information properties
+            string signingHash = CloudinaryURISignature.SignParameters(imageInformation, CLOUDINARY_SECRETKEY);
+
+            imageInformation.Add("api_key", CLOUDINARY_APIKEY);
+
+            using (HttpClient client = new HttpClient()) // Initialize HTTPClient
+                                                         //using (MemoryStream imageMemoryStream = new MemoryStream(Convert.FromBase64String(base64SNSDImage))) 
+                                                         // Converts the base64 SNSD image to Stream
+            using (Stream imageMemoryStream = inImageStream)
+            using (MultipartFormDataContent form = new MultipartFormDataContent()) // Creates a multipart form data for the HTTP POST request
+            {
+                // For every property in 'imageInformation', append it to 
+                // the HTTP multipart form object data.
+                foreach (KeyValuePair<string, object> data in imageInformation)
+                {
+                    form.Add(new StringContent(data.Value as string), @"""" + data.Key + @"""");
+                }
+                form.Add(new StringContent(signingHash), @"""signature"""); // Append the signature
+
+                // Finally append the image stream
+                StreamContent scontent = new StreamContent(imageMemoryStream);
+                scontent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
+                form.Add(scontent, @"""file""", @"""image""");
+
+                try
+                {
+                    // Sent the data to Cloudinary
+                    HttpResponseMessage response = await client.PostAsync(string.Format(CloudinaryAPIUploadLink, CLOUDINARY_CLOUDNAME), form);
+                    response.EnsureSuccessStatusCode();
+
+                    string jsonResponseInStringFromCloudinary = await response.Content.ReadAsStringAsync();
+                    /* {"public_id":"sample_image","version":1463379445,"signature":"1deeca551715cdc84a9ffc4f8de47a387c61dc6a",
+                     * "width":400,"height":268,"format":"png","resource_type":"image","created_at":"2016-05-16T06:17:25Z",
+                     * "tags":[],"bytes":213064,"type":"upload","etag":"ac4e0dc0526a755b34c28f04d418acfe",
+                     * "url":"http://res.cloudinary.com/diniplvxf/image/upload/v1463379445/sample_image.png",
+                     * "secure_url":"https://res.cloudinary.com/diniplvxf/image/upload/v1463379445/sample_image.png",
+                     * "overwritten":true,"original_filename":"girls_generation__snsd__png_render"}*/
+
+                    dynamic jsonResponse = JsonConvert.DeserializeObject(jsonResponseInStringFromCloudinary);
+
+                    // Here are the returned JSON properties
+                    string ret_public_id = (string)jsonResponse["public_id"];
+                    int ret_version = (int)jsonResponse["version"];
+                    string ret_signature = (string)jsonResponse["signature"];
+                    int ret_width = (int)jsonResponse["width"];
+                    int ret_height = (int)jsonResponse["height"];
+                    string ret_format = (string)jsonResponse["format"];
+                    string ret_resource_type = (string)jsonResponse["resource_type"];
+
+                    DateTime ret_created_at = DateTime.Now;
+                    string ret_created_at_string = (string)jsonResponse["created_at"];
+                    bool parsedDate = DateTime.TryParseExact(
+                        ret_created_at_string,
+                        "MM/dd/yyyy hh:mm:ss", CultureInfo.InvariantCulture,
+                        DateTimeStyles.AllowTrailingWhite | DateTimeStyles.AllowLeadingWhite,
+                        out ret_created_at);
+
+                    int ret_imageSize = (int)jsonResponse["bytes"];
+
+                    string ret_url = (string)jsonResponse["url"];
+                    string ret_secure_url = (string)jsonResponse["secure_url"];
+                    //bool ret_overwritten = (bool)jsonResponse["overwritten"];
+                    string ret_original_filename = (string)jsonResponse["original_filename"];
+
+                    // Create a 'CloudinaryUploadJsonResult' file
+                    // and insert the data
+                    ProductPhoto newProductPhoto = new ProductPhoto()
+                    {
+                        PublicCloudinaryId = ret_public_id,
+                        Version = ret_version,
+                        //Signature = ret_signature,
+                        Width = ret_width,
+                        Height = ret_height,
+                        Format = ret_format,
+                        //ResourceType = ret_resource_type,
+                        CreatedAt = ret_created_at,
+                        ImageSize = ret_imageSize,
+                        Url = ret_url,
+                        SecureUrl = ret_secure_url,
+                        //Overwritten = ret_overwritten,
+                        //OriginalFileName = ret_original_filename
+                    };
+                    return newProductPhoto; // done
+                }
+                catch (Exception exp)
+                {
+                    // :( die.
+                }
+            }
+            return null;
+        }//UploadBrandImageToCloudinary()
+
+
+        public static async Task<Boolean> DeleteImageInCloudinary(string inImagePublicId)
         {
             // File upload information
             long unixTime_Seconds = UnixTime.GetTimeBySeconds();

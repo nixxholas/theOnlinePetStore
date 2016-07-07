@@ -512,6 +512,8 @@ namespace WEBA_ASSIGNMENT.Models
                 BrandName = "Advocate",
                 BrandPhoto = new BrandPhoto()
                 {
+                    // Imaginery BrandId auto-magically created.
+                    // ValueGeneratedOnAdd() on ApplicationDbContext
                     Format = "jpg",
                     Height = 179,
                     ImageSize = 26351,

@@ -17,8 +17,9 @@ namespace WEBA_ASSIGNMENT.Models
         public int Quantity { get; set; }
         // Product that is binded to this metric system
         public Product Product { get; set; }
+        public int PriceId { get; set; }
         // Price per metric
-        public decimal Price { get; set; }
+        public Price Price { get; set; }
         public string CreatedById { get; set; }
 
         public string UpdatedById { get; set; }
@@ -36,6 +37,5 @@ namespace WEBA_ASSIGNMENT.Models
         public DateTime? DeletedAt { get; set; }
         // Pulls ALL of the Preset Metrics available for the
         // User to utilize
-        public List<PresetMetric> PresetMetrics { get; set; }
     }
 }
