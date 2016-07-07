@@ -11,6 +11,9 @@ namespace WEBA_ASSIGNMENT.Models
         public int MetricId { get; set; }
         // Foreign key to identify which product the metrics is related to
         public int ProdId { get; set; }
+        // Link Metrics with a Preset if Needed
+        public int? PMetricId { get; set; }
+        public PresetMetric PresetMetric { get; set; }
         // Custom size/metric name/type
         // For example, kilograms, tonnes or even grams
         public String MetricName { get; set; }

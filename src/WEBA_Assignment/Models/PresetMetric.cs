@@ -25,5 +25,7 @@ namespace WEBA_ASSIGNMENT.Models
         public String MetricType { get; set; }
         // The Metric name it is (grams, litres)
         public String MetricSubType { get; set; }
+        // Link this with Metrics through Metrics' class
+        public List<Metrics> Metrics { get; set; }
     }
 }

@@ -69,6 +69,8 @@ namespace WEBA_ASSIGNMENT.Models
         /// Foreign Key
         /// </summary>
         public int ProdId { get; set; }
-
+        // Variable to define whether this is the main photo
+        // of a product.
+        public int isPrimaryPhoto { get; set; }
     }
 }

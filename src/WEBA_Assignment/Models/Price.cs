@@ -8,6 +8,7 @@ namespace WEBA_ASSIGNMENT.Models
     public class Price
     {
         public int PriceId { get; set; }
+        public Metrics Metric { get; set; }
         public int MetricId { get; set; }
         public decimal Value { get; set; }
         public DateTime CreatedAt { get; set; }        
