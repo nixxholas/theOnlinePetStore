@@ -336,7 +336,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<int>("SpecialId");
 
                     b.HasKey("BrandId", "SpecialId")
-                        .HasName("BrandsOfCategories_CompositeKey");
+                        .HasName("BrandSpecials_CompositeKey");
 
                     b.HasIndex("SpecialId");
 
@@ -409,7 +409,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<int>("SpecialId");
 
                     b.HasKey("CatId", "SpecialId")
-                        .HasName("BrandsOfCategories_CompositeKey");
+                        .HasName("CategorySpecials_CompositeKey");
 
                     b.HasIndex("SpecialId");
 
@@ -695,7 +695,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<int>("SpecialId");
 
                     b.HasKey("ProdId", "SpecialId")
-                        .HasName("BrandsOfCategories_CompositeKey");
+                        .HasName("ProductSpecials_CompositeKey");
 
                     b.HasIndex("SpecialId");
 

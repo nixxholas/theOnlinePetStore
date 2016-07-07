@@ -426,7 +426,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("BrandsOfCategories_CompositeKey", x => new { x.BrandId, x.SpecialId });
+                    table.PrimaryKey("BrandSpecials_CompositeKey", x => new { x.BrandId, x.SpecialId });
                     table.ForeignKey(
                         name: "FK_BrandSpecials_Specials_SpecialId",
                         column: x => x.SpecialId,
@@ -444,7 +444,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("BrandsOfCategories_CompositeKey", x => new { x.CatId, x.SpecialId });
+                    table.PrimaryKey("CategorySpecials_CompositeKey", x => new { x.CatId, x.SpecialId });
                     table.ForeignKey(
                         name: "FK_CategorySpecials_Specials_SpecialId",
                         column: x => x.SpecialId,
@@ -518,7 +518,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("BrandsOfCategories_CompositeKey", x => new { x.ProdId, x.SpecialId });
+                    table.PrimaryKey("ProductSpecials_CompositeKey", x => new { x.ProdId, x.SpecialId });
                     table.ForeignKey(
                         name: "FK_ProductSpecials_Specials_SpecialId",
                         column: x => x.SpecialId,

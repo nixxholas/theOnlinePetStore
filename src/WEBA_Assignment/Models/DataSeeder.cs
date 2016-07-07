@@ -439,7 +439,8 @@ namespace WEBA_ASSIGNMENT.Models
                 SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466794773/Brands/u0ofsgsn9b1q6tlwrkxg.jpg",
                 Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466794773/Brands/u0ofsgsn9b1q6tlwrkxg.jpg",
                 Version = 1466794773,
-                Width = 171
+                Width = 171,
+                CreatedById = benUser.Id
             };
 
             // DataSeeder for the Brands Table
@@ -479,7 +480,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466703383/Brands/tit6egwg7gbqc6pgemmx.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466703383/Brands/tit6egwg7gbqc6pgemmx.jpg",
                     Version = 1466703383,
-                    Width = 380
+                    Width = 380,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -499,7 +501,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466734352/Brands/f4gr1p4fwl5oqszf4rlb.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466734352/Brands/f4gr1p4fwl5oqszf4rlb.jpg",
                     Version = 1466734352,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -521,7 +524,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466740096/Brands/vbap8qirkbg3puiri0da.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466740096/Brands/vbap8qirkbg3puiri0da.jpg",
                     Version = 1466740096,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -541,7 +545,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466740233/Brands/ndjfdkxd8pgawdszpxnt.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466740233/Brands/ndjfdkxd8pgawdszpxnt.jpg",
                     Version = 1466740233,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -561,7 +566,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466740327/Brands/mkkg3jfvlrkomp5s3hnx.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466740327/Brands/mkkg3jfvlrkomp5s3hnx.jpg",
                     Version = 1466740327,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -581,7 +587,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466066280/Brands/hfvgs7v6zbkowlvvtp8l.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466066280/Brands/hfvgs7v6zbkowlvvtp8l.jpg",
                     Version = 1466066280,
-                    Width = 201
+                    Width = 201,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -601,7 +608,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466743616/Brands/uzhh398ujqis7wqdqjjx.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466743616/Brands/uzhh398ujqis7wqdqjjx.jpg",
                     Version = 1466743616,
-                    Width = 150
+                    Width = 150,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -621,7 +629,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466747277/Brands/idznhlnfjzx7h4zwsn6k.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466747277/Brands/idznhlnfjzx7h4zwsn6k.jpg",
                     Version = 1466747277,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -641,7 +650,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466747523/Brands/uywfq0isejzowlbcncco.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466747523/Brands/uywfq0isejzowlbcncco.jpg",
                     Version = 1466747523,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -661,7 +671,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466747612/Brands/zscuuofknz7ttyh0kqzj.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466747612/Brands/zscuuofknz7ttyh0kqzj.jpg",
                     Version = 1466747612,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -681,7 +692,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466750904/Brands/ynickkk94i1nekjbza1w.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466750904/Brands/ynickkk94i1nekjbza1w.jpg",
                     Version = 1466750904,
-                    Width = 500
+                    Width = 500,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -701,7 +713,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466751162/Brands/towdmksonwd8adlbhplc.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466751162/Brands/towdmksonwd8adlbhplc.jpg",
                     Version = 1466751162,
-                    Width = 752
+                    Width = 752,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -721,7 +734,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466751231/Brands/ow8rcpkh0x2yqh97pk02.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466751231/Brands/ow8rcpkh0x2yqh97pk02.jpg",
                     Version = 1466751231,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -741,7 +755,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466751422/Brands/h42w6s5w8cqlotkoiyi7.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466751422/Brands/h42w6s5w8cqlotkoiyi7.jpg",
                     Version = 1466751422,
-                    Width = 220
+                    Width = 220,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -761,7 +776,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466751518/Brands/ak8blj54xjqou1wyh184.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466751518/Brands/ak8blj54xjqou1wyh184.jpg",
                     Version = 1466751518,
-                    Width = 1300
+                    Width = 1300,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -781,7 +797,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466751586/Brands/qfsndfihcpvwybgdmbgc.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466751586/Brands/qfsndfihcpvwybgdmbgc.jpg",
                     Version = 1466751586,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -801,7 +818,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466751678/Brands/wimeemxthe5fqrfsvjik.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466751678/Brands/wimeemxthe5fqrfsvjik.jpg",
                     Version = 1466751678,
-                    Width = 300
+                    Width = 300,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -821,7 +839,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466751806/Brands/xplwqusk9dksdi30rwv6.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466751806/Brands/xplwqusk9dksdi30rwv6.jpg",
                     Version = 1466751806,
-                    Width = 366
+                    Width = 366,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -841,7 +860,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466751918/Brands/pstmlpe0bvrj6yspt8oe.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466751918/Brands/pstmlpe0bvrj6yspt8oe.jpg",
                     Version = 1466751918,
-                    Width = 350
+                    Width = 350,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -861,7 +881,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466753177/Brands/squ2ywclp04aaktlk6fr.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466753177/Brands/squ2ywclp04aaktlk6fr.jpg",
                     Version = 1466753177,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -881,7 +902,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466753483/Brands/z7trhwxwt4ekyji3nw4m.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466753483/Brands/z7trhwxwt4ekyji3nw4m.jpg",
                     Version = 1466753483,
-                    Width = 289
+                    Width = 289,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -901,7 +923,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466753863/Brands/xd6seuazssacj9hjv9cx.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466753863/Brands/xd6seuazssacj9hjv9cx.jpg",
                     Version = 1466753863,
-                    Width = 640
+                    Width = 640,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -921,7 +944,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466755982/Brands/bprxjqelcrrfusmk8qla.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466755982/Brands/bprxjqelcrrfusmk8qla.jpg",
                     Version = 1466755982,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -941,7 +965,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466756050/Brands/jdjgqtfudzbc93q9cqkb.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466756050/Brands/jdjgqtfudzbc93q9cqkb.jpg",
                     Version = 1466756050,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -961,7 +986,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466751678/Brands/wimeemxthe5fqrfsvjik.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466751678/Brands/wimeemxthe5fqrfsvjik.jpg",
                     Version = 1466751678,
-                    Width = 300
+                    Width = 300,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -981,7 +1007,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466756145/Brands/da9ix14ckujkywexvwmo.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466756145/Brands/da9ix14ckujkywexvwmo.jpg",
                     Version = 1466756145,
-                    Width = 180
+                    Width = 180,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1001,7 +1028,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466756199/Brands/soax69czeighglbncjiz.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466756199/Brands/soax69czeighglbncjiz.jpg",
                     Version = 1466756199,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1021,7 +1049,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466756258/Brands/cjpqaktzqn2xyzt6yzcs.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466756258/Brands/cjpqaktzqn2xyzt6yzcs.jpg",
                     Version = 1466756258,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1041,7 +1070,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466264399/Brands/jwufpgyc3ncvzmsc0qrk.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466264399/Brands/jwufpgyc3ncvzmsc0qrk.jpg",
                     Version = 1466264399,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1061,7 +1091,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466756377/Brands/py1x45ks49cx1mupkoas.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466756377/Brands/py1x45ks49cx1mupkoas.jpg",
                     Version = 1466756377,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1081,7 +1112,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466756449/Brands/ycstvr1fkicrlbzyo8e9.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466756449/Brands/ycstvr1fkicrlbzyo8e9.jpg",
                     Version = 1466756449,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1101,7 +1133,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466756540/Brands/fe3xkezop49tgn8byvaz.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466756540/Brands/fe3xkezop49tgn8byvaz.jpg",
                     Version = 1466756540,
-                    Width = 500
+                    Width = 500,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1121,7 +1154,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466262801/Brands/xgbtldplf6ldedrjydft.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466262801/Brands/xgbtldplf6ldedrjydft.jpg",
                     Version = 1466262801,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1141,7 +1175,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466756705/Brands/dne1hajhoyxej5xvorxe.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466756705/Brands/dne1hajhoyxej5xvorxe.jpg",
                     Version = 1466756705,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1161,7 +1196,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466756785/Brands/x6iatnduivdgljx8gvwc.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466756785/Brands/x6iatnduivdgljx8gvwc.jpg",
                     Version = 1466756785,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1181,7 +1217,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466756926/Brands/bki98o0irbeec3g43tw0.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466756926/Brands/bki98o0irbeec3g43tw0.jpg",
                     Version = 1466756926,
-                    Width = 169
+                    Width = 169,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1201,7 +1238,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466756987/Brands/d1dilcatll5ktesh01ii.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466756987/Brands/d1dilcatll5ktesh01ii.jpg",
                     Version = 1466756987,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1222,7 +1260,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466262801/Brands/xgbtldplf6ldedrjydft.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466262801/Brands/xgbtldplf6ldedrjydft.jpg",
                     Version = 1466262801,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1242,7 +1281,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466757634/Brands/jgvqk3ljtjsd0m86asui.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466757634/Brands/jgvqk3ljtjsd0m86asui.jpg",
                     Version = 1466757634,
-                    Width = 3198
+                    Width = 3198,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1262,7 +1302,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466757696/Brands/vxso2u9bjhbt9kcxzcy3.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466757696/Brands/vxso2u9bjhbt9kcxzcy3.jpg",
                     Version = 1466757696,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1282,7 +1323,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466757887/Brands/quryogltxqeujt2hppmk.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466757887/Brands/quryogltxqeujt2hppmk.jpg",
                     Version = 1466757887,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1302,7 +1344,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466757938/Brands/bcsd9drkatxjwnmzddqp.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466757938/Brands/bcsd9drkatxjwnmzddqp.jpg",
                     Version = 1466757938,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1322,7 +1365,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466758045/Brands/ntpyhbft5bt9dnsjrjsf.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466758045/Brands/ntpyhbft5bt9dnsjrjsf.jpg",
                     Version = 1466758045,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1342,7 +1386,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466758148/Brands/jp9fxtum9tyyvfydmuf6.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466758148/Brands/jp9fxtum9tyyvfydmuf6.jpg",
                     Version = 1466758148,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1362,7 +1407,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466758221/Brands/mhzvzex1amdlhmkx21zs.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466758221/Brands/mhzvzex1amdlhmkx21zs.jpg",
                     Version = 1466758221,
-                    Width = 250
+                    Width = 250,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1382,7 +1428,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466758323/Brands/gdfyteyab1z0bmwe0tpt.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466758323/Brands/gdfyteyab1z0bmwe0tpt.jpg",
                     Version = 1466758323,
-                    Width = 600
+                    Width = 600,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1402,7 +1449,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466758402/Brands/hrnlojqbf6ys7estxblk.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466758402/Brands/hrnlojqbf6ys7estxblk.jpg",
                     Version = 1466758402,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1422,7 +1470,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466758473/Brands/pihcxnqur1k9a5lbz10o.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466758473/Brands/pihcxnqur1k9a5lbz10o.jpg",
                     Version = 1466758473,
-                    Width = 300
+                    Width = 300,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1442,7 +1491,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466758554/Brands/wbxa34qe4pl1dfjbvx7u.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466758554/Brands/wbxa34qe4pl1dfjbvx7u.jpg",
                     Version = 1466758554,
-                    Width = 801
+                    Width = 801,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1462,7 +1512,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466758686/Brands/aepza2fmbbahf0iixvao.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466758686/Brands/aepza2fmbbahf0iixvao.jpg",
                     Version = 1466758686,
-                    Width = 2927
+                    Width = 2927,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1482,7 +1533,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466758742/Brands/iv1zj0kzkyrqmolswbfv.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466758742/Brands/iv1zj0kzkyrqmolswbfv.jpg",
                     Version = 1466758742,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1502,7 +1554,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466758802/Brands/znlywbrrcsn79kqqrkhh.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466758802/Brands/znlywbrrcsn79kqqrkhh.jpg",
                     Version = 1466758802,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1541,7 +1594,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466759009/Brands/ghc2w8rursq3g5li1jm6.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466759009/Brands/ghc2w8rursq3g5li1jm6.jpg",
                     Version = 1466759009,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1561,7 +1615,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466759051/Brands/j6umxs3xvhbe4ppudmux.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466759051/Brands/j6umxs3xvhbe4ppudmux.jpg",
                     Version = 1466759051,
-                    Width = 265
+                    Width = 265,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1581,7 +1636,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466759240/Brands/mjp0sdmwkvg14hidk7ez.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466759240/Brands/mjp0sdmwkvg14hidk7ez.jpg",
                     Version = 1466759240,
-                    Width = 1200
+                    Width = 1200,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1601,7 +1657,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466759285/Brands/tbgjadtm2s645hwrkjjg.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466759285/Brands/tbgjadtm2s645hwrkjjg.jpg",
                     Version = 1466759285,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1621,7 +1678,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466759326/Brands/kfnlizwypvvqdmmdrkyo.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466759326/Brands/kfnlizwypvvqdmmdrkyo.jpg",
                     Version = 1466759326,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1642,7 +1700,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466262801/Brands/xgbtldplf6ldedrjydft.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466262801/Brands/xgbtldplf6ldedrjydft.jpg",
                     Version = 1466262801,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1662,7 +1721,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466759578/Brands/jmptoxpdqtdghc4wqidt.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466759578/Brands/jmptoxpdqtdghc4wqidt.jpg",
                     Version = 1466759578,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1682,7 +1742,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466702593/Brands/becgkvedm5wepvplkyqy.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466702593/Brands/becgkvedm5wepvplkyqy.jpg",
                     Version = 1466702593,
-                    Width = 300
+                    Width = 300,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1703,7 +1764,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466702593/Brands/becgkvedm5wepvplkyqy.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466702593/Brands/becgkvedm5wepvplkyqy.jpg",
                     Version = 1466702593,
-                    Width = 300
+                    Width = 300,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1723,7 +1785,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466759844/Brands/cljuaq2lt9gaxtauzraj.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466759844/Brands/cljuaq2lt9gaxtauzraj.jpg",
                     Version = 1466759844,
-                    Width = 200
+                    Width = 200,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1743,7 +1806,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466759961/Brands/homrqnob6yb8pfxwzqzp.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466759961/Brands/homrqnob6yb8pfxwzqzp.jpg",
                     Version = 1466759961,
-                    Width = 880
+                    Width = 880,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1763,7 +1827,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466760065/Brands/xzke0lpvyevbcokzasa8.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466760065/Brands/xzke0lpvyevbcokzasa8.jpg",
                     Version = 1466760065,
-                    Width = 677
+                    Width = 677,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1783,7 +1848,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466760157/Brands/uxaxsqad0hnbljbdtf0r.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466760157/Brands/uxaxsqad0hnbljbdtf0r.jpg",
                     Version = 1466760157,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1803,7 +1869,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466139306/Brands/mwd14fzvsacnqpeo7wka.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466139306/Brands/mwd14fzvsacnqpeo7wka.jpg",
                     Version = 1466139306,
-                    Width = 270
+                    Width = 270,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -1823,7 +1890,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466760331/Brands/tjv3tjg5ipzcr5lxkgmn.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466760331/Brands/tjv3tjg5ipzcr5lxkgmn.jpg",
                     Version = 1466760331,
-                    Width = 900
+                    Width = 900,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,
@@ -2473,7 +2541,8 @@ namespace WEBA_ASSIGNMENT.Models
                     SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466264430/Brands/mzhtv4hg4eaw1xnc8yv1.jpg",
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466264430/Brands/mzhtv4hg4eaw1xnc8yv1.jpg",
                     Version = 1466264430,
-                    Width = 202
+                    Width = 202,
+                    CreatedById = benUser.Id
                 },
                 BrandCategory = new List<BrandCategory>(),
                 CreatedById = randyUser.Id,

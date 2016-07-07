@@ -8,7 +8,7 @@ using WEBA_ASSIGNMENT.Data;
 namespace WEBA_ASSIGNMENT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160707094412_setupdb")]
+    [Migration("20160707105332_setupdb")]
     partial class setupdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -337,7 +337,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<int>("SpecialId");
 
                     b.HasKey("BrandId", "SpecialId")
-                        .HasName("BrandsOfCategories_CompositeKey");
+                        .HasName("BrandSpecials_CompositeKey");
 
                     b.HasIndex("SpecialId");
 
@@ -410,7 +410,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<int>("SpecialId");
 
                     b.HasKey("CatId", "SpecialId")
-                        .HasName("BrandsOfCategories_CompositeKey");
+                        .HasName("CategorySpecials_CompositeKey");
 
                     b.HasIndex("SpecialId");
 
@@ -696,7 +696,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<int>("SpecialId");
 
                     b.HasKey("ProdId", "SpecialId")
-                        .HasName("BrandsOfCategories_CompositeKey");
+                        .HasName("ProductSpecials_CompositeKey");
 
                     b.HasIndex("SpecialId");
 
