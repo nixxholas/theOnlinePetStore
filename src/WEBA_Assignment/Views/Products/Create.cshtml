@@ -1,5 +1,5 @@
 ﻿<div class="row">
-    <div class="col-md-offset-2  col-md-8">
+    <div class="col-md-12">
         <div id="alertingBox" class="alert alert-danger hidden" role="alert"></div>
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -11,24 +11,26 @@
             <div class="panel-body">
                 <form id="dataForm" role="form" class="form-horizontal">
                     <div class="form-group col-md-12">
-                        <label class="control-label  col-md-4" for="prodNameInput">Product Name</label>
+                        <label class="control-label  col-md-3" for="prodNameInput">Product Name</label>
 
                         <input type="text" id="prodNameInput" class="form-control font-bold"
                                maxlength="50" placeholder="Product Name" value="" />
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-4 photoUploadMarginFixProducts" for="fileInput">Photo</label>
+                        <label class="control-label col-md-3 photoUploadMarginFixProducts" for="fileInput">Photo</label>
                         <div class="col-md-8">
                             <input id="fileInput" name="fileInput" type="file" class="file input-group-lg" multiple />
                         </div>
                     </div>
-                    <div class="form-group col-md-12 hidden" id="startDateSegment">
-                        <label class="control-label col-md-4" for="startDateInput">Start Date</label>
-                        <div id="jqxStartDate"></div>
+                    <div class="form-group col-md-12" id="descriptionBox">
+                        <label class="control-label col-md-3" for="descBox">Description</label>
+                        <div  class="form-group col-md-8">
+                            <textarea></textarea>
+                        </div>
                     </div>
                     <div class="form-group col-md-12 hidden" id="endDateSegment">
-                        <label class="control-label col-md-4" for="endDateInput">End Date</label>
-                        <div id="jqxEndDate"></div>
+                        <label class="control-label col-md-4" for="endDateInput">Price</label>
+
                     </div>
                     <div class="form-group col-md-12">
                         <label class="control-label col-md-1"></label>
@@ -46,13 +48,33 @@
 </div><!-- end of div element with class="row" -->
 
 <script>
-    $("#jqxStartDate").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'dd/MM/yyyy', animationType: 'fade', min: new Date() });
+    tinymce.init({
+        selector: 'textarea',
+        height: 500,
+        theme: 'modern',
+        plugins: [
+          'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+          'searchreplace wordcount visualblocks visualchars code fullscreen',
+          'insertdatetime media nonbreaking save table contextmenu directionality',
+          'emoticons template paste textcolor colorpicker textpattern imagetools'
+        ],
+        toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+        toolbar2: 'print preview media | forecolor backcolor emoticons',
+        image_advtab: true,
+        templates: [
+          { title: 'Test template 1', content: 'Test 1' },
+          { title: 'Test template 2', content: 'Test 2' }
+        ],
+        content_css: [
+          '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+          '//www.tinymce.com/css/codepen.min.css'
+        ]
+    });
+
     $("#jqxEndDate").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'dd/MM/yyyy', animationType: 'fade', min: new Date() });
     var startDateInput;
     var endDateInput;
-    $('#jqxStartDate').on('change', function (event) {
-        startDateInput = event.args.date;
-    });
+   
     $('#jqxEndDate').on('change', function (event) {
         endDateInput = event.args.date;
     });
