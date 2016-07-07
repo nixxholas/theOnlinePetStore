@@ -1,5 +1,6 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="js/site.js" />
+/// <reference path="lib/accounting-js/accounting.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />
 /// <reference path="lib/bootstrap-fileinput/js/fileinput.min.js" />
 /// <reference path="lib/jquery/dist/jquery.js" />
