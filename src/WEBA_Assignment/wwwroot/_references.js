@@ -8,6 +8,7 @@
 /// <reference path="lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js" />
 /// <reference path="lib/magicsuggest/magicsuggest.js" />
 /// <reference path="lib/moment/moment.js" />
+/// <reference path="lib/quill/dist/quill.js" />
 /// <reference path="lib/react/react.js" />
 /// <reference path="lib/react/react-dom.js" />
 /// <reference path="lib/semantic-ui/dist/semantic.js" />

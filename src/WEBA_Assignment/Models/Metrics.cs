@@ -23,6 +23,8 @@ namespace WEBA_ASSIGNMENT.Models
         public int PriceId { get; set; }
         // Price per metric
         public Price Price { get; set; }
+        // This must be nullable incase there is an in-house brand
+        public decimal? RRP { get; set; }
         public string CreatedById { get; set; }
 
         public string UpdatedById { get; set; }

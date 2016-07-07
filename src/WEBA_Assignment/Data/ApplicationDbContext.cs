@@ -42,7 +42,8 @@ namespace WEBA_ASSIGNMENT.Data
                 entity.Relational().TableName = entity.DisplayName();
             }
 
-            // Foreign Key Relations are undone
+            // Relations Between Categories, Brands and Products to Specials are undone
+            // SuperType - SubType undone
 
             // -------------- Defining Visibility Entity --------------- //
             modelBuilder.Entity<Visibility>()
@@ -522,6 +523,12 @@ namespace WEBA_ASSIGNMENT.Data
                 .IsRequired();
 
             modelBuilder.Entity<Metrics>()
+                .Property(input => input.RRP)
+                .HasColumnName("Price")
+                .HasColumnType("DECIMAL(10, 2)")
+                .IsRequired(false);
+
+            modelBuilder.Entity<Metrics>()
                 .Property(input => input.CreatedAt)
                 .HasDefaultValueSql("GETDATE()");
 
@@ -621,12 +628,6 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasColumnName("Description")
                 .HasColumnType("VARCHAR(MAX)")
                 .IsRequired();
-
-            modelBuilder.Entity<Product>()
-                .Property(input => input.TOPSPrice)
-                .HasColumnName("Price")
-                .HasColumnType("DECIMAL(10, 2)")
-                .IsRequired(false);
 
             modelBuilder.Entity<Product>()
                 .Property(input => input.Quantity)

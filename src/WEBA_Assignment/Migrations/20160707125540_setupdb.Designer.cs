@@ -8,7 +8,7 @@ using WEBA_ASSIGNMENT.Data;
 namespace WEBA_ASSIGNMENT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160707120727_setupdb")]
+    [Migration("20160707125540_setupdb")]
     partial class setupdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -456,6 +456,10 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnName("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<decimal?>("RRP")
+                        .HasColumnName("Price")
+                        .HasColumnType("DECIMAL(10, 2)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("GETDATE()");
@@ -580,10 +584,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("SpecialId");
-
-                    b.Property<decimal?>("TOPSPrice")
-                        .HasColumnName("Price")
-                        .HasColumnType("DECIMAL(10, 2)");
 
                     b.Property<int?>("ThresholdInvertoryQuantity")
                         .IsRequired()

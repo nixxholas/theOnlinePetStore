@@ -10,7 +10,6 @@ namespace WEBA_ASSIGNMENT.Models
         public int ProdId { get; set; }
         public String ProdName { get; set; }     
         public String Description { get; set; }
-        public decimal? TOPSPrice { get; set; }
         public int BrandId { get; set; }
         //Defining a Brand class property to indicate that
         //there is a one to one relationship with the Brand entity.

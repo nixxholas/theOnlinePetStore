@@ -455,6 +455,10 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnName("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<decimal?>("RRP")
+                        .HasColumnName("Price")
+                        .HasColumnType("DECIMAL(10, 2)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("GETDATE()");
@@ -579,10 +583,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("SpecialId");
-
-                    b.Property<decimal?>("TOPSPrice")
-                        .HasColumnName("Price")
-                        .HasColumnType("DECIMAL(10, 2)");
 
                     b.Property<int?>("ThresholdInvertoryQuantity")
                         .IsRequired()

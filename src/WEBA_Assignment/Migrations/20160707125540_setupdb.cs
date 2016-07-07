@@ -396,7 +396,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                     Published = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     SpecialId = table.Column<int>(nullable: true),
-                    Price = table.Column<decimal>(type: "DECIMAL(10, 2)", nullable: true),
                     ThresholdInventoryQuantity = table.Column<int>(type: "int", nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
                     UpdatedById = table.Column<string>(nullable: false)
@@ -494,6 +493,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     PriceId = table.Column<int>(type: "int", nullable: false),
                     ProdId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "DECIMAL(10, 2)", nullable: true),
                     UpdatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
                     UpdatedById = table.Column<string>(nullable: false)
                 },
