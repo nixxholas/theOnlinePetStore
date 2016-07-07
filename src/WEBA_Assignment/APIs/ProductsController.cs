@@ -60,8 +60,9 @@ namespace WEBA_ASSIGNMENT.APIs
             var products = Database.Products
             .Where(eachProductEntity => eachProductEntity.DeletedAt == null)
             .Include(eachProductEntity => eachProductEntity.Brand)
+            .Include(eachProductEntity => eachProductEntity.Metrics)
             .Include(eachProductEntity => eachProductEntity.ProductPhotos).AsNoTracking();
-
+            
             //After obtaining all the Product entity rows (records) from the database,
             //the productss variable will become an container holding these 
             //Product class entity rows.
@@ -75,17 +76,31 @@ namespace WEBA_ASSIGNMENT.APIs
                 {
                     ProdId = oneProduct.ProdId,
                     ProdName = oneProduct.ProdName,
+                    BrandName = oneProduct.Brand.BrandName,
                     // Save this for later
                     // PhotoUrl = oneProduct.ProductPhotos.Url,
-                    Description = oneProduct.Description,
-                    Price = oneProduct.Price,
+                    TiS = oneProduct.ThresholdInvertoryQuantity,
+                    Quantity = getTotalQuantity(oneProduct.Metrics),
+                    Published = oneProduct.Published,
                     CreatedAt = oneProduct.CreatedAt,
-                    UpdatedAt = oneProduct.UpdatedAt
+                    CreatedBy = oneProduct.CreatedBy.FullName,
+                    UpdatedAt = oneProduct.UpdatedAt,
+                    UpdatedBy = oneProduct.UpdatedBy.FullName
                 });
             }//end of foreach loop which builds the productsList .
             return new JsonResult(productList);
         }
 
+        // Method to compute the total amount of quantity of a product.
+        public int getTotalQuantity(List<Metrics> metricList)
+        {
+            int TotalQuantity = 0;
+            foreach (Metrics metric in metricList)
+            {
+                TotalQuantity += metric.Quantity;
+            }
+            return TotalQuantity;
+        }
 
         // GET ProductsUnderBrand
         // Takes in an integer as a Category Id
@@ -97,6 +112,7 @@ namespace WEBA_ASSIGNMENT.APIs
             var products = Database.Products
                 .Where(eachProductEntity => eachProductEntity.Brand.BrandId == id)
                 .Include(eachProductEntity => eachProductEntity.Brand)
+                .Include(eachProductEntity => eachProductEntity.Metrics)
                 .Include(eachProductEntity => eachProductEntity.ProductPhotos).AsNoTracking();
 
             foreach (var oneProduct in products)
@@ -105,12 +121,16 @@ namespace WEBA_ASSIGNMENT.APIs
                 {
                     ProdId = oneProduct.ProdId,
                     ProdName = oneProduct.ProdName,
+                    BrandName = oneProduct.Brand.BrandName,
                     // Save this for later
                     // PhotoUrl = oneProduct.ProductPhotos.Url,
-                    Description = oneProduct.Description,
-                    Price = oneProduct.Price,
+                    TiS = oneProduct.ThresholdInvertoryQuantity,
+                    Quantity = getTotalQuantity(oneProduct.Metrics),
+                    Published = oneProduct.Published,
                     CreatedAt = oneProduct.CreatedAt,
-                    UpdatedAt = oneProduct.UpdatedAt
+                    CreatedBy = oneProduct.CreatedBy.FullName,
+                    UpdatedAt = oneProduct.UpdatedAt,
+                    UpdatedBy = oneProduct.UpdatedBy.FullName
                 });
             }//end of foreach loop which builds the productsList .
             return new JsonResult(productList);
