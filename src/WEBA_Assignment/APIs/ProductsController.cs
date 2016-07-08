@@ -483,7 +483,6 @@ namespace WEBA_ASSIGNMENT.APIs
                 .Include(Product => Product.ProductPhotos).Single();
             oneProduct.ProdName = productToBeUpdated.ProdName;
                       
-
             var oneFile = fileInput[0];
             var fileName = ContentDispositionHeaderValue
                         .Parse(oneFile.ContentDisposition)

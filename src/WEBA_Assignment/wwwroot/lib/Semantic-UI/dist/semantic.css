@@ -28118,8 +28118,9 @@ a.ui.card:hover,
   outline: none;
   vertical-align: baseline;
   font-style: normal;
+  font-weight:bold;
   min-height: 17px;
-  font-size: 1rem;
+  font-size: 14px;
   line-height: 17px;
   min-width: 17px;
 }
@@ -28148,9 +28149,9 @@ a.ui.card:hover,
   cursor: auto;
   position: relative;
   display: block;
-  padding-left: 1.85714em;
   outline: none;
-  font-size: 1em;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 .ui.checkbox .box:before,
@@ -28158,8 +28159,8 @@ a.ui.card:hover,
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
   content: '';
   background: #FFFFFF;
   border-radius: 0.21428571rem;
@@ -28177,7 +28178,7 @@ a.ui.card:hover,
 .ui.checkbox .box:after,
 .ui.checkbox label:after {
   position: absolute;
-  font-size: 14px;
+  font-size: 18px;
   top: 0px;
   left: 0px;
   width: 17px;
@@ -28466,6 +28467,7 @@ a.ui.card:hover,
 
 .ui.slider.checkbox {
   min-height: 1.25rem;
+  margin-left: -10px;
 }
 
 /* Input */
@@ -28473,6 +28475,7 @@ a.ui.card:hover,
 .ui.slider.checkbox input {
   width: 3.5rem;
   height: 1.25rem;
+  margin-left: 4px;
 }
 
 /* Label */
@@ -28583,6 +28586,7 @@ a.ui.card:hover,
 
 .ui.toggle.checkbox {
   min-height: 1.5rem;
+  margin-left: -10px;
 }
 
 /* Input */

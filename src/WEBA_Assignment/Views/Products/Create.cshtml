@@ -1,56 +1,98 @@
 ﻿<div class="row">
     <div class="col-md-12">
-        <div id="alertingBox" class="alert alert-danger hidden" role="alert"></div>
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="panel-title">Create Product Record</div>
-                <div class="btn-group pull-right">
-
-                </div>
             </div>
             <div class="panel-body">
                 <form id="dataForm" role="form" class="form-horizontal">
                     <div class="form-group col-md-12">
-                        <label class="control-label  col-md-3" for="prodNameInput">Product Name</label>
+                        <label class="control-label col-md-3" for="prodNameInput">Product Name</label>
 
                         <input type="text" id="prodNameInput" class="form-control font-bold"
                                maxlength="50" placeholder="Product Name" value="" />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-3" for="brandInput">Brand</label>
+                        <div id="brandInput" class="col-md-8 ui selection dropdown">
+
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
                         <label class="control-label col-md-3 photoUploadMarginFixProducts" for="fileInput">Photo</label>
                         <div class="col-md-8">
                             <input id="fileInput" name="fileInput" type="file" class="file input-group-lg" multiple />
                         </div>
                     </div>
-                    <div class="form-group col-md-12" id="descriptionBox">
-                        <label class="control-label col-md-3" for="descBox">Description</label>
-                        <div  class="form-group col-md-8">
-                            <textarea></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12 hidden" id="endDateSegment">
-                        <label class="control-label col-md-4" for="endDateInput">Price</label>
-
-                    </div>
                     <div class="form-group col-md-12">
-                        <label class="control-label col-md-1"></label>
-                        <div class="col-md-10">
-                            <div class="pull-right">
-                                <input type="button" class="btn btn-primary" value="Save" id="saveButton" />
-                                <a class="btn btn-default" asp-action="Index" asp-controler="Categories">Cancel</a>
-                            </div>
+                        <label class="control-label col-md-3" for="productProperties">Properties</label>
+                        <div id="checkboxContainer" class="col-md-9">
+                            <div class="ui slider checkbox">
+                                <input type="checkbox" id="descriptionCheck">
+                                <label>Product has a description</label>
+                            </div><br>
+                            <div class="ui slider checkbox">
+                                <!-- A Product does not need to comply with the metrics system.
+                                In such cases, we'll be creating a row within metrics without
+                                any properties and just throw in it's price into the row. -->
+                                <input type="checkbox" id="metricsCheck">
+                                <label>Product has many variations</label>
+                            </div><br>
+                            <div class="ui slider checkbox">
+                                <input type="checkbox" id="consumableCheck">
+                                <label>Product is a consumable</label>
+                            </div><br>
+                            <div class="ui slider checkbox">
+                                <input type="checkbox" id="specialsCheck">
+                                <label>Product has a special promotion</label>
+                            </div><br>
                         </div>
                     </div>
-                </form>
-            </div><!-- end of div element which has the class="panel-body" -->
-        </div><!-- end of the div element which has the class="panel" -->
-    </div><!-- end of the div element which as the  class="col-md-offset-2 col-sm-8"-->
+                    <div class="form-group col-md-12 hidden" id="descriptionBox">
+                        <label class="control-label col-md-3" for="descBox">Description</label>
+                        <div class="form-group col-md-8">
+                            <textarea id="descriptionBox"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 hidden" id="metricSegment">
+                        <label class="control-label col-md-3" for="dataTable">Metrics</label>
+                        <div class="col-md-8">
+                            <table id="dataTable" class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Metric Name</th>
+                                        <th>Metric Type</th>
+                                        <th>Quantity</th>
+                                        <th>Price per type</th>
+                                        <th>RRP</th> <!-- Recommended Retail Price -->
+                                        <th>&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="metricsTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label col-md-1"></label>
+                <div class="col-md-10">
+                    <div class="pull-right">
+                        <input type="button" class="btn btn-primary" value="Save" id="saveButton" />
+                        <a class="btn btn-default" asp-action="Index" asp-controler="Products">Cancel</a>
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div><!-- end of div element which has the class="panel-body" -->
+    </div><!-- end of the div element which has the class="panel" -->
+</div><!-- end of the div element which as the  class="col-md-offset-2 col-sm-8"-->
 </div><!-- end of div element with class="row" -->
 
 <script>
+    var descriptionBox = $('#descriptionBox');
     tinymce.init({
         selector: 'textarea',
-        height: 500,
+        height: 250,
         theme: 'modern',
         plugins: [
           'advlist autolink lists link image charmap print preview hr anchor pagebreak',
@@ -61,23 +103,59 @@
         toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
         toolbar2: 'print preview media | forecolor backcolor emoticons',
         image_advtab: true,
-        templates: [
-          { title: 'Test template 1', content: 'Test 1' },
-          { title: 'Test template 2', content: 'Test 2' }
-        ],
         content_css: [
           '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
           '//www.tinymce.com/css/codepen.min.css'
         ]
     });
+    var metricsTable = $('#metricSegment');
 
-    $("#jqxEndDate").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'dd/MM/yyyy', animationType: 'fade', min: new Date() });
-    var startDateInput;
-    var endDateInput;
-   
-    $('#jqxEndDate').on('change', function (event) {
-        endDateInput = event.args.date;
-    });
+    $('#descriptionCheck').on('click', function () {
+        if (descriptionBox.hasClass('hidden')) {
+            descriptionBox.removeClass('hidden');
+        } else {
+            descriptionBox.addClass('hidden');
+        }
+    })
+    ;
+
+    $('#metricsCheck').on('click', function () {
+        if (metricsTable.hasClass('hidden')) {
+            metricsTable.removeClass('hidden');
+        } else {
+            metricsTable.addClass('hidden');
+        }
+    })
+    ;
+
+    $('#consumableCheck').on('click', function () {
+        if (descriptionBox.hasClass('hidden')) {
+            descriptionBox.removeClass('hidden');
+        } else {
+            descriptionBox.addClass('hidden');
+        }
+    })
+    ;
+
+    $('#specialsCheck').on('click', function () {
+        if (descriptionBox.hasClass('hidden')) {
+            descriptionBox.removeClass('hidden');
+        } else {
+            descriptionBox.addClass('hidden');
+        }
+    })
+    ;
+
+    var brandInput = $('#brandInput')
+                      .dropdown({
+                          useLabels: false,
+                          maxSelections: 3,
+                          api: {
+                              method: 'GET',
+                              url: 'http://localhost:5008/API/Brands/'
+                          }
+                      })
+    ;
 
     setupvisibilityRadioListBox();
 
