@@ -60,6 +60,8 @@ namespace WEBA_ASSIGNMENT.APIs
             var brands = Database.Brands
             .Where(eachBrandEntity => eachBrandEntity.DeletedAt == null)
             .Include(eachBrandEntity => eachBrandEntity.BrandCategory)
+            // Prepare for Products counting
+            .Include(eachBrandEntity => eachBrandEntity.Products)
             .Include(eachBrandEntity => eachBrandEntity.BrandPhoto).AsNoTracking();
 
             //After obtaining all the Brand entity rows (records) from the database,
@@ -75,8 +77,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 {
                     BrandId = oneBrand.BrandId,
                     BrandName = oneBrand.BrandName,
-                    // Save this for later
-                    // PhotoUrl = oneBrand.BrandPhoto.Url,
+                    PhotoUrl = oneBrand.BrandPhoto.Url,
                     NoOfProducts = oneBrand.NoOfProducts,
                     CreatedAt = oneBrand.CreatedAt,
                     UpdatedAt = oneBrand.UpdatedAt
@@ -150,7 +151,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 return BadRequest(httpFailRequestResultMessage);
             }
         }
-
+        
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

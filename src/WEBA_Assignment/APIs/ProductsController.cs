@@ -76,6 +76,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 {
                     ProdId = oneProduct.ProdId,
                     ProdName = oneProduct.ProdName,
+                    Brand = oneProduct.Brand,
                     BrandName = oneProduct.Brand.BrandName,
                     // Save this for later
                     // PhotoUrl = oneProduct.ProductPhotos.Url,
@@ -121,6 +122,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 {
                     ProdId = oneProduct.ProdId,
                     ProdName = oneProduct.ProdName,
+                    Brand = oneProduct.Brand,
                     BrandName = oneProduct.Brand.BrandName,
                     // Save this for later
                     // PhotoUrl = oneProduct.ProductPhotos.Url,
@@ -167,6 +169,35 @@ namespace WEBA_ASSIGNMENT.APIs
             }
         }
 
+        /**
+         * A method to enable the server to
+         * compute the amount of products within a brand
+         * 
+         * */
+        public void computeProductsPerBrand()
+        {
+            // Get all the brands first
+            var allBrands = Database.Brands
+                .Where(eachBrand => eachBrand.DeletedAt == null)
+                .Include(eachBrand => eachBrand.Products);
+
+            // We then implement a loop to configure the NoOfProducts Column
+            foreach (var Brand in allBrands)
+            {
+                // Let us reset the column first
+                Brand.NoOfProducts = 0;
+                // All set, time to count
+                foreach (var Product in Brand.Products)
+                {
+                    Brand.NoOfProducts += 1;
+                }
+            }
+
+            // Update the table and save it with the Database
+            Database.Update(allBrands);
+            Database.SaveChanges();
+        }
+
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
@@ -186,6 +217,8 @@ namespace WEBA_ASSIGNMENT.APIs
                 //Tell the db model to commit/persist the changes to the database, 
                 //I use the following command.
                 Database.SaveChanges();
+                //Let's update the Brands table as well 
+                computeProductsPerBrand();
             }
             catch (Exception ex)
             {
@@ -228,6 +261,10 @@ namespace WEBA_ASSIGNMENT.APIs
                 //newProduct.
                 newProduct.ProdName = productNewInput.ProdName.Value;
                 newProduct.Description = productNewInput.Description.Value;
+                newProduct.BrandId = productNewInput.Brand.BrandId.Value;
+                
+                // Have to implement a foreach loop to stash multiple Metrics
+                // into the table
                 
                 //I cannot save the products information into database yet. The 
                 //UploadProductPhotosAndSaveProductData has logic to upload the binary file to
@@ -279,23 +316,27 @@ namespace WEBA_ASSIGNMENT.APIs
 
             try
             {
-                newProduct.ProductPhotos.Add(new ProductPhoto()
-                {
-                    Format = "jpg",
-                    Height = 120,
-                    ImageSize = 1692,
-                    PublicCloudinaryId = "Products/u0ofsgsn9b1q6tlwrkxg",
-                    SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466794773/Products/u0ofsgsn9b1q6tlwrkxg.jpg",
-                    Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466794773/Products/u0ofsgsn9b1q6tlwrkxg.jpg",
-                    Version = 1466794773,
-                    Width = 171
-                });
+                // I didn't even start testing the ProductPhotos yet
+                // So I'll leave the default Product image alone first
+
+                //newProduct.ProductPhotos.Add(new ProductPhoto()
+                //{
+                //    Format = "jpg",
+                //    Height = 120,
+                //    ImageSize = 1692,
+                //    PublicCloudinaryId = "Products/u0ofsgsn9b1q6tlwrkxg",
+                //    SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466794773/Products/u0ofsgsn9b1q6tlwrkxg.jpg",
+                //    Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466794773/Products/u0ofsgsn9b1q6tlwrkxg.jpg",
+                //    Version = 1466794773,
+                //    Width = 171
+                //});
                 //Add the product record first, so that the newProduct
                 //object's ProdId property is updated with the new record's
                 //id.
                 Database.Products.Add(newProduct);
                 Database.SaveChanges();
-
+                // We'll then update the brands table
+                computeProductsPerBrand();
 
                 //******************************************************
                 //Construct a custom message for the client
@@ -396,6 +437,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 foundOneProduct.UpdatedAt = DateTime.Now;
                 Database.Products.Update(foundOneProduct);
                 Database.SaveChanges();//Without this command, the changes are not committed.
+                computeProductsPerBrand();
                 customMessage = "Saved product into database.";
             }
             catch (Exception exceptionObject)
@@ -481,6 +523,7 @@ namespace WEBA_ASSIGNMENT.APIs
 
             Database.Products.Update(oneProduct);
             Database.SaveChanges();
+            computeProductsPerBrand();
             var successRequestResultMessage = new
             {
                 Message = "Saved product."
@@ -519,6 +562,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 Database.ProductPhotos.Add(newProductPhotos);
                 Database.Products.Add(newProduct);
                 Database.SaveChanges();
+                computeProductsPerBrand();
             }
             var successRequestResultMessage = new
             {
