@@ -116,13 +116,14 @@ namespace WEBA_ASSIGNMENT.Models
              * based on the International System of Units
              * a.k.a SI Units
              * 
-             * Length, Mass & Generic (eg. Sizes)
+             * Length, Mass, Volumes & Generics (eg. Sizes)
              * 
              * **/
 
             PresetMetric Millimetre, Centimetre, Metre, Kilometre,
-                Pounds, Tonnes, Milligrams, Grams, Kilograms, Small,
-                Medium, Large, XLarge, XXLarge, XXXLarge, XXXXLarge;
+                Pounds, Tonnes, Milligrams, Grams, Kilograms, Millilitres,
+                Litres, Small, Medium, Large, XLarge, XXLarge, 
+                XXXLarge, XXXXLarge;
 
             Millimetre = new PresetMetric()
             {
@@ -172,6 +173,46 @@ namespace WEBA_ASSIGNMENT.Models
             };
             db.PresetMetrics.Add(Tonnes);
 
+            Milligrams = new PresetMetric()
+            {
+                MetricType = "Length",
+                MetricSubType = "Milligrams",
+                MetricCharacter = "mg"
+            };
+            db.PresetMetrics.Add(Milligrams);
+
+            Grams = new PresetMetric()
+            {
+                MetricType = "Length",
+                MetricSubType = "Grams",
+                MetricCharacter = "g"
+            };
+            db.PresetMetrics.Add(Grams);
+
+            Kilograms = new PresetMetric()
+            {
+                MetricType = "Length",
+                MetricSubType = "Kilograms",
+                MetricCharacter = "kg"
+            };
+            db.PresetMetrics.Add(Kilograms);
+
+            Millilitres = new PresetMetric()
+            {
+                MetricType = "Length",
+                MetricSubType = "Millilitres",
+                MetricCharacter = "ml"
+            };
+            db.PresetMetrics.Add(Millilitres);
+
+            Litres = new PresetMetric()
+            {
+                MetricType = "Length",
+                MetricSubType = "Litres",
+                MetricCharacter = "l"
+            };
+            db.PresetMetrics.Add(Litres);
+
             Small = new PresetMetric()
             {
                 MetricType = "Generic",
@@ -195,6 +236,38 @@ namespace WEBA_ASSIGNMENT.Models
                 MetricCharacter = "L"
             };
             db.PresetMetrics.Add(Large);
+
+            XLarge = new PresetMetric()
+            {
+                MetricType = "Generic",
+                MetricSubType = "XLarge",
+                MetricCharacter = "XL"
+            };
+            db.PresetMetrics.Add(Large);
+
+            XXLarge = new PresetMetric()
+            {
+                MetricType = "Generic",
+                MetricSubType = "XXLarge",
+                MetricCharacter = "XXL"
+            };
+            db.PresetMetrics.Add(XXLarge);
+
+            XXXLarge = new PresetMetric()
+            {
+                MetricType = "Generic",
+                MetricSubType = "XXXLarge",
+                MetricCharacter = "XXXL"
+            };
+            db.PresetMetrics.Add(XXXLarge);
+
+            XXXXLarge = new PresetMetric()
+            {
+                MetricType = "Generic",
+                MetricSubType = "XXXXLarge",
+                MetricCharacter = "XXXXL"
+            };
+            db.PresetMetrics.Add(XXXXLarge);
 
             // DataSeeder for the Visibility Table
 
