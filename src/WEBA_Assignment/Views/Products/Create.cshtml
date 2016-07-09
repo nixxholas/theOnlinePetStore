@@ -75,15 +75,24 @@
                             </table>
                         </div>
                     </div>
-            </div>
-            <div class="form-group col-md-12">
-                <label class="control-label col-md-1"></label>
-                <div class="col-md-10">
-                    <div class="pull-right">
-                        <input type="button" class="btn btn-primary" value="Save" id="saveButton" />
-                        <a class="btn btn-default" asp-action="Index" asp-controler="Products">Cancel</a>
+
+                    <div class="form-group col-md-12 hidden" id="specialsBox">
+                        <label class="control-label col-md-3 photoUploadMarginFixProducts" for="specialInput">Specials</label>
+                        <div class="col-md-5">
+                            <div id="specialInput" class="form-group">
+
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-1"></label>
+                        <div class="col-md-10">
+                            <div class="pull-right">
+                                <input type="button" class="btn btn-primary" value="Save" id="saveButton" />
+                                <a class="btn btn-default" asp-action="Index" asp-controler="Products">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
             </div>
             </form>
         </div><!-- end of div element which has the class="panel-body" -->
@@ -92,6 +101,23 @@
 </div><!-- end of div element with class="row" -->
 
 <script>
+    var isConsumable = 0;
+    var PresetMetricData = [];
+    var $dataCommunicationTracker = jQuery.ajax({
+        contentType: 'application/json',
+        method: 'get',
+        url: 'http://localhost:5008/API/PresetMetrics',
+    });
+    $dataCommunicationTracker.done(function (data, textStatus, jqXHR) {
+        for (i = 0; i < data.length; i++) {
+            metric = data[i];
+            PresetMetricData.push(metric);
+        }
+    });
+    $dataCommunicationTracker.fail(function (data, textStatus, jqXHR) {
+        swal("Oh no!", data.responseJSON.message, "error");
+    });
+
     var descriptionBox = $('#descriptionBox');
     tinymce.init({
         selector: 'textarea',
@@ -132,19 +158,19 @@
     ;
 
     $('#consumableCheck').on('click', function () {
-        if (descriptionBox.hasClass('hidden')) {
-            descriptionBox.removeClass('hidden');
+        if (isConsumable = 0) {
+            isConsumable = 1;
         } else {
-            descriptionBox.addClass('hidden');
+            isConsumable = 0;
         }
     })
     ;
 
     $('#specialsCheck').on('click', function () {
-        if (descriptionBox.hasClass('hidden')) {
-            descriptionBox.removeClass('hidden');
+        if (specialsBox.hasClass('hidden')) {
+            specialsBox.removeClass('hidden');
         } else {
-            descriptionBox.addClass('hidden');
+            specialsBox.addClass('hidden');
         }
     })
     ;
@@ -170,6 +196,24 @@
         }
     });
 
+    //var specialInput = $('#specialInput').magicSuggest({
+    //    maxSelection: 1,
+    //    allowFreeEntries: false,
+    //    method: 'get',
+    //    data: 'http://localhost:5008/API/',
+    //    dataType: 'json',
+    //    displayField: 'brandName',
+    //    valueField: 'brandId',
+    //    renderer: function (data) {
+    //        return '<div style="padding: 5px;">' +
+    //            '<div style="float: left;"><img height="75px" width="75px" src="' + data.photoUrl + '" /></div>' +
+    //            '<div style="float: left; margin-left: 5px">' +
+    //                '<div style="font-weight: bold; color: #333; font-size: 15px; line-height: 11px">' + data.brandName + '</div>' +
+    //                //'<div style="color: #999; font-size: 9px">' + data.email + '</div>' +
+    //            '</div>' +
+    //        '</div><div style="clear:both;"></div>'; // make sure we have closed our dom stuff
+    //    }
+    //});
 
     setupvisibilityRadioListBox();
 
@@ -198,7 +242,7 @@
             element//.text('').addClass('valid')
                 .closest('.control-group')
                 .removeClass('error');
-                //.addClass('success');
+            //.addClass('success');
         }
     });
 
