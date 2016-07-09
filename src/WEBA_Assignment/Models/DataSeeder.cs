@@ -31,7 +31,7 @@ namespace WEBA_ASSIGNMENT.Models
             //RoleStore needs using Microsoft.AspNet.Identity.EntityFramework;
             var identityRoleStore = new RoleStore<IdentityRole>(db);
             var identityRoleManager = new RoleManager<IdentityRole>(identityRoleStore, null, null, null, null, null);
-            
+
             var superAdminRole = new IdentityRole { Name = "SUPER ADMIN" };
             await identityRoleManager.CreateAsync(superAdminRole);
 
@@ -43,7 +43,7 @@ namespace WEBA_ASSIGNMENT.Models
 
             var customerRole = new IdentityRole { Name = "USER" };
             await identityRoleManager.CreateAsync(customerRole);
-            
+
             var userStore = new UserStore<ApplicationUser>(db);
             var userManager = new UserManager<ApplicationUser>(userStore, null, null, null, null, null, null, null, null);
 
@@ -109,6 +109,93 @@ namespace WEBA_ASSIGNMENT.Models
                                                      //to create a relationship describing that, Fred user is an OFFICER role user
             await userManager.AddToRoleAsync(fredUser, "OFFICER");
             
+            /**
+             * DataSeeder for the PresetMetric Table
+             * 
+             * Current types of Standard Metrics
+             * based on the International System of Units
+             * a.k.a SI Units
+             * 
+             * Length, Mass & Generic (eg. Sizes)
+             * 
+             * **/
+
+            PresetMetric Millimetre, Centimetre, Metre, Kilometre,
+                Pounds, Tonnes, Milligrams, Grams, Kilograms, Small,
+                Medium, Large, XLarge, XXLarge, XXXLarge, XXXXLarge;
+
+            Millimetre = new PresetMetric()
+            {
+                MetricType = "Length",
+                MetricSubType = "Millimetre",
+                MetricCharacter = "mm"
+            };
+            db.PresetMetrics.Add(Millimetre);
+
+            Centimetre = new PresetMetric()
+            {
+                MetricType = "Length",
+                MetricSubType = "Centimetre",
+                MetricCharacter = "cm"
+            };
+            db.PresetMetrics.Add(Centimetre);
+
+            Metre = new PresetMetric()
+            {
+                MetricType = "Length",
+                MetricSubType = "Metres",
+                MetricCharacter = "m"
+            };
+            db.PresetMetrics.Add(Metre);
+
+            Kilometre = new PresetMetric()
+            {
+                MetricType = "Length",
+                MetricSubType = "Kilometres",
+                MetricCharacter = "km"
+            };
+            db.PresetMetrics.Add(Kilometre);
+
+            Pounds = new PresetMetric()
+            {
+                MetricType = "Mass",
+                MetricSubType = "Pounds",
+                MetricCharacter = "lbs"
+            };
+            db.PresetMetrics.Add(Pounds);
+
+            Tonnes = new PresetMetric()
+            {
+                MetricType = "Length",
+                MetricSubType = "Tonnes",
+                MetricCharacter = "ton"
+            };
+            db.PresetMetrics.Add(Tonnes);
+
+            Small = new PresetMetric()
+            {
+                MetricType = "Generic",
+                MetricSubType = "Small",
+                MetricCharacter = "S"
+            };
+            db.PresetMetrics.Add(Small);
+
+            Medium = new PresetMetric()
+            {
+                MetricType = "Generic",
+                MetricSubType = "Medium",
+                MetricCharacter = "M"
+            };
+            db.PresetMetrics.Add(Medium);
+
+            Large = new PresetMetric()
+            {
+                MetricType = "Generic",
+                MetricSubType = "Large",
+                MetricCharacter = "L"
+            };
+            db.PresetMetrics.Add(Large);
+
             // DataSeeder for the Visibility Table
 
             Visibility Visible, VisibleIgnored, Hidden;

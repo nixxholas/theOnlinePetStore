@@ -104,7 +104,7 @@ namespace WEBA_ASSIGNMENT
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-           //app.SeedData();
+           app.SeedData();
         }//end of Configure()
     }
 }

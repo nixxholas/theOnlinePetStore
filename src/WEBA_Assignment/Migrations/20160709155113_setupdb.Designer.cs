@@ -8,7 +8,7 @@ using WEBA_ASSIGNMENT.Data;
 namespace WEBA_ASSIGNMENT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160707125540_setupdb")]
+    [Migration("20160709155113_setupdb")]
     partial class setupdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -302,6 +302,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<string>("DeletedById");
 
                     b.Property<int?>("NoOfProducts")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnName("NoOfProducts")
                         .HasColumnType("int")
@@ -415,6 +416,39 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.HasIndex("SpecialId");
 
                     b.ToTable("CategorySpecials");
+                });
+
+            modelBuilder.Entity("WEBA_ASSIGNMENT.Models.Consumable", b =>
+                {
+                    b.Property<int>("ProdId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ProdId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActiveIngredients")
+                        .HasColumnName("ActiveIngredients")
+                        .HasColumnType("VARCHAR(1000)");
+
+                    b.Property<string>("GuranteedAnalysis")
+                        .HasColumnName("GuranteedAnalysis")
+                        .HasColumnType("VARCHAR(1000)");
+
+                    b.Property<string>("InActiveIngredients")
+                        .HasColumnName("InActiveIngredients")
+                        .HasColumnType("VARCHAR(1000)");
+
+                    b.Property<string>("Ingredients")
+                        .HasColumnName("VARCHAR(1000)");
+
+                    b.Property<string>("TypicalAnalysis")
+                        .HasColumnName("TypicalAnalysis")
+                        .HasColumnType("VARCHAR(1000)");
+
+                    b.HasKey("ProdId")
+                        .HasName("Consumable_ProdId");
+
+                    b.ToTable("Consumable");
                 });
 
             modelBuilder.Entity("WEBA_ASSIGNMENT.Models.Metrics", b =>
@@ -552,7 +586,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnName("ProdId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BrandId");
+                    b.Property<int?>("BrandId");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -566,7 +600,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<string>("DeletedById");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnName("Description")
                         .HasColumnType("VARCHAR(MAX)");
 
@@ -576,12 +609,16 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnType("VARCHAR(100)");
 
                     b.Property<int>("Published")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("Published")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<int>("Quantity")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<int?>("SpecialId");
 
@@ -597,6 +634,11 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<string>("UpdatedById")
                         .IsRequired();
 
+                    b.Property<int?>("isConsumable")
+                        .IsRequired()
+                        .HasColumnName("isConsumable")
+                        .HasColumnType("int");
+
                     b.HasKey("ProdId")
                         .HasName("PrimaryKey_ProdId");
 
@@ -605,6 +647,9 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("DeletedById");
+
+                    b.HasIndex("ProdId")
+                        .IsUnique();
 
                     b.HasIndex("SpecialId");
 
@@ -942,8 +987,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                 {
                     b.HasOne("WEBA_ASSIGNMENT.Models.Brands", "Brand")
                         .WithMany("Products")
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("BrandId");
 
                     b.HasOne("WEBA_ASSIGNMENT.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
@@ -952,6 +996,11 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.HasOne("WEBA_ASSIGNMENT.Models.ApplicationUser", "DeletedBy")
                         .WithMany()
                         .HasForeignKey("DeletedById");
+
+                    b.HasOne("WEBA_ASSIGNMENT.Models.Consumable", "Consumable")
+                        .WithOne("Product")
+                        .HasForeignKey("WEBA_ASSIGNMENT.Models.Product", "ProdId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("WEBA_ASSIGNMENT.Models.Specials", "Special")
                         .WithMany()

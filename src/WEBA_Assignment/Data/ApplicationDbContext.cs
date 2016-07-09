@@ -172,7 +172,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasColumnName("NoOfProducts")
                 .HasColumnType("int")
                 .HasDefaultValue(0)
-                .IsRequired(false);
+                .IsRequired();
 
             modelBuilder.Entity<Brands>()
                 .Property(input => input.CreatedAt)
@@ -190,7 +190,7 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<Brands>()
                 .HasIndex(input => input.BrandName).IsUnique()
                 .HasName("Brand_BrandName_UniqueConstraint");
-            
+
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<Brands>()
              .HasOne(userClass => userClass.CreatedBy)
@@ -377,7 +377,7 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<Specials>()
                 .Property(input => input.DeletedAt)
                 .IsRequired(false);
-            
+
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<Specials>()
              .HasOne(userClass => userClass.CreatedBy)
@@ -396,7 +396,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .WithMany()
                 .HasForeignKey(userClass => userClass.DeletedById)
                 .OnDelete(DeleteBehavior.Restrict);
-            
+
             // ------------ End of Defining Specials Entity ------------ //
 
             // -------------- Defining CategorySpecials Entity ----------------- //
@@ -451,7 +451,7 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<Price>()
                 .Property(input => input.CreatedAt)
                 .HasDefaultValueSql("GETDATE()");
-            
+
             modelBuilder.Entity<Price>()
                 .Property(input => input.DeletedAt)
                 .IsRequired(false);
@@ -570,7 +570,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .WithMany()
                 .HasForeignKey(userClass => userClass.DeletedById)
                 .OnDelete(DeleteBehavior.Restrict);
-            
+
             // -------------- End of Defining Metric Entity --------- //
 
             // -------------- Defining PresetMetric Entity ---------- //
@@ -598,6 +598,12 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasColumnType("VARCHAR(100)")
                 .IsRequired();
 
+            modelBuilder.Entity<PresetMetric>()
+                .Property(input => input.MetricCharacter)
+                .HasColumnName("MetricCharacter")
+                .HasColumnType("VARCHAR(100)")
+                .IsRequired();
+
             // No need to have any user tracking data as there
             // won't be any chance that the admin will be able to 
             // change a single shit unless the SI Unit had a 
@@ -622,17 +628,18 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasColumnName("ProdName")
                 .HasColumnType("VARCHAR(100)")
                 .IsRequired();
-            
+
             modelBuilder.Entity<Product>()
                 .Property(input => input.Description)
                 .HasColumnName("Description")
                 .HasColumnType("VARCHAR(MAX)")
-                .IsRequired();
+                .IsRequired(false);
 
             modelBuilder.Entity<Product>()
                 .Property(input => input.Quantity)
                 .HasColumnName("Quantity")
                 .HasColumnType("int")
+                .HasDefaultValue(0)
                 .IsRequired();
 
             modelBuilder.Entity<Product>()
@@ -644,6 +651,13 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<Product>()
                 .Property(input => input.Published)
                 .HasColumnName("Published")
+                .HasColumnType("int")
+                .HasDefaultValue(0)
+                .IsRequired();
+
+            modelBuilder.Entity<Product>()
+                .Property(input => input.isConsumable)
+                .HasColumnName("isConsumable")
                 .HasColumnType("int")
                 .IsRequired();
 
@@ -670,7 +684,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasMany(input => input.Metrics)
                 .WithOne(input => input.Product)
                 .HasForeignKey(input => input.ProdId);
-            
+
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<Product>()
              .HasOne(userClass => userClass.CreatedBy)
@@ -689,7 +703,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .WithMany()
                 .HasForeignKey(userClass => userClass.DeletedById)
                 .OnDelete(DeleteBehavior.Restrict);
-          
+
             // -------------- Defining Product Entity --------------- //
             // END.
 
@@ -794,7 +808,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasOne(input => input.Product)
                 .WithMany(input => input.ProductPhotos)
                 .HasForeignKey(input => input.ProdId);
-            
+
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<ProductPhoto>()
              .HasOne(userClass => userClass.CreatedBy)
@@ -813,42 +827,57 @@ namespace WEBA_ASSIGNMENT.Data
             // END.
 
             // -------------- Defining Consumable Entity --------------- //
-            //modelBuilder.Entity<Consumable>()
-            //    .HasKey(input => input.ProdId)
-            //    .HasName("Consumable_ProdId");
+            modelBuilder.Entity<Consumable>()
+                .HasKey(input => input.ProdId)
+                .HasName("Consumable_ProdId");
 
-            //modelBuilder.Entity<Consumable>()
-            //    .Property(input => input.TypicalAnalysis)
-            //    .HasColumnName("TypicalAnalysis")
-            //    .HasColumnType("VARCHAR(1000)")
-            //    .IsRequired(false);
+            modelBuilder.Entity<Consumable>()
+            .Property(input => input.ProdId)
+            .HasColumnName("ProdId")
+            .HasColumnType("int")
+            .UseSqlServerIdentityColumn()
+            .ValueGeneratedOnAdd()
+            .IsRequired(true);
 
-            //modelBuilder.Entity<Consumable>()
-            //    .Property(input => input.GuranteedAnalysis)
-            //    .HasColumnName("GuranteedAnalysis")
-            //    .HasColumnType("VARCHAR(1000)")
-            //    .IsRequired(false);
+            modelBuilder.Entity<Consumable>()
+                .Property(input => input.TypicalAnalysis)
+                .HasColumnName("TypicalAnalysis")
+                .HasColumnType("VARCHAR(1000)")
+                .IsRequired(false);
 
-            //modelBuilder.Entity<Consumable>()
-            //    .Property(input => input.Ingredients)
-            //    .HasColumnName("Ingredients")
-            //    .HasColumnName("VARCHAR(1000)")
-            //    .IsRequired(false);
+            modelBuilder.Entity<Consumable>()
+                .Property(input => input.GuranteedAnalysis)
+                .HasColumnName("GuranteedAnalysis")
+                .HasColumnType("VARCHAR(1000)")
+                .IsRequired(false);
 
-            //modelBuilder.Entity<Consumable>()
-            //    .Property(input => input.ActiveIngredients)
-            //    .HasColumnName("ActiveIngredients")
-            //    .HasColumnType("VARCHAR(1000)")
-            //    .IsRequired();
+            modelBuilder.Entity<Consumable>()
+                .Property(input => input.Ingredients)
+                .HasColumnName("Ingredients")
+                .HasColumnName("VARCHAR(1000)")
+                .IsRequired(false);
 
-            //modelBuilder.Entity<Consumable>()
-            //    .Property(input => input.InActiveIngredients)
-            //    .HasColumnName("InActiveIngredients")
-            //    .HasColumnType("VARCHAR(1000)")
-            //    .IsRequired();
+            modelBuilder.Entity<Consumable>()
+                .Property(input => input.ActiveIngredients)
+                .HasColumnName("ActiveIngredients")
+                .HasColumnType("VARCHAR(1000)")
+                .IsRequired(false);
+
+            modelBuilder.Entity<Consumable>()
+                .Property(input => input.InActiveIngredients)
+                .HasColumnName("InActiveIngredients")
+                .HasColumnType("VARCHAR(1000)")
+                .IsRequired(false);
+
+            // Foreign Key initializations
+
+            modelBuilder.Entity<Consumable>()
+                .HasOne(input => input.Product)
+                .WithOne(input => input.Consumable)
+                .HasForeignKey<Product>(input => input.ProdId);
 
             //----------- Defining Consumable Entity - End --------------
-                        
+
             base.OnModelCreating(modelBuilder);
 
         }

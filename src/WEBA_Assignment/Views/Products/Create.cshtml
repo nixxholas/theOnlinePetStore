@@ -8,14 +8,17 @@
                 <form id="dataForm" role="form" class="form-horizontal">
                     <div class="form-group col-md-12">
                         <label class="control-label col-md-3" for="prodNameInput">Product Name</label>
-
-                        <input type="text" id="prodNameInput" class="form-control font-bold"
-                               maxlength="50" placeholder="Product Name" value="" />
+                        <div class="form-group col-md-8">
+                            <input type="text" name="prodNameInput" id="prodNameInput" class="form-control font-bold"
+                                   maxlength="50" placeholder="Product Name" value="" />
+                        </div>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="control-label col-md-3" for="brandInput">Brand</label>
-                        <div id="brandInput" class="col-md-8 ui selection dropdown">
+                        <label class="control-label col-md-3 photoUploadMarginFixProducts" for="brandInput">Brand</label>
+                        <div class="col-md-5">
+                            <div id="brandInput" class="form-group">
 
+                            </div>
                         </div>
                     </div>
                     <div class="form-group col-md-12">
@@ -146,16 +149,27 @@
     })
     ;
 
-    var brandInput = $('#brandInput')
-                      .dropdown({
-                          useLabels: false,
-                          maxSelections: 3,
-                          api: {
-                              method: 'GET',
-                              url: 'http://localhost:5008/API/Brands/'
-                          }
-                      })
-    ;
+    // note that it would be a lot more proper to use CSS classes here instead of inline style
+
+    var brandInput = $('#brandInput').magicSuggest({
+        maxSelection: 1,
+        allowFreeEntries: false,
+        method: 'get',
+        data: 'http://localhost:5008/API/Brands',
+        dataType: 'json',
+        displayField: 'brandName',
+        valueField: 'brandId',
+        renderer: function (data) {
+            return '<div style="padding: 5px;">' +
+                '<div style="float: left;"><img height="75px" width="75px" src="' + data.photoUrl + '" /></div>' +
+                '<div style="float: left; margin-left: 5px">' +
+                    '<div style="font-weight: bold; color: #333; font-size: 15px; line-height: 11px">' + data.brandName + '</div>' +
+                    //'<div style="color: #999; font-size: 9px">' + data.email + '</div>' +
+                '</div>' +
+            '</div><div style="clear:both;"></div>'; // make sure we have closed our dom stuff
+        }
+    });
+
 
     setupvisibilityRadioListBox();
 
@@ -167,10 +181,31 @@
         this.EndDate = inEndDate;
     }
 
+    // Form validation for jQuery-based elements
+    $('#dataForm').validate({
+        rules: {
+            prodNameInput: {
+                minlength: 2,
+                required: true
+            }
+        },
+        highlight: function (element) {
+            $(element).closest('.control-group')
+                //.removeClass('success')
+                .addClass('error');
+        },
+        success: function (element) {
+            element//.text('').addClass('valid')
+                .closest('.control-group')
+                .removeClass('error');
+                //.addClass('success');
+        }
+    });
+
     $('#saveButton').on('click', function () {
-        var collectedCatName = $('#catNameInput').val();
-        if (collectedCatName == null || collectedCatName == "") {
-            swal("Error!", "Please enter an appropriate category name!", "error")
+        var collectedProdName = $('#prodNameInput').val();
+        if (collectedProdName == null || collectedProdName == "") {
+            swal("Error!", "Please enter an appropriate product name!", "error")
             return; // Break out of the function
         }
         var collectedVisibilityId = $('input[name="Visibility"]:checked').val();
