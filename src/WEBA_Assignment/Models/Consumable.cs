@@ -9,6 +9,7 @@ namespace WEBA_ASSIGNMENT.Models
     // Consumable a weak entity of product first.
     public class Consumable
     {
+        public int ConsumableId { get; set; }
         public int ProdId { get; set; }
         public Product Product { get; set; }
         public String TypicalAnalysis { get; set; }

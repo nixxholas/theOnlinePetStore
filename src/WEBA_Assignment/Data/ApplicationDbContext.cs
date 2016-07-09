@@ -42,8 +42,7 @@ namespace WEBA_ASSIGNMENT.Data
                 entity.Relational().TableName = entity.DisplayName();
             }
 
-            // Relations Between Categories, Brands and Products to Specials are undone
-            // SuperType - SubType undone
+            // Unique Constraints Enforcement undone
 
             // -------------- Defining Visibility Entity --------------- //
             modelBuilder.Entity<Visibility>()
@@ -828,12 +827,12 @@ namespace WEBA_ASSIGNMENT.Data
 
             // -------------- Defining Consumable Entity --------------- //
             modelBuilder.Entity<Consumable>()
-                .HasKey(input => input.ProdId)
-                .HasName("Consumable_ProdId");
+                .HasKey(input => input.ConsumableId)
+                .HasName("PrimaryKey_ConsumableId");
 
             modelBuilder.Entity<Consumable>()
-            .Property(input => input.ProdId)
-            .HasColumnName("ProdId")
+            .Property(input => input.ConsumableId)
+            .HasColumnName("ConsumableId")
             .HasColumnType("int")
             .UseSqlServerIdentityColumn()
             .ValueGeneratedOnAdd()
@@ -874,7 +873,7 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<Consumable>()
                 .HasOne(input => input.Product)
                 .WithOne(input => input.Consumable)
-                .HasForeignKey<Product>(input => input.ProdId);
+                .HasForeignKey<Consumable>(input => input.ProdId);
 
             //----------- Defining Consumable Entity - End --------------
 

@@ -8,7 +8,7 @@ using WEBA_ASSIGNMENT.Data;
 namespace WEBA_ASSIGNMENT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160709155113_setupdb")]
+    [Migration("20160709161857_setupdb")]
     partial class setupdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -420,9 +420,9 @@ namespace WEBA_ASSIGNMENT.Migrations
 
             modelBuilder.Entity("WEBA_ASSIGNMENT.Models.Consumable", b =>
                 {
-                    b.Property<int>("ProdId")
+                    b.Property<int>("ConsumableId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ProdId")
+                        .HasColumnName("ConsumableId")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -441,12 +441,17 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<string>("Ingredients")
                         .HasColumnName("VARCHAR(1000)");
 
+                    b.Property<int>("ProdId");
+
                     b.Property<string>("TypicalAnalysis")
                         .HasColumnName("TypicalAnalysis")
                         .HasColumnType("VARCHAR(1000)");
 
-                    b.HasKey("ProdId")
-                        .HasName("Consumable_ProdId");
+                    b.HasKey("ConsumableId")
+                        .HasName("PrimaryKey_ConsumableId");
+
+                    b.HasIndex("ProdId")
+                        .IsUnique();
 
                     b.ToTable("Consumable");
                 });
@@ -523,6 +528,11 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("PMetricId")
                         .HasColumnType("int");
+
+                    b.Property<string>("MetricCharacter")
+                        .IsRequired()
+                        .HasColumnName("MetricCharacter")
+                        .HasColumnType("VARCHAR(100)");
 
                     b.Property<string>("MetricSubType")
                         .IsRequired()
@@ -647,9 +657,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("DeletedById");
-
-                    b.HasIndex("ProdId")
-                        .IsUnique();
 
                     b.HasIndex("SpecialId");
 
@@ -943,6 +950,14 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("WEBA_ASSIGNMENT.Models.Consumable", b =>
+                {
+                    b.HasOne("WEBA_ASSIGNMENT.Models.Product", "Product")
+                        .WithOne("Consumable")
+                        .HasForeignKey("WEBA_ASSIGNMENT.Models.Consumable", "ProdId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("WEBA_ASSIGNMENT.Models.Metrics", b =>
                 {
                     b.HasOne("WEBA_ASSIGNMENT.Models.ApplicationUser", "CreatedBy")
@@ -996,11 +1011,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.HasOne("WEBA_ASSIGNMENT.Models.ApplicationUser", "DeletedBy")
                         .WithMany()
                         .HasForeignKey("DeletedById");
-
-                    b.HasOne("WEBA_ASSIGNMENT.Models.Consumable", "Consumable")
-                        .WithOne("Product")
-                        .HasForeignKey("WEBA_ASSIGNMENT.Models.Product", "ProdId")
-                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("WEBA_ASSIGNMENT.Models.Specials", "Special")
                         .WithMany()
