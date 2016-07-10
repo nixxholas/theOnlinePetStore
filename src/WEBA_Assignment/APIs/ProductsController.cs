@@ -480,47 +480,51 @@ namespace WEBA_ASSIGNMENT.APIs
             var oneProduct = Database.Products
                 .Where(Product => Product.ProdId == productToBeUpdated.ProdId)
                 .Include(Product => Product.Brand)
-                .Include(Product => Product.ProductPhotos).Single();
-            oneProduct.ProdName = productToBeUpdated.ProdName;
+                // Issue with this
+                .Include(Product => Product.ProductPhotos);
+            
+            //oneProduct.ProdName = productToBeUpdated.ProdName;
                       
-            var oneFile = fileInput[0];
-            var fileName = ContentDispositionHeaderValue
-                        .Parse(oneFile.ContentDisposition)
-                        .FileName
-                        .Trim('"');
-            string contentType = oneFile.ContentType;
-            //Upload the binary file first
-            var currentProductPhotos = await Cloudinary.CloudinaryAPIs.UploadProductImageToCloudinary(oneFile.OpenReadStream(), contentType, fileName, "Products");
-            //Delete the existing binary file
-            //Obtain the Cloudinary public id value from the foundOneProduct's ProductPhotos navigation property
-            string originalCloudinaryPublicId = "";
+            //foreach (var oneFile in fileInput)
+            //{
+            //    foreach (ProductPhoto productPhoto in oneProduct.ProductPhotos)
+            //    {
+            //        //var oneFile = fileInput[0];
+            //        var fileName = ContentDispositionHeaderValue
+            //                    .Parse(oneFile.ContentDisposition)
+            //                    .FileName
+            //                    .Trim('"');
 
-            // Lazy loading system lol
-            foreach (var productPhoto in oneProduct.ProductPhotos)
-            {
-                originalCloudinaryPublicId = productPhoto.PublicCloudinaryId;
-                break;
-            }
+            //        string contentType = oneFile.ContentType;
+            //        //Upload the binary file first
+            //        var currentProductPhotos = await Cloudinary.CloudinaryAPIs.UploadProductImageToCloudinary(oneFile.OpenReadStream(), contentType, fileName, "Products");
 
-            //Use the Cloudinary public id value as an input argument for the DeleteImageInCloudinary to delete the binary
-            //file resource.
-            Boolean result = await Cloudinary.CloudinaryAPIs.DeleteImageInCloudinary(originalCloudinaryPublicId);
+            //        //Delete the existing binary file
+            //        //Obtain the Cloudinary public id value from the foundOneProduct's ProductPhotos navigation property
+            //        string originalCloudinaryPublicId = "";
+            //        originalCloudinaryPublicId = productPhoto.PublicCloudinaryId;
 
-            if (currentProductPhotos.PublicCloudinaryId != "")
-            {
-                foreach (var productPhoto in oneProduct.ProductPhotos)
-                {
-                    productPhoto.ImageSize = currentProductPhotos.ImageSize;
-                    productPhoto.Version = currentProductPhotos.Version;
-                    productPhoto.Height = currentProductPhotos.Height;
-                    productPhoto.Width = currentProductPhotos.Width;
-                    productPhoto.PublicCloudinaryId = currentProductPhotos.PublicCloudinaryId;
-                    productPhoto.Url = currentProductPhotos.Url;
-                    productPhoto.SecureUrl = currentProductPhotos.SecureUrl;
-                }
-            }
 
-            Database.Products.Update(oneProduct);
+            //        //Use the Cloudinary public id value as an input argument for the DeleteImageInCloudinary to delete the binary
+            //        //file resource.
+            //        Boolean result = await Cloudinary.CloudinaryAPIs.DeleteImageInCloudinary(originalCloudinaryPublicId);
+
+            //        if (currentProductPhotos.PublicCloudinaryId != "")
+            //        {
+            //            productPhoto.ImageSize = currentProductPhotos.ImageSize;
+            //            productPhoto.Version = currentProductPhotos.Version;
+            //            productPhoto.Height = currentProductPhotos.Height;
+            //            productPhoto.Width = currentProductPhotos.Width;
+            //            productPhoto.PublicCloudinaryId = currentProductPhotos.PublicCloudinaryId;
+            //            productPhoto.Url = currentProductPhotos.Url;
+            //            productPhoto.SecureUrl = currentProductPhotos.SecureUrl;
+
+            //            Database.Products.Update(oneProduct);
+            //        }
+            //    }
+            //}
+            
+
             Database.SaveChanges();
             computeProductsPerBrand();
             var successRequestResultMessage = new

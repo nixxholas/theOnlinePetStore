@@ -645,6 +645,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .Property(input => input.ThresholdInvertoryQuantity)
                 .HasColumnName("ThresholdInventoryQuantity")
                 .HasColumnType("int")
+                .HasDefaultValue(0)
                 .IsRequired();
 
             modelBuilder.Entity<Product>()
@@ -658,6 +659,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .Property(input => input.isConsumable)
                 .HasColumnName("isConsumable")
                 .HasColumnType("int")
+                .HasDefaultValue(0)
                 .IsRequired();
 
             modelBuilder.Entity<Product>()
@@ -683,7 +685,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasMany(input => input.Metrics)
                 .WithOne(input => input.Product)
                 .HasForeignKey(input => input.ProdId);
-
+            
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<Product>()
              .HasOne(userClass => userClass.CreatedBy)
@@ -794,7 +796,8 @@ namespace WEBA_ASSIGNMENT.Data
             .Property(ProductPhotoObject => ProductPhotoObject.isPrimaryPhoto)
             .HasColumnName("isPrimaryPhoto")
             .HasColumnType("int")
-            .HasDefaultValue(0);
+            .HasDefaultValue(0)
+            .IsRequired();
 
             //----------------------------------------------------------------------------
             // Define One to Many relationship between Product and ProductPhoto
@@ -805,8 +808,7 @@ namespace WEBA_ASSIGNMENT.Data
 
             modelBuilder.Entity<ProductPhoto>()
                 .HasOne(input => input.Product)
-                .WithMany(input => input.ProductPhotos)
-                .HasForeignKey(input => input.ProdId);
+                .WithMany(input => input.ProductPhotos);
 
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<ProductPhoto>()

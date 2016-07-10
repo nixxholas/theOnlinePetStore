@@ -15,6 +15,8 @@ namespace WEBA_ASSIGNMENT.Models
         //there is a one to one relationship with the Brand entity.
         public Brands Brand { get; set; }
         public int Quantity { get; set; }
+        // Threshold inventory quantity is the minimum amount
+        // of inventory a company wants to have on hand.
         public int? ThresholdInvertoryQuantity { get; set; }
         public int Published { get; set; }
         // We don't need to have SpecialId to have a value.

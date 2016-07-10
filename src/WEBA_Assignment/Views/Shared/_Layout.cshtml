@@ -61,6 +61,7 @@
 						@if (User.IsInRole("ADMIN") || User.IsInRole("MASTER"))
                         {
 						<li><a asp-controller="UserManager" asp-action="Index">Manage User</a></li>
+                        <li><a asp-controller="Specials" asp-action="Index">Manage Promotions</a></li>
                         <li><a asp-controller="Categories" asp-action="Index">Manage Categories</a></li>
                         <li><a asp-controller="Brands" asp-action="Index">Manage Brands</a></li>
                         }
