@@ -61,9 +61,12 @@
                         <label class="control-label col-md-3" for="dataTable">Metrics</label>
                         <div class="col-md-8">
                             <table id="dataTable" class="table table-hover">
+                                <button id="rowBtn" onclick="addRow()" class="pull-right large ui secondary button">
+                                    New Row
+                                </button>
                                 <thead>
                                     <tr>
-                                        <th>Metric Name</th>
+                                        <th>Metrics Name</th>
                                         <th>Metric Type</th>
                                         <th>Quantity</th>
                                         <th>Price per type</th>
@@ -103,6 +106,8 @@
 <script>
     var isConsumable = 0;
     var PresetMetricData = [];
+    
+    // PresetMetric GET Method
     var $dataCommunicationTracker = jQuery.ajax({
         contentType: 'application/json',
         method: 'get',
@@ -138,6 +143,65 @@
         ]
     });
     var metricsTable = $('#metricSegment');
+
+    function addRow() {
+        // We'll have to add a new row in the table
+        var $tableElement = null;
+        var $cellElement = null;
+        var $rowElement = null;
+        var works = "nice";
+
+        //-------- Find the table element -----------
+        //I am using the $tableElement variable
+        //to represent the found HTML element which has a matching id of brandTableBody
+        $tableBodyElement = $('#metricsTableBody');
+
+        //Create the 1st cell element which displays the CategoryId
+        $cellElement = $('<td></td>', { text: works });
+        $rowElement.append($cellElement);
+        //Create the 2nd cell element which displays the Category Name
+        $cellElement = $('<td></td>', { text: works });
+        $rowElement.append($cellElement);
+        // Create the 3rd cell element which displays the Visibility
+        $cellElement = $('<td></td>', { text: works });
+        $rowElement.append($cellElement);
+        //Create the 4th cell element which display created at information
+        $cellElement = $('<td></td>', { text: works });
+        $rowElement.append($cellElement);
+        //Create the 5th cell element which display created at information
+        $cellElement = $('<td></td>', { text: works });
+        $rowElement.append($cellElement);
+        //Create the 6th cell element which display updated at information
+        $cellElement = $('<td></td>', { text: works });
+        $rowElement.append($cellElement);
+        //Create the 7th cell element which display created at information
+        $cellElement = $('<td></td>', { text: works });
+        $rowElement.append($cellElement);
+        if (deletedAt == null) {
+            //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
+            $hyperLinkElement = $('<a>Update</a>').attr('href', '/Categories/Update/' + CatId);
+            $hyperLinkElement.addClass('btn btn-primary');
+            //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
+            $hyperLinkElement2 = $('<a>Manage Brands</a>').attr('href', '/Brands/BrandsUnderCategory/' + CatId); // Placeholder
+            $hyperLinkElement2.addClass('btn btn-primary inline');
+            //-----------------Using jQuery() to creating the 6th cell for the row----------------------
+            $cellElement = $('<td></td>');
+            //-----------------Add the previous created hyperlink element, $hyperLinkElement
+            //                 into the newly created 6th cell.
+            $cellElement.append($hyperLinkElement);
+            $cellElement.append($hyperLinkElement2);
+        } else {
+            //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
+            $hyperLinkElement3 = $('<a name="restore" id=' + CatId + ' onClick="restoreCat(' + CatId + ')">Restore Category</a>'); // Placeholder
+            $hyperLinkElement3.addClass('btn btn-primary inline');
+            $cellElement = $('<td></td>');
+            $cellElement.append($hyperLinkElement3);
+        }
+        //---------------Add the 6th cell into the row represented by the $rowElement
+        $rowElement.append($cellElement);
+        //Insert the $rowElement into the table element represented by $tableElement.
+        $tableBodyElement.append($rowElement);
+    };
 
     $('#descriptionCheck').on('click', function () {
         if (descriptionBox.hasClass('hidden')) {
@@ -214,15 +278,61 @@
     //        '</div><div style="clear:both;"></div>'; // make sure we have closed our dom stuff
     //    }
     //});
+    
+    // Start of Product Image Element
 
-    setupvisibilityRadioListBox();
+    window.$brandPhotoInputElement = $('#fileInput');
+
+    var footerTemplate = '<div class="file-thumbnail-footer">\n' +
+    '    <div class="file-caption-name" style="width:{width}">{caption}</div>\n' +
+    '    {actions}\n' +
+    '</div>';
+    var actionTemplate = '<div class="file-actions">\n' +
+     '       <div class="file-footer-buttons">\n {delete} </div>\n' +
+     '    <div class="file-upload-indicator" tabindex="-1" title="{indicatorTitle}">{indicator}</div>\n' +
+     '    <div class="clearfix"></div>\n' +
+     '</div>';
+
+    $('#fileInput').fileinput({
+        previewFileType: 'image',
+        allowedFileTypes: ['image'],
+        uploadUrl: '/API/Brands/UploadProductPhotosAndUpdateProductData',
+        uploadAsync: false,
+        maxFileCount: 3,
+        layoutTemplates: { footer: footerTemplate, actions: actionTemplate },
+        type: 'post',
+        msgInvalidFileType: 'Invalid type for file "{name}". Only "{types}" files are supported.',
+        autoReplace: true,
+        overwriteInitial: false,
+        showUploadedThumbs: false,
+        showUpload: false,
+        showRemove: false,
+        browseClass: 'btn btn-primary btn-md pull-right',
+        previewFileIcon: '<i class="glyphicon glyphicon-king"></i>',
+        allowedFileExtensions: ['jpg', 'jpeg', 'png'],
+        uploadExtraData: function () {  // callback example
+            var out = {};
+            return out;
+        }
+    });
+    window.$brandPhotoInputElement.on('filebatchuploadsuccess',
+                         function (event, data, previewId, index) {
+                             var form = data.form, files = data.files, extra = data.extra,
+                                 response = data.response, reader = data.reader;
+                             swal("Hurray!", data.responseJSON.message, "Success");
+                         });
+
+    // End of Product Image Element
 
     //Using a function technique to create a JavaScript class, WebFormData
-    function WebFormData(inCatName, inVisibilityId, inStartDate, inEndDate) {
-        this.CatName = inCatName;
-        this.VisibilityId = inVisibilityId;
-        this.StartDate = inStartDate;
-        this.EndDate = inEndDate;
+    function WebFormData(inProdName, inBrandId, inDescription, inMetrics, inTiQ, inPublished, inIsConsumable) {
+        this.ProdName = inProdName;
+        this.BrandId = inBrandId;
+        this.Description = inDescription;
+        this.Metrics = inMetrics;
+        this.ThresholdInventoryQuantity = inTiQ;
+        this.Published = inPublished;
+        this.isConsumable = inIsConsumable;
     }
 
     // Form validation for jQuery-based elements
@@ -248,99 +358,48 @@
 
     $('#saveButton').on('click', function () {
         var collectedProdName = $('#prodNameInput').val();
-        if (collectedProdName == null || collectedProdName == "") {
-            swal("Error!", "Please enter an appropriate product name!", "error")
-            return; // Break out of the function
-        }
-        var collectedVisibilityId = $('input[name="Visibility"]:checked').val();
-        if (collectedVisibilityId == null) {
-            swal("Error!", "Please select a visibility type!", "error")
-            return;
-        }
-        //Create a JavaScript object to contain the type name information
-        if (collectedVisibilityId == 3) {
-            var collectedStartDate = moment(startDateInput).format("DD/MM/YYYY");
-            var collectedEndDate = moment(endDateInput).format("DD/MM/YYYY");
-            // Date Checking is done Server-Sided
-            //
-            // Update 01 Jul 2016
-            //
-            // Reason 1:
-            // Moment Js is 150 times slower than javascript
-            // Proof of Concept: http://jsperf.com/momentjs-isafter-performance
-            //
-            // Reason 2:
-            // http://stackoverflow.com/questions/25310242/moment-js-isafter-performance
-            //
-            var webFormData = new WebFormData(collectedCatName, collectedVisibilityId, collectedStartDate, collectedEndDate);
-        } else {
-            var webFormData = new WebFormData(collectedCatName, collectedVisibilityId, null, null);
-        }
+        var collectedBrand = brandInput.getValue(); // Brand Id in an array
+        //if (collectedProdName == null || collectedProdName == "") {
+        //    swal("Error!", "Please enter an appropriate product name!", "error")
+        //    return; // Break out of the function
+        //}
+
+
+        //(inProdName, inBrandId, inDescription, inMetrics, inTiQ, inPublished, inIsConsumable)
+        var webFormData = new WebFormData(collectedProdName, collectedVisibilityId, collectedStartDate, collectedEndDate);
 
         //Serialize the webFormData object which contains the type name
         //data into a flat string. So that, it can be sent accross the Internet network successfully.
         var webFormDataInString = JSON.stringify(webFormData);
 
-        $saveCategoryHandler = jQuery.ajax({
-            type: 'POST',
-            url: '/API/Categories/',
-            dataType: 'json',
-            contentType: 'application/json;',
-            data: "'" + webFormDataInString + "'"
-        })//end of ajax() call
-        $saveCategoryHandler.done(function (data, textStatus, jqXHR) {
-            swal("Hurray!", data.responseJSON.message, "Success");
-        });//end of $saveCategoryHandler.done();
-        $saveCategoryHandler.fail(function (data, textStatus, jqXHR) {
-            swal("Oh no!", data.responseJSON.message, "error");
-        });//end of $saveCategoryHandler.fail();
-    });//end of $('#saveButton').on('click', function () {
-
-    function setupvisibilityRadioListBox() {
-        var $dataCommunicationTracker = jQuery.ajax({
+        $saveProductHandler = jQuery.ajax({
+            method: 'post',
             contentType: 'application/json',
-            method: 'get',
-            url: 'http://localhost:5008/API/Visibility/GetAllVisibilities',
+            url: '/Api/Products/SaveNewProductInformationInSession',
+            data: "'" + webFormDataInString + "'"
         });
-
-        /**
-            So now, we will have to throw in all of the elements into
-            the dropdown box
-        **/
-        $dataCommunicationTracker.done(function (data, textStatus, jqXHR) {
-            // Like the previous cshtml, let's define a variable for
-            // the visibilityRadioList box
-            var $visibilityRadioListElement = $('#visibilityRadioList');
-            // We then initialize the element container
-            // for each element
-            var $optionElement = null;
-
-            // Then we implement a for loop to make things dynamic
-            // for each course in the array called data
-            for (index = 0; index < data.length; index++) {
-                // We first define the visibility from the data array
-                oneVisibility = data[index];
-                // Then we put it into the element container
-                $optionElement = $('<input type="radio" name="Visibility" onClick="checkRadio()" value="'
-                    + oneVisibility.visibilityId + '"/>' + '<span>' + oneVisibility.visibilityName + '&nbsp;&nbsp;&nbsp;' + '</span>');
-                // Then we add the element into the visibilityRadioList radio box
-                $visibilityRadioListElement.append($optionElement);
+        $saveProductHandler.done(function (data, textStatus, jqXHR) {
+            // If no images are uploaded, we'll post with a stock image
+            if ($('#fileInput').get(0).files.length == 0) {
+                $saveProductDBHandler = jQuery.ajax({
+                    method: 'post',
+                    contentType: 'application/json',
+                    url: '/Api/Brands/SaveBrandData',
+                    data: "'" + webFormDataInString + "'"
+                });
+                $saveProductDBHandler.done(function (data, textStatus, jqXHR) {
+                    swal("Hurray!", data.responseJSON.message, "Success");
+                });
+                $saveProductDBHandler.fail(function (data, textStatus, jqXHR) {
+                    swal("Oh no!", data.responseJSON.message, "error");
+                });
+            } else {
+                window.$brandPhotoInputElement.fileinput('upload');
             }
         });
-
-        $dataCommunicationTracker.fail(function (data, textStatus, jqXHR) {
+        $saveProductHandler.fail(function (data, textStatus, jqXHR) {
             swal("Oh no!", data.responseJSON.message, "error");
         });
-    } //End of setupvisibilityRadioListBox() function
+    });//end of $('#saveButton').on('click', function () {
 
-    function checkRadio() {
-        if ($('input[name="Visibility"]:checked').val() == 3) {
-            $("#startDateSegment").removeClass('hidden');
-            $("#endDateSegment").removeClass('hidden');
-        } else {
-            $("#startDateSegment").addClass('hidden');
-            $("#endDateSegment").addClass('hidden');
-        }
-
-    }
 </script>
