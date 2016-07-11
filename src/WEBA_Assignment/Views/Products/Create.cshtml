@@ -31,6 +31,10 @@
                         <label class="control-label col-md-3" for="productProperties">Properties</label>
                         <div id="checkboxContainer" class="col-md-9">
                             <div class="ui slider checkbox">
+                                <input type="checkbox" id="publishCheck">
+                                <label>Publish product upon save</label>
+                            </div><br>
+                            <div class="ui slider checkbox">
                                 <input type="checkbox" id="descriptionCheck">
                                 <label>Product has a description</label>
                             </div><br>
@@ -48,7 +52,7 @@
                             <div class="ui slider checkbox">
                                 <input type="checkbox" id="specialsCheck">
                                 <label>Product has a special promotion</label>
-                            </div><br>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group col-md-12 hidden" id="descriptionBox">
@@ -281,7 +285,7 @@
     
     // Start of Product Image Element
 
-    window.$brandPhotoInputElement = $('#fileInput');
+    window.$productPhotoInputElement = $('#fileInput');
 
     var footerTemplate = '<div class="file-thumbnail-footer">\n' +
     '    <div class="file-caption-name" style="width:{width}">{caption}</div>\n' +
@@ -296,8 +300,8 @@
     $('#fileInput').fileinput({
         previewFileType: 'image',
         allowedFileTypes: ['image'],
-        uploadUrl: '/API/Brands/UploadProductPhotosAndUpdateProductData',
-        uploadAsync: false,
+        uploadUrl: '/API/Products/UploadProductPhotosAndUpdateProductData',
+        uploadAsync: true,
         maxFileCount: 3,
         layoutTemplates: { footer: footerTemplate, actions: actionTemplate },
         type: 'post',
@@ -315,7 +319,7 @@
             return out;
         }
     });
-    window.$brandPhotoInputElement.on('filebatchuploadsuccess',
+    window.$productPhotoInputElement.on('filebatchuploadsuccess',
                          function (event, data, previewId, index) {
                              var form = data.form, files = data.files, extra = data.extra,
                                  response = data.response, reader = data.reader;
@@ -358,15 +362,13 @@
 
     $('#saveButton').on('click', function () {
         var collectedProdName = $('#prodNameInput').val();
-        var collectedBrand = brandInput.getValue(); // Brand Id in an array
-        //if (collectedProdName == null || collectedProdName == "") {
-        //    swal("Error!", "Please enter an appropriate product name!", "error")
-        //    return; // Break out of the function
-        //}
-
-
+        var collectedBrandId = brandInput.getValue().toString(); // Brand Id
+        if (collectedBrandId == null || collectedBrandId == "") {
+            swal("Error!", "Please select a brand!", "error")
+            return; // Break out of the function
+        }
         //(inProdName, inBrandId, inDescription, inMetrics, inTiQ, inPublished, inIsConsumable)
-        var webFormData = new WebFormData(collectedProdName, collectedVisibilityId, collectedStartDate, collectedEndDate);
+        var webFormData = new WebFormData(collectedProdName, collectedBrandId, null, null, null, null, null);
 
         //Serialize the webFormData object which contains the type name
         //data into a flat string. So that, it can be sent accross the Internet network successfully.
@@ -384,7 +386,7 @@
                 $saveProductDBHandler = jQuery.ajax({
                     method: 'post',
                     contentType: 'application/json',
-                    url: '/Api/Brands/SaveBrandData',
+                    url: '/Api/Products/SaveProductData',
                     data: "'" + webFormDataInString + "'"
                 });
                 $saveProductDBHandler.done(function (data, textStatus, jqXHR) {
@@ -394,7 +396,7 @@
                     swal("Oh no!", data.responseJSON.message, "error");
                 });
             } else {
-                window.$brandPhotoInputElement.fileinput('upload');
+                window.$productPhotoInputElement.fileinput('upload');
             }
         });
         $saveProductHandler.fail(function (data, textStatus, jqXHR) {

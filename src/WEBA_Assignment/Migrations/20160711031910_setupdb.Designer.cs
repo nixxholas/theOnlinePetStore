@@ -8,7 +8,7 @@ using WEBA_ASSIGNMENT.Data;
 namespace WEBA_ASSIGNMENT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160709161857_setupdb")]
+    [Migration("20160711031910_setupdb")]
     partial class setupdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -596,7 +596,9 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnName("ProdId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BrandId");
+                    b.Property<int>("BrandId")
+                        .HasColumnName("BrandId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -634,8 +636,10 @@ namespace WEBA_ASSIGNMENT.Migrations
 
                     b.Property<int?>("ThresholdInvertoryQuantity")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("ThresholdInventoryQuantity")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
@@ -646,8 +650,10 @@ namespace WEBA_ASSIGNMENT.Migrations
 
                     b.Property<int?>("isConsumable")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("isConsumable")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.HasKey("ProdId")
                         .HasName("PrimaryKey_ProdId");
@@ -703,7 +709,9 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(0);
 
-                    b.Property<int>("ProdId");
+                    b.Property<int>("ProdId")
+                        .HasColumnName("ProdId")
+                        .HasColumnType("int");
 
                     b.Property<string>("PublicCloudinaryId")
                         .ValueGeneratedOnAdd()
@@ -1002,7 +1010,8 @@ namespace WEBA_ASSIGNMENT.Migrations
                 {
                     b.HasOne("WEBA_ASSIGNMENT.Models.Brands", "Brand")
                         .WithMany("Products")
-                        .HasForeignKey("BrandId");
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("WEBA_ASSIGNMENT.Models.ApplicationUser", "CreatedBy")
                         .WithMany()

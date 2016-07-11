@@ -53,7 +53,7 @@ namespace WEBA_ASSIGNMENT.Models
             danielUser.PasswordHash = ph.HashPassword(danielUser, "P@ssw0rd"); //More complex password
             await userManager.CreateAsync(danielUser);
 
-            await userManager.AddToRoleAsync(danielUser, "ADMIN");
+            await userManager.AddToRoleAsync(danielUser, "SUPER ADMIN");
 
 
 

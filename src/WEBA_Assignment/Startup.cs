@@ -59,6 +59,7 @@ namespace WEBA_ASSIGNMENT
             services.AddAuthorization(options =>
             {
                 // inline policies
+                options.AddPolicy("RequireSuperAdminRole", policy => policy.RequireRole("SUPER ADMIN"));
                 options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("ADMIN"));
                 options.AddPolicy("RequireOfficerRole", policy => policy.RequireRole("OFFICER"));
             });
@@ -104,7 +105,7 @@ namespace WEBA_ASSIGNMENT
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-           //app.SeedData();
+          //app.SeedData();
         }//end of Configure()
     }
 }

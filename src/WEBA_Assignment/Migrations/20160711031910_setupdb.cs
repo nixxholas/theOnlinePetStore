@@ -387,7 +387,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                 {
                     ProdId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    BrandId = table.Column<int>(nullable: true),
+                    BrandId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
                     CreatedById = table.Column<string>(nullable: false),
                     DeletedAt = table.Column<DateTime>(nullable: true),
@@ -397,10 +397,10 @@ namespace WEBA_ASSIGNMENT.Migrations
                     Published = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     Quantity = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     SpecialId = table.Column<int>(nullable: true),
-                    ThresholdInventoryQuantity = table.Column<int>(type: "int", nullable: false),
+                    ThresholdInventoryQuantity = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     UpdatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
                     UpdatedById = table.Column<string>(nullable: false),
-                    isConsumable = table.Column<int>(type: "int", nullable: false)
+                    isConsumable = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
                 {
@@ -410,7 +410,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                         column: x => x.BrandId,
                         principalTable: "Brands",
                         principalColumn: "BrandId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Product_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
@@ -571,7 +571,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     Format = table.Column<string>(type: "VARCHAR(14)", nullable: false, defaultValue: ""),
                     Height = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     ImageSize = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    ProdId = table.Column<int>(nullable: false),
+                    ProdId = table.Column<int>(type: "int", nullable: false),
                     PublicCloudinaryId = table.Column<string>(type: "VARCHAR(100)", nullable: true, defaultValue: ""),
                     SecureUrl = table.Column<string>(type: "VARCHAR(300)", nullable: true, defaultValue: ""),
                     Url = table.Column<string>(type: "VARCHAR(300)", nullable: false, defaultValue: ""),

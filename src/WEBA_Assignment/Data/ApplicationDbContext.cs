@@ -623,6 +623,12 @@ namespace WEBA_ASSIGNMENT.Data
                 .IsRequired();
 
             modelBuilder.Entity<Product>()
+                .Property(input => input.BrandId)
+                .HasColumnName("BrandId")
+                .HasColumnType("int")
+                .IsRequired();
+
+            modelBuilder.Entity<Product>()
                 .Property(input => input.ProdName)
                 .HasColumnName("ProdName")
                 .HasColumnType("VARCHAR(100)")
@@ -634,6 +640,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasColumnType("VARCHAR(MAX)")
                 .IsRequired(false);
 
+            // Quantity will be generated from the metrics web api
             modelBuilder.Entity<Product>()
                 .Property(input => input.Quantity)
                 .HasColumnName("Quantity")
@@ -685,6 +692,18 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasMany(input => input.Metrics)
                 .WithOne(input => input.Product)
                 .HasForeignKey(input => input.ProdId);
+
+            //----------------------------------------------------------------------------
+            // Define One to Many relationship between Product and ProductPhoto
+            //
+            // This ensures that many ProductPhoto objects/rows can be directed to just
+            // one entity of Product.
+            //----------------------------------------------------------------------------
+
+            modelBuilder.Entity<Product>()
+                .HasMany(input => input.ProductPhotos)
+                .WithOne(input => input.Product)
+                .HasForeignKey(input => input.ProdId);
             
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<Product>()
@@ -693,12 +712,14 @@ namespace WEBA_ASSIGNMENT.Data
              .HasForeignKey(userClass => userClass.CreatedById)
              .OnDelete(DeleteBehavior.Restrict)
              .IsRequired();
+
             modelBuilder.Entity<Product>()
                 .HasOne(userClass => userClass.UpdatedBy)
                 .WithMany()
                 .HasForeignKey(userClass => userClass.UpdatedById)
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
+
             modelBuilder.Entity<Product>()
                 .HasOne(userClass => userClass.DeletedBy)
                 .WithMany()
@@ -793,22 +814,17 @@ namespace WEBA_ASSIGNMENT.Data
             .IsRequired(false);
 
             modelBuilder.Entity<ProductPhoto>()
-            .Property(ProductPhotoObject => ProductPhotoObject.isPrimaryPhoto)
-            .HasColumnName("isPrimaryPhoto")
-            .HasColumnType("int")
-            .HasDefaultValue(0)
-            .IsRequired();
-
-            //----------------------------------------------------------------------------
-            // Define One to Many relationship between Product and ProductPhoto
-            //
-            // This ensures that many ProductPhoto objects/rows can be directed to just
-            // one entity of Product.
-            //----------------------------------------------------------------------------
+                .Property(ProductPhotoObject => ProductPhotoObject.isPrimaryPhoto)
+                .HasColumnName("isPrimaryPhoto")
+                .HasColumnType("int")
+                .HasDefaultValue(0)
+                .IsRequired();
 
             modelBuilder.Entity<ProductPhoto>()
-                .HasOne(input => input.Product)
-                .WithMany(input => input.ProductPhotos);
+                .Property(ProductPhotoObject => ProductPhotoObject.ProdId)
+                .HasColumnName("ProdId")
+                .HasColumnType("int")
+                .IsRequired();
 
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<ProductPhoto>()

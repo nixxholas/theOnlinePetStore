@@ -23,7 +23,7 @@ using WEBA_ASSIGNMENT.Controllers;
 
 namespace WEBA_ASSIGNMENT.APIs
 {
-    [Authorize("RequireAdminRole")]
+    [Authorize(Roles = "SUPER ADMIN,ADMIN")]
     [Route("api/[controller]")]
     public class BrandsController : Controller
 

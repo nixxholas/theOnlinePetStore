@@ -23,7 +23,7 @@ using WEBA_ASSIGNMENT.Controllers;
 
 namespace WEBA_ASSIGNMENT.APIs
 {
-    [Authorize("RequireAdminRole")]
+    [Authorize(Roles = "SUPER ADMIN,ADMIN")]
     [Route("api/[controller]")]
     public class ProductsController : Controller
 
@@ -260,8 +260,8 @@ namespace WEBA_ASSIGNMENT.APIs
                 //Copy out all the products data into the new Product instance,
                 //newProduct.
                 newProduct.ProdName = productNewInput.ProdName.Value;
-                newProduct.Description = productNewInput.Description.Value;
-                newProduct.BrandId = productNewInput.Brand.BrandId.Value;
+                //newProduct.Description = productNewInput.Description.Value;
+                newProduct.BrandId = Int32.Parse(productNewInput.BrandId.Value);
                 
                 // Have to implement a foreach loop to stash multiple Metrics
                 // into the table
@@ -272,7 +272,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 //Therefore, I need to save the products data as a Session variable first.
                 //The command below will save the product data inside a
                 //Session variable, Product (I can use other names...it is just a name)
-                HttpContext.Session.SetObjectAsJson("Products", newProduct);
+                HttpContext.Session.SetObjectAsJson("Product", newProduct);
             }
             catch (Exception exceptionObject)
             {
@@ -479,52 +479,51 @@ namespace WEBA_ASSIGNMENT.APIs
             //Also get the current products Photo information.
             var oneProduct = Database.Products
                 .Where(Product => Product.ProdId == productToBeUpdated.ProdId)
+                .Include(input => input.ProductPhotos)
                 .Include(Product => Product.Brand)
-                // Issue with this
-                .Include(Product => Product.ProductPhotos);
+                .Single(); // Take in only that product.
+
+            oneProduct.ProdName = productToBeUpdated.ProdName;
             
-            //oneProduct.ProdName = productToBeUpdated.ProdName;
-                      
-            //foreach (var oneFile in fileInput)
-            //{
-            //    foreach (ProductPhoto productPhoto in oneProduct.ProductPhotos)
-            //    {
-            //        //var oneFile = fileInput[0];
-            //        var fileName = ContentDispositionHeaderValue
-            //                    .Parse(oneFile.ContentDisposition)
-            //                    .FileName
-            //                    .Trim('"');
+            foreach (var oneFile in fileInput)
+            {
+                foreach (ProductPhoto productPhoto in oneProduct.ProductPhotos)
+                {
+                    //var oneFile = fileInput[0];
+                    var fileName = ContentDispositionHeaderValue
+                                .Parse(oneFile.ContentDisposition)
+                                .FileName
+                                .Trim('"');
 
-            //        string contentType = oneFile.ContentType;
-            //        //Upload the binary file first
-            //        var currentProductPhotos = await Cloudinary.CloudinaryAPIs.UploadProductImageToCloudinary(oneFile.OpenReadStream(), contentType, fileName, "Products");
+                    string contentType = oneFile.ContentType;
+                    //Upload the binary file first
+                    var currentProductPhotos = await Cloudinary.CloudinaryAPIs.UploadProductImageToCloudinary(oneFile.OpenReadStream(), contentType, fileName, "Products");
 
-            //        //Delete the existing binary file
-            //        //Obtain the Cloudinary public id value from the foundOneProduct's ProductPhotos navigation property
-            //        string originalCloudinaryPublicId = "";
-            //        originalCloudinaryPublicId = productPhoto.PublicCloudinaryId;
+                    //Delete the existing binary file
+                    //Obtain the Cloudinary public id value from the foundOneProduct's ProductPhotos navigation property
+                    string originalCloudinaryPublicId = "";
+                    originalCloudinaryPublicId = productPhoto.PublicCloudinaryId;
 
 
-            //        //Use the Cloudinary public id value as an input argument for the DeleteImageInCloudinary to delete the binary
-            //        //file resource.
-            //        Boolean result = await Cloudinary.CloudinaryAPIs.DeleteImageInCloudinary(originalCloudinaryPublicId);
+                    //Use the Cloudinary public id value as an input argument for the DeleteImageInCloudinary to delete the binary
+                    //file resource.
+                    Boolean result = await Cloudinary.CloudinaryAPIs.DeleteImageInCloudinary(originalCloudinaryPublicId);
 
-            //        if (currentProductPhotos.PublicCloudinaryId != "")
-            //        {
-            //            productPhoto.ImageSize = currentProductPhotos.ImageSize;
-            //            productPhoto.Version = currentProductPhotos.Version;
-            //            productPhoto.Height = currentProductPhotos.Height;
-            //            productPhoto.Width = currentProductPhotos.Width;
-            //            productPhoto.PublicCloudinaryId = currentProductPhotos.PublicCloudinaryId;
-            //            productPhoto.Url = currentProductPhotos.Url;
-            //            productPhoto.SecureUrl = currentProductPhotos.SecureUrl;
+                    if (currentProductPhotos.PublicCloudinaryId != "")
+                    {
+                        productPhoto.ImageSize = currentProductPhotos.ImageSize;
+                        productPhoto.Version = currentProductPhotos.Version;
+                        productPhoto.Height = currentProductPhotos.Height;
+                        productPhoto.Width = currentProductPhotos.Width;
+                        productPhoto.PublicCloudinaryId = currentProductPhotos.PublicCloudinaryId;
+                        productPhoto.Url = currentProductPhotos.Url;
+                        productPhoto.SecureUrl = currentProductPhotos.SecureUrl;
+                    }
+                }
+            }
 
-            //            Database.Products.Update(oneProduct);
-            //        }
-            //    }
-            //}
-            
 
+            Database.Products.Update(oneProduct);
             Database.SaveChanges();
             computeProductsPerBrand();
             var successRequestResultMessage = new
