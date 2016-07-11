@@ -364,11 +364,13 @@
         $("#metricsTableBody").on('click', '.remRow', function () {
             $(this).parent().parent().remove();
         });
-        $("#metricsTableBody").on('click', '.presetMetricCheck', function () {
+        $("#metricsTableBody").on('click', '.customMetricCheck', function () {
+            // We need to switch this to a custom box if the user wants to
             $(this).parent().parent().remove();
         });
     });
 
+    // Function Constructor for creating a metrics object
 
     //Using a function technique to create a JavaScript class, WebFormData
     function WebFormData(inProdName, inBrandId, inDescription, inPrice, inRRP, inMetrics, inQuantity, inTiQ, inPublished, inIsConsumable) {
@@ -423,6 +425,7 @@
         }
 
         if ($('#metricsTableBody').hasClass('hidden')) {
+        // If there are no custom sizes or variations
             var collectedMetricName = $('metricNameInput').val();
             var collectedTIQ = $('#tiqInput').val();
             var collectedQuantity = $('#qtyInput').val();
@@ -436,7 +439,7 @@
                 collectedPrice, collectedRRP, collectedMetrics, collectedQuantity, collectedTIQ, collectedPublished, collectedConsumable);
 
         } else {
-
+        // If there are custom variations, we'll have to utitilize the Metrics system
 
         }
 

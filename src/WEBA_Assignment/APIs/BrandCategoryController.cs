@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WEBA_ASSIGNMENT.APIs
 {
-    [Authorize("RequireAdminRole")]
+    [Authorize(Roles = "SUPER ADMIN,ADMIN")]
     [Route("api/[controller]")]
     public class BrandCategoryController : Controller
     {
