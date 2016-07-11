@@ -3,6 +3,7 @@
 using WEBA_ASSIGNMENT.Data;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WEBA_ASSIGNMENT.APIs
 {
