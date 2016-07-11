@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace WEBA_ASSIGNMENT.APIs
 {
-    [Authorize("RequireAdminRole")]
+    [Authorize(Roles = "SUPER ADMIN")]
     [Route("api/[controller]")]
     public class UserManagerController : Controller
     {

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 namespace WEBA_ASSIGNMENT.APIs
 {
+    [Authorize(Roles = "SUPER ADMIN,ADMIN")]
     [Route("api/[controller]")]
     public class RolesController : Controller
     {

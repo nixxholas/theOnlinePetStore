@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WEBA_ASSIGNMENT.APIs
 {
+    [Authorize(Roles = "SUPER ADMIN,ADMIN")]
     [Route("api/[controller]")]
     public class VisibilityController : Controller
     {
