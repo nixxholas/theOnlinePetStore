@@ -404,7 +404,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PrimaryKey_ProdId", x => x.ProdId);
+                    table.PrimaryKey("PrimaryKey_Product_ProdId", x => x.ProdId);
                     table.ForeignKey(
                         name: "FK_Product_Brands_BrandId",
                         column: x => x.BrandId,
@@ -571,7 +571,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     Format = table.Column<string>(type: "VARCHAR(14)", nullable: false, defaultValue: ""),
                     Height = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     ImageSize = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    ProdId = table.Column<int>(type: "int", nullable: false),
+                    ProdId = table.Column<int>(nullable: false),
                     PublicCloudinaryId = table.Column<string>(type: "VARCHAR(100)", nullable: true, defaultValue: ""),
                     SecureUrl = table.Column<string>(type: "VARCHAR(300)", nullable: true, defaultValue: ""),
                     Url = table.Column<string>(type: "VARCHAR(300)", nullable: false, defaultValue: ""),
@@ -581,7 +581,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PrimaryKey_ProductPhotoId", x => x.ProductPhotoId);
+                    table.PrimaryKey("PrimaryKey_ProductPhoto_ProductPhotoId", x => x.ProductPhotoId);
                     table.ForeignKey(
                         name: "FK_ProductPhoto_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
@@ -823,6 +823,12 @@ namespace WEBA_ASSIGNMENT.Migrations
                 name: "IX_Product_DeletedById",
                 table: "Product",
                 column: "DeletedById");
+
+            migrationBuilder.CreateIndex(
+                name: "Product_ProdName_UniqueConstraint",
+                table: "Product",
+                column: "ProdName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_SpecialId",

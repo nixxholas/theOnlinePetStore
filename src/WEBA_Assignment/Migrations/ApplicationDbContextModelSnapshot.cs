@@ -460,7 +460,8 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<int>("MetricId")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("MetricId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -526,7 +527,8 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<int>("PMetricId")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("PMetricId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("MetricCharacter")
                         .IsRequired()
@@ -554,7 +556,8 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<int>("PriceId")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("PriceId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -593,7 +596,8 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<int>("ProdId")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("ProdId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("BrandId")
                         .HasColumnName("BrandId")
@@ -655,13 +659,17 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasDefaultValue(0);
 
                     b.HasKey("ProdId")
-                        .HasName("PrimaryKey_ProdId");
+                        .HasName("PrimaryKey_Product_ProdId");
 
                     b.HasIndex("BrandId");
 
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("DeletedById");
+
+                    b.HasIndex("ProdName")
+                        .IsUnique()
+                        .HasName("Product_ProdName_UniqueConstraint");
 
                     b.HasIndex("SpecialId");
 
@@ -708,9 +716,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(0);
 
-                    b.Property<int>("ProdId")
-                        .HasColumnName("ProdId")
-                        .HasColumnType("int");
+                    b.Property<int>("ProdId");
 
                     b.Property<string>("PublicCloudinaryId")
                         .ValueGeneratedOnAdd()
@@ -750,7 +756,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasDefaultValue(0);
 
                     b.HasKey("ProductPhotoId")
-                        .HasName("PrimaryKey_ProductPhotoId");
+                        .HasName("PrimaryKey_ProductPhoto_ProductPhotoId");
 
                     b.HasIndex("CreatedById");
 
@@ -780,7 +786,8 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<int>("SpecialId")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("SpecialId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()

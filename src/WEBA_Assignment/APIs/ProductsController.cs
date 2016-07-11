@@ -62,7 +62,7 @@ namespace WEBA_ASSIGNMENT.APIs
             .Include(eachProductEntity => eachProductEntity.Brand)
             .Include(eachProductEntity => eachProductEntity.Metrics)
             .Include(eachProductEntity => eachProductEntity.ProductPhotos).AsNoTracking();
-            
+
             //After obtaining all the Product entity rows (records) from the database,
             //the productss variable will become an container holding these 
             //Product class entity rows.
@@ -260,17 +260,43 @@ namespace WEBA_ASSIGNMENT.APIs
                 //Copy out all the products data into the new Product instance,
                 //newProduct.
                 newProduct.ProdName = productNewInput.ProdName.Value;
+                
+                // Description
                 if (productNewInput.Description.Value != null)
                 {
                     newProduct.Description = productNewInput.Description.Value;
-                } else
+                }
+                else
                 {
                     newProduct.Description = null;
                 }
+
+                // Brand Id Relation
                 newProduct.BrandId = Int32.Parse(productNewInput.BrandId.Value);
-                
+
+                // Initialize the ProductPhotos list first
+                newProduct.ProductPhotos = new List<ProductPhoto>();
+
                 // Have to implement a foreach loop to stash multiple Metrics
                 // into the table
+                if (productNewInput.Metrics != null)
+                {
+                    // Let's initialize the List of Metrics
+                    newProduct.Metrics = new List<Metrics>();
+                    foreach (var Metric in productNewInput.Metrics)
+                    {
+                        Metrics metric = new Metrics();
+                        metric.MetricName = Metric.MetricName.Value;
+                        metric.Quantity = Int32.Parse(Metric.Quantity.Value);
+                        metric.RRP = Decimal.Parse(Metric.RRP);
+                        metric.CreatedById = _userManager.GetUserId(User);
+                        metric.UpdatedById = _userManager.GetUserId(User);
+                        if (Metric.PMetricId.Value != null)
+                        {
+                            // Then initialize a preset metric
+                        }
+                    }
+                }
                 
                 //I cannot save the products information into database yet. The 
                 //UploadProductPhotosAndSaveProductData has logic to upload the binary file to
@@ -278,7 +304,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 //Therefore, I need to save the products data as a Session variable first.
                 //The command below will save the product data inside a
                 //Session variable, Product (I can use other names...it is just a name)
-                HttpContext.Session.SetObjectAsJson("Product", newProduct);
+                HttpContext.Session.SetObjectAsJson("Products", newProduct);
             }
             catch (Exception exceptionObject)
             {
@@ -318,12 +344,10 @@ namespace WEBA_ASSIGNMENT.APIs
             // Issue: Should I add a "'" into a the Product name String, the received from the
             // Client results in an unended json object..
             //Reconstruct a useful object from the input string value. 
-            Product newProduct = HttpContext.Session.GetObjectFromJson<Product>("Product");
+            Product newProduct = HttpContext.Session.GetObjectFromJson<Product>("Products");
 
             try
             {
-
-
                 // Parse in auditing data
                 newProduct.CreatedById = _userManager.GetUserId(User);
                 newProduct.UpdatedById = _userManager.GetUserId(User);
@@ -393,7 +417,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 //newProduct.
                 productToBeUpdated.ProdId = id;
                 productToBeUpdated.ProdName = productChangeInput.ProdName.Value;
-                               
+                
 
                 //Saved it into a Session variable
                 HttpContext.Session.SetObjectAsJson("Products", productToBeUpdated);
@@ -439,12 +463,12 @@ namespace WEBA_ASSIGNMENT.APIs
             try
             {
                 productToBeUpdated.ProdName = productChangeInput.ProdName.Value;
-                
+
                 var foundOneProduct = Database.Products
                         .Where(eachProduct => eachProduct.ProdId == id)
                         .Include(eachProduct => eachProduct.Brand)
                         .Single();
-                
+
                 foundOneProduct.ProdName = productToBeUpdated.ProdName;
                 foundOneProduct.UpdatedAt = DateTime.Now;
                 Database.Products.Update(foundOneProduct);
@@ -486,7 +510,7 @@ namespace WEBA_ASSIGNMENT.APIs
         {
             //Retrieve the products data which is stashed inside the Session, "Product".
             //http://benjii.me/2015/07/using-sessions-and-httpcontext-in-aspnet5-and-mvc6/
-            Product productToBeUpdated = HttpContext.Session.GetObjectFromJson<Product>("Product");
+            Product productToBeUpdated = HttpContext.Session.GetObjectFromJson<Product>("Products");
             //Get the current products data from the database.
             //Also get the current products Photo information.
             var oneProduct = Database.Products
@@ -495,16 +519,23 @@ namespace WEBA_ASSIGNMENT.APIs
                 .Single(); // Take in only that product.
 
             oneProduct.ProdName = productToBeUpdated.ProdName;
-            
+            oneProduct.ProductPhotos = new List<ProductPhoto>();
+
+            // Load ProductPhotos in this way
+            var productPhotos = Database.ProductPhotos
+                .Where(input => input.Product == oneProduct);
+
             foreach (var oneFile in fileInput)
             {
-                foreach (ProductPhoto productPhoto in oneProduct.ProductPhotos)
+                foreach (ProductPhoto productPhoto in productPhotos)
                 {
                     //var oneFile = fileInput[0];
                     var fileName = ContentDispositionHeaderValue
                                 .Parse(oneFile.ContentDisposition)
                                 .FileName
                                 .Trim('"');
+
+                    string CreatedById = _userManager.GetUserId(User);
 
                     string contentType = oneFile.ContentType;
                     //Upload the binary file first
@@ -530,6 +561,8 @@ namespace WEBA_ASSIGNMENT.APIs
                         productPhoto.Url = currentProductPhotos.Url;
                         productPhoto.SecureUrl = currentProductPhotos.SecureUrl;
                     }
+
+                    oneProduct.ProductPhotos.Add(productPhoto);
                 }
             }
 
@@ -551,32 +584,43 @@ namespace WEBA_ASSIGNMENT.APIs
         [HttpPost("UploadProductPhotosAndSaveProductData")]
         public async Task<IActionResult> UploadProductPhotosAndSaveProductData(IList<IFormFile> fileInput)
         {
-            var oneFile = fileInput[0];
-            ProductPhoto newProductPhotos;
-            var fileName = ContentDispositionHeaderValue
-                  .Parse(oneFile.ContentDisposition)
-                  .FileName
-                  .Trim('"');
-            string contentType = oneFile.ContentType;
-            // Not complete
-            newProductPhotos = await Cloudinary.CloudinaryAPIs.UploadProductImageToCloudinary(oneFile.OpenReadStream(), contentType, fileName, "Products");
-
             //Retrieve the new products data which is stashed inside the Session, "Product".
             Product newProduct = HttpContext.Session.GetObjectFromJson<Product>("Products");
-            if (newProductPhotos.PublicCloudinaryId != "")
+            newProduct.CreatedById = _userManager.GetUserId(User);
+            newProduct.UpdatedById = _userManager.GetUserId(User);
+
+            Database.Products.Add(newProduct);
+            
+            //Add the Product record first, so that the newProduct
+            //object's ProdId property is updated with the new record's
+            //id.
+
+            foreach (var oneFile in fileInput)
             {
-                //Add the Product record first, so that the newProduct
-                //object's ProdId property is updated with the new record's
-                //id.
-                Database.Products.Add(newProduct);
-                //Copy over the new products id information to the ProductPhotos object,
-                //newProductPhotos. 
-                newProductPhotos.ProdId = newProduct.ProdId;
-                Database.ProductPhotos.Add(newProductPhotos);
-                Database.Products.Add(newProduct);
-                Database.SaveChanges();
-                computeProductsPerBrand();
+                ProductPhoto newProductPhoto;
+                var fileName = ContentDispositionHeaderValue
+                      .Parse(oneFile.ContentDisposition)
+                      .FileName
+                      .Trim('"');
+                string contentType = oneFile.ContentType;
+
+                newProductPhoto = await Cloudinary.CloudinaryAPIs.UploadProductImageToCloudinary(oneFile.OpenReadStream(), contentType, fileName, "Products");
+
+                if (newProductPhoto.PublicCloudinaryId != "")
+                {
+                    //Copy over the new products id information to the ProductPhotos object,
+                    //newProductPhotos. 
+                    newProductPhoto.ProdId = newProduct.ProdId;
+                    newProductPhoto.CreatedById = _userManager.GetUserId(User);
+                   
+                    Database.ProductPhotos.Add(newProductPhoto);
+                }
             }
+            
+            Database.SaveChanges();
+
+            //computeProductsPerBrand();
+
             var successRequestResultMessage = new
             {
                 Message = "Saved Product"

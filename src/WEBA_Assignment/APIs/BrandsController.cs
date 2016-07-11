@@ -579,6 +579,8 @@ namespace WEBA_ASSIGNMENT.APIs
                 }
             }
 
+            string CreatedById = _userManager.GetUserId(User);
+
             var oneFile = fileInput[0];
             var fileName = ContentDispositionHeaderValue
                         .Parse(oneFile.ContentDisposition)
@@ -586,7 +588,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         .Trim('"');
             string contentType = oneFile.ContentType;
             //Upload the binary file first
-            var currentBrandPhoto = await Cloudinary.CloudinaryAPIs.UploadBrandImageToCloudinary(oneFile.OpenReadStream(), contentType, fileName, "Brands");
+            var currentBrandPhoto = await Cloudinary.CloudinaryAPIs.UploadBrandImageToCloudinary(oneFile.OpenReadStream(), contentType, fileName, "Brands", CreatedById);
             //Delete the existing binary file
             //Obtain the Cloudinary public id value from the foundOneBrand's BrandPhoto navigation property
             string originalCloudinaryPublicId = oneBrand.BrandPhoto.PublicCloudinaryId;
@@ -629,7 +631,10 @@ namespace WEBA_ASSIGNMENT.APIs
                   .FileName
                   .Trim('"');
             string contentType = oneFile.ContentType;
-            newBrandPhoto = await Cloudinary.CloudinaryAPIs.UploadBrandImageToCloudinary(oneFile.OpenReadStream(), contentType, fileName, "Brands");
+
+            string CreatedById = _userManager.GetUserId(User);
+
+            newBrandPhoto = await Cloudinary.CloudinaryAPIs.UploadBrandImageToCloudinary(oneFile.OpenReadStream(), contentType, fileName, "Brands", _userManager.GetUserId(User));
 
             //Retrieve the new brands data which is stashed inside the Session, "Brand".
             Brands newBrand = HttpContext.Session.GetObjectFromJson<Brands>("Brands");
@@ -643,7 +648,6 @@ namespace WEBA_ASSIGNMENT.APIs
                 //newBrandPhoto. 
                 newBrandPhoto.BrandId = newBrand.BrandId;
                 Database.BrandPhotos.Add(newBrandPhoto);
-                Database.Brands.Add(newBrand);
                 Database.SaveChanges();
             }
             var successRequestResultMessage = new

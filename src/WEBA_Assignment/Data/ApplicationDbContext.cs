@@ -186,9 +186,17 @@ namespace WEBA_ASSIGNMENT.Data
                 .IsRequired(false);
 
             // Unique Constraint
+
             modelBuilder.Entity<Brands>()
                 .HasIndex(input => input.BrandName).IsUnique()
                 .HasName("Brand_BrandName_UniqueConstraint");
+
+            // Enforce One to Many relationship between products
+
+            modelBuilder.Entity<Brands>()
+                .HasMany(input => input.Products)
+                .WithOne(input => input.Brand)
+                .HasForeignKey(input => input.BrandId);
 
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<Brands>()
@@ -346,6 +354,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .Property(input => input.SpecialId)
                 .HasColumnName("SpecialId")
                 .HasColumnType("int")
+                .UseSqlServerIdentityColumn()
                 .ValueGeneratedOnAdd()
                 .IsRequired();
 
@@ -432,6 +441,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .Property(input => input.PriceId)
                 .HasColumnName("PriceId")
                 .HasColumnType("int")
+                .UseSqlServerIdentityColumn()
                 .ValueGeneratedOnAdd()
                 .IsRequired();
 
@@ -488,6 +498,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .Property(input => input.MetricId)
                 .HasColumnName("MetricId")
                 .HasColumnType("int")
+                .UseSqlServerIdentityColumn()
                 .ValueGeneratedOnAdd()
                 .IsRequired();
 
@@ -582,6 +593,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .Property(input => input.PMetricId)
                 .HasColumnName("PMetricId")
                 .HasColumnType("int")
+                .UseSqlServerIdentityColumn()
                 .ValueGeneratedOnAdd()
                 .IsRequired();
 
@@ -613,12 +625,13 @@ namespace WEBA_ASSIGNMENT.Data
             // -------------- Defining Product Entity --------------- //
             modelBuilder.Entity<Product>()
                 .HasKey(input => input.ProdId)
-                .HasName("PrimaryKey_ProdId");
+                .HasName("PrimaryKey_Product_ProdId");
 
             modelBuilder.Entity<Product>()
                 .Property(input => input.ProdId)
                 .HasColumnName("ProdId")
                 .HasColumnType("int")
+                .UseSqlServerIdentityColumn()
                 .ValueGeneratedOnAdd()
                 .IsRequired();
 
@@ -681,6 +694,12 @@ namespace WEBA_ASSIGNMENT.Data
                 .Property(input => input.DeletedAt)
                 .IsRequired(false);
 
+            // Unique Constraint
+
+            modelBuilder.Entity<Product>()
+                .HasIndex(input => input.ProdName).IsUnique()
+                .HasName("Product_ProdName_UniqueConstraint");
+
             //Foreign Key Initializations
 
             modelBuilder.Entity<Product>()
@@ -693,18 +712,6 @@ namespace WEBA_ASSIGNMENT.Data
                 .WithOne(input => input.Product)
                 .HasForeignKey(input => input.ProdId);
 
-            //----------------------------------------------------------------------------
-            // Define One to Many relationship between Product and ProductPhoto
-            //
-            // This ensures that many ProductPhoto objects/rows can be directed to just
-            // one entity of Product.
-            //----------------------------------------------------------------------------
-
-            modelBuilder.Entity<Product>()
-                .HasMany(input => input.ProductPhotos)
-                .WithOne(input => input.Product)
-                .HasForeignKey(input => input.ProdId);
-            
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<Product>()
              .HasOne(userClass => userClass.CreatedBy)
@@ -734,7 +741,7 @@ namespace WEBA_ASSIGNMENT.Data
 
             modelBuilder.Entity<ProductPhoto>()
             .HasKey(ProductPhotoObject => ProductPhotoObject.ProductPhotoId)
-            .HasName("PrimaryKey_ProductPhotoId");
+            .HasName("PrimaryKey_ProductPhoto_ProductPhotoId");
 
             modelBuilder.Entity<ProductPhoto>()
             .Property(ProductPhotoObject => ProductPhotoObject.ProductPhotoId)
@@ -820,11 +827,17 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasDefaultValue(0)
                 .IsRequired();
 
+            //----------------------------------------------------------------------------
+            // Define One to Many relationship between Product and ProductPhoto
+            //
+            // This ensures that many ProductPhoto objects/rows can be directed to just
+            // one entity of Product.
+            //----------------------------------------------------------------------------
+
             modelBuilder.Entity<ProductPhoto>()
-                .Property(ProductPhotoObject => ProductPhotoObject.ProdId)
-                .HasColumnName("ProdId")
-                .HasColumnType("int")
-                .IsRequired();
+                .HasOne(input => input.Product)
+                .WithMany(input => input.ProductPhotos)
+                .HasForeignKey(input => input.ProdId);
 
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<ProductPhoto>()

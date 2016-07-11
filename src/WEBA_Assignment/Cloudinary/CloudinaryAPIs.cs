@@ -51,7 +51,7 @@ namespace WEBA_ASSIGNMENT.Cloudinary
   
 // As stated above, we'll need to make another method for another class if so,
 public static async Task<BrandPhoto> UploadBrandImageToCloudinary(Stream inImageStream,
-                                                                              string inContentType, string inImageName,  string inTagName)
+                                                                              string inContentType, string inImageName,  string inTagName, string createdById)
 {
             // File upload information
             long unixTime_Seconds = UnixTime.GetTimeBySeconds();
@@ -142,6 +142,7 @@ public static async Task<BrandPhoto> UploadBrandImageToCloudinary(Stream inImage
                         Format = ret_format,
                         //ResourceType = ret_resource_type,
                         CreatedAt = ret_created_at,
+                        CreatedById = createdById,
                         ImageSize = ret_imageSize,
                         Url = ret_url,
                         SecureUrl = ret_secure_url,

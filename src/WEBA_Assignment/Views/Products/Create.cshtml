@@ -23,14 +23,14 @@
                     <div class="form-group col-md-12" id="qtyInputBox">
                         <label class="control-label col-md-2" for="qtyInput">Quantity</label>
                         <div class="form-group col-md-9">
-                            <input type="number" min="0" pattern="[0-9]" name="qtyInput" id="qtyInput" class="form-control font-bold"
+                            <input type="number" min="0" name="qtyInput" id="qtyInput" class="form-control font-bold"
                                    maxlength="20" placeholder="Quantity" value="" />
                         </div>
                     </div>
                     <div class="form-group col-md-12" id="tiqInputBox">
                         <label class="control-label col-md-2" for="tiqInput">TIQ</label>
                         <div class="form-group col-md-10">
-                            <input type="number" min="0" pattern="[0-9]" name="tiqInput" id="tiqInput" class="form-control font-bold"
+                            <input type="number" min="0" name="tiqInput" id="tiqInput" class="form-control font-bold"
                                    maxlength="20" placeholder="Threshold Inventory Quantity" value="" />
                         </div>
                     </div>
@@ -93,12 +93,12 @@
                     <div class="form-group col-md-12 hidden" id="descriptionBox">
                         <label class="control-label col-md-2" for="descBox">Description</label>
                         <div class="form-group col-md-9">
-                            <textarea id="descriptionBox"></textarea>
+                            <textarea name="descriptionBox" id="descriptionBox"></textarea>
                         </div>
                     </div>
                     <div class="form-group col-md-12 hidden" id="metricSegment">
-                        <label class="control-label col-md-2" for="dataTable">Metrics</label>
-                        <div class="col-md-10">
+                        <label class="control-label col-md-1" for="dataTable">Metrics</label>
+                        <div class="col-md-11">
                             <table id="dataTable" class="table table-hover">
                                 <div id="rowBtn" class="pull-right big ui secondary button">
                                     New Row
@@ -144,6 +144,7 @@
 </div><!-- end of div element with class="row" -->
 
 <script>
+    var isPublished = 0;
     var isConsumable = 0;
     var PresetMetricData = [];
     
@@ -164,6 +165,7 @@
     });
 
     var descriptionBox = $('#descriptionBox');
+
     tinymce.init({
         selector: 'textarea',
         height: 250,
@@ -182,7 +184,17 @@
           '//www.tinymce.com/css/codepen.min.css'
         ]
     });
+
     var metricsTable = $('#metricSegment');
+
+    $('#publishCheck').on('click', function () {
+        if (isPublished = 0) {
+            isPublished = 1;
+        } else {
+            isPublished = 0;
+        }
+    })
+    ;
 
     $('#descriptionCheck').on('click', function () {
         if (descriptionBox.hasClass('hidden')) {
@@ -285,8 +297,8 @@
     $('#fileInput').fileinput({
         previewFileType: 'image',
         allowedFileTypes: ['image'],
-        uploadUrl: '/API/Products/UploadProductPhotosAndUpdateProductData',
-        uploadAsync: true,
+        uploadUrl: '/API/Products/UploadProductPhotosAndSaveProductData',
+        uploadAsync: false,
         maxFileCount: 3,
         layoutTemplates: { footer: footerTemplate, actions: actionTemplate },
         type: 'post',
@@ -326,10 +338,12 @@
         $("#rowBtn").click(function () {
             $("#metricsTableBody").append(
                 '<tr valign="top">' +
-                '<td>' +
+                '<td>' + 
                 '<input type="text" class="form-control font-bold" id="metricName" name="customFieldName" value="" placeholder="Metric Name" />' +
+                '</br><div class="ui slider checkbox"><input type="checkbox" id="customMetricCheck">' +
+                '<label>Custom</label></div>' +
                 '</td>' +
-                '<td>' +
+                '<td> ' +
                 '<input type="text" class="form-control font-bold" id="metricTypeInput" name="metricTypeInput" value="" placeholder="Metric Type" />' +
                 '</td>' +
                 '<td>' +
@@ -343,11 +357,14 @@
                 '</td>' +
                 '<td>' +
                 '<input type="text" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP" />' +
-                '<a href="javascript:void(0);" class="remRow btn btn-danger inline">Remove</a>' +
+                '</br><a href="javascript:void(0);" class="remRow btn btn-danger inline">Remove</a>' +
                 '</td>' +
                 '</tr>');
         });
         $("#metricsTableBody").on('click', '.remRow', function () {
+            $(this).parent().parent().remove();
+        });
+        $("#metricsTableBody").on('click', '.presetMetricCheck', function () {
             $(this).parent().parent().remove();
         });
     });
@@ -395,8 +412,34 @@
             swal("Error!", "Please select a brand!", "error")
             return; // Break out of the function
         }
-        //(inProdName, inBrandId, inDescription, inPrice, inRRP, inMetrics, inQuantity, inTiQ, inPublished, inIsConsumable)
-        var webFormData = new WebFormData(collectedProdName, collectedBrandId, null, null, null, null, null);
+        var collectedDescription;
+        var collectedPublished = isPublished;
+        var collectedConsumable = isConsumable;
+
+        if ($('#descriptionBox').hasClass('hidden')) {
+            collectedDescription = null
+        } else {
+            collectedDescription = tinyMCE.get('descriptionBox').getContent();
+        }
+
+        if ($('#metricsTableBody').hasClass('hidden')) {
+            var collectedMetricName = $('metricNameInput').val();
+            var collectedTIQ = $('#tiqInput').val();
+            var collectedQuantity = $('#qtyInput').val();
+            var collectedPrice = $('#priceInput').val();
+            var collectedRRP = $('#rrpInput').val();
+            var collectedMetrics = null; // Undone, need a for loop to pull all tables
+
+            // Create the object for POST
+            //(inProdName, inBrandId, inDescription, inPrice, inRRP, inMetrics, inQuantity, inTiQ, inPublished, inIsConsumable)
+            var webFormData = new WebFormData(collectedProdName, collectedBrandId, collectedDescription,
+                collectedPrice, collectedRRP, collectedMetrics, collectedQuantity, collectedTIQ, collectedPublished, collectedConsumable);
+
+        } else {
+
+
+        }
+
 
         //Serialize the webFormData object which contains the type name
         //data into a flat string. So that, it can be sent accross the Internet network successfully.
