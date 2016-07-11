@@ -7,14 +7,49 @@
             <div class="panel-body">
                 <form id="dataForm" role="form" class="form-horizontal">
                     <div class="form-group col-md-12">
-                        <label class="control-label col-md-3" for="prodNameInput">Product Name</label>
-                        <div class="form-group col-md-8">
+                        <label class="control-label col-md-2" for="prodNameInput">Product Name</label>
+                        <div class="form-group col-md-9">
                             <input type="text" name="prodNameInput" id="prodNameInput" class="form-control font-bold"
                                    maxlength="50" placeholder="Product Name" value="" />
                         </div>
                     </div>
+                    <div class="form-group col-md-12" id="metricNameInputBox">
+                        <label class="control-label col-md-2" for="metricNameInput">Metric Name</label>
+                        <div class="form-group col-md-9">
+                            <input type="text" name="metricNameInput" id="metricNameInput" class="form-control font-bold"
+                                   maxlength="50" placeholder="Unit name of Product (eg. KG)" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" id="qtyInputBox">
+                        <label class="control-label col-md-2" for="qtyInput">Quantity</label>
+                        <div class="form-group col-md-9">
+                            <input type="number" min="0" pattern="[0-9]" name="qtyInput" id="qtyInput" class="form-control font-bold"
+                                   maxlength="20" placeholder="Quantity" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" id="tiqInputBox">
+                        <label class="control-label col-md-2" for="tiqInput">TIQ</label>
+                        <div class="form-group col-md-10">
+                            <input type="number" min="0" pattern="[0-9]" name="tiqInput" id="tiqInput" class="form-control font-bold"
+                                   maxlength="20" placeholder="Threshold Inventory Quantity" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" id="priceInputBox">
+                        <label class="control-label col-md-2" for="priceInput">Price</label>
+                        <div class="form-group col-md-9">
+                            <input type="text" name="priceInput" id="priceInput" class="form-control font-bold"
+                                   maxlength="20" placeholder="Price" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" id="rrpInputBox">
+                        <label class="control-label col-md-2" for="rrpInput">RRP</label>
+                        <div class="form-group col-md-9">
+                            <input type="text" name="rrpInput" id="rrpInput" class="form-control font-bold"
+                                   maxlength="20" placeholder="Recommended Retail Price" value="" />
+                        </div>
+                    </div>
                     <div class="form-group col-md-12">
-                        <label class="control-label col-md-3 photoUploadMarginFixProducts" for="brandInput">Brand</label>
+                        <label class="control-label col-md-2 photoUploadMarginFixProducts" for="brandInput">Brand</label>
                         <div class="col-md-5">
                             <div id="brandInput" class="form-group">
 
@@ -22,14 +57,14 @@
                         </div>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="control-label col-md-3 photoUploadMarginFixProducts" for="fileInput">Photo</label>
-                        <div class="col-md-8">
+                        <label class="control-label col-md-2 photoUploadMarginFixProducts" for="fileInput">Photo</label>
+                        <div class="col-md-9">
                             <input id="fileInput" name="fileInput" type="file" class="file input-group-lg" multiple />
                         </div>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="control-label col-md-3" for="productProperties">Properties</label>
-                        <div id="checkboxContainer" class="col-md-9">
+                        <label class="control-label col-md-2" for="productProperties">Properties</label>
+                        <div id="checkboxContainer" class="col-md-10">
                             <div class="ui slider checkbox">
                                 <input type="checkbox" id="publishCheck">
                                 <label>Publish product upon save</label>
@@ -56,23 +91,24 @@
                         </div>
                     </div>
                     <div class="form-group col-md-12 hidden" id="descriptionBox">
-                        <label class="control-label col-md-3" for="descBox">Description</label>
-                        <div class="form-group col-md-8">
+                        <label class="control-label col-md-2" for="descBox">Description</label>
+                        <div class="form-group col-md-9">
                             <textarea id="descriptionBox"></textarea>
                         </div>
                     </div>
                     <div class="form-group col-md-12 hidden" id="metricSegment">
-                        <label class="control-label col-md-3" for="dataTable">Metrics</label>
-                        <div class="col-md-8">
+                        <label class="control-label col-md-2" for="dataTable">Metrics</label>
+                        <div class="col-md-10">
                             <table id="dataTable" class="table table-hover">
-                                <button id="rowBtn" onclick="addRow()" class="pull-right large ui secondary button">
+                                <div id="rowBtn" class="pull-right big ui secondary button">
                                     New Row
-                                </button>
+                                </div>
                                 <thead>
                                     <tr>
                                         <th>Metrics Name</th>
                                         <th>Metric Type</th>
                                         <th>Quantity</th>
+                                        <th>Status</th>
                                         <th>Price per type</th>
                                         <th>RRP</th> <!-- Recommended Retail Price -->
                                         <th>&nbsp;</th>
@@ -84,8 +120,8 @@
                     </div>
 
                     <div class="form-group col-md-12 hidden" id="specialsBox">
-                        <label class="control-label col-md-3 photoUploadMarginFixProducts" for="specialInput">Specials</label>
-                        <div class="col-md-5">
+                        <label class="control-label col-md-2 photoUploadMarginFixProducts" for="specialInput">Specials</label>
+                        <div class="col-md-6">
                             <div id="specialInput" class="form-group">
 
                             </div>
@@ -148,65 +184,6 @@
     });
     var metricsTable = $('#metricSegment');
 
-    function addRow() {
-        // We'll have to add a new row in the table
-        var $tableElement = null;
-        var $cellElement = null;
-        var $rowElement = null;
-        var works = "nice";
-
-        //-------- Find the table element -----------
-        //I am using the $tableElement variable
-        //to represent the found HTML element which has a matching id of brandTableBody
-        $tableBodyElement = $('#metricsTableBody');
-
-        //Create the 1st cell element which displays the CategoryId
-        $cellElement = $('<td></td>', { text: works });
-        $rowElement.append($cellElement);
-        //Create the 2nd cell element which displays the Category Name
-        $cellElement = $('<td></td>', { text: works });
-        $rowElement.append($cellElement);
-        // Create the 3rd cell element which displays the Visibility
-        $cellElement = $('<td></td>', { text: works });
-        $rowElement.append($cellElement);
-        //Create the 4th cell element which display created at information
-        $cellElement = $('<td></td>', { text: works });
-        $rowElement.append($cellElement);
-        //Create the 5th cell element which display created at information
-        $cellElement = $('<td></td>', { text: works });
-        $rowElement.append($cellElement);
-        //Create the 6th cell element which display updated at information
-        $cellElement = $('<td></td>', { text: works });
-        $rowElement.append($cellElement);
-        //Create the 7th cell element which display created at information
-        $cellElement = $('<td></td>', { text: works });
-        $rowElement.append($cellElement);
-        if (deletedAt == null) {
-            //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
-            $hyperLinkElement = $('<a>Update</a>').attr('href', '/Categories/Update/' + CatId);
-            $hyperLinkElement.addClass('btn btn-primary');
-            //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
-            $hyperLinkElement2 = $('<a>Manage Brands</a>').attr('href', '/Brands/BrandsUnderCategory/' + CatId); // Placeholder
-            $hyperLinkElement2.addClass('btn btn-primary inline');
-            //-----------------Using jQuery() to creating the 6th cell for the row----------------------
-            $cellElement = $('<td></td>');
-            //-----------------Add the previous created hyperlink element, $hyperLinkElement
-            //                 into the newly created 6th cell.
-            $cellElement.append($hyperLinkElement);
-            $cellElement.append($hyperLinkElement2);
-        } else {
-            //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
-            $hyperLinkElement3 = $('<a name="restore" id=' + CatId + ' onClick="restoreCat(' + CatId + ')">Restore Category</a>'); // Placeholder
-            $hyperLinkElement3.addClass('btn btn-primary inline');
-            $cellElement = $('<td></td>');
-            $cellElement.append($hyperLinkElement3);
-        }
-        //---------------Add the 6th cell into the row represented by the $rowElement
-        $rowElement.append($cellElement);
-        //Insert the $rowElement into the table element represented by $tableElement.
-        $tableBodyElement.append($rowElement);
-    };
-
     $('#descriptionCheck').on('click', function () {
         if (descriptionBox.hasClass('hidden')) {
             descriptionBox.removeClass('hidden');
@@ -219,8 +196,16 @@
     $('#metricsCheck').on('click', function () {
         if (metricsTable.hasClass('hidden')) {
             metricsTable.removeClass('hidden');
+            $('#metricNameInputBox').addClass('hidden');
+            $('#qtyInputBox').addClass('hidden');
+            $('#priceInputBox').addClass('hidden');
+            $('#rrpInputBox').addClass('hidden');
         } else {
             metricsTable.addClass('hidden');
+            $('#metricNameInputBox').removeClass('hidden');
+            $('#qtyInputBox').removeClass('hidden');
+            $('#priceInputBox').removeClass('hidden');
+            $('#rrpInputBox').removeClass('hidden');
         }
     })
     ;
@@ -328,12 +313,55 @@
 
     // End of Product Image Element
 
+    $(document).ready(function () {
+
+        // Initialize a text box only allowing numeric inputs
+        $("#prodCodeInput").on("keypress keyup blur", function (event) {
+            $(this).val($(this).val().replace(/[^\d].+/, ""));
+            if ((event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+        });
+
+        $("#rowBtn").click(function () {
+            $("#metricsTableBody").append(
+                '<tr valign="top">' +
+                '<td>' +
+                '<input type="text" class="form-control font-bold" id="metricName" name="customFieldName" value="" placeholder="Metric Name" />' +
+                '</td>' +
+                '<td>' +
+                '<input type="text" class="form-control font-bold" id="metricTypeInput" name="metricTypeInput" value="" placeholder="Metric Type" />' +
+                '</td>' +
+                '<td>' +
+                '<input type="number" min="0" pattern="[0-9]" class="form-control font-bold" id="qtyInput" name="qtyInput" value="" placeholder="Quantity" />' +
+                '</td>' +
+                '<td>' +
+                '<input type="text" class="form-control font-bold" id="statusInput" name="statusInput" value="" placeholder="Status" />' +
+                '</td>' +
+                '<td>' +
+                '<input type="text" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price" />' +
+                '</td>' +
+                '<td>' +
+                '<input type="text" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP" />' +
+                '<a href="javascript:void(0);" class="remRow btn btn-danger inline">Remove</a>' +
+                '</td>' +
+                '</tr>');
+        });
+        $("#metricsTableBody").on('click', '.remRow', function () {
+            $(this).parent().parent().remove();
+        });
+    });
+
+
     //Using a function technique to create a JavaScript class, WebFormData
-    function WebFormData(inProdName, inBrandId, inDescription, inMetrics, inTiQ, inPublished, inIsConsumable) {
+    function WebFormData(inProdName, inBrandId, inDescription, inPrice, inRRP, inMetrics, inQuantity, inTiQ, inPublished, inIsConsumable) {
         this.ProdName = inProdName;
         this.BrandId = inBrandId;
         this.Description = inDescription;
+        this.RRP = inRRP;
+        this.Price = inPrice;
         this.Metrics = inMetrics;
+        this.Quantity = inQuantity;
         this.ThresholdInventoryQuantity = inTiQ;
         this.Published = inPublished;
         this.isConsumable = inIsConsumable;
@@ -367,7 +395,7 @@
             swal("Error!", "Please select a brand!", "error")
             return; // Break out of the function
         }
-        //(inProdName, inBrandId, inDescription, inMetrics, inTiQ, inPublished, inIsConsumable)
+        //(inProdName, inBrandId, inDescription, inPrice, inRRP, inMetrics, inQuantity, inTiQ, inPublished, inIsConsumable)
         var webFormData = new WebFormData(collectedProdName, collectedBrandId, null, null, null, null, null);
 
         //Serialize the webFormData object which contains the type name

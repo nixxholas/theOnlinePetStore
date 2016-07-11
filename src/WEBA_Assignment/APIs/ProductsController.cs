@@ -260,7 +260,13 @@ namespace WEBA_ASSIGNMENT.APIs
                 //Copy out all the products data into the new Product instance,
                 //newProduct.
                 newProduct.ProdName = productNewInput.ProdName.Value;
-                //newProduct.Description = productNewInput.Description.Value;
+                if (productNewInput.Description.Value != null)
+                {
+                    newProduct.Description = productNewInput.Description.Value;
+                } else
+                {
+                    newProduct.Description = null;
+                }
                 newProduct.BrandId = Int32.Parse(productNewInput.BrandId.Value);
                 
                 // Have to implement a foreach loop to stash multiple Metrics
@@ -316,6 +322,12 @@ namespace WEBA_ASSIGNMENT.APIs
 
             try
             {
+
+
+                // Parse in auditing data
+                newProduct.CreatedById = _userManager.GetUserId(User);
+                newProduct.UpdatedById = _userManager.GetUserId(User);
+
                 // I didn't even start testing the ProductPhotos yet
                 // So I'll leave the default Product image alone first
 
@@ -479,7 +491,6 @@ namespace WEBA_ASSIGNMENT.APIs
             //Also get the current products Photo information.
             var oneProduct = Database.Products
                 .Where(Product => Product.ProdId == productToBeUpdated.ProdId)
-                .Include(input => input.ProductPhotos)
                 .Include(Product => Product.Brand)
                 .Single(); // Take in only that product.
 
