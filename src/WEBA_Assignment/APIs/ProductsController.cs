@@ -286,6 +286,51 @@ namespace WEBA_ASSIGNMENT.APIs
                 //Copy out all the products data into the new Product instance,
                 //newProduct.
                 newProduct.ProdName = productNewInput.ProdName.Value;
+                newProduct.BrandId = Int32.Parse(productNewInput.BrandId.Value);
+                newProduct.Published = Int32.Parse(productNewInput.Published.Value);
+                newProduct.isConsumable = Int32.Parse(productNewInput.isConsumable.Value);
+                newProduct.Metrics = new List<Metrics>();
+                              
+                // If we're not creating alot of metrics
+                if (productNewInput.Metrics.Value = null)
+                {
+                    // If the only metric is actually from a preset metric
+                    if (productNewInput.customMetricType.Value == null)
+                    {
+                        int id = Int32.Parse(productNewInput.MetricType.Value);
+                        var presetMetricUsed = Database.PresetMetrics
+                            .Where(input => input.PMetricId == id).Single();
+                        Metrics newMetric = new Metrics();
+                        newMetric.ProdId = newProduct.ProdId;
+                        newMetric.MetricAmount = productNewInput.MetricAmount.Value;
+                        newMetric.MetricType = presetMetricUsed.MetricType;
+                        newMetric.PMetricId = id;
+                        newMetric.Quantity = Int32.Parse(productNewInput.Quantity.Value);
+                        //newMetric.Status undone
+                        newMetric.CreatedById = _userManager.GetUserId(User);
+                        newMetric.UpdatedById = _userManager.GetUserId(User);
+
+                        // Add the new metric into the DbSet
+                        Database.Metrics.Add(newMetric);
+
+                        Price price = new Price();
+                        price.MetricId = newMetric.MetricId;
+                        // Have not converted to decimal yet
+                        price.RRP = productNewInput.RRP.Value;
+                        price.Value = productNewInput.Price.Value;
+                        price.CreatedById = _userManager.GetUserId(User);
+
+                        Database.Prices.Add(price);
+                    } else
+                    // Else, it'll be a custom preset metric
+                    {
+
+                    }
+
+                    // Since we're creating alot of metrics
+                } else {
+
+                }
 
                 // Description
                 if (productNewInput.Description.Value != null)

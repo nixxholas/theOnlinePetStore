@@ -5,7 +5,7 @@
                 <div class="panel-title">Create Product Record</div>
             </div>
             <div class="panel-body">
-                <form id="dataForm" role="form" class="form-horizontal">
+                <form id="dataForm" data-toggle="validator" role="form" class="form-horizontal">
                     <div class="form-group col-md-12">
                         <label class="control-label col-md-2" for="prodNameInput">Product Name</label>
                         <div class="form-group col-md-9">
@@ -13,10 +13,17 @@
                                    maxlength="50" placeholder="Product Name" value="" required/>
                         </div>
                     </div>
+                    <div class="form-group col-md-12" id="metricAmountBox">
+                        <label class="control-label col-md-2" for="metricAmountInput">Metric Amount</label>
+                        <div class="form-group col-md-9">
+                            <input type="number" min="0" name="metricAmountInput" id="metricAmountInput" class="form-control font-bold"
+                                   maxlength="20" placeholder="Amount Per Type" value="" required />
+                        </div>
+                    </div>
                     <div class="form-group col-md-12" id="metricTypeInputBox">
                         <label class="control-label col-md-2" for="metricTypeInput">Metric Type</label>
                         <div id="metricType" class="form-group col-md-4">
-                            <div id="pMetricSuggest" class="form-group">
+                            <div id="pMetricSuggest" class="form-control ms-ctn">
 
                             </div>
                             <input type="text" name="customMetricTypeInput" id="customMetricTypeInput" class="form-control font-bold hidden"
@@ -258,17 +265,21 @@
         } else {
             isPublished = 0;
         }
-    })
-    ;
-
+    });
     
     $('#customUnitSwitch').on('click', function () {
         if ($('#customMetricTypeInput').hasClass('hidden')) {
             customMetric = 1;
+            $('#pMetricSuggest').magicSuggest({
+                required: false
+            });
             $('#pMetricSuggest').addClass('hidden')
             $('#customMetricTypeInput').removeClass('hidden');        
         } else {
             customMetric = 0;
+            $('#pMetricSuggest').magicSuggest({
+                required: true
+            });
             $('#pMetricSuggest').removeClass('hidden')
             $('#customMetricTypeInput').addClass('hidden');
         }        
@@ -325,6 +336,7 @@
     // note that it would be a lot more proper to use CSS classes here instead of inline style
 
     var pMetricInput = $('#pMetricSuggest').magicSuggest({
+        required: true,
         maxSelection: 1,
         allowFreeEntries: false,
         method: 'get',
@@ -343,7 +355,12 @@
         }
     });
 
+    // Hacky fix for MagicSuggest Validation
+    $('#pMetricSuggest').removeClass("form-control");
+    $("#pMetricSuggest div input").addClass("form-control")
+    
     var brandInput = $('#brandInput').magicSuggest({
+        required: true,
         maxSelection: 1,
         allowFreeEntries: false,
         method: 'get',
@@ -361,6 +378,10 @@
             '</div><div style="clear:both;"></div>'; // make sure we have closed our dom stuff
         }
     });
+
+    // Hacky fix for MagicSuggest Validation
+    $('#brandInput').removeClass("form-control");
+    $("#brandInput div input").addClass("form-control")
 
     //var specialInput = $('#specialInput').magicSuggest({
     //    maxSelection: 1,
@@ -426,7 +447,7 @@
 
     // End of Product Image Element
 
-    $(document).ready(function () {
+    $(document).ready(function () {        
         // Preset Metric Row
         $("#rowBtn").click(function () {
             $("#metricsTableBody").append(
@@ -505,16 +526,22 @@
     });
 
     // Function Constructor for creating a metrics object
-    function Metric(inMetricName, inQuantity, inPrice, inRRP) {
-
-
+    function Metric(inMetricAmount, inMetricType, inQuantity, inPrice, inRRP, inStatus) {
+        this.MetricAmount = inMetricAmount;
+        this.MetricType = inMetricType;
+        this.Quantity = inQuantity;
+        this.Price = inPrice;
+        this.RRP = inRRP;
+        this.Status = inStatus;
     }
 
     //Using a function technique to create a JavaScript class, WebFormData
     // Special promotions & Consumable Entities unscripted
-    function WebFormData(inProdName, inMetricType, inQuantity, inTiQ, inPrice, inRRP, inBrandId, inPublished, inDescription, inMetrics, inIsConsumable) {
+    function WebFormData(inProdName, inMetricAmount, inMetricType, inCustomMetricType, inQuantity, inTiQ, inPrice, inRRP, inBrandId, inPublished, inDescription, inMetrics, inIsConsumable) {
         this.ProdName = inProdName;
+        this.MetricAmount = inMetricAmount;
         this.MetricType = inMetricType;
+        this.customMetricType = inCustomMetricType;
         this.Quantity = inQuantity;
         this.ThresholdInventoryQuantity = inTiQ;
         this.Price = inPrice;
@@ -526,39 +553,55 @@
         this.isConsumable = inIsConsumable;
     }
 
-    // Form validation for bootstrap-based elements
-    $('#dataForm').validator();
-
     $('#saveButton').on('click', function () {
+        // Product Name
         var collectedProdName = $('#prodNameInput').val();
+        if (collectedProdName == null || collectedProdName == "") {
+            swal("Error!", "Please enter a product name! ", error);
+            return; // Break out of the function
+        }
+
+        // Brand id
         var collectedBrandId = brandInput.getValue().toString(); // Brand Id
         if (collectedBrandId == null || collectedBrandId == "") {
             swal("Error!", "Please select a brand!", "error")
             return; // Break out of the function
         }
-        var collectedDescription;
-        var collectedPublished = isPublished;
-        var collectedConsumable = isConsumable;
 
+        // Description
+        var collectedDescription;
         if ($('#descriptionBox').hasClass('hidden')) {
             collectedDescription = null
         } else {
             collectedDescription = tinyMCE.get('descriptionBox').getContent();
         }
 
-        if ($('#metricsTableBody').hasClass('hidden')) {
+        var collectedPublished = isPublished;
+        var collectedConsumable = isConsumable;
+
+
+        if ($('#metricSegment').hasClass('hidden')) {
             // If there are no custom sizes or variations
-            var collectedMetricName = $('metricNameInput').val();
-            var collectedTIQ = $('#tiqInput').val();
+            var collectedMetricAmount = $('metricAmountInput').val();
+            if (customMetric == 1) {
+                var customCollectedMetricType = pMetricInput.val();
+                var collectedMetricType = null;
+            } else {
+                var customCollectedMetricType = null;
+                var collectedMetricType = pMetricInput.getValue().toString();
+            }
             var collectedQuantity = $('#qtyInput').val();
+            var collectedTIQ = $('#tiqInput').val();
             var collectedPrice = $('#priceInput').val();
             var collectedRRP = $('#rrpInput').val();
             var collectedMetrics = null; // Undone, need a for loop to pull all tables
 
             // Create the object for POST
-            //(inProdName, inBrandId, inDescription, inPrice, inRRP, inMetrics, inQuantity, inTiQ, inPublished, inIsConsumable)
-            var webFormData = new WebFormData(collectedProdName, collectedBrandId, collectedDescription,
-                collectedPrice, collectedRRP, collectedMetrics, collectedQuantity, collectedTIQ, collectedPublished, collectedConsumable);
+            //(inProdName, inMetricAmount, inMetricType, inQuantity, inTiQ, inPrice, inRRP, inBrandId, inPublished,
+            // inDescription, inMetrics, inIsConsumable)
+            var webFormData = new WebFormData(collectedProdName, collectedMetricAmount, collectedMetricType, customCollectedMetricType,
+                collectedQuantity, collectedTIQ, collectedPrice, collectedRRP, collectedBrandId, collectedPublished,
+                collectedDescription, collectedMetrics, collectedConsumable);
 
         } else {
             // If there are custom variations, we'll have to utitilize the Metrics system
