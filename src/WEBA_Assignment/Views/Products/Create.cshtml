@@ -10,7 +10,7 @@
                         <label class="control-label col-md-2" for="prodNameInput">Product Name</label>
                         <div class="form-group col-md-9">
                             <input type="text" name="prodNameInput" id="prodNameInput" class="form-control font-bold"
-                                   maxlength="50" placeholder="Product Name" value="" />
+                                   maxlength="50" placeholder="Product Name" value="" required/>
                         </div>
                     </div>
                     <div class="form-group col-md-12" id="metricTypeInputBox">
@@ -20,7 +20,7 @@
 
                             </div>
                             <input type="text" name="customMetricTypeInput" id="customMetricTypeInput" class="form-control font-bold hidden"
-                                   maxlength="50" placeholder="Unit Type (eg. KG)" value="" />
+                                   maxlength="50" placeholder="Unit Type (eg. Black)" value="" />
                         </div>
                         &emsp;&emsp;&emsp;
                         <div class="form-group col-md-offset-8 ui slider checkbox">
@@ -32,14 +32,14 @@
                         <label class="control-label col-md-2" for="qtyInput">Stock</label>
                         <div class="form-group col-md-9">
                             <input type="number" min="0" name="qtyInput" id="qtyInput" class="form-control font-bold"
-                                   maxlength="20" placeholder="Stock" value="" />
+                                   maxlength="20" placeholder="Stock" value="" required/>
                         </div>
                     </div>
                     <div class="form-group col-md-12" id="tiqInputBox">
                         <label class="control-label col-md-2" for="tiqInput">TIQ</label>
                         <div class="form-group col-md-10">
                             <input type="number" min="0" name="tiqInput" id="tiqInput" class="form-control font-bold"
-                                   maxlength="20" placeholder="Threshold Inventory Quantity" value="" />
+                                   maxlength="20" placeholder="Threshold Inventory Quantity" value="" required/>
                         </div>
                     </div>
                     <div class="form-group col-md-12" id="priceInputBox">
@@ -47,7 +47,7 @@
                         <div class="form-group input-group col-md-9">
                             <span class="input-group-addon">$</span>
                             <input type="text" name="priceInput" id="priceInput" class="form-control font-bold"
-                                   maxlength="20" placeholder="Price" value="" onkeypress="return isNumberKey(event)" />
+                                   maxlength="20" placeholder="Price" value="" onkeypress="return isNumberKey(event)" required/>
                         </div>
                     </div>
                     <div class="form-group col-md-12" id="rrpInputBox">
@@ -55,7 +55,7 @@
                         <div class="form-group input-group col-md-9">
                             <span class="input-group-addon">$</span>
                             <input type="text" name="rrpInput" id="rrpInput" class="form-control font-bold"
-                                   maxlength="20" placeholder="Recommended Retail Price" value="" onkeypress="return isNumberKey(event)" />
+                                   maxlength="20" placeholder="Recommended Retail Price" value="" onkeypress="return isNumberKey(event)" required/>
                         </div>
                     </div>
                     <div class="form-group col-md-12">
@@ -511,39 +511,23 @@
     }
 
     //Using a function technique to create a JavaScript class, WebFormData
-    function WebFormData(inProdName, inBrandId, inDescription, inPrice, inRRP, inMetrics, inQuantity, inTiQ, inPublished, inIsConsumable) {
+    // Special promotions & Consumable Entities unscripted
+    function WebFormData(inProdName, inMetricType, inQuantity, inTiQ, inPrice, inRRP, inBrandId, inPublished, inDescription, inMetrics, inIsConsumable) {
         this.ProdName = inProdName;
-        this.BrandId = inBrandId;
-        this.Description = inDescription;
-        this.RRP = inRRP;
-        this.Price = inPrice;
-        this.Metrics = inMetrics;
+        this.MetricType = inMetricType;
         this.Quantity = inQuantity;
         this.ThresholdInventoryQuantity = inTiQ;
+        this.Price = inPrice;
+        this.RRP = inRRP;
+        this.BrandId = inBrandId;
         this.Published = inPublished;
+        this.Description = inDescription;
+        this.Metrics = inMetrics;
         this.isConsumable = inIsConsumable;
     }
 
-    // Form validation for jQuery-based elements
-    $('#dataForm').validate({
-        rules: {
-            prodNameInput: {
-                minlength: 2,
-                required: true
-            }
-        },
-        highlight: function (element) {
-            $(element).closest('.control-group')
-                //.removeClass('success')
-                .addClass('error');
-        },
-        success: function (element) {
-            element//.text('').addClass('valid')
-                .closest('.control-group')
-                .removeClass('error');
-            //.addClass('success');
-        }
-    });
+    // Form validation for bootstrap-based elements
+    $('#dataForm').validator();
 
     $('#saveButton').on('click', function () {
         var collectedProdName = $('#prodNameInput').val();
