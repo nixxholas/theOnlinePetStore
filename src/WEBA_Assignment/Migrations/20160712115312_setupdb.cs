@@ -359,42 +359,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BrandSpecials",
-                columns: table => new
-                {
-                    BrandId = table.Column<int>(nullable: false),
-                    SpecialId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("BrandSpecials_CompositeKey", x => new { x.BrandId, x.SpecialId });
-                    table.ForeignKey(
-                        name: "FK_BrandSpecials_Specials_SpecialId",
-                        column: x => x.SpecialId,
-                        principalTable: "Specials",
-                        principalColumn: "SpecialId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CategorySpecials",
-                columns: table => new
-                {
-                    CatId = table.Column<int>(nullable: false),
-                    SpecialId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("CategorySpecials_CompositeKey", x => new { x.CatId, x.SpecialId });
-                    table.ForeignKey(
-                        name: "FK_CategorySpecials_Specials_SpecialId",
-                        column: x => x.SpecialId,
-                        principalTable: "Specials",
-                        principalColumn: "SpecialId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Product",
                 columns: table => new
                 {
@@ -409,7 +373,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                     ProdName = table.Column<string>(type: "VARCHAR(100)", nullable: false),
                     Published = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     Quantity = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    SpecialId = table.Column<int>(nullable: true),
                     ThresholdInventoryQuantity = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     UpdatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
                     UpdatedById = table.Column<string>(nullable: false),
@@ -437,12 +400,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Product_Specials_SpecialId",
-                        column: x => x.SpecialId,
-                        principalTable: "Specials",
-                        principalColumn: "SpecialId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Product_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
@@ -451,17 +408,23 @@ namespace WEBA_ASSIGNMENT.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductSpecials",
+                name: "BrandSpecials",
                 columns: table => new
                 {
-                    ProdId = table.Column<int>(nullable: false),
+                    BrandId = table.Column<int>(nullable: false),
                     SpecialId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("ProductSpecials_CompositeKey", x => new { x.ProdId, x.SpecialId });
+                    table.PrimaryKey("BrandSpecials_CompositeKey", x => new { x.BrandId, x.SpecialId });
                     table.ForeignKey(
-                        name: "FK_ProductSpecials_Specials_SpecialId",
+                        name: "FK_BrandSpecials_Brands_BrandId",
+                        column: x => x.BrandId,
+                        principalTable: "Brands",
+                        principalColumn: "BrandId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BrandSpecials_Specials_SpecialId",
                         column: x => x.SpecialId,
                         principalTable: "Specials",
                         principalColumn: "SpecialId",
@@ -490,6 +453,30 @@ namespace WEBA_ASSIGNMENT.Migrations
                         column: x => x.CatId,
                         principalTable: "Category",
                         principalColumn: "CatId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CategorySpecials",
+                columns: table => new
+                {
+                    CatId = table.Column<int>(nullable: false),
+                    SpecialId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("CategorySpecials_CompositeKey", x => new { x.CatId, x.SpecialId });
+                    table.ForeignKey(
+                        name: "FK_CategorySpecials_Category_CatId",
+                        column: x => x.CatId,
+                        principalTable: "Category",
+                        principalColumn: "CatId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CategorySpecials_Specials_SpecialId",
+                        column: x => x.SpecialId,
+                        principalTable: "Specials",
+                        principalColumn: "SpecialId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -533,7 +520,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                     PriceId = table.Column<int>(type: "int", nullable: false),
                     ProdId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "DECIMAL(10, 2)", nullable: true),
                     StatusId = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     UpdatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
                     UpdatedById = table.Column<string>(nullable: false)
@@ -624,6 +610,31 @@ namespace WEBA_ASSIGNMENT.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductSpecials",
+                columns: table => new
+                {
+                    ProdId = table.Column<int>(nullable: false),
+                    SpecialId = table.Column<int>(nullable: false),
+                    ProductsProdId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("ProductSpecials_CompositeKey", x => new { x.ProdId, x.SpecialId });
+                    table.ForeignKey(
+                        name: "FK_ProductSpecials_Product_ProductsProdId",
+                        column: x => x.ProductsProdId,
+                        principalTable: "Product",
+                        principalColumn: "ProdId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductSpecials_Specials_SpecialId",
+                        column: x => x.SpecialId,
+                        principalTable: "Specials",
+                        principalColumn: "SpecialId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Price",
                 columns: table => new
                 {
@@ -634,6 +645,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     DeletedAt = table.Column<DateTime>(nullable: true),
                     DeletedById = table.Column<string>(nullable: true),
                     MetricId = table.Column<int>(type: "int", nullable: false),
+                    RRP = table.Column<decimal>(type: "money", nullable: true),
                     Value = table.Column<decimal>(type: "DECIMAL(6,2)", nullable: false)
                 },
                 constraints: table =>
@@ -748,6 +760,11 @@ namespace WEBA_ASSIGNMENT.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BrandSpecials_BrandId",
+                table: "BrandSpecials",
+                column: "BrandId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BrandSpecials_SpecialId",
                 table: "BrandSpecials",
                 column: "SpecialId");
@@ -777,6 +794,11 @@ namespace WEBA_ASSIGNMENT.Migrations
                 name: "IX_Category_VisibilityId",
                 table: "Category",
                 column: "VisibilityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CategorySpecials_CatId",
+                table: "CategorySpecials",
+                column: "CatId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CategorySpecials_SpecialId",
@@ -857,11 +879,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_SpecialId",
-                table: "Product",
-                column: "SpecialId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Product_UpdatedById",
                 table: "Product",
                 column: "UpdatedById");
@@ -880,6 +897,11 @@ namespace WEBA_ASSIGNMENT.Migrations
                 name: "IX_ProductPhoto_ProdId",
                 table: "ProductPhoto",
                 column: "ProdId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSpecials_ProductsProdId",
+                table: "ProductSpecials",
+                column: "ProductsProdId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductSpecials_SpecialId",
@@ -953,6 +975,9 @@ namespace WEBA_ASSIGNMENT.Migrations
                 name: "Metrics");
 
             migrationBuilder.DropTable(
+                name: "Specials");
+
+            migrationBuilder.DropTable(
                 name: "Visibility");
 
             migrationBuilder.DropTable(
@@ -966,9 +991,6 @@ namespace WEBA_ASSIGNMENT.Migrations
 
             migrationBuilder.DropTable(
                 name: "Brands");
-
-            migrationBuilder.DropTable(
-                name: "Specials");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

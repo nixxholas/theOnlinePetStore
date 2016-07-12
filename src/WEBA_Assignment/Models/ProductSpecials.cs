@@ -9,5 +9,7 @@ namespace WEBA_ASSIGNMENT.Models
     {
         public int ProdId { get; set; }
         public int SpecialId { get; set; }
+        public Product Products { get; set; }
+        public Specials Specials { get; set; }
     }
 }

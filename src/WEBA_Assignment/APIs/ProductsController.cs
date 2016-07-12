@@ -150,6 +150,7 @@ namespace WEBA_ASSIGNMENT.APIs
                      .Where(eachProduct => eachProduct.ProdId == id)
                      .Include(eachProduct => eachProduct.Brand)
                      .Include(eachProduct => eachProduct.Metrics)
+                     .Include(eachProduct => eachProduct.Specials)
                      .Include(eachProduct => eachProduct.ProductPhotos).Single();
 
                 // Not yet implemented
@@ -176,7 +177,7 @@ namespace WEBA_ASSIGNMENT.APIs
                     Metrics = foundProduct.Metrics,
                     ProductPhotos = foundProduct.ProductPhotos,
                     isConsumable = foundProduct.isConsumable,
-                    Specials = foundProduct.Special,
+                    Specials = foundProduct.Specials,
                     Published = foundProduct.Published,
                 };//end of creation of the response object
 
@@ -313,7 +314,6 @@ namespace WEBA_ASSIGNMENT.APIs
                         Metrics metric = new Metrics();
                         metric.MetricType = Metric.MetricType.Value;
                         metric.Quantity = Int32.Parse(Metric.Quantity.Value);
-                        metric.RRP = Decimal.Parse(Metric.RRP);
                         metric.CreatedById = _userManager.GetUserId(User);
                         metric.UpdatedById = _userManager.GetUserId(User);
                         if (Metric.PMetricId.Value != null)

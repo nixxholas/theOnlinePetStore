@@ -35,7 +35,7 @@ namespace WEBA_ASSIGNMENT.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=nixh\SQLEXPRESS;database=WEBA_ASSIGNMENTDB;Trusted_Connection=True;MultipleActiveResultSets=True");
+            optionsBuilder.UseSqlServer(@"Server=nixholas\SQLEXPRESS;database=WEBA_ASSIGNMENTDB;Trusted_Connection=True;MultipleActiveResultSets=True");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -72,7 +72,13 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasColumnName("Value")
                 .HasColumnType("money")
                 .IsRequired();
-            
+
+            modelBuilder.Entity<Price>()
+                .Property(input => input.RRP)
+                .HasColumnName("RRP")
+                .HasColumnType("money")
+                .IsRequired(false);
+
             // Two sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<Price>()
              .HasOne(userClass => userClass.CreatedBy)
@@ -267,7 +273,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasMany(input => input.Products)
                 .WithOne(input => input.Brand)
                 .HasForeignKey(input => input.BrandId);
-
+            
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<Brands>()
              .HasOne(userClass => userClass.CreatedBy)
@@ -455,7 +461,7 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<Specials>()
                 .Property(input => input.DeletedAt)
                 .IsRequired(false);
-
+            
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<Specials>()
              .HasOne(userClass => userClass.CreatedBy)
@@ -482,7 +488,7 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<CategorySpecials>()
                 .HasKey(input => new { input.CatId, input.SpecialId })
                 .HasName("CategorySpecials_CompositeKey");
-
+            
             // ------------ End of Defining CategorySpecials Entity ------------ //
 
             // -------------- Defining BrandSpecials Entity ----------------- //
@@ -608,12 +614,6 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasColumnName("PriceId")
                 .HasColumnType("int")
                 .IsRequired();
-
-            modelBuilder.Entity<Metrics>()
-                .Property(input => input.RRP)
-                .HasColumnName("Price")
-                .HasColumnType("DECIMAL(10, 2)")
-                .IsRequired(false);
 
             modelBuilder.Entity<Metrics>()
                 .Property(input => input.StatusId)

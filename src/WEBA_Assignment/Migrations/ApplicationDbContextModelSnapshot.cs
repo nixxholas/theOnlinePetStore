@@ -339,6 +339,8 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.HasKey("BrandId", "SpecialId")
                         .HasName("BrandSpecials_CompositeKey");
 
+                    b.HasIndex("BrandId");
+
                     b.HasIndex("SpecialId");
 
                     b.ToTable("BrandSpecials");
@@ -411,6 +413,8 @@ namespace WEBA_ASSIGNMENT.Migrations
 
                     b.HasKey("CatId", "SpecialId")
                         .HasName("CategorySpecials_CompositeKey");
+
+                    b.HasIndex("CatId");
 
                     b.HasIndex("SpecialId");
 
@@ -501,10 +505,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnName("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("RRP")
-                        .HasColumnName("Price")
-                        .HasColumnType("DECIMAL(10, 2)");
-
                     b.Property<int>("StatusId")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("StatusId")
@@ -588,6 +588,10 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnName("MetricId")
                         .HasColumnType("int");
 
+                    b.Property<decimal?>("RRP")
+                        .HasColumnName("RRP")
+                        .HasColumnType("money");
+
                     b.Property<decimal>("Value")
                         .HasColumnName("Value")
                         .HasColumnType("DECIMAL(6,2)");
@@ -649,8 +653,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(0);
 
-                    b.Property<int?>("SpecialId");
-
                     b.Property<int?>("ThresholdInvertoryQuantity")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -684,8 +686,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.HasIndex("ProdName")
                         .IsUnique()
                         .HasName("Product_ProdName_UniqueConstraint");
-
-                    b.HasIndex("SpecialId");
 
                     b.HasIndex("UpdatedById");
 
@@ -787,8 +787,12 @@ namespace WEBA_ASSIGNMENT.Migrations
 
                     b.Property<int>("SpecialId");
 
+                    b.Property<int?>("ProductsProdId");
+
                     b.HasKey("ProdId", "SpecialId")
                         .HasName("ProductSpecials_CompositeKey");
+
+                    b.HasIndex("ProductsProdId");
 
                     b.HasIndex("SpecialId");
 
@@ -963,7 +967,12 @@ namespace WEBA_ASSIGNMENT.Migrations
 
             modelBuilder.Entity("WEBA_ASSIGNMENT.Models.BrandSpecials", b =>
                 {
-                    b.HasOne("WEBA_ASSIGNMENT.Models.Specials")
+                    b.HasOne("WEBA_ASSIGNMENT.Models.Brands", "Brands")
+                        .WithMany("BrandSpecials")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WEBA_ASSIGNMENT.Models.Specials", "Specials")
                         .WithMany("BrandSpecials")
                         .HasForeignKey("SpecialId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -991,7 +1000,12 @@ namespace WEBA_ASSIGNMENT.Migrations
 
             modelBuilder.Entity("WEBA_ASSIGNMENT.Models.CategorySpecials", b =>
                 {
-                    b.HasOne("WEBA_ASSIGNMENT.Models.Specials")
+                    b.HasOne("WEBA_ASSIGNMENT.Models.Category", "Categories")
+                        .WithMany()
+                        .HasForeignKey("CatId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WEBA_ASSIGNMENT.Models.Specials", "Specials")
                         .WithMany("CategorySpecials")
                         .HasForeignKey("SpecialId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -1065,10 +1079,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .WithMany()
                         .HasForeignKey("DeletedById");
 
-                    b.HasOne("WEBA_ASSIGNMENT.Models.Specials", "Special")
-                        .WithMany()
-                        .HasForeignKey("SpecialId");
-
                     b.HasOne("WEBA_ASSIGNMENT.Models.ApplicationUser", "UpdatedBy")
                         .WithMany()
                         .HasForeignKey("UpdatedById");
@@ -1092,7 +1102,11 @@ namespace WEBA_ASSIGNMENT.Migrations
 
             modelBuilder.Entity("WEBA_ASSIGNMENT.Models.ProductSpecials", b =>
                 {
-                    b.HasOne("WEBA_ASSIGNMENT.Models.Specials")
+                    b.HasOne("WEBA_ASSIGNMENT.Models.Product", "Products")
+                        .WithMany("Specials")
+                        .HasForeignKey("ProductsProdId");
+
+                    b.HasOne("WEBA_ASSIGNMENT.Models.Specials", "Specials")
                         .WithMany("ProductSpecials")
                         .HasForeignKey("SpecialId")
                         .OnDelete(DeleteBehavior.Cascade);

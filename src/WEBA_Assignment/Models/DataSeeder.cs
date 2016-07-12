@@ -176,13 +176,13 @@ namespace WEBA_ASSIGNMENT.Models
             };
             db.PresetMetrics.Add(Metre);
 
-            Kilometre = new PresetMetric()
-            {
-                MetricType = "Length",
-                MetricSubType = "Kilometres",
-                MetricCharacter = "km"
-            };
-            db.PresetMetrics.Add(Kilometre);
+            //Kilometre = new PresetMetric()
+            //{
+            //    MetricType = "Length",
+            //    MetricSubType = "Kilometres",
+            //    MetricCharacter = "km"
+            //};
+            //db.PresetMetrics.Add(Kilometre);
 
             Pounds = new PresetMetric()
             {
@@ -192,13 +192,13 @@ namespace WEBA_ASSIGNMENT.Models
             };
             db.PresetMetrics.Add(Pounds);
 
-            Tonnes = new PresetMetric()
-            {
-                MetricType = "Length",
-                MetricSubType = "Tonnes",
-                MetricCharacter = "ton"
-            };
-            db.PresetMetrics.Add(Tonnes);
+            //Tonnes = new PresetMetric()
+            //{
+            //    MetricType = "Length",
+            //    MetricSubType = "Tonnes",
+            //    MetricCharacter = "ton"
+            //};
+            //db.PresetMetrics.Add(Tonnes);
 
             Milligrams = new PresetMetric()
             {

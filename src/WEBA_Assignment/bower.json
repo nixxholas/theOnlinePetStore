@@ -15,6 +15,7 @@
     "accounting-js": "0.4.2",
     "bootstrap-fileinput": "4.3.1",
     "bootstrap-select": "1.10.0",
+    "bootstrap-checkbox": "1.4.0",
     "magicsuggest": "2.1.4",
     "tinymce": "4.4.0"
   },

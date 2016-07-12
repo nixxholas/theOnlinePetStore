@@ -9,5 +9,7 @@ namespace WEBA_ASSIGNMENT.Models
     {
         public int CatId { get; set; }
         public int SpecialId { get; set; }
+        public Category Categories { get; set; }
+        public Specials Specials { get; set; }
     }
 }

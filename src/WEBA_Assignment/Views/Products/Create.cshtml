@@ -13,18 +13,26 @@
                                    maxlength="50" placeholder="Product Name" value="" />
                         </div>
                     </div>
-                    <div class="form-group col-md-12" id="metricNameInputBox">
-                        <label class="control-label col-md-2" for="metricNameInput">Metric Name</label>
-                        <div class="form-group col-md-9">
-                            <input type="text" name="metricNameInput" id="metricNameInput" class="form-control font-bold"
-                                   maxlength="50" placeholder="Unit name of Product (eg. KG)" value="" />
+                    <div class="form-group col-md-12" id="metricTypeInputBox">
+                        <label class="control-label col-md-2" for="metricTypeInput">Metric Type</label>
+                        <div id="metricType" class="form-group col-md-4">
+                            <div id="pMetricSuggest" class="form-group">
+
+                            </div>
+                            <input type="text" name="customMetricTypeInput" id="customMetricTypeInput" class="form-control font-bold hidden"
+                                   maxlength="50" placeholder="Unit Type (eg. KG)" value="" />
+                        </div>
+                        &emsp;&emsp;&emsp;
+                        <div class="form-group col-md-offset-8 ui slider checkbox">
+                            <input type="checkbox" name="customUnitSwitch" id="customUnitSwitch">
+                            <label>Custom Unit</label>
                         </div>
                     </div>
-                    <div class="form-group col-md-12" id="qtyInputBox">
-                        <label class="control-label col-md-2" for="qtyInput">Quantity</label>
+                    <div class="form-group col-md-12" id="stockBox">
+                        <label class="control-label col-md-2" for="qtyInput">Stock</label>
                         <div class="form-group col-md-9">
                             <input type="number" min="0" name="qtyInput" id="qtyInput" class="form-control font-bold"
-                                   maxlength="20" placeholder="Quantity" value="" />
+                                   maxlength="20" placeholder="Stock" value="" />
                         </div>
                     </div>
                     <div class="form-group col-md-12" id="tiqInputBox">
@@ -36,16 +44,18 @@
                     </div>
                     <div class="form-group col-md-12" id="priceInputBox">
                         <label class="control-label col-md-2" for="priceInput">Price</label>
-                        <div class="form-group col-md-9">
+                        <div class="form-group input-group col-md-9">
+                            <span class="input-group-addon">$</span>
                             <input type="text" name="priceInput" id="priceInput" class="form-control font-bold"
-                                   maxlength="20" placeholder="Price" value="" />
+                                   maxlength="20" placeholder="Price" value="" onkeypress="return isNumberKey(event)" />
                         </div>
                     </div>
                     <div class="form-group col-md-12" id="rrpInputBox">
                         <label class="control-label col-md-2" for="rrpInput">RRP</label>
-                        <div class="form-group col-md-9">
+                        <div class="form-group input-group col-md-9">
+                            <span class="input-group-addon">$</span>
                             <input type="text" name="rrpInput" id="rrpInput" class="form-control font-bold"
-                                   maxlength="20" placeholder="Recommended Retail Price" value="" />
+                                   maxlength="20" placeholder="Recommended Retail Price" value="" onkeypress="return isNumberKey(event)" />
                         </div>
                     </div>
                     <div class="form-group col-md-12">
@@ -93,7 +103,7 @@
                     <div class="form-group col-md-12 hidden" id="descriptionBox">
                         <label class="control-label col-md-2" for="descBox">Description</label>
                         <div class="form-group col-md-9">
-                            <textarea name="descriptionBox" id="descriptionBox"></textarea>
+                            <textarea class="tinymceStart" name="descriptionBox" id="descriptionBox"></textarea>
                         </div>
                     </div>
                     <div class="form-group col-md-12 hidden" id="metricSegment">
@@ -147,20 +157,59 @@
 </div><!-- end of div element with class="row" -->
 
 <script>
+    var customMetric = 0;
     var isPublished = 0;
     var isConsumable = 0;
     var PresetMetricData = [];
+    var StatusData = [];
+
+    var metricsTable = $('#metricSegment');
 
     // We define the li elements to parse into
     var $presetElements = '';
+    var $statusElements = '';
+
+    // Money Input Checker
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode != 46 && charCode > 31
+          && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+
+    // Status GET Method
+    var $dCTForStatus = jQuery.ajax({
+        contentType: 'application/json',
+        method: 'get',
+        url: 'http://localhost:5008/API/Status',
+    });
+    $dCTForStatus.done(function (data, textStatus, jqXHR) {
+        for (i = 0; i < data.length; i++) {
+            var liElement = "";
+            var status = data[i];
+            StatusData.push(status);
+
+            // Toss the data into the element storage variable as well
+            liElement = "<option value=" + status.statusId + ">" + status.statusName + "</option>";
+
+            $statusElements += liElement;
+        }
+        $('metricTypeInput').append($statusElements);
+
+    });
+    $dCTForStatus.fail(function (data, textStatus, jqXHR) {
+        swal("Oh no!", data.responseJSON.message, "error");
+    });
 
     // PresetMetric GET Method
-    var $dataCommunicationTracker = jQuery.ajax({
+    var $dCTForPresetMetrics = jQuery.ajax({
         contentType: 'application/json',
         method: 'get',
         url: 'http://localhost:5008/API/PresetMetrics',
     });
-    $dataCommunicationTracker.done(function (data, textStatus, jqXHR) {
+    $dCTForPresetMetrics.done(function (data, textStatus, jqXHR) {
         for (i = 0; i < data.length; i++) {
             var liElement = "";
             metric = data[i];
@@ -171,15 +220,16 @@
 
             $presetElements += liElement;
         }
+
     });
-    $dataCommunicationTracker.fail(function (data, textStatus, jqXHR) {
+    $dCTForPresetMetrics.fail(function (data, textStatus, jqXHR) {
         swal("Oh no!", data.responseJSON.message, "error");
     });
 
     var descriptionBox = $('#descriptionBox');
 
     tinymce.init({
-        selector: 'textarea',
+        selector: '.tinymceStart',
         height: 250,
         theme: 'modern',
         plugins: [
@@ -197,7 +247,10 @@
         //]
     });
 
-    var metricsTable = $('#metricSegment');
+    $('.selectpicker').selectpicker({
+        style: 'btn-info',
+        size: 3
+    });
 
     $('#publishCheck').on('click', function () {
         if (isPublished = 0) {
@@ -207,6 +260,19 @@
         }
     })
     ;
+
+    
+    $('#customUnitSwitch').on('click', function () {
+        if ($('#customMetricTypeInput').hasClass('hidden')) {
+            customMetric = 1;
+            $('#pMetricSuggest').addClass('hidden')
+            $('#customMetricTypeInput').removeClass('hidden');        
+        } else {
+            customMetric = 0;
+            $('#pMetricSuggest').removeClass('hidden')
+            $('#customMetricTypeInput').addClass('hidden');
+        }        
+    });
 
     $('#descriptionCheck').on('click', function () {
         if (descriptionBox.hasClass('hidden')) {
@@ -220,16 +286,20 @@
     $('#metricsCheck').on('click', function () {
         if (metricsTable.hasClass('hidden')) {
             metricsTable.removeClass('hidden');
-            $('#metricNameInputBox').addClass('hidden');
+            $('#metricTypeInputBox').addClass('hidden');
+            $('#stockBox').addClass('hidden');
+            $('#metricTypeInputBox').addClass('hidden');
             $('#qtyInputBox').addClass('hidden');
             $('#priceInputBox').addClass('hidden');
             $('#rrpInputBox').addClass('hidden');
+
         } else {
             metricsTable.addClass('hidden');
-            $('#metricNameInputBox').removeClass('hidden');
+            $('#metricTypeInputBox').removeClass('hidden');
             $('#qtyInputBox').removeClass('hidden');
             $('#priceInputBox').removeClass('hidden');
             $('#rrpInputBox').removeClass('hidden');
+            $('#stockBox').removeClass('hidden');
         }
     })
     ;
@@ -244,15 +314,34 @@
     ;
 
     $('#specialsCheck').on('click', function () {
-        if (specialsBox.hasClass('hidden')) {
-            specialsBox.removeClass('hidden');
+        if ($('specialsBox').hasClass('hidden')) {
+            $('specialsBox').removeClass('hidden');
         } else {
-            specialsBox.addClass('hidden');
+            $('specialsBox').addClass('hidden');
         }
     })
     ;
 
     // note that it would be a lot more proper to use CSS classes here instead of inline style
+
+    var pMetricInput = $('#pMetricSuggest').magicSuggest({
+        maxSelection: 1,
+        allowFreeEntries: false,
+        method: 'get',
+        data: 'http://localhost:5008/API/PresetMetrics',
+        dataType: 'json',
+        displayField: 'metricSubType',
+        valueField: 'pMetricId',
+        renderer: function (data) {
+            return '<div style="padding: 5px;">' +
+                //'<div style="float: left;"><img height="75px" width="75px" src="' + data.photoUrl + '" /></div>' +
+                '<div style="float: left; margin-left: 5px">' +
+                    '<div style="font-weight: bold; color: #333; font-size: 15px; line-height: 11px">' + data.metricSubType + '</div>' +
+                    '<div style="color: #999; font-size: 9px">' + data.metricType + '</div>' +
+                '</div>' +
+            '</div><div style="clear:both;"></div>'; // make sure we have closed our dom stuff
+        }
+    });
 
     var brandInput = $('#brandInput').magicSuggest({
         maxSelection: 1,
@@ -291,7 +380,7 @@
     //        '</div><div style="clear:both;"></div>'; // make sure we have closed our dom stuff
     //    }
     //});
-    
+
     // Start of Product Image Element
 
     window.$productPhotoInputElement = $('#fileInput');
@@ -338,50 +427,37 @@
     // End of Product Image Element
 
     $(document).ready(function () {
-
-        // Initialize a text box only allowing numeric inputs
-        $("#prodCodeInput").on("keypress keyup blur", function (event) {
-            $(this).val($(this).val().replace(/[^\d].+/, ""));
-            if ((event.which < 48 || event.which > 57)) {
-                event.preventDefault();
-            }
-        });
-
         // Preset Metric Row
         $("#rowBtn").click(function () {
             $("#metricsTableBody").append(
                 '<tr valign="top">' +
-                '<td name="metricNameField">' +
-                "NA" +
+                '<td name="metricAmountField">' +
+                '<input type="text" class="form-control font-bold" id="metricAmount" name="metricAmount" value="" placeholder="Metric Amount" />' +
                 '</td>' +
                 '<td name="metricTypeField">' +
-                '<select class="selectpicker" id="metricTypeInput" name="metricTypeInput">' +
-                //'<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">' +
-                //"Metric Type" + '<span class="caret"></span>' +
-                //'</button>' +
-                //'<ul class="dropdown-menu" aria-labelledby="dropdownMenu">' +
+                '<select class="form-control selectpicker" id="metricTypeInput" name="metricTypeInput" data-live-search="true">' +
                 $presetElements +
-                //'</ul>' +
                 '</select>' +
                 '</td>' +
                 '<td>' +
                 '<input type="number" min="0" pattern="[0-9]" class="form-control font-bold" id="qtyInput" name="qtyInput" value="" placeholder="Stock" />' +
                 '</td>' +
                 '<td>' +
-                '<input type="text" class="form-control font-bold" id="statusInput" name="statusInput" value="" placeholder="Status" />' +
+                '<select class="form-control selectpicker" id="statusInput" name="statusInput">' +
+                $statusElements +
+                '</select>' +
                 '</td>' +
                 '<td>' +
-                '<input type="text" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price" />' +
+                '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price" onkeypress="return isNumberKey(event)"/>' +
                 '</td>' +
                 '<td>' +
-                '<input type="text" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP" />' +
+                '<input type="text" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP" onkeypress="return isNumberKey(event)"/>' +
                 '</br><a href="javascript:void(0);" class="remRow btn btn-danger inline">Remove</a>' +
                 '</td>' +
                 '</tr>');
-            
             $('.selectpicker').selectpicker({
                 style: 'btn-info',
-                size: 4
+                size: 3
             });
         });
 
@@ -390,8 +466,8 @@
         $("#customRowBtn").click(function () {
             $("#metricsTableBody").append(
                 '<tr valign="top">' +
-                '<td name="metricNameField">' + 
-                '<input type="text" class="form-control font-bold" id="metricName" name="customFieldName" value="" placeholder="Metric Name" />' +
+                '<td name="metricAmountField">' +
+                '<input type="text" class="form-control font-bold" id="metricAmount" name="metricAmount" value="" placeholder="Metric Amount" />' +
                 '</td>' +
                 '<td name="metricTypeField">' +
                 '<input type="text" class="form-control font-bold" id="metricTypeInput" name="metricTypeInput" value="" placeholder="Metric Type" />' +
@@ -400,16 +476,23 @@
                 '<input type="number" min="0" pattern="[0-9]" class="form-control font-bold" id="qtyInput" name="qtyInput" value="" placeholder="Quantity" />' +
                 '</td>' +
                 '<td>' +
-                '<input type="text" class="form-control font-bold" id="statusInput" name="statusInput" value="" placeholder="Status" />' +
+                '<select class="form-control selectpicker" id="statusInput" name="statusInput">' +
+                $statusElements +
+                '</select>' +
                 '</td>' +
                 '<td>' +
-                '<input type="text" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price" />' +
+                '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price" onkeypress="return isNumberKey(event)"/>' +
                 '</td>' +
                 '<td>' +
-                '<input type="text" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP" />' +
+                '<input type="number" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP" onkeypress="return isNumberKey(event)"/>' +
                 '</br><a href="javascript:void(0);" class="remRow btn btn-danger inline">Remove</a>' +
                 '</td>' +
-                '</tr>');
+                '</tr>'
+                );
+            $('.selectpicker').selectpicker({
+                style: 'btn-info',
+                size: 3
+            });
         });
 
         $("#metricsTableBody").on('click', '.remRow', function () {
@@ -418,52 +501,6 @@
             // Parent = Row
             // lol
             $(this).parent().parent().remove();
-        });
-        $("#metricsTableBody").on('click', '.customMetricCheck', function () {
-            // If the row is currently based off Custom,
-            // We need to convert the columns into 
-            if ($(this).val('SI Unit')) {
-
-                // Iterate through each preset metric 
-                // and toss each preset metric into the element
-                for (i = 0; i < PresetMetricData.length; i++) {
-                    
-                }
-                
-                // New Element
-                // Toss in the prsetElement we previously created in
-                var $metricTypesCol = "<ul class=" + "dropdown-menu" + ">" +$presetElements + "</ul>";
-                
-                console.dir($(this).parent().next());
-                console.dir($(this).parent());
-
-                console.dir($(this).parent().parent().next().context.outerHTML);
-                return;
-                // Empties the next column as well
-                $(this).parent().next().empty();
-
-                // Empties the column
-                $(this).parent().empty();
-
-
-
-                $(this).parent().append($metricTypesCol);
-                
-                // Converts the button into 'Custom'
-                $(this).val('Custom');
-
-                // Let's toss in the new dropdown box we created into this column
-                $(this).parent().next().append($metricTypesCol);
-
-            } else {
-
-                // Converts the button into 'SI Unit'
-                $(this).val('SI Unit');
-
-            
-            }
-
-        
         });
     });
 
@@ -526,7 +563,7 @@
         }
 
         if ($('#metricsTableBody').hasClass('hidden')) {
-        // If there are no custom sizes or variations
+            // If there are no custom sizes or variations
             var collectedMetricName = $('metricNameInput').val();
             var collectedTIQ = $('#tiqInput').val();
             var collectedQuantity = $('#qtyInput').val();
@@ -540,7 +577,7 @@
                 collectedPrice, collectedRRP, collectedMetrics, collectedQuantity, collectedTIQ, collectedPublished, collectedConsumable);
 
         } else {
-        // If there are custom variations, we'll have to utitilize the Metrics system
+            // If there are custom variations, we'll have to utitilize the Metrics system
 
         }
 

@@ -8,6 +8,7 @@ namespace WEBA_ASSIGNMENT.Models
         public int BrandId { get; set; }
         public String BrandName { get; set; }
         public List<BrandCategory> BrandCategory { get; set; }
+        public List<BrandSpecials> BrandSpecials { get; set; }
         public int? NoOfProducts { get; set; }
         public List<Product> Products { get; set; }
         public DateTime CreatedAt { get; set; }

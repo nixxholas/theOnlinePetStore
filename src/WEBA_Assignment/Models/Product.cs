@@ -19,11 +19,9 @@ namespace WEBA_ASSIGNMENT.Models
         // of inventory a company wants to have on hand.
         public int? ThresholdInvertoryQuantity { get; set; }
         public int Published { get; set; }
-        // We don't need to have SpecialId to have a value.
-        public int? SpecialId { get; set; }
-        //Defining a Special class property to indicate that
+        //Defining a List of Special class property to indicate that
         //there is a one to one relationship with the Product entity.
-        public Specials Special { get; set; }
+        public List<ProductSpecials> Specials { get; set; }
         public int? isConsumable { get; set; }
         public Consumable Consumable { get; set; }
         public List<Metrics> Metrics { get; set; }

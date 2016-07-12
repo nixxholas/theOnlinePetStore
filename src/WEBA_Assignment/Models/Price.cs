@@ -11,6 +11,8 @@ namespace WEBA_ASSIGNMENT.Models
         public Metrics Metric { get; set; }
         public int MetricId { get; set; }
         public decimal Value { get; set; }
+        // This must be nullable incase there is an in-house brand
+        public decimal? RRP { get; set; }
         public DateTime CreatedAt { get; set; }        
         //Defining a property with a ? symbol after the DateTime datatype,
         //to tell the .NET engine's Entity Framework that, this is a Nullable property.
