@@ -386,7 +386,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CatId")
-                        .HasName("PrimaryKey_CatId");
+                        .HasName("PrimaryKey_Category_CatId");
 
                     b.HasIndex("CatName")
                         .IsUnique()
@@ -474,7 +474,13 @@ namespace WEBA_ASSIGNMENT.Migrations
 
                     b.Property<string>("DeletedById");
 
-                    b.Property<string>("MetricName")
+                    b.Property<int>("MetricAmount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("MetricAmount")
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("MetricType")
                         .IsRequired()
                         .HasColumnName("MetricName")
                         .HasColumnType("VARCHAR(200)");
@@ -499,6 +505,12 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnName("Price")
                         .HasColumnType("DECIMAL(10, 2)");
 
+                    b.Property<int>("StatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("StatusId")
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("GETDATE()");
@@ -516,6 +528,8 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.HasIndex("PMetricId");
 
                     b.HasIndex("ProdId");
+
+                    b.HasIndex("StatusId");
 
                     b.HasIndex("UpdatedById");
 
@@ -834,6 +848,25 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.ToTable("Specials");
                 });
 
+            modelBuilder.Entity("WEBA_ASSIGNMENT.Models.Status", b =>
+                {
+                    b.Property<int>("StatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("StatusId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("StatusName")
+                        .IsRequired()
+                        .HasColumnName("StatusName")
+                        .HasColumnType("VARCHAR(100)");
+
+                    b.HasKey("StatusId")
+                        .HasName("PrimaryKey_Status_StatusId");
+
+                    b.ToTable("Status");
+                });
+
             modelBuilder.Entity("WEBA_ASSIGNMENT.Models.Visibility", b =>
                 {
                     b.Property<int>("VisibilityId")
@@ -842,7 +875,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<string>("VisibilityName");
 
                     b.HasKey("VisibilityId")
-                        .HasName("PrimaryKey_VisibilityId");
+                        .HasName("PrimaryKey_Visibility_VisibilityId");
 
                     b.ToTable("Visibility");
                 });
@@ -989,6 +1022,11 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.HasOne("WEBA_ASSIGNMENT.Models.Product", "Product")
                         .WithMany("Metrics")
                         .HasForeignKey("ProdId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WEBA_ASSIGNMENT.Models.Status", "Status")
+                        .WithMany("Metrics")
+                        .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("WEBA_ASSIGNMENT.Models.ApplicationUser", "UpdatedBy")

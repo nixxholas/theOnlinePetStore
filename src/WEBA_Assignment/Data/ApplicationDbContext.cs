@@ -18,8 +18,10 @@ namespace WEBA_ASSIGNMENT.Data
     {
         public DbSet<Brands> Brands { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Status> Statuses { get; set; }
         public DbSet<Metrics> Metrics { get; set; }
         public DbSet<PresetMetric> PresetMetrics { get; set; }
+        public DbSet<Price> Prices { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductPhoto> ProductPhotos { get; set; }
         public DbSet<BrandCategory> BrandCategory { get; set; }
@@ -44,10 +46,78 @@ namespace WEBA_ASSIGNMENT.Data
 
             // Unique Constraints Enforcement undone
 
+            // ---------------- Defining Price Entity ----------------- //
+
+            modelBuilder.Entity<Price>()
+                .HasKey(input => input.PriceId)
+                .HasName("PrimaryKey_Price_PriceId");
+
+            // Provide the properties of the PriceId column
+            modelBuilder.Entity<Price>()
+                .Property(input => input.PriceId)
+                .HasColumnName("PriceId")
+                .HasColumnType("int")
+                .UseSqlServerIdentityColumn()
+                .ValueGeneratedOnAdd()
+                .IsRequired();
+
+            modelBuilder.Entity<Price>()
+                .Property(input => input.MetricId)
+                .HasColumnName("MetricId")
+                .HasColumnType("int")
+                .IsRequired();
+
+            modelBuilder.Entity<Price>()
+                .Property(input => input.Value)
+                .HasColumnName("Value")
+                .HasColumnType("money")
+                .IsRequired();
+            
+            // Two sets of Many to One relationship between User and ApplicationUser  entity (Start)
+            modelBuilder.Entity<Price>()
+             .HasOne(userClass => userClass.CreatedBy)
+             .WithMany()
+             .HasForeignKey(userClass => userClass.CreatedById)
+             .OnDelete(DeleteBehavior.Restrict)
+             .IsRequired();
+
+            modelBuilder.Entity<Price>()
+                .HasOne(userClass => userClass.DeletedBy)
+                .WithMany()
+                .HasForeignKey(userClass => userClass.DeletedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // -------------- Defining Price Entity --------------- //
+            // END.
+
+            // ---------------- Defining Status Entity ----------------- //
+
+            modelBuilder.Entity<Status>()
+                .HasKey(input => input.StatusId)
+                .HasName("PrimaryKey_Status_StatusId");
+
+            // Provide the properties of the StatusId column
+            modelBuilder.Entity<Status>()
+                .Property(input => input.StatusId)
+                .HasColumnName("StatusId")
+                .HasColumnType("int")
+                .UseSqlServerIdentityColumn()
+                .ValueGeneratedOnAdd()
+                .IsRequired();
+
+            modelBuilder.Entity<Status>()
+                .Property(input => input.StatusName)
+                .HasColumnName("StatusName")
+                .HasColumnType("VARCHAR(100)")
+                .IsRequired();
+
+            // -------------- Defining Status Entity --------------- //
+            // END.
+
             // -------------- Defining Visibility Entity --------------- //
             modelBuilder.Entity<Visibility>()
                 .HasKey(input => input.VisibilityId)
-                .HasName("PrimaryKey_VisibilityId");
+                .HasName("PrimaryKey_Visibility_VisibilityId");
 
             // -------------- Defining Visibility Entity --------------- //
             // END.
@@ -57,7 +127,7 @@ namespace WEBA_ASSIGNMENT.Data
             // Make CatId a primary key and an identity column
             modelBuilder.Entity<Category>()
                 .HasKey(input => input.CatId)
-                .HasName("PrimaryKey_CatId");
+                .HasName("PrimaryKey_Category_CatId");
 
             // Provide the properties of the CatId column
             modelBuilder.Entity<Category>()
@@ -515,7 +585,14 @@ namespace WEBA_ASSIGNMENT.Data
                 .IsRequired(false);
 
             modelBuilder.Entity<Metrics>()
-                .Property(input => input.MetricName)
+                .Property(input => input.MetricAmount)
+                .HasColumnName("MetricAmount")
+                .HasColumnType("int")
+                .HasDefaultValue(1) // Give the default a 1 if user does not implement any
+                .IsRequired(true);
+
+            modelBuilder.Entity<Metrics>()
+                .Property(input => input.MetricType)
                 .HasColumnName("MetricName")
                 .HasColumnType("VARCHAR(200)")
                 .IsRequired();
@@ -537,6 +614,13 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasColumnName("Price")
                 .HasColumnType("DECIMAL(10, 2)")
                 .IsRequired(false);
+
+            modelBuilder.Entity<Metrics>()
+                .Property(input => input.StatusId)
+                .HasColumnName("StatusId")
+                .HasColumnType("int")
+                .HasDefaultValue(0)
+                .IsRequired();
 
             modelBuilder.Entity<Metrics>()
                 .Property(input => input.CreatedAt)
@@ -561,6 +645,11 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasOne(input => input.Price)
                 .WithOne(input => input.Metric)
                 .HasForeignKey<Price>(input => input.MetricId);
+
+            modelBuilder.Entity<Metrics>()
+                .HasOne(input => input.Status)
+                .WithMany(input => input.Metrics)
+                .HasForeignKey(input => input.StatusId);
 
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<Metrics>()

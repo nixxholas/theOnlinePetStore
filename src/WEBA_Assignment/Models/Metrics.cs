@@ -14,10 +14,15 @@ namespace WEBA_ASSIGNMENT.Models
         // Link Metrics with a Preset if Needed
         public int? PMetricId { get; set; }
         public PresetMetric PresetMetric { get; set; }
+        // Custom Amount per Metric Type
+        public int MetricAmount { get; set; }
         // Custom size/metric name/type
         // For example, kilograms, tonnes or even grams
-        public String MetricName { get; set; }
+        public String MetricType { get; set; }
         public int Quantity { get; set; }
+        // Each metric has it's own status
+        public int StatusId { get; set; }
+        public Status Status { get; set; }
         // Product that is binded to this metric system
         public Product Product { get; set; }
         public int PriceId { get; set; }

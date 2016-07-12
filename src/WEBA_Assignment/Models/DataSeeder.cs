@@ -108,7 +108,34 @@ namespace WEBA_ASSIGNMENT.Models
                                                      //which also manages the many-to-many AspNetUserRoles table
                                                      //to create a relationship describing that, Fred user is an OFFICER role user
             await userManager.AddToRoleAsync(fredUser, "OFFICER");
+
+            /**
+             * DataSeeder for the Status Table
+             * 
+             * Stores all the allowed Metric Statuses
+             * 
+             * **/
+
+            Status Available, Unavailable, OutOfStock;
+
+            Available = new Status()
+            {
+                StatusName = "Available"
+            };
+            db.Statuses.Add(Available);
             
+            Unavailable = new Status()
+            {
+                StatusName = "Unavailable"
+            };
+            db.Statuses.Add(Unavailable);
+            
+            OutOfStock = new Status()
+            {
+                StatusName = "Out Of Stock"
+            };
+            db.Statuses.Add(OutOfStock);
+
             /**
              * DataSeeder for the PresetMetric Table
              * 

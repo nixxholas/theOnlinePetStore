@@ -79,6 +79,19 @@ namespace WEBA_ASSIGNMENT.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Status",
+                columns: table => new
+                {
+                    StatusId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    StatusName = table.Column<string>(type: "VARCHAR(100)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PrimaryKey_Status_StatusId", x => x.StatusId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Visibility",
                 columns: table => new
                 {
@@ -88,7 +101,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PrimaryKey_VisibilityId", x => x.VisibilityId);
+                    table.PrimaryKey("PrimaryKey_Visibility_VisibilityId", x => x.VisibilityId);
                 });
 
             migrationBuilder.CreateTable(
@@ -275,7 +288,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PrimaryKey_CatId", x => x.CatId);
+                    table.PrimaryKey("PrimaryKey_Category_CatId", x => x.CatId);
                     table.ForeignKey(
                         name: "FK_Category_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
@@ -514,12 +527,14 @@ namespace WEBA_ASSIGNMENT.Migrations
                     CreatedById = table.Column<string>(nullable: false),
                     DeletedAt = table.Column<DateTime>(nullable: true),
                     DeletedById = table.Column<string>(nullable: true),
+                    MetricAmount = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
                     MetricName = table.Column<string>(type: "VARCHAR(200)", nullable: false),
                     PMetricId = table.Column<int>(type: "int", nullable: true),
                     PriceId = table.Column<int>(type: "int", nullable: false),
                     ProdId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "DECIMAL(10, 2)", nullable: true),
+                    StatusId = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     UpdatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
                     UpdatedById = table.Column<string>(nullable: false)
                 },
@@ -549,6 +564,12 @@ namespace WEBA_ASSIGNMENT.Migrations
                         column: x => x.ProdId,
                         principalTable: "Product",
                         principalColumn: "ProdId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Metrics_Status_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Status",
+                        principalColumn: "StatusId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Metrics_AspNetUsers_UpdatedById",
@@ -789,6 +810,11 @@ namespace WEBA_ASSIGNMENT.Migrations
                 column: "ProdId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Metrics_StatusId",
+                table: "Metrics",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Metrics_UpdatedById",
                 table: "Metrics",
                 column: "UpdatedById");
@@ -934,6 +960,9 @@ namespace WEBA_ASSIGNMENT.Migrations
 
             migrationBuilder.DropTable(
                 name: "Product");
+
+            migrationBuilder.DropTable(
+                name: "Status");
 
             migrationBuilder.DropTable(
                 name: "Brands");

@@ -1,62 +1,151 @@
 ﻿<div class="row">
-    <div class="col-md-offset-2  col-md-8">
+    <div class="col-md-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="panel-title">Update Category Record</div>
-                <div class="btn-group pull-right">
-
-                </div>
+                <div class="panel-title">Update Product Record</div>
             </div>
             <div class="panel-body">
                 <form id="dataForm" role="form" class="form-horizontal">
                     <div class="form-group col-md-12">
-                        <label class="control-label  col-md-4" for="catNameInput">Category Name</label>
-
-                        <input type="text" id="catNameInput" class="form-control font-bold"
-                               maxlength="50" placeholder="Category Name" value="" pattern=".{6,}" title="Six or more characters" />
-
+                        <label class="control-label col-md-2" for="prodNameInput">Product Name</label>
+                        <div class="form-group col-md-9">
+                            <input type="text" name="prodNameInput" id="prodNameInput" class="form-control font-bold"
+                                   maxlength="50" placeholder="Product Name" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" id="metricNameInputBox">
+                        <label class="control-label col-md-2" for="metricNameInput">Metric Name</label>
+                        <div class="form-group col-md-9">
+                            <input type="text" name="metricNameInput" id="metricNameInput" class="form-control font-bold"
+                                   maxlength="50" placeholder="Unit name of Product (eg. KG)" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" id="qtyInputBox">
+                        <label class="control-label col-md-2" for="qtyInput">Quantity</label>
+                        <div class="form-group col-md-9">
+                            <input type="number" min="0" name="qtyInput" id="qtyInput" class="form-control font-bold"
+                                   maxlength="20" placeholder="Quantity" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" id="tiqInputBox">
+                        <label class="control-label col-md-2" for="tiqInput">TIQ</label>
+                        <div class="form-group col-md-10">
+                            <input type="number" min="0" name="tiqInput" id="tiqInput" class="form-control font-bold"
+                                   maxlength="20" placeholder="Threshold Inventory Quantity" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" id="priceInputBox">
+                        <label class="control-label col-md-2" for="priceInput">Price</label>
+                        <div class="form-group col-md-9">
+                            <input type="text" name="priceInput" id="priceInput" class="form-control font-bold"
+                                   maxlength="20" placeholder="Price" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" id="rrpInputBox">
+                        <label class="control-label col-md-2" for="rrpInput">RRP</label>
+                        <div class="form-group col-md-9">
+                            <input type="text" name="rrpInput" id="rrpInput" class="form-control font-bold"
+                                   maxlength="20" placeholder="Recommended Retail Price" value="" />
+                        </div>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="control-label  col-md-4" for="visibilityInput">Visibility</label>
-                        <div id="visibilityRadioList"></div>
-                    </div>
-                    <div class="form-group col-md-12 hidden" id="startDateSegment">
-                        <label class="control-label col-md-4" for="startDateInput">Start Date</label>
-                        <div id="jqxStartDate" name="jqxStartDate"></div>
-                    </div>
-                    <div class="form-group col-md-12 hidden" id="endDateSegment">
-                        <label class="control-label col-md-4" for="endDateInput">End Date</label>
-                        <div id="jqxEndDate" name="jqxEndDate"></div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <div class="col-md-12">
-                            <div class="pull-left">
-                                <input type="button" class="btn btn-primary btn-danger" value="Delete" id="deleteButton" />
-                            </div>
-                            <div class="pull-right">
-                                <input type="button" class="btn btn-primary" value="Save" id="saveButton" />
-                                <a class="btn btn-default" asp-action="Index" asp-controller="Categories">Cancel</a>
+                        <label class="control-label col-md-2 photoUploadMarginFixProducts" for="brandInput">Brand</label>
+                        <div class="col-md-5">
+                            <div id="brandInput" class="form-group">
+
                             </div>
                         </div>
                     </div>
-                </form>
-            </div><!-- end of div element which has the class="panel-body" -->
-        </div><!-- end of the div element which has the class="panel" -->
-    </div><!-- end of the div element which as the  class="col-md-offset-2 col-sm-8"-->
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-2 photoUploadMarginFixProducts" for="fileInput">Photo</label>
+                        <div class="col-md-9">
+                            <input id="fileInput" name="fileInput" type="file" class="file input-group-lg" multiple />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-2" for="productProperties">Properties</label>
+                        <div id="checkboxContainer" class="col-md-10">
+                            <div class="ui slider checkbox">
+                                <input type="checkbox" id="publishCheck">
+                                <label>Publish product upon save</label>
+                            </div><br>
+                            <div class="ui slider checkbox">
+                                <input type="checkbox" id="descriptionCheck">
+                                <label>Product has a description</label>
+                            </div><br>
+                            <div class="ui slider checkbox">
+                                <!-- A Product does not need to comply with the metrics system.
+                                In such cases, we'll be creating a row within metrics without
+                                any properties and just throw in it's price into the row. -->
+                                <input type="checkbox" id="metricsCheck">
+                                <label>Product has many variations</label>
+                            </div><br>
+                            <div class="ui slider checkbox">
+                                <input type="checkbox" id="consumableCheck">
+                                <label>Product is a consumable</label>
+                            </div><br>
+                            <div class="ui slider checkbox">
+                                <input type="checkbox" id="specialsCheck">
+                                <label>Product has a special promotion</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 hidden" id="descriptionBox">
+                        <label class="control-label col-md-2" for="descBox">Description</label>
+                        <div class="form-group col-md-9">
+                            <textarea name="descriptionBox" id="descriptionBox"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 hidden" id="metricSegment">
+                        <label class="control-label col-md-1" for="dataTable">Metrics</label>
+                        <div class="col-md-11">
+                            <table id="dataTable" class="table table-hover">
+                                <div id="rowBtn" class="pull-right big ui secondary button">
+                                    New Row
+                                </div>
+                                <thead>
+                                    <tr>
+                                        <th>Metrics Name</th>
+                                        <th>Metric Type</th>
+                                        <th>Quantity</th>
+                                        <th>Status</th>
+                                        <th>Price per type</th>
+                                        <th>RRP</th> <!-- Recommended Retail Price -->
+                                        <th>&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="metricsTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12 hidden" id="specialsBox">
+                        <label class="control-label col-md-2 photoUploadMarginFixProducts" for="specialInput">Specials</label>
+                        <div class="col-md-6">
+                            <div id="specialInput" class="form-group">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-1"></label>
+                        <div class="col-md-10">
+                            <div class="pull-right">
+                                <input type="button" class="btn btn-primary" value="Save" id="saveButton" />
+                                <a class="btn btn-default" asp-action="Index" asp-controler="Products">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            </form>
+        </div><!-- end of div element which has the class="panel-body" -->
+    </div><!-- end of the div element which has the class="panel" -->
+</div><!-- end of the div element which as the  class="col-md-offset-2 col-sm-8"-->
 </div><!-- end of div element with class="row" -->
 
 
 <script>
-    $("#jqxStartDate").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'dd/MM/yyyy', animationType: 'fade', min: new Date() });
-    $("#jqxEndDate").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'dd/MM/yyyy', animationType: 'fade', min: new Date() });
-    var startDateInput;
-    var endDateInput;
-    $('#jqxStartDate').on('change', function (event) {
-        startDateInput = event.args.date;
-    });
-    $('#jqxEndDate').on('change', function (event) {
-        endDateInput = event.args.date;
-    });
+    getProductDetails()
 
     //Declare a document scope variable, g_catId.
     //A document scope variable value can be accessed anywhere in the web page during the
@@ -66,99 +155,47 @@
     //which will be extracted from the address bar.
     //The variable will be used in the first Ajax() call, to retrieve JSON structured
     //information about the student
-    var g_catId = getCatIdFromAddressBar();
-    function getCatIdFromAddressBar() {
+    var g_prodId = getProdIdFromAddressBar();
+    function getProdIdFromAddressBar() {
         //Get studentId from the url string in the browser's address bar
         var urlArray = window.location.href.split('/');
-        var catId = urlArray[urlArray.length - 1];
-        return catId;
+        var prodId = urlArray[urlArray.length - 1];
+        return prodId;
     };
 
-    var $dataCommunicationTracker = jQuery.ajax({
-        contentType: 'application/json',
-        method: 'get',
-        url: 'http://localhost:5008/API/Visibility/GetAllVisibilities',
-    });
-
-    /**
-        So now, we will have to throw in all of the elements into
-        the dropdown box
-    **/
-    $dataCommunicationTracker.done(function (data, textStatus, jqXHR) {
-        // Like the previous cshtml, let's define a variable for
-        // the visibilityRadioList box
-        var $visibilityRadioListElement = $('#visibilityRadioList');
-        // We then initialize the element container
-        // for each element
-        var $optionElement = null;
-
-        // Then we implement a for loop to make things dynamic
-        // for each visibility in the array called data
-        for (index = 0; index < data.length; index++) {
-            // We first define the course from the data array
-            oneVisibility = data[index];
-            // Then we put it into the element container
-            $optionElement = $('<input type="radio" name="Visibility" onClick="checkRadio()" value="'
-                + oneVisibility.visibilityId + '"/>' + '<span>' + oneVisibility.visibilityName + '&nbsp;&nbsp;&nbsp;' + '</span>');
-            // Then we add the element into the visibilityRadioList radio box
-            $visibilityRadioListElement.append($optionElement);
-        }
-        getCategoryDetails();
-    });
-
-    $dataCommunicationTracker.fail(function (data, textStatus, jqXHR) {
-        swal("Oh no!", data.responseJSON.message, "error");
-    });
-
-    function checkRadio() {
-        if ($('input[name="Visibility"]:checked').val() == 3) {
-            $("#startDateSegment").removeClass('hidden');
-            $("#endDateSegment").removeClass('hidden');
-        } else {
-            $("#startDateSegment").addClass('hidden');
-            $("#endDateSegment").addClass('hidden');
-        }
-
-    }
-
-    function getCategoryDetails() {
-        $loadCategoryHandler = jQuery.ajax({
+    function getProductDetails() {
+        $loadProductHandler = jQuery.ajax({
             type: 'GET',
-            url: '/API/Categories/' + g_catId,
+            url: '/API/Products/' + g_prodId,
             dataType: 'json',
             cache: false,
         })
-        $loadCategoryHandler.done(function (data, textStatus, jqXHR) {
-            var category = data;
-            //Copy out the student information
-            var catId = category.catId;
-            var catName = category.catName;
-            var visibilityId = category.visibilityId;
-            var startDate = category.startDate; // Format: yyyy-mm-dd
-            var endDate = category.endDate;
-            startDateInput = startDate;
-            endDateInput = endDate;
+        $loadProductHandler.done(function (data, textStatus, jqXHR) {
+            var product = data;
+            console.dir(product);
+            return;
+            //Copy out the product information
+            var ProdName = product.prodName;
+            var Description = product.description;
+            var BrandId = product.brand.brandId;
+            var Brand = product.brand;
+            var Quantity = product.quantity; 
+            var TiQ = product.thresholdInventoryQuantity;
+            var Metrics = product.metrics;
+            var ProductPhotos = product.productPhotos;
+            var isConsumable = product.isConsumable;
+            var Published = product.published;
+            var Special = product.special;
+
             //Populate the respective input controls with the user details.
             //For example, find the text input control, catNameInput and set the text input control
             //'s value with the catName variable's content.
-            $('#catNameInput').val(catName);
-            var elements = document.getElementsByName('Visibility');
-            for (i = 0; i < elements.length; i++) {
-                if (elements[i].value == visibilityId) {
-                    elements[i].checked = true;
-                }
-            }
-            checkRadio();
-            // Should we not include this if statement, the user will be able to notice
-            // an "Invalid date" String should they change the visibility to include
-            // a Start Date and End Date
-            if (startDate != null && endDate != null) {
-                $('input[name="jqxStartDate"]').val(moment(startDate).format("DD/MM/YYYY"));
-                $('input[name="jqxEndDate"]').val(moment(endDate).format("DD/MM/YYYY"));
-            }
+            $('#prodNameInput').val(ProdName);
+
+
         })//end of the done() method;
-        $loadCategoryHandler.fail(function (data, textStatus, jqXHR) {
-            swal("Oh no!", "The category failed to load!", "error");
+        $loadProductHandler.fail(function (data, textStatus, jqXHR) {
+            swal("Oh no!", "The product failed to load!", "error");
         });//end of $loadCategoryHandler.error()
     }//end of getCategoryDetails();
 

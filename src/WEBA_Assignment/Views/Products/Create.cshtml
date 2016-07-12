@@ -100,12 +100,15 @@
                         <label class="control-label col-md-1" for="dataTable">Metrics</label>
                         <div class="col-md-11">
                             <table id="dataTable" class="table table-hover">
+                                <div id="customRowBtn" class="pull-right big ui secondary button">
+                                    New Custom Row
+                                </div>
                                 <div id="rowBtn" class="pull-right big ui secondary button">
                                     New Row
                                 </div>
                                 <thead>
                                     <tr>
-                                        <th>Metrics Name</th>
+                                        <th>Metric Amount</th>
                                         <th>Metric Type</th>
                                         <th>Quantity</th>
                                         <th>Status</th>
@@ -147,7 +150,10 @@
     var isPublished = 0;
     var isConsumable = 0;
     var PresetMetricData = [];
-    
+
+    // We define the li elements to parse into
+    var $presetElements = '';
+
     // PresetMetric GET Method
     var $dataCommunicationTracker = jQuery.ajax({
         contentType: 'application/json',
@@ -156,8 +162,14 @@
     });
     $dataCommunicationTracker.done(function (data, textStatus, jqXHR) {
         for (i = 0; i < data.length; i++) {
+            var liElement = "";
             metric = data[i];
             PresetMetricData.push(metric);
+
+            // Toss the data into the element storage variable as well
+            liElement = "<option value=" + metric.pMetricId + ">" + metric.metricSubType + "</option>";
+
+            $presetElements += liElement;
         }
     });
     $dataCommunicationTracker.fail(function (data, textStatus, jqXHR) {
@@ -179,10 +191,10 @@
         toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
         toolbar2: 'print preview media | forecolor backcolor emoticons',
         image_advtab: true,
-        content_css: [
-          '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-          '//www.tinymce.com/css/codepen.min.css'
-        ]
+        //content_css: [
+        //  '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+        //  '//www.tinymce.com/css/codepen.min.css'
+        //]
     });
 
     var metricsTable = $('#metricSegment');
@@ -265,7 +277,7 @@
     //    maxSelection: 1,
     //    allowFreeEntries: false,
     //    method: 'get',
-    //    data: 'http://localhost:5008/API/',
+    //    data: 'http://localhost:5008/API/Specials',
     //    dataType: 'json',
     //    displayField: 'brandName',
     //    valueField: 'brandId',
@@ -335,15 +347,53 @@
             }
         });
 
+        // Preset Metric Row
         $("#rowBtn").click(function () {
             $("#metricsTableBody").append(
                 '<tr valign="top">' +
-                '<td>' + 
-                '<input type="text" class="form-control font-bold" id="metricName" name="customFieldName" value="" placeholder="Metric Name" />' +
-                '</br><div class="ui slider checkbox"><input type="checkbox" id="customMetricCheck">' +
-                '<label>Custom</label></div>' +
+                '<td name="metricNameField">' +
+                "NA" +
                 '</td>' +
-                '<td> ' +
+                '<td name="metricTypeField">' +
+                '<select class="selectpicker" id="metricTypeInput" name="metricTypeInput">' +
+                //'<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">' +
+                //"Metric Type" + '<span class="caret"></span>' +
+                //'</button>' +
+                //'<ul class="dropdown-menu" aria-labelledby="dropdownMenu">' +
+                $presetElements +
+                //'</ul>' +
+                '</select>' +
+                '</td>' +
+                '<td>' +
+                '<input type="number" min="0" pattern="[0-9]" class="form-control font-bold" id="qtyInput" name="qtyInput" value="" placeholder="Stock" />' +
+                '</td>' +
+                '<td>' +
+                '<input type="text" class="form-control font-bold" id="statusInput" name="statusInput" value="" placeholder="Status" />' +
+                '</td>' +
+                '<td>' +
+                '<input type="text" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price" />' +
+                '</td>' +
+                '<td>' +
+                '<input type="text" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP" />' +
+                '</br><a href="javascript:void(0);" class="remRow btn btn-danger inline">Remove</a>' +
+                '</td>' +
+                '</tr>');
+            
+            $('.selectpicker').selectpicker({
+                style: 'btn-info',
+                size: 4
+            });
+        });
+
+
+        // Custom Metric Row
+        $("#customRowBtn").click(function () {
+            $("#metricsTableBody").append(
+                '<tr valign="top">' +
+                '<td name="metricNameField">' + 
+                '<input type="text" class="form-control font-bold" id="metricName" name="customFieldName" value="" placeholder="Metric Name" />' +
+                '</td>' +
+                '<td name="metricTypeField">' +
                 '<input type="text" class="form-control font-bold" id="metricTypeInput" name="metricTypeInput" value="" placeholder="Metric Type" />' +
                 '</td>' +
                 '<td>' +
@@ -361,16 +411,67 @@
                 '</td>' +
                 '</tr>');
         });
+
         $("#metricsTableBody").on('click', '.remRow', function () {
+            // This = Button
+            // Parent = Column
+            // Parent = Row
+            // lol
             $(this).parent().parent().remove();
         });
         $("#metricsTableBody").on('click', '.customMetricCheck', function () {
-            // We need to switch this to a custom box if the user wants to
-            $(this).parent().parent().remove();
+            // If the row is currently based off Custom,
+            // We need to convert the columns into 
+            if ($(this).val('SI Unit')) {
+
+                // Iterate through each preset metric 
+                // and toss each preset metric into the element
+                for (i = 0; i < PresetMetricData.length; i++) {
+                    
+                }
+                
+                // New Element
+                // Toss in the prsetElement we previously created in
+                var $metricTypesCol = "<ul class=" + "dropdown-menu" + ">" +$presetElements + "</ul>";
+                
+                console.dir($(this).parent().next());
+                console.dir($(this).parent());
+
+                console.dir($(this).parent().parent().next().context.outerHTML);
+                return;
+                // Empties the next column as well
+                $(this).parent().next().empty();
+
+                // Empties the column
+                $(this).parent().empty();
+
+
+
+                $(this).parent().append($metricTypesCol);
+                
+                // Converts the button into 'Custom'
+                $(this).val('Custom');
+
+                // Let's toss in the new dropdown box we created into this column
+                $(this).parent().next().append($metricTypesCol);
+
+            } else {
+
+                // Converts the button into 'SI Unit'
+                $(this).val('SI Unit');
+
+            
+            }
+
+        
         });
     });
 
     // Function Constructor for creating a metrics object
+    function Metric(inMetricName, inQuantity, inPrice, inRRP) {
+
+
+    }
 
     //Using a function technique to create a JavaScript class, WebFormData
     function WebFormData(inProdName, inBrandId, inDescription, inPrice, inRRP, inMetrics, inQuantity, inTiQ, inPublished, inIsConsumable) {

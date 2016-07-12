@@ -78,8 +78,8 @@ namespace WEBA_ASSIGNMENT.APIs
                     ProdName = oneProduct.ProdName,
                     Brand = oneProduct.Brand,
                     BrandName = oneProduct.Brand.BrandName,
-                    // Save this for later
-                    // PhotoUrl = oneProduct.ProductPhotos.Url,
+                    Description = oneProduct.Description,
+                    Metrics = oneProduct.Metrics,
                     TiS = oneProduct.ThresholdInvertoryQuantity,
                     Quantity = getTotalQuantity(oneProduct.Metrics),
                     Published = oneProduct.Published,
@@ -104,6 +104,7 @@ namespace WEBA_ASSIGNMENT.APIs
         }
 
         // GET ProductsUnderBrand
+        // Not going to do this for now.
         // Takes in an integer as a Category Id
         [HttpGet("GetProductsUnderBrand/{id}")]
         public JsonResult ProductsUnderCategory(int id)
@@ -147,12 +148,36 @@ namespace WEBA_ASSIGNMENT.APIs
             {
                 var foundProduct = Database.Products
                      .Where(eachProduct => eachProduct.ProdId == id)
+                     .Include(eachProduct => eachProduct.Brand)
+                     .Include(eachProduct => eachProduct.Metrics)
                      .Include(eachProduct => eachProduct.ProductPhotos).Single();
+
+                // Not yet implemented
+                if (foundProduct.isConsumable != 0)
+                {
+                    // var foundConsumable = Database.
+                }
+
+                int quantity = 0;
+
+                foreach (Metrics metric in foundProduct.Metrics)
+                {
+                    quantity += metric.Quantity;
+                }
+
                 var response = new
                 {
                     ProdId = foundProduct.ProdId,
                     ProdName = foundProduct.ProdName,
-                    ProductPhotos = foundProduct.ProductPhotos
+                    Description = foundProduct.Description,
+                    Brand = foundProduct.Brand,
+                    ThresholdInventoryQuantity = foundProduct.ThresholdInvertoryQuantity,
+                    Quantity = quantity,
+                    Metrics = foundProduct.Metrics,
+                    ProductPhotos = foundProduct.ProductPhotos,
+                    isConsumable = foundProduct.isConsumable,
+                    Specials = foundProduct.Special,
+                    Published = foundProduct.Published,
                 };//end of creation of the response object
 
                 return new JsonResult(response);
@@ -163,7 +188,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 //This anonymous object only has one Message property 
                 //which contains a simple string message
                 object httpFailRequestResultMessage =
-                                    new { Message = "Unable to obtain Category information." };
+                                            new { Message = "Unable to obtain Category information." };
                 //Return a bad http response message to the client
                 return BadRequest(httpFailRequestResultMessage);
             }
@@ -191,10 +216,10 @@ namespace WEBA_ASSIGNMENT.APIs
                 {
                     Brand.NoOfProducts += 1;
                 }
+                // Time to update
+                Database.Brands.Update(Brand);
             }
 
-            // Update the table and save it with the Database
-            Database.Update(allBrands);
             Database.SaveChanges();
         }
 
@@ -260,7 +285,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 //Copy out all the products data into the new Product instance,
                 //newProduct.
                 newProduct.ProdName = productNewInput.ProdName.Value;
-                
+
                 // Description
                 if (productNewInput.Description.Value != null)
                 {
@@ -286,7 +311,7 @@ namespace WEBA_ASSIGNMENT.APIs
                     foreach (var Metric in productNewInput.Metrics)
                     {
                         Metrics metric = new Metrics();
-                        metric.MetricName = Metric.MetricName.Value;
+                        metric.MetricType = Metric.MetricType.Value;
                         metric.Quantity = Int32.Parse(Metric.Quantity.Value);
                         metric.RRP = Decimal.Parse(Metric.RRP);
                         metric.CreatedById = _userManager.GetUserId(User);
@@ -297,7 +322,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         }
                     }
                 }
-                
+
                 //I cannot save the products information into database yet. The 
                 //UploadProductPhotosAndSaveProductData has logic to upload the binary file to
                 //Cloudinary first, then it will save products data into the database.
@@ -417,7 +442,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 //newProduct.
                 productToBeUpdated.ProdId = id;
                 productToBeUpdated.ProdName = productChangeInput.ProdName.Value;
-                
+
 
                 //Saved it into a Session variable
                 HttpContext.Session.SetObjectAsJson("Products", productToBeUpdated);
@@ -590,7 +615,7 @@ namespace WEBA_ASSIGNMENT.APIs
             newProduct.UpdatedById = _userManager.GetUserId(User);
 
             Database.Products.Add(newProduct);
-            
+
             //Add the Product record first, so that the newProduct
             //object's ProdId property is updated with the new record's
             //id.
@@ -612,11 +637,11 @@ namespace WEBA_ASSIGNMENT.APIs
                     //newProductPhotos. 
                     newProductPhoto.ProdId = newProduct.ProdId;
                     newProductPhoto.CreatedById = _userManager.GetUserId(User);
-                   
+
                     Database.ProductPhotos.Add(newProductPhoto);
                 }
             }
-            
+
             Database.SaveChanges();
 
             //computeProductsPerBrand();

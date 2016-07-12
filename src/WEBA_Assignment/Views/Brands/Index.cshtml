@@ -56,11 +56,7 @@
         }//end of JavaScript anonymous function
           )//end of the done() method;
     $loadBrandCategoryDataHandler.fail(function (data, textStatus, jqXHR) {
-            noty({
-                text: 'Ajax fail fired : ' + data.responseJSON.Message, type: 'error',
-                layout: 'center',
-                template: '<div class="noty_message"><span class="noty_text"></span>'
-            });//end of noty()
+        swal();
     })//end of $loadBrandCategoryDataHandler.fail()
 
     function loadBrandsData() {
