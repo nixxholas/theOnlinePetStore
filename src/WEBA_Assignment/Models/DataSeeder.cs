@@ -202,7 +202,7 @@ namespace WEBA_ASSIGNMENT.Models
 
             Milligrams = new PresetMetric()
             {
-                MetricType = "Length",
+                MetricType = "Mass",
                 MetricSubType = "Milligrams",
                 MetricCharacter = "mg"
             };
@@ -210,7 +210,7 @@ namespace WEBA_ASSIGNMENT.Models
 
             Grams = new PresetMetric()
             {
-                MetricType = "Length",
+                MetricType = "Mass",
                 MetricSubType = "Grams",
                 MetricCharacter = "g"
             };
@@ -218,7 +218,7 @@ namespace WEBA_ASSIGNMENT.Models
 
             Kilograms = new PresetMetric()
             {
-                MetricType = "Length",
+                MetricType = "Mass",
                 MetricSubType = "Kilograms",
                 MetricCharacter = "kg"
             };
@@ -226,7 +226,7 @@ namespace WEBA_ASSIGNMENT.Models
 
             Millilitres = new PresetMetric()
             {
-                MetricType = "Length",
+                MetricType = "Volume",
                 MetricSubType = "Millilitres",
                 MetricCharacter = "ml"
             };
@@ -234,7 +234,7 @@ namespace WEBA_ASSIGNMENT.Models
 
             Litres = new PresetMetric()
             {
-                MetricType = "Length",
+                MetricType = "Volume",
                 MetricSubType = "Litres",
                 MetricCharacter = "l"
             };

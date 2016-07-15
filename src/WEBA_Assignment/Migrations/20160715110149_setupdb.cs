@@ -514,7 +514,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     CreatedById = table.Column<string>(nullable: false),
                     DeletedAt = table.Column<DateTime>(nullable: true),
                     DeletedById = table.Column<string>(nullable: true),
-                    MetricAmount = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    MetricAmount = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     MetricName = table.Column<string>(type: "VARCHAR(200)", nullable: false),
                     PMetricId = table.Column<int>(type: "int", nullable: true),
                     PriceId = table.Column<int>(type: "int", nullable: false),

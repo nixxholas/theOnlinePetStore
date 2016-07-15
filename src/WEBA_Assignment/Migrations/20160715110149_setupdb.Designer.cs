@@ -8,7 +8,7 @@ using WEBA_ASSIGNMENT.Data;
 namespace WEBA_ASSIGNMENT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160712115312_setupdb")]
+    [Migration("20160715110149_setupdb")]
     partial class setupdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -483,7 +483,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("MetricAmount")
                         .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasDefaultValue(0);
 
                     b.Property<string>("MetricType")
                         .IsRequired()

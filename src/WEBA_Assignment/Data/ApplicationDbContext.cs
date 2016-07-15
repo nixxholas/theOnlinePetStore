@@ -35,7 +35,7 @@ namespace WEBA_ASSIGNMENT.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=nixh\SQLEXPRESS;database=WEBA_ASSIGNMENTDB;Trusted_Connection=True;MultipleActiveResultSets=True");
+            optionsBuilder.UseSqlServer(@"Server=nixholas\SQLEXPRESS;database=WEBA_ASSIGNMENTDB;Trusted_Connection=True;MultipleActiveResultSets=True");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -594,8 +594,9 @@ namespace WEBA_ASSIGNMENT.Data
                 .Property(input => input.MetricAmount)
                 .HasColumnName("MetricAmount")
                 .HasColumnType("int")
-                .HasDefaultValue(1) // Give the default a 1 if user does not implement any
-                .IsRequired(true);
+                // 0 Shows that the user entered nothing
+                .HasDefaultValue(0) // Give the default a 1 if user does not implement any
+                .IsRequired();
 
             modelBuilder.Entity<Metrics>()
                 .Property(input => input.MetricType)

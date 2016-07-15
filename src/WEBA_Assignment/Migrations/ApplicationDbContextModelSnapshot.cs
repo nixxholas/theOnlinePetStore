@@ -482,7 +482,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("MetricAmount")
                         .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasDefaultValue(0);
 
                     b.Property<string>("MetricType")
                         .IsRequired()
