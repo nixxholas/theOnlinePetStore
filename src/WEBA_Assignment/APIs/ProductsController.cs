@@ -196,6 +196,7 @@ namespace WEBA_ASSIGNMENT.APIs
         }
 
         /**
+         * 
          * A method to enable the server to
          * compute the amount of products within a brand
          * 
@@ -292,7 +293,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 newProduct.Metrics = new List<Metrics>();
                               
                 // If we're not creating alot of metrics
-                if (productNewInput.Metrics.Value = null)
+                if (productNewInput.Metrics.Value == null)
                 {
                     // If the only metric is actually from a preset metric
                     if (productNewInput.customMetricType.Value == null)
@@ -302,11 +303,11 @@ namespace WEBA_ASSIGNMENT.APIs
                             .Where(input => input.PMetricId == id).Single();
                         Metrics newMetric = new Metrics();
                         newMetric.ProdId = newProduct.ProdId;
-                        newMetric.MetricAmount = productNewInput.MetricAmount.Value;
+                        newMetric.MetricAmount = Int32.Parse(productNewInput.MetricAmount.Value);
                         newMetric.MetricType = presetMetricUsed.MetricType;
-                        newMetric.PMetricId = id;
+                        newMetric.PMetricId = id; // Only for Preset Metrics
                         newMetric.Quantity = Int32.Parse(productNewInput.Quantity.Value);
-                        //newMetric.Status undone
+                        newMetric.StatusId = Int32.Parse(productNewInput.Status.Value);
                         newMetric.CreatedById = _userManager.GetUserId(User);
                         newMetric.UpdatedById = _userManager.GetUserId(User);
 
@@ -316,20 +317,45 @@ namespace WEBA_ASSIGNMENT.APIs
                         Price price = new Price();
                         price.MetricId = newMetric.MetricId;
                         // Have not converted to decimal yet
-                        price.RRP = productNewInput.RRP.Value;
-                        price.Value = productNewInput.Price.Value;
+                        price.RRP = Convert.ToDecimal(productNewInput.RRP.Value);
+                        price.Value = Convert.ToDecimal(productNewInput.Price.Value);
                         price.CreatedById = _userManager.GetUserId(User);
 
                         Database.Prices.Add(price);
                     } else
                     // Else, it'll be a custom preset metric
                     {
+                        // Time to construct a custom metric
+                        Metrics newMetric = new Metrics();
+                        newMetric.ProdId = newProduct.ProdId;
+                        newMetric.MetricAmount = productNewInput.MetricAmount.Value;
+                        newMetric.MetricType = productNewInput.customMetricType.Value;
+                        newMetric.Quantity = Int32.Parse(productNewInput.Quantity.Value);
+                        newMetric.StatusId = Int32.Parse(productNewInput.StatusId.Value);
+                        newMetric.CreatedById = _userManager.GetUserId(User);
+                        newMetric.UpdatedById = _userManager.GetUserId(User);
+
+                        // Add the new metric into the DbSet
+                        Database.Metrics.Add(newMetric);
+
+                        Price price = new Price();
+                        price.MetricId = newMetric.MetricId;
+                        // Have not converted to decimal yet
+                        price.RRP = Convert.ToDecimal(productNewInput.RRP.Value);
+                        price.Value = Convert.ToDecimal(productNewInput.Price.Value);
+                        price.CreatedById = _userManager.GetUserId(User);
+
+                        Database.Prices.Add(price);
 
                     }
 
                     // Since we're creating alot of metrics
                 } else {
+                    // Iterate through the metric list
+                    foreach (var Metric in productNewInput.Metrics)
+                    {
 
+                    }
                 }
 
                 // Description

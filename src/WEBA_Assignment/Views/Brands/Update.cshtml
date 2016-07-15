@@ -80,7 +80,7 @@
 
           )//end of the done() method;
     $loadSelectedCategoriesDataHandler.fail(function (data, textStatus, jqXHR) {
-        swal("Oh no!", data.responseJSON.message, "error");
+        swal("Oh no!", data.response.message, "error");
     })//end of $loadBrandDataHandler.fail()
 
     //Note: jQuery.ajax(..) is also often written is $.ajax(..)
@@ -154,7 +154,7 @@
                       //select a new file.
                       var form = data.form, files = data.files, extra = data.extra,
                       response = data.response, reader = data.reader;
-                      swal("Hurray!", data.responseJSON.message, "Success");
+                      swal("Hurray!", data.response.message, "Success");
                       var newImageUrl = data.jqXHR.responseJSON.NewImageUrl;
                       $('#currentPhotoImage').attr('src', newImageUrl);
                   });
@@ -201,11 +201,11 @@
                     //Using this command will get the FileUpload widget to begin upload
                     window.$brandPhotoInputElement.fileinput('upload');
                 } else {
-                    swal("Hurray!", data.responseJSON.message, "success");
+                    swal("Hurray!", data.response.message, "success");
                 }
             });
             $saveBrandHandler.fail(function (data, textStatus, jqXHR) {
-                swal("Oh no!", data.responseJSON.message, "error");
+                swal("Oh no!", data.response.message, "error");
             });
         }//end of if (numberOfFiles>0) condition block
 
@@ -220,7 +220,7 @@
                 swal("Hurray!", "Your amazing brand has been updated!", "success");
             });
             $saveBrandHandler.fail(function (data, textStatus, jqXHR) {
-                swal("Oh no!", data.responseJSON.message, "error");
+                swal("Oh no!", data.response.message, "error");
             });
 
         }//end of if (numberOfFiles==0) condition block

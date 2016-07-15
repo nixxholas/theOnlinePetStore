@@ -41,5 +41,8 @@ namespace WEBA_ASSIGNMENT.Models
         //Defining a property with a ? symbol after the DateTime datatype,
         //to tell the .NET engine's Entity Framework that, this is a Nullable property.
         public DateTime? DeletedAt { get; set; }
+        // Even though status is defined for each metric, we still need to have one
+        // for each product in case the user wants the entire product's status unavailable
+        // However, this is rectified through is published.
     }
 }

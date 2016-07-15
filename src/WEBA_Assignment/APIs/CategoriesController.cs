@@ -49,7 +49,6 @@ namespace WEBA_ASSIGNMENT.APIs
         {
             List<object> categoryList = new List<object>();
             var categories = Database.Categories
-                 .Where(category => category.DeletedAt == null)
                  .Include(input => input.Visibility)
                                  .Include(eachUser => eachUser.CreatedBy)
                                  .Include(eachUser => eachUser.UpdatedBy);
@@ -118,7 +117,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 //newcategory.
                 newCategory.CatName = categoryNewInput.CatName.Value;
                 newCategory.VisibilityId = Int32.Parse(categoryNewInput.VisibilityId.Value);
-                if (newCategory.VisibilityId == 3)
+                if (newCategory.VisibilityId == 2)
                 {
                     newCategory.StartDate = DateTime.ParseExact(categoryNewInput.StartDate.Value, format, System.Globalization.CultureInfo.InvariantCulture);
                     newCategory.EndDate = DateTime.ParseExact(categoryNewInput.EndDate.Value, format, System.Globalization.CultureInfo.InvariantCulture);
@@ -208,7 +207,7 @@ namespace WEBA_ASSIGNMENT.APIs
                                     .Single(item => item.CatId == id);
                 foundOneCategory.CatName = categoryChangeInput.CatName;
                 foundOneCategory.VisibilityId = categoryChangeInput.VisibilityId;
-                if (foundOneCategory.VisibilityId == 3)
+                if (foundOneCategory.VisibilityId == 2)
                 {
                     foundOneCategory.StartDate = DateTime.ParseExact(categoryChangeInput.StartDate.Value, format, System.Globalization.CultureInfo.InvariantCulture);
                     foundOneCategory.EndDate = DateTime.ParseExact(categoryChangeInput.EndDate.Value, format, System.Globalization.CultureInfo.InvariantCulture);

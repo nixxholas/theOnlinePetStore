@@ -58,6 +58,56 @@
         endDateInput = event.args.date;
     });
 
+    jQuery(function () {
+        jQuery("#catNameInput").validate({
+            expression: "if (VAL) return true; else return false;",
+            message: "Please enter a category name."
+        });
+        jQuery("#ValidNumber").validate({
+            expression: "if (!isNaN(VAL) && VAL) return true; else return false;",
+            message: "Please enter a valid number"
+        });
+        jQuery("#ValidInteger").validate({
+            expression: "if (VAL.match(/^[0-9]*$/) && VAL) return true; else return false;",
+            message: "Please enter a valid integer"
+        });
+        jQuery("#ValidDate").validate({
+            expression: "if (!isValidDate(parseInt(VAL.split('-')[2]), parseInt(VAL.split('-')[0]), parseInt(VAL.split('-')[1]))) return false; else return true;",
+            message: "Please enter a valid Date"
+        });
+        jQuery("#ValidEmail").validate({
+            expression: "if (VAL.match(/^[^\\W][a-zA-Z0-9\\_\\-\\.]+([a-zA-Z0-9\\_\\-\\.]+)*\\[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*\\.[a-zA-Z]{2,4}$/)) return true; else return false;",
+            message: "Please enter a valid Email ID"
+        });
+        jQuery("#ValidPassword").validate({
+            expression: "if (VAL.length > 5 && VAL) return true; else return false;",
+            message: "Please enter a valid Password"
+        });
+        jQuery("#ValidConfirmPassword").validate({
+            expression: "if ((VAL == jQuery('#ValidPassword').val()) && VAL) return true; else return false;",
+            message: "Confirm password field doesn't match the password field"
+        });
+        jQuery("#ValidSelection").validate({
+            expression: "if (VAL != '0') return true; else return false;",
+            message: "Please make a selection"
+        });
+        jQuery("#ValidMultiSelection").validate({
+            expression: "if (VAL) return true; else return false;",
+            message: "Please make a selection"
+        });
+        jQuery("#ValidRadio").validate({
+            expression: "if (isChecked(SelfID)) return true; else return false;",
+            message: "Please select a radio button"
+        });
+        jQuery("#ValidCheckbox").validate({
+            expression: "if (isChecked(SelfID)) return true; else return false;",
+            message: "Please check atleast one checkbox"
+        });
+        jQuery('.AdvancedForm').validated(function () {
+            alert("Use this call to make AJAX submissions.");
+        });
+    });
+
     //Declare a document scope variable, g_catId.
     //A document scope variable value can be accessed anywhere in the web page during the
     //entire life cycle at the web browser (till the user refresh the page)
@@ -111,7 +161,7 @@
     });
 
     function checkRadio() {
-        if ($('input[name="Visibility"]:checked').val() == 3) {
+        if ($('input[name="Visibility"]:checked').val() == 2) {
             $("#startDateSegment").removeClass('hidden');
             $("#endDateSegment").removeClass('hidden');
         } else {
@@ -171,6 +221,8 @@
     }
 
     $('#saveButton').on('click', function () {
+
+
         var collectedCatName = $('#catNameInput').val().toUpperCase(); // Forces an Upper Case Only String
         if (collectedCatName == null || collectedCatName == "") {
             swal("Error!", "Please key in an appropriate category name!", "error")
@@ -181,7 +233,7 @@
         var collectedVisibilityId = $('input[name="Visibility"]:checked').val();
         //Create a WebFormData object, webFormData. Have its field values
         //populated with the collected student data
-        if (collectedVisibilityId == 3) {
+        if (collectedVisibilityId == 2) {
             // We only need to define these two variables if VisibilityId is 3.
             // jqWidgets does the automated filling before the user does anything.
             // Checks are not needed as we will restrict the dates to only today or the future
@@ -217,7 +269,7 @@
             data: "'" + webFormDataInString + "'"
         })//end of jQuery.ajax() call
         $updateCategoryHandler.done(function (data, textStatus, jqXHR) {
-            swal("Good job!", "You've updated an amazing category!", "success")
+            swal("Updated!", data.responseJSON.message, "success");
         });//end of $updateCategoryHandler.done()
 
         $updateCategoryHandler.error(function (data, textStatus, jqXHR) {
@@ -230,7 +282,7 @@
     $('#deleteButton').on('click', function () {
         swal({
             title: "Are you sure?",
-            text: "You will not be able to recover this imaginary file!",
+            text: "You will be able to recover this tho...",
             type: "warning", showCancelButton: true,
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "Yes, delete it!",
@@ -241,16 +293,12 @@
                 url: '/API/Categories/' + g_catId
             })//end of jQuery.ajax() call
             $deleteCategoryHandler.done(function (data, textStatus, jqXHR) {
-                swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                swal("Deleted!", data.responseJSON.message, "success");
+                $('body').fadeOut(2000, redirectPage);
             });//end of $deleteCategoryHandler.done()
 
             $deleteCategoryHandler.fail(function (data, textStatus, jqXHR) {
-                console.log(data);
-                noty({
-                    text: data.responseJSON.Message, type: 'error',
-                    layout: 'center',
-                    template: '<div class="noty_message"><span class="noty_text"></span>'
-                });//end of noty()
+                swal("Oh no!", data.responseJSON.message, "error");
             });//end of $deleteCategoryHandler.fail()
         });
         

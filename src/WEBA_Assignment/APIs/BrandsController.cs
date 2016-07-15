@@ -213,6 +213,8 @@ namespace WEBA_ASSIGNMENT.APIs
                 //newBrand.
                 newBrand.BrandName = brandNewInput.BrandName.Value;
                 newBrand.BrandCategory = new List<BrandCategory>();
+                newBrand.CreatedById = _userManager.GetUserId(User);
+                newBrand.UpdatedById = _userManager.GetUserId(User);
 
                 var categories = brandNewInput.BrandCategories.Value;
                 categories = categories.TrimEnd(']');
@@ -485,6 +487,7 @@ namespace WEBA_ASSIGNMENT.APIs
 
                 foundOneBrand.BrandName = brandToBeUpdated.BrandName;
                 foundOneBrand.UpdatedAt = DateTime.Now;
+                foundOneBrand.UpdatedById = _userManager.GetUserId(User);
                 Database.Brands.Update(foundOneBrand);
                 Database.SaveChanges();//Without this command, the changes are not committed.
                 customMessage = "Saved brand into database.";
@@ -605,6 +608,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 oneBrand.BrandPhoto.PublicCloudinaryId = currentBrandPhoto.PublicCloudinaryId;
                 oneBrand.BrandPhoto.Url = currentBrandPhoto.Url;
                 oneBrand.BrandPhoto.SecureUrl = currentBrandPhoto.SecureUrl;
+                oneBrand.BrandPhoto.CreatedById = _userManager.GetUserId(User);
             }
 
             Database.Brands.Update(oneBrand);
@@ -631,9 +635,7 @@ namespace WEBA_ASSIGNMENT.APIs
                   .FileName
                   .Trim('"');
             string contentType = oneFile.ContentType;
-
-            string CreatedById = _userManager.GetUserId(User);
-
+            
             newBrandPhoto = await Cloudinary.CloudinaryAPIs.UploadBrandImageToCloudinary(oneFile.OpenReadStream(), contentType, fileName, "Brands", _userManager.GetUserId(User));
 
             //Retrieve the new brands data which is stashed inside the Session, "Brand".
@@ -643,10 +645,13 @@ namespace WEBA_ASSIGNMENT.APIs
                 //Add the Brand record first, so that the newBrand
                 //object's BrandId property is updated with the new record's
                 //id.
+                newBrand.CreatedById = _userManager.GetUserId(User);
+                newBrand.UpdatedById = _userManager.GetUserId(User);
                 Database.Brands.Add(newBrand);
                 //Copy over the new brands id information to the BrandPhoto object,
                 //newBrandPhoto. 
                 newBrandPhoto.BrandId = newBrand.BrandId;
+                newBrandPhoto.CreatedById = _userManager.GetUserId(User);
                 Database.BrandPhotos.Add(newBrandPhoto);
                 Database.SaveChanges();
             }

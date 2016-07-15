@@ -77,7 +77,7 @@
             return;
         }
         //Create a JavaScript object to contain the type name information
-        if (collectedVisibilityId == 3) {
+        if (collectedVisibilityId == 2) {
             var collectedStartDate = moment(startDateInput).format("DD/MM/YYYY");
             var collectedEndDate = moment(endDateInput).format("DD/MM/YYYY");
             // Date Checking is done Server-Sided
@@ -108,10 +108,12 @@
             data: "'" + webFormDataInString + "'"
         })//end of ajax() call
         $saveCategoryHandler.done(function (data, textStatus, jqXHR) {
-            swal("Hurray!", data.responseJSON.message, "Success");
+            console.dir(data);
+            return;
+            swal("Hurray!", data.message, "success");
         });//end of $saveCategoryHandler.done();
         $saveCategoryHandler.fail(function (data, textStatus, jqXHR) {
-            swal("Oh no!", data.responseJSON.message, "error");
+            swal("Oh no!", data.message, "error");
         });//end of $saveCategoryHandler.fail();
     });//end of $('#saveButton').on('click', function () {
 
@@ -153,7 +155,7 @@
     } //End of setupvisibilityRadioListBox() function
 
     function checkRadio() {
-        if ($('input[name="Visibility"]:checked').val() == 3) {
+        if ($('input[name="Visibility"]:checked').val() == 2) {
             $("#startDateSegment").removeClass('hidden');
             $("#endDateSegment").removeClass('hidden');
         } else {

@@ -6,7 +6,7 @@
                     Manage Categories
                     <div class="btn-group pull-right">
                         <a asp-action="Create" asp-controller="Categories" class="btn btn-default btn-group-lg ">Create New Category</a>
-                      <!--  <a id="deleteButton" class="btn btn-danger btn-group-lg ">Delete</a>-->
+                      <a id="deleteButton" class="btn btn-danger btn-group-lg ">Delete</a>
                     </div>
                 </div>
             </div>
@@ -170,13 +170,13 @@
 
     // Highlight function for Table
     // Commented Out, Broken 'Advanced Feature'
-    //$('#dataTable').on('click', 'tbody tr', function (event) {
-    //    if (!$(this).hasClass('highlight') && !$(this).hasClass('highlightred')) {
-    //        $(this).addClass('highlight');
-    //    } else if ($(this).hasClass('highlight')) {
-    //        $(this).removeClass('highlight');
-    //    }
-    //});
+    $('#dataTable').on('click', 'tbody tr', function (event) {
+        if (!$(this).hasClass('highlight') && !$(this).hasClass('highlightred')) {
+            $(this).addClass('highlight');
+        } else if ($(this).hasClass('highlight')) {
+            $(this).removeClass('highlight');
+        }
+    });
 
     function checkRowsAndProcess(i) {
         $loadBrandUnderCategoryDataHandler = jQuery.ajax({
@@ -191,7 +191,6 @@
             for (i = 0; i < categoryList.length; i++) {
                 output += categoryList[i].BrandName + "\n";
             }
-            console.dir(output);
             return output;
         }//end of JavaScript anonymous function
 
@@ -225,27 +224,12 @@
             data: "'" + webFormDataInString + "'"
         })//end of jQuery.ajax() call
         $updateCategoryHandler.done(function (data, textStatus, jqXHR) {
-            noty({
-                text: data.Message, type: 'success',
-                layout: 'center',
-                template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>',
-                buttons: [
-                    {
-                        addClass: 'btn btn-primary', text: 'Ok', onClick: function ($noty) {
-                            $noty.close();
-                            $('body').fadeOut(2000, redirectPage);
-                        }
-                    }
-                ]
-            });//end of noty()
+            swal("Hurray!", data.message, "success");
+            $('body').fadeOut(2000, redirectPage);
         });//end of $updateCategoryHandler.done()
 
         $updateCategoryHandler.error(function (data, textStatus, jqXHR) {
-            noty({
-                text: data.responseJSON.Message, type: 'error',
-                layout: 'center',
-                template: '<div class="noty_message"><span class="noty_text"></span>'
-            });//end of noty()
+            swal("Oh no!", data.message, "error");
         });//end of $updateCategoryHandler.error()
     }
 
