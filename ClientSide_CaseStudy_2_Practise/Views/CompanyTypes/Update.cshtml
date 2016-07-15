@@ -1,0 +1,175 @@
+﻿<div class="row">
+	<div class="col-md-offset-2  col-md-8">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div class="panel-title">Update Company Type Record</div>
+				<div class="btn-group pull-right">
+
+				</div>
+			</div>
+			<div class="panel-body">
+				<form id="dataForm" role="form" class="form-horizontal">
+					<div class="form-group col-md-12">
+						<label class="control-label  col-md-4" for="typeNameInput">Type Name</label>
+
+						<input type="text" id="typeNameInput" class="form-control font-bold"
+													maxlength="100" placeholder="Company type name" value="" />
+
+					</div>
+					<div class="form-group col-md-12">
+						<label class="control-label col-md-1"></label>
+						<div class="col-md-10">
+							<div class="pull-right">
+								<input type="button" class="btn btn-danger" value="Delete" id="deleteButton" />
+								<input type="button" class="btn btn-primary" value="Save" id="saveButton" />
+								<a class="btn btn-default" asp-action="Index" asp-controler="CompanyTypes">Cancel</a>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div><!-- end of div element which has the class="panel-body" -->
+		</div><!-- end of the div element which has the class="panel" -->
+	</div><!-- end of the div element which as the  class="col-md-offset-2 col-sm-8"-->
+</div><!-- end of div element with class="row" -->
+    <script>
+        //Declare a document scope variable, g_companyTypeId.
+        //A document scope variable value can be accessed anywhere in the web page during the
+        //entire life cycle at the web browser (till the user refresh the page)
+        //Naming convention: begin with "g_" prefix
+        //This variable will contain the id of the company type
+        //which will be extracted from the address bar.
+        //The variable will be used in the first Ajax() call, to retrieve JSON structured
+        //information about the company type
+        var g_companyTypeId = getIdFromAddressBar();
+        function getIdFromAddressBar() {
+            var urlArray = window.location.href.split('/');
+            var id = urlArray[urlArray.length - 1];
+            return id;
+        };
+        getCompanyTypeDetails();
+
+
+
+
+        function getCompanyTypeDetails() {
+        	//When making an ajax call, need to
+        	//get $loadCompanyTypeDataHandler to reference the call activity.
+        	//jQuery's ajax() method will turn this $loadCompanyTypeDataHandler variable
+									//into an object having 2 important methods. done() and fail().
+        	$loadCompanyTypeDataHandler = jQuery.ajax({
+                type: 'GET',
+                url: '/API/CompanyTypes/' + g_companyTypeId,
+            })
+        	$loadCompanyTypeDataHandler.done(function (data, textStatus, jqXHR) {
+                //The (data) input parameter automatically captures the response from the
+                //Get API method
+                //I usually use the following code
+                //to inspect the returned result captured by the data input parameter
+                //from the web server.
+                console.log(data);
+
+                //After inspecting the data object with the console.log
+                //I have clear picture of the structure and used
+                //the following variable to reference(represent) the data variable.
+                var companyType = data;
+                //Copy out the company type information
+                var typeName = companyType.TypeName;
+
+             
+                //Populate the respective input controls with the user details.
+               	//For example, find the text input control, typeNameInput 
+                //and set the input control's value with the typeName variable's content.
+                $('#typeNameInput').val(typeName);
+            }//end of JavaScript anonymous function
+            )//end of the done() method;
+
+        	$loadCompanyTypeDataHandler.fail(function (data, textStatus, jqXHR) {
+                console.log(textStatus);
+                console.log(data);
+                console.log(jqXHR);
+                noty({
+                    text: data.responseJSON.Message, type: 'error',
+                    layout: 'center',
+                    template: '<div class="noty_message"><span class="noty_text"></span>'
+                });
+        	});//end of $loadCompanyTypeDataHandler.error()
+        }//end of getCompanyTypeDetails() function (method);
+
+        //Using a function technique to define a JavaScript class, WebFormData
+        function WebFormData(inTypeName) {
+        	this.TypeName = inTypeName;
+        }
+        $('#saveButton').on('click', function () {
+            var collectedTypeName = $('#typeNameInput').val();
+            //Create a WebFormData object, webFormData. Have its field values
+            //populated with the collected company type data
+            var webFormData = new WebFormData(collectedTypeName);
+            //Convert the webFromData into a JSON string
+            var webFormDataInString = JSON.stringify(webFormData);
+
+            $updateCompanyTypeHandler = jQuery.ajax({
+                type: 'PUT',
+                url: '/API/CompanyTypes/' + g_companyTypeId,
+                dataType: 'json',
+                contentType: 'application/json;',
+                data: "'" + webFormDataInString + "'"
+            })//end of jQuery.ajax() call
+            $updateCompanyTypeHandler.done(function (data, textStatus, jqXHR) {
+                noty({
+                    text: data.Message, type: 'success',
+                    layout: 'center',
+                    template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>'
+                });//end of noty()
+            });//end of $updateCompanyTypeHandler.done()
+
+            $updateCompanyTypeHandler.error(function (data, textStatus, jqXHR) {
+                noty({
+                    text: data.responseJSON.Message, type: 'error',
+                    layout: 'center',
+                    template: '<div class="noty_message"><span class="noty_text"></span>'
+                });//end of noty()
+            });//end of $updateCompanyTypeHandler.error()
+
+        });// end of $('#saveButton').on('click', function () { ...}
+
+
+        $('#deleteButton').on('click', function () {
+ 
+            $deleteCompanyTypeHandler = jQuery.ajax({
+                type: 'DELETE',
+                url: '/API/CompanyTypes/' + g_companyTypeId
+            })//end of jQuery.ajax() call
+            $deleteCompanyTypeHandler.done(function (data, textStatus, jqXHR) {
+                noty({
+                    text: data.Message, type: 'success',
+                    layout: 'center',
+                    template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>',
+                    buttons: [
+                        {
+                         addClass: 'btn btn-primary', text: 'Ok', onClick: function ($noty) {
+                             $noty.close();
+                             $('body').fadeOut(2000, redirectPage);
+                             }
+                         }
+                    ]
+                });//end of noty()
+            });//end of $deleteCompanyTypeHandler.done()
+
+            $deleteCompanyTypeHandler.fail(function (data, textStatus, jqXHR) {
+            	console.log(data);
+                noty({
+                    text: data.responseJSON.Message, type: 'error',
+                    layout: 'center',
+                    template: '<div class="noty_message"><span class="noty_text"></span>'
+                });//end of noty()
+            });//end of $deleteCompanyTypeHandler.fail()
+
+        });//$('#deleteButton').on('click', function () { ... }
+        function redirectPage() {
+            location.replace('/CompanyTypes/Index');
+        }
+    </script>
+
+
+
+

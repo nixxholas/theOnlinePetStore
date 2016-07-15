@@ -1,0 +1,158 @@
+﻿<div class="row">
+	<div class="col-md-offset-2 col-sm-8">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div class="panel-title">Create Company Record</div>
+			</div>
+			<div class="panel-body">
+				<form id="dataForm" role="form" class="form-horizontal">
+					<div class="form-group col-md-12">
+						<label class="control-label  col-md-4" for="companyNameInput">Company Name</label>
+						<input type="text" name="companyNameInput" id="companyNameInput" class="form-control font-bold"
+													maxlength="100" placeholder="Company name" value="" />
+					</div><!-- End of div element containing label and input for company name -->
+					<div class="form-group col-md-12">
+						<label class="control-label col-md-4" for="addressInput">Address</label>
+						<textarea type="text" name="addressInput" id="addressInput" class="form-control font-bold"
+																placeholder="Address" value=""></textarea>
+					</div><!-- End of div element containing label and input for address -->
+					<div class="form-group col-md-12">
+						<label class="control-label col-md-4" for="postalCodeInput">Postal Code</label>
+						<input type="text" id="postalCodeInput" class="form-control font-bold"
+									name="postalcodeInput"				placeholder="Postal Code" maxlength="20" value="" />
+					</div><!-- End of div element containing label and input for postal code -->
+					<div class="form-group col-md-12">
+						<label class="control-label col-md-4" for="companyTypeIdInput">Type</label>
+						<div class="col-md-8">
+							<select id="companyTypeIdInput" class="form-control input-group-sm"></select>
+						</div>
+					</div><!-- End of div element containing label and input for company type id-->
+					<div class="form-group col-md-12">
+						<label class="control-label col-md-1"></label>
+						<div class="col-md-10">
+							<div class="pull-right">
+								<input type="button" class="btn btn-primary" value="Save" id="saveButton" />
+								<a class="btn btn-default" asp-action="Index" asp-controler="Companies">Cancel</a>
+							</div>
+						</div>
+					</div><!-- End of div element containing the Save and Cancel Button -->
+				</form>
+			</div><!-- end of div element which has the class="panel-body" -->
+		</div><!-- end of the div element which has the class="panel" -->
+	</div><!-- end of the div element which as the  class="col-md-offset-2 col-sm-8"-->
+</div><!-- end of div element with class="row" -->
+
+<script>
+	//Call the JavaScript sub program (JavaScript function) to 
+	//make an ajax call obtaining all the Company Type data so that
+	//the drop down listbox, companyTypeIdInput can be populated
+	//with option elements.
+	setupCompanyTypeListBox();
+
+	function setupCompanyTypeListBox() {
+		//Note: jQuery.ajax(..) is also often written is $.ajax(..)
+		jQuery.ajax({
+			url: '/Api/CompanyTypes/GetCompanyTypesForControls',
+			method: 'GET',
+			dataType: 'json',
+			cache: false,
+		}).done(function (data, textStatus, jqXHR) {
+			//After inspecting the data object with the console.log
+			//I have clear picture of the structure and used
+			//the following variable, companyTypeList to represent the data
+			var companyTypeList = data;
+			var companyTypeId = '';
+			var typeName = '';
+			var $companyTypeIdInputElement = null;
+			var $optionElement = null;
+			var companyType = null; //To be used inside the for loop
+			//-------- Find the table element -----------
+			//I am using the $tableElement variable
+			//to represent the found HTML element which has a matching id of courseTableBody
+			$companyTypeIdInputElement = $('#companyTypeIdInput');
+
+			//I want to build option elements so that
+			//I can display company type name 
+			//within the drop down list, companyTypeIdInput
+			//$companyTypeIdInputElement variable is representing the 
+			//dropdownlist <SELECT> element.
+
+			//-------- Begin creating <option> HTML element ------
+			for (index = 0; index < companyTypeList.length; index++) {
+				//Set this course variable to reference a course object
+				//inside the courseList Array.
+				companyType = companyTypeList[index];
+				//Copy out the company type information
+				companyTypeId = companyType.CompanyTypeId;
+				typeName = companyType.TypeName;
+
+				//Create new HTML <option> element.
+				//At the same time let the $optionElement variable to represent it.
+				$optionElement = $('<option></option>', { text: typeName });
+				$optionElement.attr('value', companyTypeId);
+				//Add the new <option> element into the ListBox element
+				$companyTypeIdInputElement.append($optionElement);
+			}//end of for loop.
+		}//end of JavaScript anonymous function
+		)//end of the done() method;
+	}//end of setupCompanyTypeListBox();
+
+
+
+
+      //Using a function to create a JavaScript class, WebFormData
+        function WebFormData(inCompanyName, inAddress, inPostalCode, inCompanyTypeId) {
+            this.CompanyName = inCompanyName;
+            this.Address = inAddress;
+            this.PostalCode = inPostalCode;
+            this.CompanyTypeId = inCompanyTypeId;
+        }
+	      //Use jQuery library function, jQuery() to find the Save button by id.
+	      //Then, call the on() method, to define a click event handler to handle the click event.
+	      //Provide an annoymous function which has all the necessary code to send the user data
+	      //to the Web API controller, Companies using the HTTP POST request.
+        $('#saveButton').on('click', function () {
+            var collectedCompanyName = $('#companyNameInput').val();
+            var collectedAddress = $('#addressInput').val();
+            var collectedPostalCode = $('#postalCodeInput').val();
+            var collectedCompanyTypeId = $('#companyTypeIdInput').val();
+        	//Create a JavaScript object from the collected data
+									//Create an "object of information" which consists of name-value pairs
+            var webFormData = new WebFormData(collectedCompanyName,collectedAddress,
+                  collectedPostalCode, collectedCompanyTypeId);
+
+        	   //Serialize the webFormData object which contains the company name, 
+        	   //address, postal code and company type id data into a "flat string". 
+            //So that, it can be sent accross the Internet network successfully.
+            var webFormDataInString = JSON.stringify(webFormData);
+
+            $saveCompanyHandler = jQuery.ajax({
+                type: 'POST',
+                url: '/API/Companies/',
+                dataType: 'json',
+                contentType: 'application/json;',
+                data: "'" + webFormDataInString + "'"
+            })//end of ajax() call
+            $saveCompanyHandler.done(function (data, textStatus, jqXHR) {
+                noty({
+                	text: data.Message,
+                	type: 'success',
+                 layout:'center',
+                 template: '<div class="noty_message"><span class="noty_text"></span>'
+                });
+            });//end of saveCompanyHandler.done();
+            $saveCompanyHandler.fail(function (data, textStatus, jqXHR) {
+                noty({
+                	text: data.responseJSON.Message,
+                	type: 'error',
+                 layout: 'center',
+                 template: '<div class="noty_message"><span class="noty_text"></span>'
+                });
+        });//end of $saveCompanyHandler.fail();
+        });//end of the annonymous function for the saveButton click handler.
+</script>
+
+
+
+
+

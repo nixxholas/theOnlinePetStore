@@ -1,0 +1,81 @@
+﻿<div class="row">
+	<div class="col-md-offset-2  col-md-8">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div class="panel-title">Create Company Type Record</div>
+				<div class="btn-group pull-right">
+
+				</div>
+			</div>
+			<div class="panel-body">
+				<form id="dataForm" role="form" class="form-horizontal">
+					<div class="form-group col-md-12">
+						<label class="control-label  col-md-4" for="typeNameInput">Type Name</label>
+
+						<input type="text" id="typeNameInput" class="form-control font-bold"
+													maxlength="50" placeholder="Company Type Name" value="" />
+
+					</div>
+					<div class="form-group col-md-12">
+						<label class="control-label col-md-1"></label>
+						<div class="col-md-10">
+							<div class="pull-right">
+								<input type="button" class="btn btn-primary" value="Save" id="saveButton" />
+								<a class="btn btn-default" asp-action="Index" asp-controler="CompanyTypes">Cancel</a>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div><!-- end of div element which has the class="panel-body" -->
+		</div><!-- end of the div element which has the class="panel" -->
+	</div><!-- end of the div element which as the  class="col-md-offset-2 col-sm-8"-->
+</div><!-- end of div element with class="row" -->
+
+<script>
+	//Using a function technique to create a JavaScript class, WebFormData
+	function WebFormData(inTypeName) {
+		this.TypeName = inTypeName;
+	}
+
+	$('#saveButton').on('click', function () {
+		var collectedTypeName = $('#typeNameInput').val();
+
+		//Create a JavaScript object to contain the type name information
+		var webFormData = new WebFormData(collectedTypeName);
+
+		//Serialize the webFormData object which contains the type name
+		//data into a flat string. So that, it can be sent accross the Internet network successfully.
+		var webFormDataInString = JSON.stringify(webFormData);
+
+		$saveCompanyTypeHandler = jQuery.ajax({
+			type: 'POST',
+			url: '/API/CompanyTypes/',
+			dataType: 'json',
+			contentType: 'application/json;',
+			data: "'" + webFormDataInString + "'"
+		})//end of ajax() call
+		$saveCompanyTypeHandler.done(function (data, textStatus, jqXHR) {
+			noty({
+				text: data.Message, type: 'success',
+				layout: 'center',
+				template: '<div class="noty_message"><span class="noty_text"></span>'
+			});
+		});//end of $saveCompanyTypeHandler.done();
+		$saveCompanyTypeHandler.fail(function (data, textStatus, jqXHR) {
+			console.log(textStatus);
+			console.log(data);
+			console.log(jqXHR);
+			noty({
+				text: data.responseJSON.Message, type: 'error',
+				layout: 'center',
+				template: '<div class="noty_message"><span class="noty_text"></span>'
+			});
+		});//end of $saveCompanyTypeHandler.fail();
+	});//end of $('#saveButton').on('click', function () {
+
+</script>
+
+
+
+
+

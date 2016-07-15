@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Experiment</title>
+
+		<link rel="stylesheet" href="~/css/typesettings-1.1.css" />
+		<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+		<link rel="stylesheet" href="~/css/site.css" />
+		<link rel="stylesheet" href="~/css/noty_custom.css" />
+        <link rel="stylesheet" href="~/css/sticky_footer.css" />
+		
+		<script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation/dist/additional-methods.js"></script>
+		<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+		<script src="~/lib/noty/js/noty/jquery.noty.js"></script>
+		<script src="~/lib/moment/min/moment.min.js"></script>
+		<script src="~/lib/noty/js/noty/packaged/jquery.noty.packaged.js"></script>
+		<script src="~/js/site.js" asp-append-version="true"></script>
+       </head>
+<body>
+
+    <!-- Wrap all page content here -->
+    <div id="wrap">
+
+        <!-- Fixed navbar -->
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Experiment</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown ">
+                            <a href="#" id="drop1" data-toggle="dropdown" class="dropdown-toggle" role="button">Company <b class="caret"></b></a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+                                <li><a asp-controller="Companies" asp-action="Index">Manage Company</a></li>
+                                <li><a asp-controller="Companies" asp-action="ViewCompaniesWithCompanyType">View Company with Company Type</a></li>
+                                <li><a asp-controller="Companies" asp-action="ViewCompaniesGroupByCompanyType">View Company Group by Company Type</a></li>
+                            </ul>
+                        </li>
+                        <li><a asp-controller="CompanyTypes" asp-action="Index">Company Type</a></li>
+                        <li class="dropdown ">
+                            <a href="#" id="drop2" data-toggle="dropdown" class="dropdown-toggle" role="button">Student <b class="caret"></b></a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
+                                <li><a asp-controller="Students" asp-action="Index">Manage Student</a></li>
+                                <li><a asp-controller="Students" asp-action="ViewStudentsGroupByCourse">View Student Group by Course</a></li>
+                            </ul>
+                        </li>
+																					<li class="dropdown ">
+																						<a href="#" id="drop2" data-toggle="dropdown" class="dropdown-toggle" role="button">Course <b class="caret"></b></a>
+																						<ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
+																							<li><a asp-controller="Courses" asp-action="Index">Manage Course</a></li>
+																							<li><a asp-controller="Courses" asp-action="ExperimentDataDrivenListBox">Experiment Data Driven Listbox</a></li>
+																							<li><a asp-controller="Courses" asp-action="ExperimentViewCourseSummary">Experiment View Course Summary</a></li>
+																						</ul>
+																					</li>
+                      <li><a asp-controller="Miscellaneous" asp-action="Index">Learning Instructions</a></li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
+
+
+        <div class="container body-content">
+            @RenderBody()
+        </div>
+        @RenderSection("scripts", required: false)
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">Place sticky footer content here.</p>
+        </div>
+    </footer>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+﻿<div class="row">
+    <div class="col-md-offset-2  col-md-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <div class="panel-title">
+                    View Company data and the respective Company Type
+
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Company Name</th>
+                                    <th>Address</th>
+                                    <th>Postal Code</th>
+                                    <th>Company Type Name</th>
+                                </tr>
+                            </thead>
+                            <tbody id="companyTableBody"></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div> <!-- end of div element with class="panel-body" -->
+        </div><!-- end of div element with class="panel" -->
+    </div> <!-- end of div element with  class="col-md-offset-2  col-md-8"-->
+</div><!-- end of div element with class="row"-->
+
+
+<script>
+
+    loadCompanyData();
+
+    function loadCompanyData() {
+        //Note: jQuery.ajax(..) is also often written is $.ajax(..)
+       $loadCompanyDataHandler =  jQuery.ajax({
+           url: '/Api/Companies/GetCompaniesWithCompanyType',
+            method: 'GET',
+            dataType: 'json',
+            cache: false,
+       })
+       $loadCompanyDataHandler.done(function (data, textStatus, jqXHR) {
+            //This done method will
+            //The (data) input parameter automatically captures the response from the
+            //GetCompaniesGroupByCompanyType api method
+
+            //I usually use the following code
+            //to inspect the returned result captured by the data input parameter
+            //from the web server.
+            console.log(data);
+
+            //After inspecting the data object with the console.log
+            //I have clear picture of the structure and used
+            //the following variable to represent the response.d
+            var companyList = data;
+            var companyId = '';
+            var companyName = '';
+            var address = '';
+            var postalCode = '';
+            var companyTypeName = '';
+
+            var $tableBodyElement = null;
+            var $cellElement = null;
+            var $rowElement = null;
+            //-------- Find the table element -----------
+            //I am using the $tableElement variable
+            //to represent the found HTML element which has a matching id of companyTableBody
+            $tableBodyElement = $('#companyTableBody');
+
+            //I want to build rows and cells (using tr and td HTML elements) so that
+            //I can display company name, address, postal code, company type name information
+            //within the HTML table element, companyTableBody. Recall that, I have already asked the
+            //$tableBodyElement variable to represent (reference) the table element.
+
+            //-------- Begin creating <tr> and <td> HTML element ------
+            for (index = 0; index < companyList.length; index++) {
+                //Set this company variable to reference a company object
+                //inside the companyList Array.
+                company = companyList[index];
+                //Copy out the company information
+                companyId = company.CompanyId;
+                companyName = company.CompanyName;
+                address = company.Address;
+                postalCode = company.PostalCode;
+                companyTypeName = company.CompanyTypeName;
+
+                //Create new HTML <tr> element.
+                //At the same time let the $rowElement variable to represent it.
+                $rowElement = $('<tr></tr>');
+                //Create the 1st cell element which display company name.
+                $cellElement = $('<td></td>', { text: companyName });
+                $rowElement.append($cellElement);
+                //Create the 2nd cell element which display address
+                $cellElement = $('<td></td>', { text: address });
+                $rowElement.append($cellElement);
+                //Create the 3rd cell element which display postal code
+                $cellElement = $('<td></td>', { text: postalCode });
+                $rowElement.append($cellElement);
+                //Create the 4th cell element which display company type name
+                $cellElement = $('<td></td>', { text:  companyTypeName});
+                $rowElement.append($cellElement);
+                //----End of creating one row to display one company by using <tr> and <td> HTML element ---
+                $tableBodyElement.append($rowElement);
+                //       Proceed to the next company object in the companyList Array.
+            }//end of for loop.
+        }//end of JavaScript anonymous function
+
+        )//end of the done() method;
+       $loadCompanyDataHandler.fail(function (data, textStatus, jqXHR) {
+           noty({
+               text: 'Ajax fail fired : ' + data.responseJSON.Message, type: 'error',
+               layout: 'center',
+               template: '<div class="noty_message"><span class="noty_text"></span>'
+           });//end of noty()
+       })//end of $loadCompanyDataHandler.fail()
+
+
+    }//end of loadCompanyData();
+
+</script>
+

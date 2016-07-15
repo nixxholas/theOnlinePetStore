@@ -1,0 +1,249 @@
+﻿<div class="row">
+    <div class="col-md-offset-2 col-md-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="panel-title">Update Company Record</div>
+            </div>
+            <div class="panel-body">
+                <form id="dataForm" role="form" class="form-horizontal">
+                    <div class="form-group col-md-12">
+                        <label class="control-label  col-md-4" for="companyNameInput">Company Name</label>
+                       
+                            <input type="text" id="companyNameInput" class="form-control font-bold"
+                                   maxlength="50" placeholder="Company name" value="" />
+                    
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-4" for="addressInput">Address</label>
+                        <textarea type="text" id="addressInput" class="form-control font-bold"
+                                   placeholder="Address" maxlength="100" value="" ></textarea>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-4" for="postalCodeInput">Postal Code</label>
+                        <input type="text" id="postalCodeInput" class="form-control font-bold" 
+                                   placeholder="Postal Code" value="" />
+                    </div>
+																	   <div class="form-group col-md-12">
+																	   	<label class="control-label col-md-4" for="companyTypeIdInput">Type</label>
+																		   <div class="col-md-8">
+																			  <select id="companyTypeIdInput" class="form-control input-group-sm"></select>
+																		  </div>
+																	</div><!-- End of div element containing label and input for company type id-->                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-1"></label>
+                        <div class="col-md-10">
+                            <div class="pull-right">
+                                <input type="button" class="btn btn-danger" value="Delete" id="deleteButton" />
+                                <input type="button" class="btn btn-primary" value="Save" id="saveButton" />
+                                <a class="btn btn-default" asp-action="Index" asp-controler="Companies">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- end of div element which has the class="panel-body" -->
+        </div><!-- end of the div element which has the class="panel" -->
+    </div>
+</div><!-- end of div element with class="row" -->
+    <script>
+        //Declare a document scope variable, g_companyId.
+        //A document scope variable value can be accessed anywhere in the web page during the
+        //entire life cycle at the web browser (till the user refresh the page)
+        //Naming convention: begin with g_ prefix
+        //This variable will contain the company id value
+        //which will be extracted from the address bar.
+        //The variable will be used in the first Ajax() call, to retrieve JSON structured
+        //information about the company
+        var g_companyId = getCompanyIdFromAddressBar();
+        function getCompanyIdFromAddressBar() {
+            //Get companyId from the url string in the browser's address bar
+            var urlArray = window.location.href.split('/');
+            var companyId = urlArray[urlArray.length - 1];
+            return companyId;
+        };
+  
+
+
+        //Call the JavaScript sub program (JavaScript function) to 
+        //make an ajax call obtaining all the Company Type data so that
+        //the drop down listbox, companyTypeIdInput can be populated
+        //with option elements.
+        setupCompanyTypeListBox();
+					   //After setting up the dropdownlist, then call the next sub-program (JavaScript function)
+				  	 //getCompanyDetails() to populate the input controls with company details
+        getCompanyDetails();
+
+        function setupCompanyTypeListBox() {
+        	//Note: jQuery.ajax(..) is also often written is $.ajax(..)
+        	jQuery.ajax({
+        		url: '/Api/CompanyTypes/GetCompanyTypesForControls',
+        		method: 'GET',
+        		dataType: 'json',
+        		cache: false,
+        	}).done(function (data, textStatus, jqXHR) {
+        		//After inspecting the data object with the console.log
+        		//I have clear picture of the structure and used
+        		//the following variable, companyTypeList to represent the data
+        		var companyTypeList = data;
+        		var companyTypeId = '';
+        		var typeName = '';
+        		var $companyTypeIdInputElement = null;
+        		var $optionElement = null;
+        		var companyType = null; //To be used inside the for loop
+        		//-------- Find the table element -----------
+        		//I am using the $tableElement variable
+        		//to represent the found HTML element which has a matching id of courseTableBody
+        		$companyTypeIdInputElement = $('#companyTypeIdInput');
+
+        		//I want to build option elements so that
+        		//I can display company type name 
+        		//within the drop down list, companyTypeIdInput
+        		//$companyTypeIdInputElement variable is representing the 
+        		//dropdownlist <SELECT> element.
+
+        		//-------- Begin creating <option> HTML element ------
+        		for (index = 0; index < companyTypeList.length; index++) {
+        			//Set this companyType variable to reference a companyType object
+        			//inside the companyTypeList Array.
+        			companyType = companyTypeList[index];
+        			//Copy out the company type information
+        			companyTypeId = companyType.CompanyTypeId;
+        			typeName = companyType.TypeName;
+
+        			//Create new HTML <option> element.
+        			//At the same time let the $optionElement variable to represent it.
+        			$optionElement = $('<option></option>', { text: typeName });
+        			$optionElement.attr('value', companyTypeId);
+        			//Add the new <option> element into the ListBox element
+        			$companyTypeIdInputElement.append($optionElement);
+        		}//end of for loop.
+        	}//end of JavaScript anonymous function
+									)//end of the done() method;
+        }//end of setupCompanyTypeListBox();
+
+
+        function getCompanyDetails() {
+            $loadCompanyHandler = jQuery.ajax({
+                type: 'GET',
+                url: '/API/Companies/' + g_companyId,
+            })
+            $loadCompanyHandler.done(function (data, textStatus, jqXHR) {
+                //The (data) input parameter automatically captures the response from the
+                //Get API method
+                //I usually use the following code
+                //to inspect the returned result captured by the data input parameter
+                //from the web server.
+                console.log(data);
+
+                //After inspecting the data object with the console.log
+                //I have clear picture of the structure and used
+                //the following variable to reference(represent) the data variable.
+                var company = data;
+                //Copy out the company information
+                var companyName = company.CompanyName;
+                var address = company.Address;
+                var postalCode = company.PostalCode;
+                var companyTypeId = company.CompanyTypeId;
+                //Populate the respective input controls with the user details.
+                //For example, find the text input control, companyNameInput and set the text input control
+                //'s value with the companyName variable's content.
+                $('#companyNameInput').val(companyName);
+                $('#addressInput').val(address);
+                $('#postalCodeInput').val(postalCode);
+                $('#companyTypeIdInput').val(companyTypeId);
+            }//end of JavaScript anonymous function
+            )//end of the done() method;
+            $loadCompanyHandler.fail(function (data, textStatus, jqXHR) {
+                console.log(textStatus);//Have a habit in using console.log to inspect the parameter variable content
+                console.log(data);
+                console.log(jqXHR);
+                noty({
+                    text: data.responseJSON.Message, type: 'error',
+                    layout: 'center',
+                    template: '<div class="noty_message"><span class="noty_text"></span>'
+                });
+            });//end of $loadCompanyHandler.error()
+        }//end of getCompanyDetails();
+        //Using a function to create a JavaScript class, WebFormData
+        function WebFormData(inCompanyName, inAddress, inPostalCode, inCompanyTypeId) {
+        	this.CompanyName = inCompanyName;
+        	this.Address = inAddress;
+        	this.PostalCode = inPostalCode;
+        	this.CompanyTypeId = inCompanyTypeId;
+        }
+        $('#saveButton').on('click', function () {
+            var collectedCompanyName = $('#companyNameInput').val();
+            var collectedAddress = $('#addressInput').val();
+            var collectedPostalCode = $('#postalCodeInput').val();
+            var collectedCompanyTypeId = $('#companyTypeIdInput').val();
+            //Create a WebFormData object, webFormData. Have its field values
+            //populated with the collected company data
+            var webFormData = new WebFormData(collectedCompanyName, collectedAddress,
+                  collectedPostalCode, collectedCompanyTypeId);
+            //Convert the webFromData into a JSON string
+            var webFormDataInString = JSON.stringify(webFormData);
+
+            $updateCompanyHandler = jQuery.ajax({
+                type: 'PUT',
+                url: '/API/Companies/' + g_companyId,
+                dataType: 'json',
+                contentType: 'application/json;',
+                data: "'" + webFormDataInString + "'"
+            })//end of jQuery.ajax() call
+            $updateCompanyHandler.done(function (data, textStatus, jqXHR) {
+                noty({
+                    text: data.Message, type: 'success',
+                    layout: 'center',
+                    template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>'
+                });//end of noty()
+            });//end of $updateCompanyHandler.done()
+
+            $updateCompanyHandler.error(function (data, textStatus, jqXHR) {
+                noty({
+                    text: data.responseJSON.Message, type: 'error',
+                    layout: 'center',
+                    template: '<div class="noty_message"><span class="noty_text"></span>'
+                });//end of noty()
+            });//end of $updateCompanyHandler.error()
+
+        });// end of $('#saveButton').on('click', function () { ...}
+
+
+        $('#deleteButton').on('click', function () {
+ 
+            $deleteCompanyHandler = jQuery.ajax({
+                type: 'DELETE',
+                url: '/API/Companies/' + g_companyId
+            })//end of jQuery.ajax() call
+            $deleteCompanyHandler.done(function (data, textStatus, jqXHR) {
+                noty({
+                    text: data.Message, type: 'success',
+                    layout: 'center',
+                    template: '<div class="noty_message" style="height:50px;"><span class="noty_text"></span>',
+                    buttons: [
+                        {
+                         addClass: 'btn btn-primary', text: 'Ok', onClick: function ($noty) {
+                             $noty.close();
+                             $('body').fadeOut(2000, redirectPage);
+                             }
+                         }
+                    ]
+                });//end of noty()
+            });//end of $deleteCompanyHandler.done()
+
+            $deleteCompanyHandler.fail(function (data, textStatus, jqXHR) {
+            	console.log(data);
+                noty({
+                    text: data.responseJSON.Message, type: 'error',
+                    layout: 'center',
+                    template: '<div class="noty_message"><span class="noty_text"></span>'
+                });//end of noty()
+            });//end of $deleteCompanyHandler.fail()
+
+        });// end of $('#deleteButton').on('click', function () { ...}
+        function redirectPage() {
+            location.replace('/Companies/Index');
+        }// end of redirectPage() method (function)
+    </script>
+
+
+
+

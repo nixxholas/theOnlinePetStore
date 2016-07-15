@@ -1,0 +1,30 @@
+﻿<select id="courseIdInput">
+    <option value="0">-- Select Course --</option>
+</select>
+<script>
+    setupCourseListBox();//Call the JavaScript function to execute
+    function setupCourseListBox() {
+        var $dataCommunicationTracker = jQuery.ajax({
+            contentType: 'application/json',
+            method: 'get',
+            url: 'http://localhost:63079/API/Courses/GetCoursesForControls',
+        });
+        $dataCommunicationTracker.done(function (data, textStatus, jqXHR) {
+            var $courseIdInputElement = jQuery('#courseIdInput');
+            var $optionElement = null;
+
+            for (index = 0; index < data.length; index++) {
+                oneCourse = data[index];
+                $optionElement = jQuery('<option>')
+                                                .text(oneCourse.CourseAbbreviation)
+                                                .attr('value', oneCourse.CourseId);
+                $courseIdInputElement.append($optionElement);
+            }
+        });
+        $dataCommunicationTracker.fail(function (data, textStatus, jqXHR) {
+            console.dir(data);
+            console.dir(textStatus);
+            console.dir(jqXHR);
+        });
+    }//end of setupCourseListBox() function
+</script>

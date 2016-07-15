@@ -1,0 +1,46 @@
+﻿<h1>Experiment the client side Noty library</h1>
+<div class="row">
+ <div class="col-lg-12">
+ 		I referred to this  <a class="btn-link" href="http://ned.im/noty/#/about" target="_blank"> official tutorial</a> on NOTY to experiment NOTY functionalities here.
+ </div>
+</div>
+<div class="row">
+<div class="col-lg-12">
+		<button id="testButton1" class="btn btn-block">
+				Display a simple success type message"
+		</button>
+	  <button id="testButton2" class="btn btn-block">Display a message prompt having OK and Cancel button</button>
+</div>
+</div>
+
+<script>
+		//I have created used the on() method to set an event handler for testButton1
+	  //so that the jQuery will execute an anonymous function when the button is clicked.
+		$('#testButton1').on('click', function () {
+				noty({ text: 'This is a notification Message', type: 'success', layout: 'center' });
+		});
+		//I have provided an anonymous function to the on() method
+		//so that it can be executed when testButton2 is clicked.
+		$('#testButton2').on('click', function () {
+			noty({
+				text: 'Proceed the Delete action?',
+				layout:'center',
+				buttons: [
+					{addClass: 'btn btn-primary', text: 'Ok', onClick: function($noty) {
+							// this = button element
+							// $noty = $noty element
+							$noty.close();
+							noty({text: 'You clicked "Ok" button', type: 'success'});
+					}//end of anonymous function
+					},
+					{addClass: 'btn btn-danger', text: 'Cancel', onClick: function($noty) {
+							$noty.close();
+							noty({text: 'You clicked "Cancel" button', type: 'error'});
+					}//end of anonymous function
+					}
+				]
+		});
+		});
+
+
+</script>

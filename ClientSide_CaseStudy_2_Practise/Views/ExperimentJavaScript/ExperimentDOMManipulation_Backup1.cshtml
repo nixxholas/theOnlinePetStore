@@ -1,0 +1,60 @@
+﻿
+
+<select id="courseIdInput">
+	<option value="0">-- Select Course --</option>
+</select>
+
+<script>
+		//Use var keyword to tell JavaScript
+		//you want to declare a variable, data.
+		//Use { } to tell the JavaScript engine that you want to
+		//define an object.
+		//Use property name : value technique to define two sets of
+		//data.
+		//You are creating an object of information.
+var data = [{
+CourseId: "1",
+CourseAbbreviation: "DIT"
+},
+{
+CourseId: "2",
+CourseAbbreviation: "DBIT"
+},
+{
+CourseId: "3",
+CourseAbbreviation: "DISM"
+}];
+		    
+		    
+		    ;
+		console.dir(data); //Inspect the data object of information content
+		//Try to access the data object's CourseId property value
+		console.dir(data.CourseId);
+		//Try to access the data object's CourseAbbreviation property value
+		console.dir(data.CourseAbbreviation);
+
+		//On the right hand side of the assignment operator:
+		//Ask jQuery() to find the <SELECT> element by id.
+		$courseIdInputElement = jQuery('#courseIdInput');
+		var $optionElement = null;
+		//On the right hand side of the assignment operator:
+		//Ask jQuery() to create a new <option> element by supplying a string
+		//'<option>'. Note that, jQuery('<option>') will turn into a "jQuery object"
+		//equiped with powerful methods such as text() and attr().
+		//Therefore, I can "continue" calling text() and attr() to supply more information
+		//to setup the new <option> element.
+		//After everything has been executed on the right hand side, I have defined
+		//an <option> element and I need a variable to hold it. Therefore I assigned 
+		//$optionElement to do the job.
+		$optionElement = jQuery('<option>').text('DIT').attr('value', '1');
+		//Finally, I call the append() method and pass the $optionElement into it.
+		//The append() method belongs to the $courseIdInputElement which represents
+		//the actual <SELECT> element. As a result, a <OPTION> element becomes a "child"
+		//of the <SELECT> element.
+		$courseIdInputElement.append($optionElement);
+		$optionElement = jQuery('<option>').text('DBIT').attr("value", '2');
+		$courseIdInputElement.append($optionElement);
+		$optionElement = jQuery('<option>').text('DISM').attr('value', '3');
+		$courseIdInputElement.append($optionElement);
+        
+</script>

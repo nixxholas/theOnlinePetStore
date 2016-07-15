@@ -1,0 +1,28 @@
+﻿<select id="courseIdInput">
+    <option value="0">-- Select Course --</option>
+</select>
+
+<script>
+		var data = [{
+				CourseId : '1',
+				CourseAbbreviation: 'DIT'
+		},{
+				CourseId: '2',
+				CourseAbbreviation: 'DBIT'
+		},{
+				CourseId: '3',
+				CourseAbbreviation: 'DISM'
+		}];
+
+		$courseIdInputElement = jQuery('#courseIdInput');
+
+		var $optionElement = null;
+
+		for (index = 0; index < data.length; index++) {
+				oneCourse = data[index];
+				$optionElement = jQuery('<option>')
+												.text(oneCourse.CourseAbbreviation)
+												.attr('value', oneCourse.CourseId);
+				$courseIdInputElement.append($optionElement);
+		}
+</script>

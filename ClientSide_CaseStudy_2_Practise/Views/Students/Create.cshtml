@@ -1,0 +1,306 @@
+﻿<style>
+    .has-error{
+        color:#ff7700;
+    }
+    .has-success{
+        color:black;
+    }
+</style>
+<a href="https://jqueryvalidation.org/documentation/" target="_blank" >jQuery Validator Online Reference</a>
+<div class="container">
+    <div class="col-md-offset-2 col-md-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="panel-title">Create Student Record</div>
+            </div>
+            <div class="panel-body">
+                <form id="dataForm" role="form" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="fullNameInput">Full Name</label>
+                        <div class="col-md-4">
+                            <input type="text" id="fullNameInput" name="fullNameInput" class="form-control input-group-sm"
+                                   maxlength="30" placeholder="Full name" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="admissionIdInput">Admission Id</label>
+                        <div class="col-md-7">
+                            <input type="text" id="admissionIdInput" name="admissionIdInput" class="form-control input-group-sm"
+                                   placeholder="Admission id" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="emailInput">Email</label>
+                        <div class="col-md-7">
+                            <input type="text" id="emailInput" name="emailInput" class="form-control input-group-sm"
+                                   placeholder="Email" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="mobileContactInput">Mobile Contact</label>
+                        <div class="col-md-7">
+                            <input type="text" id="mobileContactInput" name="mobileContactInput" class="form-control input-group-sm"
+                                   placeholder="Mobile contact" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="dateOfBirthInput">Date of Birth</label>
+                        <div class="col-md-7">
+                            <input type="text" id="dateOfBirthInput" name="dateOfBirthInput" class="form-control input-group-sm"
+                                   placeholder="Date of Birth" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="courseIdInput">Course</label>
+                        <div class="col-md-9">
+                            <select id="courseIdInput" name="courseIdInput" class="form-control input-group-sm">
+                                <option value="0">--Select Course--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-1"></label>
+                        <div class="col-md-10">
+                            <div class="pull-right">
+                                <input type="button" class="btn btn-danger" value="Delete" id="deleteButton" />
+                                <input type="button" class="btn btn-primary" value="Save" id="saveButton" />
+                                <a class="btn btn-default" asp-action="Index" asp-controler="Students">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- end of div element which has the class="panel-body" -->
+        </div><!-- end of the div element which has the class="panel" -->
+    </div><!-- end of the div element which has class="col-md-offset-2 col-md-8" -->
+</div><!-- end of div element which has the class="container" -->
+
+
+@section Scripts{
+
+    <script>
+    setupCourseListBox();
+
+    setupFormValidationRulesAndBehavior();
+    function setupFormValidationRulesAndBehavior() {
+        //http://stackoverflow.com/questions/18754020/bootstrap-3-with-jquery-validation-plugin
+        jQuery.validator.setDefaults({
+            highlight: function (element, errorClass, validClass) {
+                if (element.type === "radio") {
+                    this.findByName(element.name).addClass(errorClass).removeClass(validClass);
+                } else {
+                    $(element).closest('.form-group').removeClass('has-success has-feedback').addClass('has-error has-feedback');
+                    $(element).closest('.form-group').find('i.fa').remove();
+                    $(element).closest('.form-group').append('<i class="fa fa-exclamation fa-lg form-control-feedback"></i>');
+                }
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                if (element.type === "radio") {
+                    this.findByName(element.name).removeClass(errorClass).addClass(validClass);
+                } else {
+                    $(element).closest('.form-group').removeClass('has-error has-feedback').addClass('has-success has-feedback');
+                    $(element).closest('.form-group').find('i.fa').remove();
+                    $(element).closest('.form-group').append('<i class="fa fa-check fa-lg form-control-feedback"></i>');
+                }
+            }
+        });
+        //http://forums.asp.net/t/1671546.aspx?Singapore+mobile+phone+validation
+        jQuery.validator.addMethod('requireAdmissionId', function (value, element) {
+            
+            //https://sg.answers.yahoo.com/question/index?qid=20100711080905AAbNjp0
+            if ((value.length == 0) && (this.optional(element))) {
+                return true;
+            }
+            if (value.match(/^\d{7}$/) == null) {
+                return false;
+            } else {
+                return true;
+            }
+        }, 'Please specify a 7 digit admission id value');
+
+        //http://forums.asp.net/t/1671546.aspx?Singapore+mobile+phone+validation
+        jQuery.validator.addMethod('mobilePhoneSG', function (phone_number, element) {
+            phone_number = phone_number.replace(/\s+/g, "");
+            //https://sg.answers.yahoo.com/question/index?qid=20100711080905AAbNjp0
+            if ((phone_number.length==0)&&(this.optional(element))){
+                return true;
+            }
+          if (phone_number.match(/^[89]\d{7}$/) == null) {
+                    return false;
+                } else {
+                    return true;
+                }
+        }, 'Please specify a valid SG mobile phone number');
+        jQuery.validator.addMethod("validDate", function (value, element) {
+            //http://stackoverflow.com/questions/24380305/validate-date-in-dd-mm-yyyy-format-using-jquery-validate
+            return this.optional(element) || moment(value, 'DD/MM/YYYY').isValid();
+        }, 'Please enter a valid date in the format DD/MM/YYYY');
+        $.validator.addMethod('validAge', function (value, element) {
+            //http://stackoverflow.com/questions/22781994/age-check-by-birthdate-to-exact-date-for-jquery-validate
+            if (this.optional(element)) {
+                return true;
+            }
+            var dateOfBirth = value;
+            var arr_dateText = dateOfBirth.split('/');
+            day = arr_dateText[0];
+            month = arr_dateText[1];
+            year = arr_dateText[2];
+
+            var mydate = new Date();
+            mydate.setFullYear(year, month - 1, day);
+
+            var maxDate = new Date();
+            maxDate.setYear(maxDate.getYear() - 18);
+
+            if (maxDate < mydate) {
+                return false;
+            }
+            return true;
+        }, 'Only students over the age of 18 can be added.');
+        $.validator.addMethod('requireCourseId', function (value, element) {
+            //http://stackoverflow.com/questions/22781994/age-check-by-birthdate-to-exact-date-for-jquery-validate
+            if (value == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        },'Required course information');
+        $("#dataForm").validate({
+            rules: {
+                fullNameInput: {
+                    required: true
+                },
+                admissionIdInput:{
+                    required:true,
+                    requireAdmissionId:true
+                },
+                mobileContactInput: {
+                    required: false,
+                    mobilePhoneSG: true
+                },
+                emailInput:{
+                    required: true,
+                    email:true
+                },
+                courseIdInput:{
+                    requireCourseId:true
+                },
+                dateOfBirthInput:{
+                    validDate:true,
+                    validAge:true
+                }
+            },
+            messages: {
+                fullNameInput: 'Please enter full name',
+                emailInput: {
+                    required: 'Please enter email',
+                    email: 'Please enter valid email'
+                },
+                mobileContactInput: {
+                    required: 'Please enter mobile contact'
+                },
+                emailInput: 'Please enter a valid email address',
+                admissionIdInput : 'Please enter 7 digit admission id'
+            }
+        });
+    }
+
+        function setupCourseListBox() {
+        	//Note: jQuery.ajax(..) is also often written is $.ajax(..)
+        	var $loadCourseDataHandler = jQuery.ajax({
+        		url: '/Api/Courses/GetCoursesForControls',
+        		method: 'GET',
+        		dataType: 'json',
+        		cache: false,
+        	});
+        	$loadCourseDataHandler.done(function (data, textStatus, jqXHR) {
+        		//After inspecting the data object with the console.log
+        		//I have clear picture of the structure and used
+        		//the following variable, courseList to represent the data
+        		var courseList = data;
+        		var courseId = '';
+        		var courseAbbreviation = '';
+        		var courseName = '';
+        		var $courseIdInputElement = null;
+        		var $optionElement = null;
+
+        		//-------- Find the table element -----------
+        		//I am using the $tableElement variable
+        		//to represent the found HTML element which has a matching id of courseIdInput
+        		$courseIdInputElement = $('#courseIdInput');
+
+        		//I want to build option elements so that
+        		//I can display course abbreviation
+        		//within the drop down list, courseIdInput
+        		//$courseIdInputElement variable is representing the dropdownlist <SELECT> element.
+
+        		//-------- Begin creating <option> HTML element ------
+        		for (index = 0; index < courseList.length; index++) {
+        			//Set this course variable to reference a course object
+        			//inside the courseList Array.
+        			course = courseList[index];
+        			//Copy out the course information
+        			courseId = course.CourseId;
+        			courseAbbreviation = course.CourseAbbreviation;
+        			courseName = course.CourseName;
+
+        			//Create new HTML <option> element.
+        			//At the same time let the $optionElement variable to represent it.
+        			$optionElement = $('<option></option>',{ text: courseAbbreviation });
+        			$optionElement.attr('value', courseId);
+        			$courseIdInputElement.append($optionElement);
+        		}//end of for loop.
+        	}//end of JavaScript anonymous function
+									)//end of the done() method;
+        }//end of setupCourseListBox();
+
+
+
+        function WebFormData(inFullName, inAdmissionId, inEmail,
+                inMobileContact,inDateOfBirth, inCourseId) {
+            this.FullName = inFullName;
+            this.AdmissionId = inAdmissionId;
+            this.Email = inEmail;
+            this.MobileContact = inMobileContact;
+            this.DateOfBirth = inDateOfBirth;
+            this.CourseId = inCourseId;
+        }
+        $('#saveButton').on('click', function () {
+            $('#dataForm').validate();
+            if ($('#dataForm').valid()==true){
+                var collectedFullName = $('#fullNameInput').val();
+                var collectedMobileContact = $('#mobileContactInput').val();
+                var collectedEmail = $('#emailInput').val();
+                var collectedDateOfBirth = $('#dateOfBirthInput').val();
+                var collectedAdmissionId = $('#admissionIdInput').val();
+                var collectedCourseId = $("#courseIdInput").val();
+                console.log(collectedCourseId);
+                var webFormData = new WebFormData(collectedFullName,collectedAdmissionId,
+                      collectedEmail,collectedMobileContact,collectedDateOfBirth,collectedCourseId);
+                var webFormDataInString = JSON.stringify(webFormData);
+
+                $saveStudentHandler = jQuery.ajax({
+                    type: 'POST',
+                    url: '/API/Students/',
+                    dataType: 'json',
+                    contentType: 'application/json;',
+                    data: "'" + webFormDataInString + "'"
+                });
+                $saveStudentHandler.done(function (data, textStatus, jqXHR) {
+                    noty({ text: data.Message, type: 'success', layout: 'center' });
+                });
+                $saveStudentHandler.fail(function (data, textStatus, jqXHR) {
+                    noty({
+                        text: data.responseJSON.Message, type: 'error',
+                        layout: 'center',
+                        template: '<div class="noty_message"><span class="noty_text"></span>'
+                    });//end of noty()
+                });
+            }//end of $('#dataForm').valid() if block
+ 
+        });//end of $('#saveButton').on('click', anonymous function)
+    </script>
+}
+
+
+
+
