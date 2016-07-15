@@ -9,12 +9,12 @@
                 </div>
             </div>
             <div class="panel-body">
-                <form id="dataForm" role="form" class="form-horizontal">
+                <form id="dataForm" role="form" class="form-horizontal" data-toggle="validator">
                     <div class="form-group col-md-12">
                         <label class="control-label  col-md-4" for="catNameInput">Category Name</label>
 
                         <input type="text" id="catNameInput" class="form-control font-bold"
-                               maxlength="50" placeholder="Category Name" value="" />
+                               maxlength="50" placeholder="Category Name" value="" required />
                     </div>
                     <div class="form-group col-md-12">
                         <label class="control-label  col-md-4" for="visibilityInput">Visibility</label>
@@ -32,7 +32,7 @@
                         <label class="control-label col-md-1"></label>
                         <div class="col-md-10">
                             <div class="pull-right">
-                                <input type="button" class="btn btn-primary" value="Save" id="saveButton" />
+                                <input type="submit" class="btn btn-primary" value="Save" id="saveButton" />
                                 <a class="btn btn-default" asp-action="Index" asp-controler="Categories">Cancel</a>
                             </div>
                         </div>
@@ -65,56 +65,63 @@
         this.EndDate = inEndDate;
     }
 
-    $('#saveButton').on('click', function () {
-        var collectedCatName = $('#catNameInput').val();
-        if (collectedCatName == null || collectedCatName == "") {
-            swal("Error!", "Please enter an appropriate category name!", "error")
-            return; // Break out of the function
-        }
-        var collectedVisibilityId = $('input[name="Visibility"]:checked').val();
-        if (collectedVisibilityId == null) {
-            swal("Error!", "Please select a visibility type!", "error")
-            return;
-        }
-        //Create a JavaScript object to contain the type name information
-        if (collectedVisibilityId == 2) {
-            var collectedStartDate = moment(startDateInput).format("DD/MM/YYYY");
-            var collectedEndDate = moment(endDateInput).format("DD/MM/YYYY");
-            // Date Checking is done Server-Sided
-            //
-            // Update 01 Jul 2016
-            //
-            // Reason 1:
-            // Moment Js is 150 times slower than javascript
-            // Proof of Concept: http://jsperf.com/momentjs-isafter-performance
-            //
-            // Reason 2:
-            // http://stackoverflow.com/questions/25310242/moment-js-isafter-performance
-            //
-            var webFormData = new WebFormData(collectedCatName, collectedVisibilityId, collectedStartDate, collectedEndDate);
+    $('#dataForm').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()) {
+            swal("Error!", "Did you forget to key in something?", "error");
         } else {
-            var webFormData = new WebFormData(collectedCatName, collectedVisibilityId, null, null);
+            e.preventDefault();
+            var collectedCatName = $('#catNameInput').val();
+            //if (collectedCatName == null || collectedCatName == "") {
+            //    swal("Error!", "Please enter an appropriate category name!", "error")
+            //    return; // Break out of the function
+            //}
+
+            var collectedVisibilityId = $('input[name="Visibility"]:checked').val();
+            if (collectedVisibilityId == null) {
+                swal("Error!", "Please select a visibility type!", "error")
+                return;
+            }
+
+            //Create a JavaScript object to contain the type name information
+            if (collectedVisibilityId == 2) {
+                var collectedStartDate = moment(startDateInput).format("DD/MM/YYYY");
+                var collectedEndDate = moment(endDateInput).format("DD/MM/YYYY");
+                // Date Checking is done Server-Sided
+                //
+                // Update 01 Jul 2016
+                //
+                // Reason 1:
+                // Moment Js is 150 times slower than javascript
+                // Proof of Concept: http://jsperf.com/momentjs-isafter-performance
+                //
+                // Reason 2:
+                // http://stackoverflow.com/questions/25310242/moment-js-isafter-performance
+                //
+                var webFormData = new WebFormData(collectedCatName, collectedVisibilityId, collectedStartDate, collectedEndDate);
+            } else {
+                var webFormData = new WebFormData(collectedCatName, collectedVisibilityId, null, null);
+            }
+
+            //Serialize the webFormData object which contains the type name
+            //data into a flat string. So that, it can be sent accross the Internet network successfully.
+            var webFormDataInString = JSON.stringify(webFormData);
+
+            // Still unable to find a solution to solve regex issues
+            
+            $saveCategoryHandler = jQuery.ajax({
+                type: 'POST',
+                url: '/API/Categories/',
+                dataType: 'json',
+                contentType: 'application/json;',
+                data: "'" + webFormDataInString + "'"
+            })//end of ajax() call
+            $saveCategoryHandler.done(function (data, textStatus, jqXHR) {
+                swal("Hurray!", data.message, "success");
+            });//end of $saveCategoryHandler.done();
+            $saveCategoryHandler.fail(function (data, textStatus, jqXHR) {
+                swal("Oh no!", data.message, "error");
+            });//end of $saveCategoryHandler.fail();
         }
-
-        //Serialize the webFormData object which contains the type name
-        //data into a flat string. So that, it can be sent accross the Internet network successfully.
-        var webFormDataInString = JSON.stringify(webFormData);
-
-        $saveCategoryHandler = jQuery.ajax({
-            type: 'POST',
-            url: '/API/Categories/',
-            dataType: 'json',
-            contentType: 'application/json;',
-            data: "'" + webFormDataInString + "'"
-        })//end of ajax() call
-        $saveCategoryHandler.done(function (data, textStatus, jqXHR) {
-            console.dir(data);
-            return;
-            swal("Hurray!", data.message, "success");
-        });//end of $saveCategoryHandler.done();
-        $saveCategoryHandler.fail(function (data, textStatus, jqXHR) {
-            swal("Oh no!", data.message, "error");
-        });//end of $saveCategoryHandler.fail();
     });//end of $('#saveButton').on('click', function () {
 
     function setupvisibilityRadioListBox() {
