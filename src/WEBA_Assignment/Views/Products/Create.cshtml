@@ -485,7 +485,7 @@
         // Custom Metric Row
         $("#customRowBtn").click(function () {
             $("#metricsTableBody").append(
-                '<tr valign="top">' +
+                '<tr value="0" valign="top">' +
                 '<td name="metricAmountField">' +
                 '<input type="text" class="form-control font-bold" id="metricAmount" name="metricAmount" value="" placeholder="Metric Amount" />' +
                 '</td>' +
@@ -516,7 +516,9 @@
         // Preset Metric Row
         $("#rowBtn").click(function () {
             $("#metricsTableBody").append(
-                '<tr valign="top">' +
+                '<tr value="1" valign="top">' +
+                // Store a value in the first column to show whether
+                // if it's preset or custom.
                 '<td name="metricAmountField">' +
                 '<input type="text" class="form-control font-bold" id="metricAmount" name="metricAmount" value="" placeholder="Metric Amount" />' +
                 '</td>' +
@@ -543,8 +545,6 @@
                 '</tr>');
 
             $('.selectpicker').selectpicker('refresh');
-
-            console.dir($('select#metricTypeInput').val());
         });
 
         $("#metricsTableBody").on('click', '.remRow', function () {
@@ -571,13 +571,7 @@
     // Special promotions & Consumable Entities unscripted
     // Things that are commented out will permanently be with the Metric Constructor
     function WebFormData(inProdName,
-        //inMetricAmount,
-        //inMetricType,
-        //inCustomMetricType,
-        //inQuantity,
         inTiQ,
-        //inPrice,
-        //inRRP,
         inBrandId,
         inPublished,
         inDescription,
@@ -585,14 +579,7 @@
         inIsConsumable,
         inStatusId) {
         this.ProdName = inProdName;
-        //this.MetricAmount = inMetricAmount;
-        //this.MetricType = inMetricType;
-        // Custom Metric for a single Metric
-        //this.customMetricType = inCustomMetricType;
-        //this.Quantity = inQuantity;
         this.ThresholdInventoryQuantity = inTiQ;
-        //this.Price = inPrice;
-        //this.RRP = inRRP;
         this.BrandId = inBrandId;
         this.Published = inPublished;
         this.Description = inDescription;
@@ -692,13 +679,6 @@
         } else {
             // If there are custom variations, we'll have to utitilize the Metrics system
             var collectedTIQ = $('#tiqInput').val(); // Only this is still needed
-            var collectedMetricAmount = null;
-            var customCollectedMetricType = null;
-            var collectedMetricType = null;
-            var collectedQuantity = null;
-            var collectedPrice = null;
-            var collectedRRP = null;
-            var collectedStatusId = 0;
 
             // Look for the table
             var table = document.getElementById("metricsTableBody");
@@ -753,7 +733,20 @@
                             // $('select#loltesting').val();
                             // I can only grab the name, so we'll have to search
                             // for the preset metric with its name
-                            MetricType = row.cells[j].children[0].innerText.trim();
+
+                            // I freaking spent 5 days on this.
+
+                            // If this element is not selectpicker
+
+                            if (row.cells[j].children[0].classList[1].toString() == "font-bold") {
+                                var isPreset = 0; // 0 = false
+                                MetricType = row.cells[j].children[0].value;
+                                break;
+                            } else {
+                                var isPreset = 1; // 1 = true
+                                MetricType = row.cells[j].children[0].innerText.trim();
+                                break;
+                            }
                             break;
                         case 2: // Quantity
                             Quantity = row.cells[j].children[0].value;
@@ -772,7 +765,7 @@
                     }
                 }
                 // Finally we push the metric object to the MetricData
-                MetricData.push(new Metric(MetricAmount, MetricType, Quantity, Price, RRP, Status, 0));
+                MetricData.push(new Metric(MetricAmount, MetricType, Quantity, Price, RRP, Status, isPreset));
             }
             // Constructing the webformdata object for a product with alot of metric units 
 
