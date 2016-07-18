@@ -117,6 +117,11 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasColumnType("VARCHAR(100)")
                 .IsRequired();
 
+            // StatusName Unique Constraint for the Status Entity
+            modelBuilder.Entity<Status>()
+                .HasIndex(input => input.StatusName).IsUnique()
+                .HasName("Status_StatusName_UniqueConstraint");
+
             // -------------- Defining Status Entity --------------- //
             // END.
 
@@ -709,6 +714,11 @@ namespace WEBA_ASSIGNMENT.Data
             // won't be any chance that the admin will be able to 
             // change a single shit unless the SI Unit had a 
             // massive revolution.
+
+            // Unqiue Constraint for PresetMetric MetricSubType
+            modelBuilder.Entity<PresetMetric>()
+                .HasIndex(input => input.MetricSubType).IsUnique()
+                .HasName("PresetMetric_MetricSubType_UniqueConstraint");
 
             // -------- End of Defining PresetMetric Entity -------- //
 

@@ -355,6 +355,61 @@ namespace WEBA_ASSIGNMENT.APIs
                     {
                         // We need have an if statement to identify a custom metric row
                         // or preset metric row as well
+
+
+                        // If the only metric is actually from a preset metric
+                        if (Metric.isPreset == "1")
+                        {
+                            String MetricType = Metric.MetricType.Value;
+                            var presetMetricUsed = Database.PresetMetrics
+                                .Where(input => input.MetricType == MetricType).Single();
+                            Metrics newMetric = new Metrics();
+                            newMetric.ProdId = newProduct.ProdId;
+                            newMetric.MetricAmount = Int32.Parse(Metric.MetricAmount.Value);
+                            newMetric.MetricType = presetMetricUsed.MetricType; // Taken from PresetMetrics Table
+                            newMetric.PMetricId = presetMetricUsed.PMetricId; // Only for Preset Metrics
+                            newMetric.Quantity = Int32.Parse(Metric.Quantity.Value);
+                            newMetric.StatusId = Int32.Parse(Metric.Status.Value);
+                            newMetric.CreatedById = _userManager.GetUserId(User);
+                            newMetric.UpdatedById = _userManager.GetUserId(User);
+
+                            // Add the new metric into the DbSet
+                            Database.Metrics.Add(newMetric);
+
+                            Price price = new Price();
+                            price.MetricId = newMetric.MetricId;
+                            // Have not converted to decimal yet
+                            price.RRP = Convert.ToDecimal(Metric.RRP.Value);
+                            price.Value = Convert.ToDecimal(Metric.Price.Value);
+                            price.CreatedById = _userManager.GetUserId(User);
+
+                            Database.Prices.Add(price);
+                        }
+                        else
+                        // Else, it'll be a custom preset metric
+                        {
+                            // Time to construct a custom metric
+                            Metrics newMetric = new Metrics();
+                            newMetric.ProdId = newProduct.ProdId;
+                            newMetric.MetricAmount = Int32.Parse(Metric.MetricAmount.Value);
+                            newMetric.MetricType = Metric.MetricType.Value;
+                            newMetric.Quantity = Int32.Parse(Metric.Quantity.Value);
+                            newMetric.StatusId = Int32.Parse(Metric.Status.Value);
+                            newMetric.CreatedById = _userManager.GetUserId(User);
+                            newMetric.UpdatedById = _userManager.GetUserId(User);
+
+                            // Add the new metric into the DbSet
+                            Database.Metrics.Add(newMetric);
+
+                            Price price = new Price();
+                            price.MetricId = newMetric.MetricId;
+                            // Have not converted to decimal yet
+                            price.RRP = Convert.ToDecimal(Metric.RRP.Value);
+                            price.Value = Convert.ToDecimal(Metric.Price.Value);
+                            price.CreatedById = _userManager.GetUserId(User);
+
+                            Database.Prices.Add(price);
+                        }
                     }
                 }
 

@@ -739,11 +739,11 @@
                             // If this element is not selectpicker
 
                             if (row.cells[j].children[0].classList[1].toString() == "font-bold") {
-                                var isPreset = 0; // 0 = false
+                                var isPreset = "0"; // 0 = false
                                 MetricType = row.cells[j].children[0].value;
                                 break;
                             } else {
-                                var isPreset = 1; // 1 = true
+                                var isPreset = "1"; // 1 = true
                                 MetricType = row.cells[j].children[0].innerText.trim();
                                 break;
                             }
@@ -772,7 +772,7 @@
             // Create the object for POST
             //(inProdName, inTiQ, inBrandId, inPublished, inDescription, inMetrics, inIsConsumable, inStatusId)
             var webFormData = new WebFormData(collectedProdName, collectedTIQ, collectedBrandId, collectedPublished,
-                collectedDescription, MetricData, collectedConsumable, 0);
+                collectedDescription, MetricData, collectedConsumable, "0");
 
         }
 
