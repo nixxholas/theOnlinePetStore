@@ -631,10 +631,9 @@
         // Static variables
         var collectedPublished = isPublished.toString();
         var collectedConsumable = isConsumable.toString();
-        
-        if ($('#metricSegment').hasClass('hidden')) {
-            // If there are no custom sizes or variations
 
+        // If there are no custom sizes or variations
+        if ($('#metricSegment').hasClass('hidden')) {
             // Metric Amount Input & Validation            
             var collectedMetricAmount = $('#metricAmountInput').val();
             if (collectedMetricAmount == null || collectedMetricAmount == "") {
@@ -644,17 +643,14 @@
 
             // Metric Type Input & Validation
             if (customMetric == 1) {
-                var customCollectedMetricType = $('#customMetricTypeInput').val();
+                var collectedMetricType = $('#customMetricTypeInput').val();
                 var collectedIsPreset = 0;
-                if (customCollectedMetricType == null || customCollectedMetricType == "") {
+                if (collectedMetricType == null || collectedMetricType == "") {
                     swal("Hey!", "Please enter your custom metric type!", "error");
                     return;
                 }
-                var collectedMetricType = null;
             } else {
-                var customCollectedMetricType = null;
                 if ($('#pMetricSuggest').magicSuggest().isValid() == true) {
-                    console.dir($('#pMetricSuggest').magicSuggest().getSelection());
                     var collectedIsPreset = 1;
                     var collectedMetricType = $('#pMetricSuggest').magicSuggest().getValue().toString();
                 } else {

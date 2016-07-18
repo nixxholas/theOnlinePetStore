@@ -328,10 +328,10 @@ namespace WEBA_ASSIGNMENT.APIs
                         // Time to construct a custom metric
                         Metrics newMetric = new Metrics();
                         newMetric.ProdId = newProduct.ProdId;
-                        newMetric.MetricAmount = productNewInput.Metrics[0].MetricAmount.Value;
+                        newMetric.MetricAmount = Int32.Parse(productNewInput.Metrics[0].MetricAmount.Value);
                         newMetric.MetricType = productNewInput.Metrics[0].MetricType.Value;
                         newMetric.Quantity = Int32.Parse(productNewInput.Metrics[0].Quantity.Value);
-                        newMetric.StatusId = Int32.Parse(productNewInput.Metrics[0].StatusId.Value);
+                        newMetric.StatusId = Int32.Parse(productNewInput.Metrics[0].Status.Value);
                         newMetric.CreatedById = _userManager.GetUserId(User);
                         newMetric.UpdatedById = _userManager.GetUserId(User);
 
