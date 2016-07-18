@@ -476,6 +476,10 @@
         size: 3
     });
 
+    // Class for selectpicker onClick
+    //$('.selectReader').on('change', function(){
+    //    $(this).val
+    //});
 
     $(document).ready(function () {
         // Custom Metric Row
@@ -539,6 +543,8 @@
                 '</tr>');
 
             $('.selectpicker').selectpicker('refresh');
+
+            console.dir($('select#metricTypeInput').val());
         });
 
         $("#metricsTableBody").on('click', '.remRow', function () {
@@ -671,7 +677,34 @@
             // Look for the table
             var table = document.getElementById("metricsTableBody");
 
-            // For each row in metricsTableBody
+
+            /**
+                Declared Ineffective
+
+                Unable to effectively provide a 5 way statement to help identify
+                which column the current loop is identifying/looking for.
+            //// jQuery Method for each row in metricsTableBody
+            //$("#metricsTableBody tr").each(function () {
+            //    // Define the attributes of each Metric
+            //    var MetricAmount = '';
+            //    var MetricType = '';
+            //    var Quantity = '';
+            //    var Price = '';
+            //    var RRP = '';
+            //    var Status = '';
+
+            //    // Iterate through each Column
+            //    $('td', this).each(function () {
+            //        console.dir(this);
+            //    })
+
+            //})
+
+            //return
+            
+            **/
+
+            // For each row in metricsTableBody javascript style
             for (var i = 0, row; row = table.rows[i]; i++) {
                 // iterate through rows
 
@@ -694,7 +727,9 @@
                             // It'll be easier if we can pull the Id instead
                             //MetricType =
                             // $('select#loltesting').val();
-                            console.dir(row.cells[j].children[0]);
+                            // I can only grab the name, so we'll have to search
+                            // for the preset metric with its name
+                            MetricType = row.cells[j].children[0].innerText.trim();
                             break;
                         case 2: // Quantity
                             Quantity = row.cells[j].children[0].value;
@@ -728,6 +763,9 @@
         //data into a flat string. So that, it can be sent accross the Internet network successfully.
         var webFormDataInString = JSON.stringify(webFormData);
         
+        // Debugging mode, do not post
+        return;
+
         $saveProductHandler = jQuery.ajax({
             method: 'post',
             contentType: 'application/json',
