@@ -65,16 +65,35 @@
                         {
 						<li><a asp-controller="UserManager" asp-action="Index">Manage User</a></li>
                         <li><a asp-controller="Specials" asp-action="Index">Manage Promotions</a></li>
-                        <li><a asp-controller="Categories" asp-action="Index">Manage Categories</a></li>
-                        <li><a asp-controller="Brands" asp-action="Index">Manage Brands</a></li>
+                        <li class="dropdown ">
+                            <a href="#" id="drop2" data-toggle="dropdown" class="dropdown-toggle" role="button">
+                                Categories <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
+                                <li><a asp-controller="Categories" asp-action="Index">Manage Categories</a></li>
+                                <li><a asp-controller="Categories" asp-action="Create">Create Category</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown ">
+                            <a href="#" id="drop2" data-toggle="dropdown" class="dropdown-toggle" role="button">
+                                Brands <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
+                                <li><a asp-controller="Brands" asp-action="Index">Manage Brands</a></li>
+                                <li><a asp-controller="Brands" asp-action="Create">Create Brand</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown ">
+                            <a href="#" id="drop2" data-toggle="dropdown" class="dropdown-toggle" role="button">
+                                Products <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
+                                <li><a asp-controller="Products" asp-action="Index">Manage Products</a></li>
+                                <li><a asp-controller="Products" asp-action="Create">Create Product</a></li>
+                            </ul>
+                        </li>
                         }
-							<li class="dropdown ">
-							<a href="#" id="drop2" data-toggle="dropdown" class="dropdown-toggle" role="button">
-																		Products <b class="caret"></b></a>
-							<ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
-								<li><a asp-controller="Products" asp-action="Index">Manage Products</a></li>
-							</ul>
-						</li>
+						
 						
 					</ul>
 					@await Html.PartialAsync("_LoginPartial")

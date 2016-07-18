@@ -293,21 +293,21 @@ namespace WEBA_ASSIGNMENT.APIs
                 newProduct.Metrics = new List<Metrics>();
                               
                 // If we're not creating alot of metrics
-                if (productNewInput.Metrics.Value == null)
+                if (productNewInput.StatusId.Value != "0")
                 {
                     // If the only metric is actually from a preset metric
-                    if (productNewInput.customMetricType.Value == null)
+                    if (productNewInput.Metrics[0].isPreset == "1")
                     {
-                        int id = Int32.Parse(productNewInput.MetricType.Value);
+                        int id = Int32.Parse(productNewInput.Metrics[0].MetricType.Value);
                         var presetMetricUsed = Database.PresetMetrics
                             .Where(input => input.PMetricId == id).Single();
                         Metrics newMetric = new Metrics();
                         newMetric.ProdId = newProduct.ProdId;
-                        newMetric.MetricAmount = Int32.Parse(productNewInput.MetricAmount.Value);
-                        newMetric.MetricType = presetMetricUsed.MetricType;
+                        newMetric.MetricAmount = Int32.Parse(productNewInput.Metrics[0].MetricAmount.Value);
+                        newMetric.MetricType = presetMetricUsed.MetricType; // Taken from PresetMetrics Table
                         newMetric.PMetricId = id; // Only for Preset Metrics
-                        newMetric.Quantity = Int32.Parse(productNewInput.Quantity.Value);
-                        newMetric.StatusId = Int32.Parse(productNewInput.Status.Value);
+                        newMetric.Quantity = Int32.Parse(productNewInput.Metrics[0].Quantity.Value);
+                        newMetric.StatusId = Int32.Parse(productNewInput.Metrics[0].Status.Value);
                         newMetric.CreatedById = _userManager.GetUserId(User);
                         newMetric.UpdatedById = _userManager.GetUserId(User);
 
@@ -317,8 +317,8 @@ namespace WEBA_ASSIGNMENT.APIs
                         Price price = new Price();
                         price.MetricId = newMetric.MetricId;
                         // Have not converted to decimal yet
-                        price.RRP = Convert.ToDecimal(productNewInput.RRP.Value);
-                        price.Value = Convert.ToDecimal(productNewInput.Price.Value);
+                        price.RRP = Convert.ToDecimal(productNewInput.Metrics[0].RRP.Value);
+                        price.Value = Convert.ToDecimal(productNewInput.Metrics[0].Price.Value);
                         price.CreatedById = _userManager.GetUserId(User);
 
                         Database.Prices.Add(price);
@@ -328,10 +328,10 @@ namespace WEBA_ASSIGNMENT.APIs
                         // Time to construct a custom metric
                         Metrics newMetric = new Metrics();
                         newMetric.ProdId = newProduct.ProdId;
-                        newMetric.MetricAmount = productNewInput.MetricAmount.Value;
-                        newMetric.MetricType = productNewInput.customMetricType.Value;
-                        newMetric.Quantity = Int32.Parse(productNewInput.Quantity.Value);
-                        newMetric.StatusId = Int32.Parse(productNewInput.StatusId.Value);
+                        newMetric.MetricAmount = productNewInput.Metrics[0].MetricAmount.Value;
+                        newMetric.MetricType = productNewInput.Metrics[0].MetricType.Value;
+                        newMetric.Quantity = Int32.Parse(productNewInput.Metrics[0].Quantity.Value);
+                        newMetric.StatusId = Int32.Parse(productNewInput.Metrics[0].StatusId.Value);
                         newMetric.CreatedById = _userManager.GetUserId(User);
                         newMetric.UpdatedById = _userManager.GetUserId(User);
 
@@ -341,12 +341,11 @@ namespace WEBA_ASSIGNMENT.APIs
                         Price price = new Price();
                         price.MetricId = newMetric.MetricId;
                         // Have not converted to decimal yet
-                        price.RRP = Convert.ToDecimal(productNewInput.RRP.Value);
-                        price.Value = Convert.ToDecimal(productNewInput.Price.Value);
+                        price.RRP = Convert.ToDecimal(productNewInput.Metrics[0].RRP.Value);
+                        price.Value = Convert.ToDecimal(productNewInput.Metrics[0].Price.Value);
                         price.CreatedById = _userManager.GetUserId(User);
 
                         Database.Prices.Add(price);
-
                     }
 
                     // Since we're creating alot of metrics
@@ -354,7 +353,8 @@ namespace WEBA_ASSIGNMENT.APIs
                     // Iterate through the metric list
                     foreach (var Metric in productNewInput.Metrics)
                     {
-
+                        // We need have an if statement to identify a custom metric row
+                        // or preset metric row as well
                     }
                 }
 
@@ -373,27 +373,7 @@ namespace WEBA_ASSIGNMENT.APIs
 
                 // Initialize the ProductPhotos list first
                 newProduct.ProductPhotos = new List<ProductPhoto>();
-
-                // Have to implement a foreach loop to stash multiple Metrics
-                // into the table
-                if (productNewInput.Metrics != null)
-                {
-                    // Let's initialize the List of Metrics
-                    newProduct.Metrics = new List<Metrics>();
-                    foreach (var Metric in productNewInput.Metrics)
-                    {
-                        Metrics metric = new Metrics();
-                        metric.MetricType = Metric.MetricType.Value;
-                        metric.Quantity = Int32.Parse(Metric.Quantity.Value);
-                        metric.CreatedById = _userManager.GetUserId(User);
-                        metric.UpdatedById = _userManager.GetUserId(User);
-                        if (Metric.PMetricId.Value != null)
-                        {
-                            // Then initialize a preset metric
-                        }
-                    }
-                }
-
+                
                 //I cannot save the products information into database yet. The 
                 //UploadProductPhotosAndSaveProductData has logic to upload the binary file to
                 //Cloudinary first, then it will save products data into the database.

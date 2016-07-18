@@ -557,36 +557,55 @@
     });
 
     // Function Constructor for creating a metrics object
-    function Metric(inMetricAmount, inMetricType, inQuantity, inPrice, inRRP, inStatus) {
+    function Metric(inMetricAmount, inMetricType, inQuantity, inPrice, inRRP, inStatus, inIsPreset) {
         this.MetricAmount = inMetricAmount;
         this.MetricType = inMetricType;
         this.Quantity = inQuantity;
         this.Price = inPrice;
         this.RRP = inRRP;
         this.Status = inStatus;
+        this.isPreset = inIsPreset;
     }
 
     //Using a function technique to create a JavaScript class, WebFormData
     // Special promotions & Consumable Entities unscripted
-    function WebFormData(inProdName, inMetricAmount, inMetricType, inCustomMetricType, inQuantity, inTiQ, inPrice, inRRP, inBrandId, inPublished, inDescription, inMetrics, inIsConsumable, inStatusId) {
+    // Things that are commented out will permanently be with the Metric Constructor
+    function WebFormData(inProdName,
+        //inMetricAmount,
+        //inMetricType,
+        //inCustomMetricType,
+        //inQuantity,
+        inTiQ,
+        //inPrice,
+        //inRRP,
+        inBrandId,
+        inPublished,
+        inDescription,
+        inMetrics,
+        inIsConsumable,
+        inStatusId) {
         this.ProdName = inProdName;
-        this.MetricAmount = inMetricAmount;
-        this.MetricType = inMetricType;
+        //this.MetricAmount = inMetricAmount;
+        //this.MetricType = inMetricType;
         // Custom Metric for a single Metric
-        this.customMetricType = inCustomMetricType;
-        this.Quantity = inQuantity;
+        //this.customMetricType = inCustomMetricType;
+        //this.Quantity = inQuantity;
         this.ThresholdInventoryQuantity = inTiQ;
-        this.Price = inPrice;
-        this.RRP = inRRP;
+        //this.Price = inPrice;
+        //this.RRP = inRRP;
         this.BrandId = inBrandId;
         this.Published = inPublished;
         this.Description = inDescription;
         this.Metrics = inMetrics;
         this.isConsumable = inIsConsumable;
-        //this.StatusId = inStatusId;
+        // Incase the product has only one metric
+        this.StatusId = inStatusId;
     }
 
     $('#saveButton').on('click', function () {
+        // Everyone needs MetricData
+        var MetricData = [];
+
         // Product Name
         var collectedProdName = $('#prodNameInput').val();
         if (collectedProdName == null || collectedProdName == "") {
@@ -626,6 +645,7 @@
             // Metric Type Input & Validation
             if (customMetric == 1) {
                 var customCollectedMetricType = $('#customMetricTypeInput').val();
+                var collectedIsPreset = 0;
                 if (customCollectedMetricType == null || customCollectedMetricType == "") {
                     swal("Hey!", "Please enter your custom metric type!", "error");
                     return;
@@ -634,6 +654,8 @@
             } else {
                 var customCollectedMetricType = null;
                 if ($('#pMetricSuggest').magicSuggest().isValid() == true) {
+                    console.dir($('#pMetricSuggest').magicSuggest().getSelection());
+                    var collectedIsPreset = 1;
                     var collectedMetricType = $('#pMetricSuggest').magicSuggest().getValue().toString();
                 } else {
                     swal("Oh no..", "Please enter a Preset Metric!", "error");
@@ -658,9 +680,18 @@
             var collectedPrice = $('#priceInput').val();
             var collectedRRP = $('#rrpInput').val();
 
-            // We don't have to have any metrics list
-            // thus we toss a null into this var for easier identification in the Web API
-            var collectedMetrics = null; // Undone, need a for loop to pull all tables
+            // Push the single metric into the array of metrics
+            // (inMetricAmount, inMetricType, inQuantity, inPrice, inRRP, inStatus) 
+            MetricData.push(new Metric(collectedMetricAmount, collectedMetricType, collectedQuantity, collectedPrice, collectedRRP, collectedStatusId, collectedIsPreset))
+
+            // DONE
+
+            // Create a product containing only one metric
+
+            // Create the object for POST
+            //(inProdName, inTiQ, inBrandId, inPublished, inDescription, inMetrics, inIsConsumable, inStatusId)
+            var webFormData = new WebFormData(collectedProdName, collectedTIQ, collectedBrandId, collectedPublished,
+                collectedDescription, MetricData, collectedConsumable, collectedStatusId);
 
         } else {
             // If there are custom variations, we'll have to utitilize the Metrics system
@@ -671,13 +702,11 @@
             var collectedQuantity = null;
             var collectedPrice = null;
             var collectedRRP = null;
-            var collectedStatusId = null;
-            var MetricData = [];
+            var collectedStatusId = 0;
 
             // Look for the table
             var table = document.getElementById("metricsTableBody");
-
-
+            
             /**
                 Declared Ineffective
 
@@ -725,7 +754,6 @@
                             // Dropdown box
                             // I'm only getting the name of the preset metric..
                             // It'll be easier if we can pull the Id instead
-                            //MetricType =
                             // $('select#loltesting').val();
                             // I can only grab the name, so we'll have to search
                             // for the preset metric with its name
@@ -748,23 +776,23 @@
                     }
                 }
                 // Finally we push the metric object to the MetricData
-                MetricData.push(new Metric(MetricAmount, MetricType, Quantity, Price, RRP, Status));
+                MetricData.push(new Metric(MetricAmount, MetricType, Quantity, Price, RRP, Status, 0));
             }
-        }
+            // Constructing the webformdata object for a product with alot of metric units 
 
-        // Create the object for POST
-        //(inProdName, inMetricAmount, inMetricType, inCustomMetricType, 
-        // inQuantity, inTiQ, inPrice, inRRP, inBrandId, inPublished, inDescription, inMetrics, inIsConsumable, inStatusId)
-        var webFormData = new WebFormData(collectedProdName, collectedMetricAmount, collectedMetricType, customCollectedMetricType,
-            collectedQuantity, collectedTIQ, collectedPrice, collectedRRP, collectedBrandId, collectedPublished,
-            collectedDescription, collectedMetrics, collectedConsumable, collectedStatusId);
+            // Create the object for POST
+            //(inProdName, inTiQ, inBrandId, inPublished, inDescription, inMetrics, inIsConsumable, inStatusId)
+            var webFormData = new WebFormData(collectedProdName, collectedTIQ, collectedBrandId, collectedPublished,
+                collectedDescription, MetricData, collectedConsumable, 0);
+
+        }
 
         //Serialize the webFormData object which contains the type name
         //data into a flat string. So that, it can be sent accross the Internet network successfully.
         var webFormDataInString = JSON.stringify(webFormData);
         
         // Debugging mode, do not post
-        return;
+        //return;
 
         $saveProductHandler = jQuery.ajax({
             method: 'post',
