@@ -780,9 +780,6 @@
         //data into a flat string. So that, it can be sent accross the Internet network successfully.
         var webFormDataInString = JSON.stringify(webFormData);
         
-        // Debugging mode, do not post
-        //return;
-
         $saveProductHandler = jQuery.ajax({
             method: 'post',
             contentType: 'application/json',
