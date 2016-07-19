@@ -16,9 +16,12 @@
                         <table id="dataTable" class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Category Id</th>
-                                    <th>Category Name</th>
-                                    <th>Visibility</th>
+                                    <th>Product Id</th>
+                                    <th>Product Name</th>
+                                    <th>Brand Name</th>
+                                    <th>Threshold Inventory Quantity</th>
+                                    <th>Quantity</th>
+                                    <th>Published</th>
                                     <!-- <th>No. of Sub-Categories</th> -->
                                     <th>Created At</th>
                                     <th>Created By</th>
@@ -27,7 +30,7 @@
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
-                            <tbody id="categoryTableBody"></tbody>
+                            <tbody id="productTableBody"></tbody>
                         </table>
 
                     </div>
@@ -42,34 +45,37 @@
     var affectedBrands = "";
     var selectedCategories = [];
     $(document).ready(function () {
-        loadCategoryData();
+        loadProductData();
     })
 
-    function loadCategoryData() {
+    function loadProductData() {
         //Note: jQuery.ajax(..) is also often written is $.ajax(..)
-        $loadCategoryDataHandler = jQuery.ajax({
-            url: '/Api/Categories',
+        $loadProductDataHandler = jQuery.ajax({
+            url: '/Api/Products',
             method: 'GET',
             dataType: 'json',
             cache: false,
         })
-        $loadCategoryDataHandler.done(function (data, textStatus, jqXHR) {
-            var categoryList = data;
-            var CatId = '';
-            var CatName = '';
-            //var noofBrands = '';
+        $loadProductDataHandler.done(function (data, textStatus, jqXHR) {
+            var productList = data;
+            var ProdId = '';
+            var ProdName = '';
+            var BrandName = '';
+            var TiQ = '';
+            var Quantity = '';
+            var Published = '';
             var CreatedAt = "";
             var CreatedBy = "";
             var UpdatedAt = "";
             var UpdatedBy = "";
-            var DeletedAt = "";
             var $tableElement = null;
             var $cellElement = null;
             var $rowElement = null;
+            
             //-------- Find the table element -----------
             //I am using the $tableElement variable
             //to represent the found HTML element which has a matching id of brandTableBody
-            $tableBodyElement = $('#categoryTableBody');
+            $tableBodyElement = $('#productTableBody');
 
             //I want to build rows and cells (using tr and td HTML elements) so that
             //I can display category name, created at, updated at information
@@ -77,64 +83,73 @@
             //$tableBodyElement variable to represent (reference) the table element.
 
             //-------- Begin creating <tr> and <td> HTML element ------
-            for (index = 0; index < categoryList.length; index++) {
+            for (index = 0; index < productList.length; index++) {
                 //Set this brand variable to reference a brand object
                 //inside the brandList Array.
-                category = categoryList[index];
+                product = productList[index];
                 //Copy out the brand information
-                CatId = category.catId;
-                CatName = category.catName;
-                VisibilityName = category.visibility;
-                CreatedAt = category.createdAt;
-                CreatedBy = category.createdBy;
-                UpdatedAt = category.updatedAt;
-                UpdatedBy = category.updatedBy;
-                console.dir(CreatedBy);
+                ProdId = product.prodId;
+                ProdName = product.prodName;
+                BrandName = product.brandName;
+                TiQ = product.tiQ;
+                Quantity = product.quantity;
+                Published = product.published;
+                CreatedAt = product.createdAt;
+                CreatedBy = product.createdBy;
+                UpdatedAt = product.updatedAt;
+                UpdatedBy = product.updatedBy;
+
                 //noofBrands = category.BrandCategory.length;
                 // Have not added BrandsOfCategories here
                 // noofProducts = brand.NoOfProducts;
                 //createdAt = new Date(brand.CreatedAt).toDateString();
-                if (category.deletedAt == null) {
+                if (product.deletedAt == null) {
                     deletedAt = null;
                 } else {
-                    deletedAt = new Date(category.deletedAt).toDateString();
+                    deletedAt = new Date(product.deletedAt).toDateString();
                 }
 
                 //Create new HTML <tr> element.
                 //At the same time let the $rowElement variable to represent it.
                 if (deletedAt == null) {
-                    $rowElement = $('<tr value="' + CatId + '"></tr>');
+                    $rowElement = $('<tr value="' + ProdId + '"></tr>');
                 } else {
-                    $rowElement = $('<tr class="highlightred" value="' + CatId + '"></tr>');
+                    $rowElement = $('<tr class="highlightred" value="' + ProdId + '"></tr>');
                 }
-                //Create the 1st cell element which displays the CategoryId
-                $cellElement = $('<td></td>', { text: CatId });
+                //Create the 1st cell element which displays the ProdId
+                $cellElement = $('<td></td>', { text: ProdId });
                 $rowElement.append($cellElement);
-                //Create the 2nd cell element which displays the Category Name
-                $cellElement = $('<td></td>', { text: CatName });
+                //Create the 2nd cell element which displays the Product Name
+                $cellElement = $('<td></td>', { text: ProdName });
                 $rowElement.append($cellElement);
-                // Create the 3rd cell element which displays the Visibility
-                $cellElement = $('<td></td>', { text: VisibilityName });
+                // Create the 3rd cell element which displays the Brand Name
+                $cellElement = $('<td></td>', { text: BrandName });
                 $rowElement.append($cellElement);
-                //Create the 4th cell element which display created at information
-                $cellElement = $('<td></td>', { text: moment(CreatedAt).format('DD/MM/YYYY HH:mm ZZ') });
+                // Create the 4th cell element which displays the Threshold Inventory Quantity
+                $cellElement = $('<td></td>', { text: TiQ });
                 $rowElement.append($cellElement);
-                //Create the 5th cell element which display created at information
-                $cellElement = $('<td></td>', { text: CreatedBy });
+                // Create the 5th cell element which displays the Quantity
+                $cellElement = $('<td></td>', { text: Quantity });
                 $rowElement.append($cellElement);
-                //Create the 6th cell element which display updated at information
-                $cellElement = $('<td></td>', { text: moment(UpdatedAt).format('DD/MM/YYYY HH:mm ZZ') });
+                // Create the 6th cell element which displays the Published State
+                $cellElement = $('<td></td>', { text: Published });
                 $rowElement.append($cellElement);
                 //Create the 7th cell element which display created at information
+                $cellElement = $('<td></td>', { text: moment(CreatedAt).format('DD/MM/YYYY HH:mm ZZ') });
+                $rowElement.append($cellElement);
+                //Create the 8th cell element which display created at information
+                $cellElement = $('<td></td>', { text: CreatedBy });
+                $rowElement.append($cellElement);
+                //Create the 9th cell element which display updated at information
+                $cellElement = $('<td></td>', { text: moment(UpdatedAt).format('DD/MM/YYYY HH:mm ZZ') });
+                $rowElement.append($cellElement);
+                //Create the 10th cell element which display created at information
                 $cellElement = $('<td></td>', { text: UpdatedBy });
                 $rowElement.append($cellElement);
                 if (deletedAt == null) {
                     //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
-                    $hyperLinkElement = $('<a>Update</a>').attr('href', '/Categories/Update/' + CatId);
+                    $hyperLinkElement = $('<a>Update</a>').attr('href', '/Products/Update/' + ProdId);
                     $hyperLinkElement.addClass('btn btn-primary');
-                    //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
-                    $hyperLinkElement2 = $('<a>Manage Brands</a>').attr('href', '/Brands/BrandsUnderCategory/' + CatId); // Placeholder
-                    $hyperLinkElement2.addClass('btn btn-primary inline');
                     //-----------------Using jQuery() to creating the 6th cell for the row----------------------
                     $cellElement = $('<td></td>');
                     //-----------------Add the previous created hyperlink element, $hyperLinkElement
@@ -143,7 +158,7 @@
                     $cellElement.append($hyperLinkElement2);
                 } else {
                     //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
-                    $hyperLinkElement3 = $('<a name="restore" id=' + CatId + ' onClick="restoreCat(' + CatId + ')">Restore Category</a>'); // Placeholder
+                    $hyperLinkElement3 = $('<a name="restore" id=' + ProdId + ' onClick="restoreCat(' + ProdId + ')">Restore Product</a>'); // Placeholder
                     $hyperLinkElement3.addClass('btn btn-primary inline');
                     $cellElement = $('<td></td>');
                     $cellElement.append($hyperLinkElement3);
@@ -158,7 +173,7 @@
         }//end of JavaScript anonymous function
 
         )//end of the done() method;
-        $loadCategoryDataHandler.fail(function (data, textStatus, jqXHR) {
+        $loadProductDataHandler.fail(function (data, textStatus, jqXHR) {
             noty({
                 text: 'Ajax fail fired : ' + data.statusText, type: 'error',
                 layout: 'center',

@@ -72,6 +72,16 @@ namespace WEBA_ASSIGNMENT.APIs
             //JSON formatted string data which can be sent back to the web browser client.
             foreach (var oneProduct in products)
             {
+                String published;
+                if (oneProduct.Published == 1)
+                {
+                   published = "Yes";
+                } else
+                {
+                   published = "No";
+                }
+
+                // Unfinished
                 productList.Add(new
                 {
                     ProdId = oneProduct.ProdId,
@@ -80,9 +90,9 @@ namespace WEBA_ASSIGNMENT.APIs
                     BrandName = oneProduct.Brand.BrandName,
                     Description = oneProduct.Description,
                     Metrics = oneProduct.Metrics,
-                    TiS = oneProduct.ThresholdInvertoryQuantity,
+                    TiQ = oneProduct.ThresholdInvertoryQuantity,
                     Quantity = getTotalQuantity(oneProduct.Metrics),
-                    Published = oneProduct.Published,
+                    Published = published,
                     CreatedAt = oneProduct.CreatedAt,
                     CreatedBy = oneProduct.CreatedBy.FullName,
                     UpdatedAt = oneProduct.UpdatedAt,
