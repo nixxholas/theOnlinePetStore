@@ -469,8 +469,8 @@ namespace WEBA_ASSIGNMENT.APIs
                     Database.Prices.Add(metric.Price);
                 }
 
-                // I didn't even start testing the ProductPhotos yet
-                // So I'll leave the default Product image alone first
+                // Default Product image adapted from
+                // http://gemkolabwell.com/Admin/images/product/075319default_product.jpg
 
                 //newProduct.ProductPhotos.Add(new ProductPhoto()
                 //{
@@ -483,6 +483,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 //    Version = 1466794773,
                 //    Width = 171
                 //});
+                
                 //Add the product record first, so that the newProduct
                 //object's ProdId property is updated with the new record's
                 //id.

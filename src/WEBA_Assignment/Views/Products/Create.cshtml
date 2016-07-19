@@ -201,7 +201,7 @@
         data: 'http://localhost:5008/API/PresetMetrics',
         dataType: 'json',
         displayField: 'metricSubType',
-        valueField: 'pMetricId',
+        valueField: 'metricSubType',
         groupBy: 'metricType',
         renderer: function (data) {
             return '<div style="padding: 5px;">' +
@@ -224,7 +224,7 @@
         data: 'http://localhost:5008/API/Status',
         dataType: 'json',
         displayField: 'statusName',
-        valueField: 'statusId',
+        valueField: 'statusName',
         renderer: function (data) {
             return '<div style="padding: 5px;">' +
                 //'<div style="float: left;"><img height="75px" width="75px" src="' + data.photoUrl + '" /></div>' +
