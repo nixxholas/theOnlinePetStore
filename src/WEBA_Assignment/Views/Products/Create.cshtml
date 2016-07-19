@@ -259,7 +259,7 @@
 
     });
     $dCTForStatus.fail(function (data, textStatus, jqXHR) {
-        swal("Oh no!", data.responseJSON.message, "error");
+        swal("Oh no!", data.message, "error");
     });
 
     // PresetMetric GET Method
@@ -282,7 +282,7 @@
 
     });
     $dCTForPresetMetrics.fail(function (data, textStatus, jqXHR) {
-        swal("Oh no!", data.responseJSON.message, "error");
+        swal("Oh no!", data.message, "error");
     });
 
 
@@ -465,7 +465,7 @@
                          function (event, data, previewId, index) {
                              var form = data.form, files = data.files, extra = data.extra,
                                  response = data.response, reader = data.reader;
-                             swal("Hurray!", data.responseJSON.message, "Success");
+                             swal("Hurray!", data.message, "Success");
                          });
 
     // End of Product Image Element
@@ -796,17 +796,17 @@
                     data: "'" + webFormDataInString + "'"
                 });
                 $saveProductDBHandler.done(function (data, textStatus, jqXHR) {
-                    swal("Hurray!", data.responseJSON.message, "Success");
+                    swal("Hurray!", data.message, "Success");
                 });
                 $saveProductDBHandler.fail(function (data, textStatus, jqXHR) {
-                    swal("Oh no!", data.responseJSON.message, "error");
+                    swal("Oh no!", data.message, "error");
                 });
             } else {
                 window.$productPhotoInputElement.fileinput('upload');
             }
         });
         $saveProductHandler.fail(function (data, textStatus, jqXHR) {
-            swal("Oh no!", data.responseJSON.message, "error");
+            swal("Oh no!", data.message, "error");
         });
     });//end of $('#saveButton').on('click', function () {
 

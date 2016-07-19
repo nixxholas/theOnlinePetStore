@@ -472,18 +472,19 @@ namespace WEBA_ASSIGNMENT.APIs
                 // Default Product image adapted from
                 // http://gemkolabwell.com/Admin/images/product/075319default_product.jpg
 
-                //newProduct.ProductPhotos.Add(new ProductPhoto()
-                //{
-                //    Format = "jpg",
-                //    Height = 120,
-                //    ImageSize = 1692,
-                //    PublicCloudinaryId = "Products/u0ofsgsn9b1q6tlwrkxg",
-                //    SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1466794773/Products/u0ofsgsn9b1q6tlwrkxg.jpg",
-                //    Url = "http://res.cloudinary.com/nixxholas/image/upload/v1466794773/Products/u0ofsgsn9b1q6tlwrkxg.jpg",
-                //    Version = 1466794773,
-                //    Width = 171
-                //});
-                
+                newProduct.ProductPhotos.Add(new ProductPhoto()
+                {
+                    Format = "jpg",
+                    Height = 400,
+                    ImageSize = 13167,
+                    PublicCloudinaryId = "Products/fkx2d5uduu1ja36zpu03",
+                    SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1468923470/Products/fkx2d5uduu1ja36zpu03.jpg",
+                    Url = "http://res.cloudinary.com/nixxholas/image/upload/v1468923470/Products/fkx2d5uduu1ja36zpu03.jpg",
+                    Version = 1468923470,
+                    Width = 400,
+                    isPrimaryPhoto = 1
+                });
+
                 //Add the product record first, so that the newProduct
                 //object's ProdId property is updated with the new record's
                 //id.
