@@ -318,8 +318,9 @@ namespace WEBA_ASSIGNMENT.APIs
                 // Initialize the ProductPhotos list first
                 newProduct.ProductPhotos = new List<ProductPhoto>();
 
-                Database.Products.Add(newProduct);
-                Database.SaveChanges();
+                //Database.Products.Add(newProduct);
+                // Shouldn't POST product object yet
+                //Database.SaveChanges();
 
                 // Iterate through the metric list
                 foreach (var Metric in productNewInput.Metrics)
@@ -334,7 +335,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         var presetMetricUsed = Database.PresetMetrics
                             .Where(input => input.MetricSubType == MetricType).Single();
                         Metrics newMetric = new Metrics();
-                        newMetric.ProdId = newProduct.ProdId;
+                        //newMetric.ProdId = newProduct.ProdId;
                         newMetric.MetricAmount = Int32.Parse(Metric.MetricAmount.Value);
                         newMetric.MetricType = presetMetricUsed.MetricType; // Taken from PresetMetrics Table
                         newMetric.PMetricId = presetMetricUsed.PMetricId; // Only for Preset Metrics
@@ -349,8 +350,8 @@ namespace WEBA_ASSIGNMENT.APIs
 
                         // So we need to add metric to db first
                         // in order for MetricId to autogenerate
-                        Database.Metrics.Add(newMetric);
-                        Database.SaveChanges();
+                        //Database.Metrics.Add(newMetric);
+                        //Database.SaveChanges();
 
                         int syncedMetricId = newMetric.MetricId;
 
@@ -361,15 +362,19 @@ namespace WEBA_ASSIGNMENT.APIs
                         price.Value = Convert.ToDecimal(Metric.Price.Value);
                         price.CreatedById = _userManager.GetUserId(User);
 
-                        Database.Prices.Add(price);
-                        Database.SaveChanges();
+                        //Database.Prices.Add(price);
+                        //Database.SaveChanges();
+
+                        // Push the Metric and price into the product object
+                        newMetric.Price = price;
+                        newProduct.Metrics.Add(newMetric);
                     }
                     else
                     // Else, it'll be a custom preset metric
                     {
                         // Time to construct a custom metric
                         Metrics newMetric = new Metrics();
-                        newMetric.ProdId = newProduct.ProdId;
+                        //newMetric.ProdId = newProduct.ProdId;
                         newMetric.MetricAmount = Int32.Parse(Metric.MetricAmount.Value);
                         newMetric.MetricType = Metric.MetricType.Value;
                         newMetric.Quantity = Int32.Parse(Metric.Quantity.Value);
@@ -381,8 +386,8 @@ namespace WEBA_ASSIGNMENT.APIs
                         newMetric.CreatedById = _userManager.GetUserId(User);
                         newMetric.UpdatedById = _userManager.GetUserId(User);
 
-                        Database.Metrics.Add(newMetric);
-                        Database.SaveChanges();
+                        //Database.Metrics.Add(newMetric);
+                        //Database.SaveChanges();
 
                         int syncedMetricId = newMetric.MetricId;
 
@@ -393,8 +398,12 @@ namespace WEBA_ASSIGNMENT.APIs
                         price.Value = Convert.ToDecimal(Metric.Price.Value);
                         price.CreatedById = _userManager.GetUserId(User);
 
-                        Database.Prices.Add(price);
-                        Database.SaveChanges();
+                        //Database.Prices.Add(price);
+                        //Database.SaveChanges();
+
+                        // Push the Metric and price into the product object
+                        newMetric.Price = price;
+                        newProduct.Metrics.Add(newMetric);
                     }
                 }
                 //}
@@ -632,13 +641,6 @@ namespace WEBA_ASSIGNMENT.APIs
             var productPhotos = Database.ProductPhotos
                 .Where(input => input.Product == oneProduct);
 
-            // Let's save the metrics and price
-            foreach (var metric in productToBeUpdated.Metrics)
-            {
-                Database.Metrics.Add(metric);
-                Database.Prices.Add(metric.Price); // Can work?
-            }
-
             foreach (var oneFile in fileInput)
             {
                 foreach (ProductPhoto productPhoto in productPhotos)
@@ -702,6 +704,13 @@ namespace WEBA_ASSIGNMENT.APIs
             bool firstImage = true;
             //Retrieve the new products data which is stashed inside the Session, "Product".
             Product newProduct = HttpContext.Session.GetObjectFromJson<Product>("Products");
+
+            // Let's save the metrics and price
+            foreach (var metric in newProduct.Metrics)
+            {
+                Database.Metrics.Add(metric);
+                Database.Prices.Add(metric.Price); // Can work?
+            }
 
             Database.Products.Add(newProduct);
 
