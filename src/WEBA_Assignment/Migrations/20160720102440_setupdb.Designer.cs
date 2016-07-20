@@ -8,7 +8,7 @@ using WEBA_ASSIGNMENT.Data;
 namespace WEBA_ASSIGNMENT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160720040242_setupdb")]
+    [Migration("20160720102440_setupdb")]
     partial class setupdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -494,9 +494,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnName("PMetricId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PriceId")
-                        .HasColumnName("PriceId")
-                        .HasColumnType("int");
+                    b.Property<int>("PriceId");
 
                     b.Property<int>("ProdId")
                         .HasColumnName("ProdId")

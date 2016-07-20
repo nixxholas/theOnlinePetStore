@@ -77,7 +77,7 @@ namespace WEBA_ASSIGNMENT.APIs
             // Removed Quantity
 
             foreach (var oneProduct in products)
-            {
+            {               
                 productList.Add(new
                 {
                     ProdId = oneProduct.ProdId,
@@ -96,6 +96,7 @@ namespace WEBA_ASSIGNMENT.APIs
             return new JsonResult(productList);
         }
 
+        // We need to find a better way to quantify the quantity column
         // Method to compute the total amount of quantity of a product.
         public int getTotalQuantity(List<Metrics> metricList)
         {
@@ -122,17 +123,17 @@ namespace WEBA_ASSIGNMENT.APIs
                 .Include(eachProductEntity => eachProductEntity.ProductPhotos).AsNoTracking();
 
             foreach (var oneProduct in products)
-            {
+            { 
+
                 productList.Add(new
                 {
                     ProdId = oneProduct.ProdId,
                     ProdName = oneProduct.ProdName,
                     Brand = oneProduct.Brand,
                     BrandName = oneProduct.Brand.BrandName,
-                    // Save this for later
-                    // PhotoUrl = oneProduct.ProductPhotos.Url,
+                    //PhotoUrl = oneProduct.ProductPhotos.Url,
                     TiS = oneProduct.ThresholdInvertoryQuantity,
-                    Quantity = getTotalQuantity(oneProduct.Metrics),
+                    Quantity = oneProduct.Quantity,
                     Published = oneProduct.Published,
                     CreatedAt = oneProduct.CreatedAt,
                     CreatedBy = oneProduct.CreatedBy.FullName,
@@ -158,17 +159,17 @@ namespace WEBA_ASSIGNMENT.APIs
                      .Include(eachProduct => eachProduct.ProductPhotos).Single();
 
                 // Not yet implemented
-                if (foundProduct.isConsumable != 0)
+                if (foundProduct.isConsumable == 1)
                 {
                     // var foundConsumable = Database.
                 }
 
-                int quantity = 0;
+                //int quantity = 0;
 
-                foreach (Metrics metric in foundProduct.Metrics)
-                {
-                    quantity += metric.Quantity;
-                }
+                //foreach (Metrics metric in foundProduct.Metrics)
+                //{
+                //    quantity += metric.Quantity;
+                //}
 
                 var response = new
                 {
@@ -177,7 +178,7 @@ namespace WEBA_ASSIGNMENT.APIs
                     Description = foundProduct.Description,
                     Brand = foundProduct.Brand,
                     ThresholdInventoryQuantity = foundProduct.ThresholdInvertoryQuantity,
-                    Quantity = quantity,
+                    Quantity = foundProduct.Quantity,
                     Metrics = foundProduct.Metrics,
                     ProductPhotos = foundProduct.ProductPhotos,
                     isConsumable = foundProduct.isConsumable,

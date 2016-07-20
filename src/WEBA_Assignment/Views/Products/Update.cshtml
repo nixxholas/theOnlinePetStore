@@ -5,47 +5,71 @@
                 <div class="panel-title">Update Product Record</div>
             </div>
             <div class="panel-body">
-                <form id="dataForm" role="form" class="form-horizontal">
+                <form id="dataForm" data-toggle="validator" role="form" class="form-horizontal">
                     <div class="form-group col-md-12">
                         <label class="control-label col-md-2" for="prodNameInput">Product Name</label>
                         <div class="form-group col-md-9">
                             <input type="text" name="prodNameInput" id="prodNameInput" class="form-control font-bold"
-                                   maxlength="50" placeholder="Product Name" value="" />
+                                   maxlength="50" placeholder="Product Name" value="" required />
                         </div>
                     </div>
-                    <div class="form-group col-md-12" id="metricNameInputBox">
-                        <label class="control-label col-md-2" for="metricNameInput">Metric Name</label>
+                    <div class="form-group col-md-12" id="statusBox">
+                        <label class="control-label col-md-2" for="statusSuggest">Status</label>
+                        <div class="form-group col-md-4">
+                            <div id="statusSuggest" class="form-control ms-ctn statusSuggest">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" id="metricAmountBox">
+                        <label class="control-label col-md-2" for="metricAmountInput">Metric Amount</label>
                         <div class="form-group col-md-9">
-                            <input type="text" name="metricNameInput" id="metricNameInput" class="form-control font-bold"
-                                   maxlength="50" placeholder="Unit name of Product (eg. KG)" value="" />
+                            <input type="number" min="0" name="metricAmountInput" id="metricAmountInput" class="form-control font-bold"
+                                   maxlength="20" placeholder="Amount Per Type" value="" required />
                         </div>
                     </div>
-                    <div class="form-group col-md-12" id="qtyInputBox">
-                        <label class="control-label col-md-2" for="qtyInput">Quantity</label>
+                    <div class="form-group col-md-12" id="metricTypeInputBox">
+                        <label class="control-label col-md-2" for="metricTypeInput">Metric Type</label>
+                        <div id="metricType" class="form-group col-md-4">
+                            <div id="pMetricSuggest" class="form-control ms-ctn pMetricSuggest">
+
+                            </div>
+                            <input type="text" name="customMetricTypeInput" id="customMetricTypeInput" class="form-control font-bold hidden"
+                                   maxlength="50" placeholder="Unit Type (eg. Black)" value="" />
+                        </div>
+                        <div class="form-group col-md-offset-8">
+                            <input type="checkbox" style="padding-left: 10px;" data-toggle="toggle" data-class="fast" name="customUnitSwitch" id="customUnitSwitch">
+                            <label>Custom Unit</label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12" id="stockBox">
+                        <label class="control-label col-md-2" for="qtyInput">Stock</label>
                         <div class="form-group col-md-9">
                             <input type="number" min="0" name="qtyInput" id="qtyInput" class="form-control font-bold"
-                                   maxlength="20" placeholder="Quantity" value="" />
+                                   maxlength="20" placeholder="Stock" value="" required />
                         </div>
                     </div>
                     <div class="form-group col-md-12" id="tiqInputBox">
                         <label class="control-label col-md-2" for="tiqInput">TIQ</label>
                         <div class="form-group col-md-10">
                             <input type="number" min="0" name="tiqInput" id="tiqInput" class="form-control font-bold"
-                                   maxlength="20" placeholder="Threshold Inventory Quantity" value="" />
+                                   maxlength="20" placeholder="Threshold Inventory Quantity" value="" required />
                         </div>
                     </div>
                     <div class="form-group col-md-12" id="priceInputBox">
                         <label class="control-label col-md-2" for="priceInput">Price</label>
-                        <div class="form-group col-md-9">
+                        <div class="form-group input-group col-md-9">
+                            <span class="input-group-addon">$</span>
                             <input type="text" name="priceInput" id="priceInput" class="form-control font-bold"
-                                   maxlength="20" placeholder="Price" value="" />
+                                   maxlength="20" placeholder="Price" value="" onkeypress="return isNumberKey(event)" required />
                         </div>
                     </div>
                     <div class="form-group col-md-12" id="rrpInputBox">
                         <label class="control-label col-md-2" for="rrpInput">RRP</label>
-                        <div class="form-group col-md-9">
+                        <div class="form-group input-group col-md-9">
+                            <span class="input-group-addon">$</span>
                             <input type="text" name="rrpInput" id="rrpInput" class="form-control font-bold"
-                                   maxlength="20" placeholder="Recommended Retail Price" value="" />
+                                   maxlength="20" placeholder="Recommended Retail Price" value="" onkeypress="return isNumberKey(event)" required />
                         </div>
                     </div>
                     <div class="form-group col-md-12">
@@ -65,27 +89,27 @@
                     <div class="form-group col-md-12">
                         <label class="control-label col-md-2" for="productProperties">Properties</label>
                         <div id="checkboxContainer" class="col-md-10">
-                            <div class="ui slider checkbox">
-                                <input type="checkbox" id="publishCheck">
+                            <div>
+                                <input type="checkbox" id="publishCheck" data-toggle="toggle" data-class="fast">
                                 <label>Publish product upon save</label>
                             </div><br>
-                            <div class="ui slider checkbox">
-                                <input type="checkbox" id="descriptionCheck">
+                            <div>
+                                <input type="checkbox" id="descriptionCheck" data-toggle="toggle" data-class="fast">
                                 <label>Product has a description</label>
                             </div><br>
-                            <div class="ui slider checkbox">
+                            <div>
                                 <!-- A Product does not need to comply with the metrics system.
                                 In such cases, we'll be creating a row within metrics without
                                 any properties and just throw in it's price into the row. -->
-                                <input type="checkbox" id="metricsCheck">
+                                <input type="checkbox" id="metricsCheck" data-toggle="toggle" data-class="fast">
                                 <label>Product has many variations</label>
                             </div><br>
-                            <div class="ui slider checkbox">
-                                <input type="checkbox" id="consumableCheck">
+                            <div>
+                                <input type="checkbox" id="consumableCheck" data-toggle="toggle" data-class="fast">
                                 <label>Product is a consumable</label>
                             </div><br>
-                            <div class="ui slider checkbox">
-                                <input type="checkbox" id="specialsCheck">
+                            <div>
+                                <input type="checkbox" id="specialsCheck" data-toggle="toggle" data-class="fast">
                                 <label>Product has a special promotion</label>
                             </div>
                         </div>
@@ -93,19 +117,22 @@
                     <div class="form-group col-md-12 hidden" id="descriptionBox">
                         <label class="control-label col-md-2" for="descBox">Description</label>
                         <div class="form-group col-md-9">
-                            <textarea name="descriptionBox" id="descriptionBox"></textarea>
+                            <textarea class="tinymceStart" name="descriptionBox" id="descriptionBox"></textarea>
                         </div>
                     </div>
                     <div class="form-group col-md-12 hidden" id="metricSegment">
                         <label class="control-label col-md-1" for="dataTable">Metrics</label>
                         <div class="col-md-11">
                             <table id="dataTable" class="table table-hover">
-                                <div id="rowBtn" class="pull-right big ui secondary button">
+                                <button type="button" id="customRowBtn" class="pull-right btn btn-default">
+                                    New Custom Row
+                                </button>
+                                <button type="button" id="rowBtn" class="pull-right btn btn-default" style="margin-right: 15px;">
                                     New Row
-                                </div>
+                                </button>
                                 <thead>
                                     <tr>
-                                        <th>Metrics Name</th>
+                                        <th>Metric Amount</th>
                                         <th>Metric Type</th>
                                         <th>Quantity</th>
                                         <th>Status</th>
@@ -143,161 +170,686 @@
 </div><!-- end of the div element which as the  class="col-md-offset-2 col-sm-8"-->
 </div><!-- end of div element with class="row" -->
 
-
 <script>
-    getProductDetails()
+    //------------------------------------ User Interface Configuration logic -----------------------------------
+    var customMetric = 0;
+    var isPublished = 0;
+    var isConsumable = 0;
+    var PresetMetricData = [];
+    var StatusData = [];
+    var metricsTable = $('#metricSegment');
 
-    //Declare a document scope variable, g_catId.
-    //A document scope variable value can be accessed anywhere in the web page during the
-    //entire life cycle at the web browser (till the user refresh the page)
-    //Naming convention: begin with g_ prefix
-    //This variable will contain the student id value
-    //which will be extracted from the address bar.
-    //The variable will be used in the first Ajax() call, to retrieve JSON structured
-    //information about the student
+    // We define the li elements to parse into
+    var $presetElements = '';
+    var $statusElements = '';
+
+    // Money Input Checker
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode != 46 && charCode > 31
+          && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+
+    $('.pMetricSuggest').magicSuggest({
+        required: true,
+        style: 'border-radius: 0 !important',
+        maxSelection: 1,
+        allowFreeEntries: false,
+        method: 'get',
+        data: 'http://localhost:5008/API/PresetMetrics',
+        dataType: 'json',
+        displayField: 'metricSubType',
+        valueField: 'metricSubType',
+        groupBy: 'metricType',
+        renderer: function (data) {
+            return '<div style="padding: 5px;">' +
+                //'<div style="float: left;"><img height="75px" width="75px" src="' + data.photoUrl + '" /></div>' +
+                '<div style="float: left; margin-left: 5px">' +
+                    '<div style="font-weight: bold; color: #333; font-size: 15px; line-height: 11px">' + data.metricSubType + '</div>' +
+                    '<div style="color: #999; font-size: 9px">' + data.metricType + '</div>' +
+                '</div>' +
+            '</div><div style="clear:both;"></div>'; // make sure we have closed our dom stuff
+        }
+    });
+
+    // Status Magic Suggest Initializer
+    $('.statusSuggest').magicSuggest({
+        required: true,
+        style: 'border-radius: 0 !important',
+        maxSelection: 1,
+        allowFreeEntries: false,
+        method: 'get',
+        data: 'http://localhost:5008/API/Status',
+        dataType: 'json',
+        displayField: 'statusName',
+        valueField: 'statusName',
+        renderer: function (data) {
+            return '<div style="padding: 5px;">' +
+                //'<div style="float: left;"><img height="75px" width="75px" src="' + data.photoUrl + '" /></div>' +
+                '<div style="float: left; margin-left: 5px">' +
+                    '<div style="font-weight: bold; color: #333; font-size: 15px; line-height: 11px">' + data.statusName + '</div>' +
+                    //'<div style="color: #999; font-size: 9px">' + data.metricType + '</div>' +
+                '</div>' +
+            '</div><div style="clear:both;"></div>'; // make sure we have closed our dom stuff
+        }
+    });
+
+
+
+    // Status GET Method
+    var $dCTForStatus = jQuery.ajax({
+        contentType: 'application/json',
+        method: 'get',
+        url: 'http://localhost:5008/API/Status',
+    });
+    $dCTForStatus.done(function (data, textStatus, jqXHR) {
+        for (i = 0; i < data.length; i++) {
+            var liElement = "";
+            var status = data[i];
+            StatusData.push(status);
+
+            // Toss the data into the element storage variable as well
+            liElement = "<option value=" + status.statusId + ">" + status.statusName + "</option>";
+
+            $statusElements += liElement;
+        }
+        $('metricTypeInput').append($statusElements);
+
+    });
+    $dCTForStatus.fail(function (data, textStatus, jqXHR) {
+        swal("Oh no!", data.message, "error");
+    });
+
+    // PresetMetric GET Method
+    var $dCTForPresetMetrics = jQuery.ajax({
+        contentType: 'application/json',
+        method: 'get',
+        url: 'http://localhost:5008/API/PresetMetrics',
+    });
+    $dCTForPresetMetrics.done(function (data, textStatus, jqXHR) {
+        for (i = 0; i < data.length; i++) {
+            var liElement = "";
+            metric = data[i];
+            PresetMetricData.push(metric);
+
+            // Toss the data into the element storage variable as well
+            liElement = "<option value=" + metric.pMetricId + ">" + metric.metricSubType + "</option>";
+
+            $presetElements += liElement;
+        }
+
+    });
+    $dCTForPresetMetrics.fail(function (data, textStatus, jqXHR) {
+        swal("Oh no!", data.message, "error");
+    });
+
+
+    var descriptionBox = $('#descriptionBox');
+
+    tinymce.init({
+        selector: '.tinymceStart',
+        height: 250,
+        theme: 'modern',
+        plugins: [
+          'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+          'searchreplace wordcount visualblocks visualchars code fullscreen',
+          'insertdatetime media nonbreaking save table contextmenu directionality',
+          'emoticons template paste textcolor colorpicker textpattern imagetools'
+        ],
+        toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+        toolbar2: 'print preview media | forecolor backcolor emoticons',
+        image_advtab: true,
+        //content_css: [
+        //  '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+        //  '//www.tinymce.com/css/codepen.min.css'
+        //]
+    });
+
+    $('#publishCheck').change(function () {
+        if (isPublished = 0) {
+            isPublished = 1;
+        } else {
+            isPublished = 0;
+        }
+    });
+
+    $('#customUnitSwitch').change(function () {
+        if ($('#customMetricTypeInput').hasClass('hidden')) {
+            customMetric = 1;
+            $('#pMetricSuggest').magicSuggest({
+                required: false
+            });
+            $('#pMetricSuggest').addClass('hidden')
+            $('#customMetricTypeInput').removeClass('hidden');
+        } else {
+            customMetric = 0;
+            $('#pMetricSuggest').magicSuggest({
+                required: true
+            });
+            $('#pMetricSuggest').removeClass('hidden')
+            $('#customMetricTypeInput').addClass('hidden');
+        }
+    });
+
+    $('#descriptionCheck').change(function () {
+        if (descriptionBox.hasClass('hidden')) {
+            descriptionBox.removeClass('hidden');
+        } else {
+            descriptionBox.addClass('hidden');
+        }
+    })
+    ;
+
+    $('#metricsCheck').change(function () {
+        if (metricsTable.hasClass('hidden')) {
+            metricsTable.removeClass('hidden');
+            $('#metricAmountBox').addClass('hidden');
+            $('#metricTypeInputBox').addClass('hidden');
+            $('#stockBox').addClass('hidden');
+            $('#metricTypeInputBox').addClass('hidden');
+            $('#qtyInputBox').addClass('hidden');
+            $('#priceInputBox').addClass('hidden');
+            $('#rrpInputBox').addClass('hidden');
+            $('#statusBox').addClass('hidden');
+
+        } else {
+            metricsTable.addClass('hidden');
+            $('#metricAmountBox').removeClass('hidden');
+            $('#metricTypeInputBox').removeClass('hidden');
+            $('#qtyInputBox').removeClass('hidden');
+            $('#priceInputBox').removeClass('hidden');
+            $('#rrpInputBox').removeClass('hidden');
+            $('#stockBox').removeClass('hidden');
+            $('#statusBox').removeClass('hidden');
+        }
+    })
+    ;
+
+    $('#consumableCheck').change(function () {
+        if (isConsumable = 0) {
+            isConsumable = 1;
+        } else {
+            isConsumable = 0;
+        }
+    })
+    ;
+
+    $('#specialsCheck').change(function () {
+        if ($('specialsBox').hasClass('hidden')) {
+            $('specialsBox').removeClass('hidden');
+        } else {
+            $('specialsBox').addClass('hidden');
+        }
+    })
+    ;
+
+
+    var brandInput = $('#brandInput').magicSuggest({
+        required: true,
+        maxSelection: 1,
+        allowFreeEntries: false,
+        method: 'get',
+        data: 'http://localhost:5008/API/Brands',
+        dataType: 'json',
+        displayField: 'brandName',
+        valueField: 'brandId',
+        renderer: function (data) {
+            return '<div style="padding: 5px;">' +
+                '<div style="float: left;"><img height="75px" width="75px" src="' + data.photoUrl + '" /></div>' +
+                '<div style="float: left; margin-left: 5px">' +
+                    '<div style="font-weight: bold; color: #333; font-size: 15px; line-height: 11px">' + data.brandName + '</div>' +
+                    //'<div style="color: #999; font-size: 9px">' + data.email + '</div>' +
+                '</div>' +
+            '</div><div style="clear:both;"></div>'; // make sure we have closed our dom stuff
+        }
+    });
+
+    //var specialInput = $('#specialInput').magicSuggest({
+    //    maxSelection: 1,
+    //    allowFreeEntries: false,
+    //    method: 'get',
+    //    data: 'http://localhost:5008/API/Specials',
+    //    dataType: 'json',
+    //    displayField: 'brandName',
+    //    valueField: 'brandId',
+    //    renderer: function (data) {
+    //        return '<div style="padding: 5px;">' +
+    //            '<div style="float: left;"><img height="75px" width="75px" src="' + data.photoUrl + '" /></div>' +
+    //            '<div style="float: left; margin-left: 5px">' +
+    //                '<div style="font-weight: bold; color: #333; font-size: 15px; line-height: 11px">' + data.brandName + '</div>' +
+    //                //'<div style="color: #999; font-size: 9px">' + data.email + '</div>' +
+    //            '</div>' +
+    //        '</div><div style="clear:both;"></div>'; // make sure we have closed our dom stuff
+    //    }
+    //});
+
+    // Start of Product Image Element
+
+    window.$productPhotoInputElement = $('#fileInput');
+
+    var footerTemplate = '<div class="file-thumbnail-footer">\n' +
+    '    <div class="file-caption-name" style="width:{width}">{caption}</div>\n' +
+    '    {actions}\n' +
+    '</div>';
+    var actionTemplate = '<div class="file-actions">\n' +
+     '       <div class="file-footer-buttons">\n {delete} </div>\n' +
+     '    <div class="file-upload-indicator" tabindex="-1" title="{indicatorTitle}">{indicator}</div>\n' +
+     '    <div class="clearfix"></div>\n' +
+     '</div>';
+
+    $('#fileInput').fileinput({
+        previewFileType: 'image',
+        allowedFileTypes: ['image'],
+        uploadUrl: '/API/Products/UploadProductPhotosAndSaveProductData',
+        uploadAsync: false,
+        maxFileCount: 3,
+        layoutTemplates: { footer: footerTemplate, actions: actionTemplate },
+        type: 'post',
+        msgInvalidFileType: 'Invalid type for file "{name}". Only "{types}" files are supported.',
+        autoReplace: true,
+        overwriteInitial: false,
+        showUploadedThumbs: false,
+        showUpload: false,
+        showRemove: false,
+        browseClass: 'btn btn-primary btn-md pull-right',
+        previewFileIcon: '<i class="glyphicon glyphicon-king"></i>',
+        allowedFileExtensions: ['jpg', 'jpeg', 'png'],
+        uploadExtraData: function () {  // callback example
+            var out = {};
+            return out;
+        }
+    });
+    window.$productPhotoInputElement.on('filebatchuploadsuccess',
+                         function (event, data, previewId, index) {
+                             var form = data.form, files = data.files, extra = data.extra,
+                                 response = data.response, reader = data.reader;
+                             swal("Hurray!", data.message, "Success");
+                         });
+
+    // End of Product Image Element
+
+    // Initialize selectpicker
+    $('.selectpicker').selectpicker({
+        style: 'btn-info',
+        size: 3
+    });
+
+    // Class for selectpicker onClick
+    //$('.selectReader').on('change', function(){
+    //    $(this).val
+    //});
+
+    $(document).ready(function () {
+        // Custom Metric Row
+        $("#customRowBtn").click(function () {
+            $("#metricsTableBody").append(
+                '<tr value="0" valign="top">' +
+                '<td name="metricAmountField">' +
+                '<input type="text" class="form-control font-bold" id="metricAmount" name="metricAmount" value="" placeholder="Metric Amount" />' +
+                '</td>' +
+                '<td name="metricTypeField">' +
+                '<input type="text" class="form-control font-bold" id="metricTypeInput" name="metricTypeInput" value="" placeholder="Metric Type" />' +
+                '</td>' +
+                '<td>' +
+                '<input type="number" min="0" pattern="[0-9]" class="form-control font-bold" id="qtyInput" name="qtyInput" value="" placeholder="Quantity" />' +
+                '</td>' +
+                '<td>' +
+                '<select class="form-control selectpicker" id="statusInput" name="statusInput">' +
+                $statusElements +
+                '</select>' +
+                '</td>' +
+                '<td>' +
+                '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price" onkeypress="return isNumberKey(event)"/>' +
+                '</td>' +
+                '<td>' +
+                '<input type="number" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP" onkeypress="return isNumberKey(event)"/>' +
+                '</br><a href="javascript:void(0);" class="remRow btn btn-danger inline">Remove</a>' +
+                '</td>' +
+                '</tr>'
+                );
+
+            $('.selectpicker').selectpicker('refresh');
+        });
+
+        // Preset Metric Row
+        $("#rowBtn").click(function () {
+            $("#metricsTableBody").append(
+                '<tr value="1" valign="top">' +
+                // Store a value in the first column to show whether
+                // if it's preset or custom.
+                '<td name="metricAmountField">' +
+                '<input type="text" class="form-control font-bold" id="metricAmount" name="metricAmount" value="" placeholder="Metric Amount" />' +
+                '</td>' +
+                '<td name="metricTypeField">' +
+                '<select class="form-control selectpicker" id="metricTypeInput" name="metricTypeInput" data-live-search="true">' +
+                $presetElements +
+                '</select>' +
+                '</td>' +
+                '<td>' +
+                '<input type="number" min="0" pattern="[0-9]" class="form-control font-bold" id="qtyInput" name="qtyInput" value="" placeholder="Stock" />' +
+                '</td>' +
+                '<td>' +
+                '<select class="form-control selectpicker" id="statusInput" name="statusInput">' +
+                $statusElements +
+                '</select>' +
+                '</td>' +
+                '<td>' +
+                '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price" onkeypress="return isNumberKey(event)"/>' +
+                '</td>' +
+                '<td>' +
+                '<input type="text" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP" onkeypress="return isNumberKey(event)"/>' +
+                '</br><a href="javascript:void(0);" class="remRow btn btn-danger inline">Remove</a>' +
+                '</td>' +
+                '</tr>');
+
+            $('.selectpicker').selectpicker('refresh');
+        });
+
+        $("#metricsTableBody").on('click', '.remRow', function () {
+            // This = Button
+            // Parent = Column
+            // Parent = Row
+            // lol
+            $(this).parent().parent().remove();
+        });
+    });
+    //----------------------------------------- User Interface Configuration logic ---(End)----------------------
+
+
+    //------------------------------------ Client-side Load Data logic -----------------------------------
+
     var g_prodId = getProdIdFromAddressBar();
     function getProdIdFromAddressBar() {
-        //Get studentId from the url string in the browser's address bar
+        //Get employee id from the url string in the browser's address bar
         var urlArray = window.location.href.split('/');
-        var prodId = urlArray[urlArray.length - 1];
-        return prodId;
+        var id = urlArray[urlArray.length - 1];
+        return id;
     };
 
-    function getProductDetails() {
-        $loadProductHandler = jQuery.ajax({
-            type: 'GET',
-            url: '/API/Products/' + g_prodId,
-            dataType: 'json',
-            cache: false,
-        })
-        $loadProductHandler.done(function (data, textStatus, jqXHR) {
-            var product = data;
-            console.dir(product);
-            return;
-            //Copy out the product information
-            var ProdName = product.prodName;
-            var Description = product.description;
-            var BrandId = product.brand.brandId;
-            var Brand = product.brand;
-            var Quantity = product.quantity; 
-            var TiQ = product.thresholdInventoryQuantity;
-            var Metrics = product.metrics;
-            var ProductPhotos = product.productPhotos;
-            var isConsumable = product.isConsumable;
-            var Published = product.published;
-            var Special = product.special;
 
-            //Populate the respective input controls with the user details.
-            //For example, find the text input control, catNameInput and set the text input control
-            //'s value with the catName variable's content.
-            $('#prodNameInput').val(ProdName);
+    $loadSelectedMetricDataHandler = jQuery.ajax({
+        contentType: 'application/json',
+        method: 'get',
+        url: 'http://localhost:5008/API/Metrics/' + g_prodId,
+    })
+    $loadSelectedMetricDataHandler.done(function (data, textStatus, jqXHR) {
+        console.dir(data);
+        return;
+
+        // If there is only one metric
 
 
-        })//end of the done() method;
-        $loadProductHandler.fail(function (data, textStatus, jqXHR) {
-            swal("Oh no!", "The product failed to load!", "error");
-        });//end of $loadCategoryHandler.error()
-    }//end of getCategoryDetails();
+        // Else there are lots of metrics, load em into the metric table
 
-    //Using a function to create a JavaScript class, WebFormData
-    function WebFormData(inCatName, inVisibilityId, inStartDate, inEndDate) {
-        this.CatName = inCatName;
-        this.VisibilityId = inVisibilityId;
-        this.StartDate = inStartDate;
-        this.EndDate = inEndDate;
+
+    } //end of JavaScript anonymous function
+
+          )//end of the done() method;
+    $loadSelectedMetricDataHandler.fail(function (data, textStatus, jqXHR) {
+        swal("Oh no!", data.response.message, "error");
+    })//end of $loadBrandDataHandler.fail()
+
+
+    //----------------------------------------- Client-side Upload logic ---(End)----------------------
+
+
+    //----------------------------------------- Client-side Update logic --------------------------------
+
+    // Function Constructor for creating a metrics object
+    function Metric(inMetricAmount, inMetricType, inQuantity, inPrice, inRRP, inStatus, inIsPreset) {
+        this.MetricAmount = inMetricAmount;
+        this.MetricType = inMetricType;
+        this.Quantity = inQuantity;
+        this.Price = inPrice;
+        this.RRP = inRRP;
+        this.Status = inStatus;
+        this.isPreset = inIsPreset;
+    }
+
+    //Using a function technique to create a JavaScript class, WebFormData
+    // Special promotions & Consumable Entities unscripted
+    // Things that are commented out will permanently be with the Metric Constructor
+    function WebFormData(inProdName,
+        inTiQ,
+        inBrandId,
+        inPublished,
+        inDescription,
+        inMetrics,
+        inIsConsumable,
+        inStatusId) {
+        this.ProdName = inProdName;
+        this.ThresholdInventoryQuantity = inTiQ;
+        this.BrandId = inBrandId;
+        this.Published = inPublished;
+        this.Description = inDescription;
+        this.Metrics = inMetrics;
+        this.isConsumable = inIsConsumable;
+        // Incase the product has only one metric
+        this.StatusId = inStatusId;
     }
 
     $('#saveButton').on('click', function () {
-        var collectedCatName = $('#catNameInput').val().toUpperCase(); // Forces an Upper Case Only String
-        if (collectedCatName == null || collectedCatName == "") {
-            swal("Error!", "Please key in an appropriate category name!", "error")
+        // Everyone needs MetricData
+        var MetricData = [];
+
+        // Product Name
+        var collectedProdName = $('#prodNameInput').val();
+        if (collectedProdName == null || collectedProdName == "") {
+            swal("Error!", "Please enter a product name! ", "error");
             return; // Break out of the function
         }
-        // VisibilityIds do not have to be checked as it has been automatically check before the user does
-        // anything
-        var collectedVisibilityId = $('input[name="Visibility"]:checked').val();
-        //Create a WebFormData object, webFormData. Have its field values
-        //populated with the collected student data
-        if (collectedVisibilityId == 3) {
-            // We only need to define these two variables if VisibilityId is 3.
-            // jqWidgets does the automated filling before the user does anything.
-            // Checks are not needed as we will restrict the dates to only today or the future
-            // and exclude the past dates.
-            var collectedStartDate = moment(startDateInput).format("DD/MM/YYYY");
-            var collectedEndDate = moment(endDateInput).format("DD/MM/YYYY");
 
-            // Date Checking is done Server-Sided
-            //
-            // Update 01 Jul 2016
-            //
-            // Reason 1:
-            // Moment Js is 150 times slower than javascript
-            // Proof of Concept: http://jsperf.com/momentjs-isafter-performance
-            //
-            // Reason 2:
-            // http://stackoverflow.com/questions/25310242/moment-js-isafter-performance
-            //
-            // Reason 3:
-            // SECURITY
-            var webFormData = new WebFormData(collectedCatName, collectedVisibilityId, collectedStartDate, collectedEndDate);
-            } else {
-                var webFormData = new WebFormData(collectedCatName, collectedVisibilityId, null, null);
+        // Brand id
+        var collectedBrandId = brandInput.getValue().toString(); // Brand Id
+        if (collectedBrandId == null || collectedBrandId == "") {
+            swal("Error!", "Please select a brand!", "error")
+            return; // Break out of the function
+        }
+
+        // Description
+        var collectedDescription; // Define a variable to store the description
+        if ($('#descriptionBox').hasClass('hidden')) {
+            collectedDescription = null
+        } else {
+            collectedDescription = tinyMCE.get('descriptionBox').getContent();
+        }
+
+        // Static variables
+        var collectedPublished = isPublished.toString();
+        var collectedConsumable = isConsumable.toString();
+
+        // If there are no custom sizes or variations
+        if ($('#metricSegment').hasClass('hidden')) {
+            // Metric Amount Input & Validation
+            var collectedMetricAmount = $('#metricAmountInput').val();
+            if (collectedMetricAmount == null || collectedMetricAmount == "") {
+                swal("Error!", "Please enter a metric amount for your metric type!", "error")
+                return; // Break out of the function
             }
-        //Convert the webFromData into a JSON string
+
+            // Metric Type Input & Validation
+            if (customMetric == 1) {
+                var collectedMetricType = $('#customMetricTypeInput').val();
+                var collectedIsPreset = 0;
+                if (collectedMetricType == null || collectedMetricType == "") {
+                    swal("Hey!", "Please enter your custom metric type!", "error");
+                    return;
+                }
+            } else {
+                if ($('#pMetricSuggest').magicSuggest().isValid() == true) {
+                    var collectedIsPreset = 1;
+                    var collectedMetricType = $('#pMetricSuggest').magicSuggest().getValue().toString();
+                } else {
+                    swal("Oh no..", "Please enter a Preset Metric!", "error");
+                    return;
+                }
+            }
+
+            // Status
+            if ($('#statusSuggest').magicSuggest().isValid()) {
+                var collectedStatusId = $('#statusSuggest').magicSuggest().getValue().toString();
+            } else {
+                swal("Oh no..", "Please select a status!", "error");
+                return;
+            }
+
+            // We have to make sure that the user won't be able to input any spamming dots
+            // into either TIQ's input or the quantity input
+
+            // Price and RRP is also needed to be verified by using accounting.js
+            var collectedQuantity = $('#qtyInput').val();
+            var collectedTIQ = $('#tiqInput').val();
+            var collectedPrice = $('#priceInput').val();
+            var collectedRRP = $('#rrpInput').val();
+
+            // Push the single metric into the array of metrics
+            // (inMetricAmount, inMetricType, inQuantity, inPrice, inRRP, inStatus)
+            MetricData.push(new Metric(collectedMetricAmount, collectedMetricType, collectedQuantity, collectedPrice, collectedRRP, collectedStatusId, collectedIsPreset))
+
+            // DONE
+
+            // Create a product containing only one metric
+
+            // Create the object for POST
+            //(inProdName, inTiQ, inBrandId, inPublished, inDescription, inMetrics, inIsConsumable, inStatusId)
+            var webFormData = new WebFormData(collectedProdName, collectedTIQ, collectedBrandId, collectedPublished,
+                collectedDescription, MetricData, collectedConsumable, collectedStatusId);
+
+        } else {
+            // If there are custom variations, we'll have to utitilize the Metrics system
+            var collectedTIQ = $('#tiqInput').val(); // Only this is still needed
+
+            // Look for the table
+            var table = document.getElementById("metricsTableBody");
+
+            /**
+                Declared Ineffective
+
+                Unable to effectively provide a 5 way statement to help identify
+                which column the current loop is identifying/looking for.
+            //// jQuery Method for each row in metricsTableBody
+            //$("#metricsTableBody tr").each(function () {
+            //    // Define the attributes of each Metric
+            //    var MetricAmount = '';
+            //    var MetricType = '';
+            //    var Quantity = '';
+            //    var Price = '';
+            //    var RRP = '';
+            //    var Status = '';
+
+            //    // Iterate through each Column
+            //    $('td', this).each(function () {
+            //        console.dir(this);
+            //    })
+
+            //})
+
+            //return
+
+            **/
+
+            // For each row in metricsTableBody javascript style
+            for (var i = 0, row; row = table.rows[i]; i++) {
+                // iterate through rows
+
+                // Define the attributes of each Metric
+                var MetricAmount = '';
+                var MetricType = '';
+                var Quantity = '';
+                var Price = '';
+                var RRP = '';
+                var Status = '';
+
+                for (var j = 0, col; col = row.cells[j]; j++) {
+                    switch (j) {
+                        case 0: // Metric Amount
+                            MetricAmount = row.cells[j].children[0].value;
+                            break;
+                        case 1: // Metric Type
+                            // Dropdown box
+                            // I'm only getting the name of the preset metric..
+                            // It'll be easier if we can pull the Id instead
+                            // $('select#loltesting').val();
+                            // I can only grab the name, so we'll have to search
+                            // for the preset metric with its name
+
+                            // I freaking spent 5 days on this.
+
+                            // If this element is not selectpicker
+
+                            if (row.cells[j].children[0].classList[1].toString() == "font-bold") {
+                                var isPreset = "0"; // 0 = false
+                                MetricType = row.cells[j].children[0].value;
+                                break;
+                            } else {
+                                var isPreset = "1"; // 1 = true
+                                MetricType = row.cells[j].children[0].innerText.trim();
+                                break;
+                            }
+                            break;
+                        case 2: // Quantity
+                            Quantity = row.cells[j].children[0].value;
+                            break;
+                        case 3: // Status
+                            Status = row.cells[j].children[0].innerText.trim();
+                            break;
+                        case 4: // Price per type
+                            Price = row.cells[j].children[0].value;
+                            break;
+                        case 5:
+                            RRP = row.cells[j].children[0].value;
+                            break;
+                        default:
+                            swal("Error!", "Something went wrong..", "error");
+                    }
+                }
+                // Finally we push the metric object to the MetricData
+                MetricData.push(new Metric(MetricAmount, MetricType, Quantity, Price, RRP, Status, isPreset));
+            }
+            // Constructing the webformdata object for a product with alot of metric units
+
+            // Create the object for POST
+            //(inProdName, inTiQ, inBrandId, inPublished, inDescription, inMetrics, inIsConsumable, inStatusId)
+            var webFormData = new WebFormData(collectedProdName, collectedTIQ, collectedBrandId, collectedPublished,
+                collectedDescription, MetricData, collectedConsumable, "0");
+
+        }
+
+        //Serialize the webFormData object which contains the type name
+        //data into a flat string. So that, it can be sent accross the Internet network successfully.
         var webFormDataInString = JSON.stringify(webFormData);
 
-        $updateCategoryHandler = jQuery.ajax({
-            type: 'PUT',
-            url: '/API/Categories/' + g_catId,
-            dataType: 'json',
-            contentType: 'application/json;',
+        $saveProductHandler = jQuery.ajax({
+            method: 'post',
+            contentType: 'application/json',
+            url: '/Api/Products/SaveNewProductInformationInSession',
             data: "'" + webFormDataInString + "'"
-        })//end of jQuery.ajax() call
-        $updateCategoryHandler.done(function (data, textStatus, jqXHR) {
-            swal("Good job!", "You've updated an amazing category!", "success")
-        });//end of $updateCategoryHandler.done()
-
-        $updateCategoryHandler.error(function (data, textStatus, jqXHR) {
-            swal("Oh no!", data.responseJSON.message, "error");
-        });//end of $updateCategoryHandler.error()
-
-    });// end of $('#saveButton').on('click', function () { ...}
-
-
-    $('#deleteButton').on('click', function () {
-        swal({
-            title: "Are you sure?",
-            text: "You will not be able to recover this imaginary file!",
-            type: "warning", showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, delete it!",
-            closeOnConfirm: false
-        }, function () {
-            $deleteCategoryHandler = jQuery.ajax({
-                type: 'DELETE',
-                url: '/API/Categories/' + g_catId
-            })//end of jQuery.ajax() call
-            $deleteCategoryHandler.done(function (data, textStatus, jqXHR) {
-                swal("Deleted!", "Your imaginary file has been deleted.", "success");
-            });//end of $deleteCategoryHandler.done()
-
-            $deleteCategoryHandler.fail(function (data, textStatus, jqXHR) {
-                console.log(data);
-                noty({
-                    text: data.responseJSON.Message, type: 'error',
-                    layout: 'center',
-                    template: '<div class="noty_message"><span class="noty_text"></span>'
-                });//end of noty()
-            });//end of $deleteCategoryHandler.fail()
         });
-        
+        $saveProductHandler.done(function (data, textStatus, jqXHR) {
+            // If no images are uploaded, we'll post with a stock image
+            if ($('#fileInput').get(0).files.length == 0) {
+                $saveProductDBHandler = jQuery.ajax({
+                    method: 'post',
+                    contentType: 'application/json',
+                    url: '/Api/Products/SaveProductData',
+                    data: "'" + webFormDataInString + "'"
+                });
+                $saveProductDBHandler.done(function (data, textStatus, jqXHR) {
+                    swal("Hurray!", data.message, "Success");
+                });
+                $saveProductDBHandler.fail(function (data, textStatus, jqXHR) {
+                    swal("Oh no!", data.message, "error");
+                });
+            } else {
+                window.$productPhotoInputElement.fileinput('upload');
+            }
+        });
+        $saveProductHandler.fail(function (data, textStatus, jqXHR) {
+            swal("Oh no!", data.message, "error");
+        });
+    });//end of $('#saveButton').on('click', function () {
 
-    });// end of $('#deleteButton').on('click', function () { ...}
-    function redirectPage() {
-        location.replace('/Categories/Index');
-    }// end of redirectPage() method (function)
 </script>
-
-
-
-

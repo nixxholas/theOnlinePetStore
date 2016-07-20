@@ -155,7 +155,6 @@
                     //-----------------Add the previous created hyperlink element, $hyperLinkElement
                     //                 into the newly created 6th cell.
                     $cellElement.append($hyperLinkElement);
-                    $cellElement.append($hyperLinkElement2);
                 } else {
                     //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
                     $hyperLinkElement3 = $('<a name="restore" id=' + ProdId + ' onClick="restoreCat(' + ProdId + ')">Restore Product</a>'); // Placeholder
@@ -174,11 +173,7 @@
 
         )//end of the done() method;
         $loadProductDataHandler.fail(function (data, textStatus, jqXHR) {
-            noty({
-                text: 'Ajax fail fired : ' + data.statusText, type: 'error',
-                layout: 'center',
-                template: '<div class="noty_message"><span class="noty_text"></span>'
-            });//end of noty()
+            swal("Oh no!", data.statusText, "error");
         })//end of $loadCategoryDataHandler.fail()
     }//end of loadCategoryData();
 

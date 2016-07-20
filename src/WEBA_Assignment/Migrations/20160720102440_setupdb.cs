@@ -517,7 +517,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     MetricAmount = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     MetricName = table.Column<string>(type: "VARCHAR(200)", nullable: false),
                     PMetricId = table.Column<int>(type: "int", nullable: true),
-                    PriceId = table.Column<int>(type: "int", nullable: false),
+                    PriceId = table.Column<int>(nullable: false),
                     ProdId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     StatusId = table.Column<int>(type: "int", nullable: false, defaultValue: 0),

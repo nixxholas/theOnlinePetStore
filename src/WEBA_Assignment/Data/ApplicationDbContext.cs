@@ -615,11 +615,13 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasColumnType("int")
                 .IsRequired();
 
-            modelBuilder.Entity<Metrics>()
-                .Property(input => input.PriceId)
-                .HasColumnName("PriceId")
-                .HasColumnType("int")
-                .IsRequired();
+            // Price Entity will carry a metricid for identification
+            // Price Entity has MetricId as an FK relationship already
+            //modelBuilder.Entity<Metrics>()
+            //    .Property(input => input.PriceId)
+            //    .HasColumnName("PriceId")
+            //    .HasColumnType("int")
+            //    .IsRequired();
 
             modelBuilder.Entity<Metrics>()
                 .Property(input => input.StatusId)
