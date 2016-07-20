@@ -58,7 +58,7 @@ namespace WEBA_ASSIGNMENT.APIs
         {
             List<object> brandList = new List<object>();
             var brands = Database.Brands
-            .Where(eachBrandEntity => eachBrandEntity.DeletedAt == null)
+            //.Where(eachBrandEntity => eachBrandEntity.DeletedAt == null)
             .Include(eachBrandEntity => eachBrandEntity.BrandCategory)
             // Prepare for Products counting
             .Include(eachBrandEntity => eachBrandEntity.Products)

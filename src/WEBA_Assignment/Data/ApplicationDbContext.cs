@@ -35,7 +35,7 @@ namespace WEBA_ASSIGNMENT.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=nixholas\SQLEXPRESS;database=WEBA_ASSIGNMENTDB;Trusted_Connection=True;MultipleActiveResultSets=True");
+            optionsBuilder.UseSqlServer(@"Server=nixh\SQLEXPRESS;database=WEBA_ASSIGNMENTDB;Trusted_Connection=True;MultipleActiveResultSets=True");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -70,13 +70,13 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<Price>()
                 .Property(input => input.Value)
                 .HasColumnName("Value")
-                .HasColumnType("money")
+                .HasColumnType("DECIMAL(10,2)")
                 .IsRequired();
 
             modelBuilder.Entity<Price>()
                 .Property(input => input.RRP)
                 .HasColumnName("RRP")
-                .HasColumnType("money")
+                .HasColumnType("DECIMAL(10,2)")
                 .IsRequired(false);
 
             // Two sets of Many to One relationship between User and ApplicationUser  entity (Start)

@@ -645,7 +645,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     DeletedAt = table.Column<DateTime>(nullable: true),
                     DeletedById = table.Column<string>(nullable: true),
                     MetricId = table.Column<int>(type: "int", nullable: false),
-                    RRP = table.Column<decimal>(type: "money", nullable: true),
+                    RRP = table.Column<decimal>(type: "DECIMAL(10,2)", nullable: true),
                     Value = table.Column<decimal>(type: "DECIMAL(6,2)", nullable: false)
                 },
                 constraints: table =>

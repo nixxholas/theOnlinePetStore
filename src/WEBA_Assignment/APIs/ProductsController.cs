@@ -60,39 +60,33 @@ namespace WEBA_ASSIGNMENT.APIs
             var products = Database.Products
             .Where(eachProductEntity => eachProductEntity.DeletedAt == null)
             .Include(eachProductEntity => eachProductEntity.Brand)
-            .Include(eachProductEntity => eachProductEntity.Metrics)
-            .Include(eachProductEntity => eachProductEntity.ProductPhotos).AsNoTracking();
+            //.Include(eachProductEntity => eachProductEntity.Metrics)
+            .Include(eachProductEntity => eachProductEntity.ProductPhotos)
+                                 .Include(eachUser => eachUser.CreatedBy)
+                                 .Include(eachUser => eachUser.UpdatedBy)
+            .AsNoTracking();
 
-            //After obtaining all the Product entity rows (records) from the database,
-            //the productss variable will become an container holding these 
+            //After obtaining all the Product entity rows(records) from the database,
+            //the products variable will become an container holding these
             //Product class entity rows.
             //I need to loop through each  Product instance inside productss
-            //to construct a List container of anonymous objects (which has 6 properties).
+            //to construct a List container of anonymous objects(which has 6 properties).
             //Then use the new JsonResult(productsList) technique to generate the
             //JSON formatted string data which can be sent back to the web browser client.
+
+            // Removed Quantity
+
             foreach (var oneProduct in products)
             {
-                String published;
-                if (oneProduct.Published == 1)
-                {
-                   published = "Yes";
-                } else
-                {
-                   published = "No";
-                }
-
-                // Unfinished
                 productList.Add(new
                 {
                     ProdId = oneProduct.ProdId,
                     ProdName = oneProduct.ProdName,
-                    Brand = oneProduct.Brand,
                     BrandName = oneProduct.Brand.BrandName,
                     Description = oneProduct.Description,
-                    Metrics = oneProduct.Metrics,
                     TiQ = oneProduct.ThresholdInvertoryQuantity,
-                    Quantity = getTotalQuantity(oneProduct.Metrics),
-                    Published = published,
+                    Quantity = oneProduct.Quantity,
+                    Published = oneProduct.Published,
                     CreatedAt = oneProduct.CreatedAt,
                     CreatedBy = oneProduct.CreatedBy.FullName,
                     UpdatedAt = oneProduct.UpdatedAt,
@@ -492,7 +486,8 @@ namespace WEBA_ASSIGNMENT.APIs
                     Url = "http://res.cloudinary.com/nixxholas/image/upload/v1468923470/Products/fkx2d5uduu1ja36zpu03.jpg",
                     Version = 1468923470,
                     Width = 400,
-                    isPrimaryPhoto = 1
+                    isPrimaryPhoto = 1,
+                    CreatedById = _userManager.GetUserId(User),
                 });
 
                 //Add the product record first, so that the newProduct

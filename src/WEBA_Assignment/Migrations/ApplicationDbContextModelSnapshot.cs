@@ -594,7 +594,7 @@ namespace WEBA_ASSIGNMENT.Migrations
 
                     b.Property<decimal?>("RRP")
                         .HasColumnName("RRP")
-                        .HasColumnType("money");
+                        .HasColumnType("DECIMAL(10,2)");
 
                     b.Property<decimal>("Value")
                         .HasColumnName("Value")
