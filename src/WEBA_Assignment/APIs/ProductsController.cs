@@ -73,11 +73,9 @@ namespace WEBA_ASSIGNMENT.APIs
             //to construct a List container of anonymous objects(which has 6 properties).
             //Then use the new JsonResult(productsList) technique to generate the
             //JSON formatted string data which can be sent back to the web browser client.
-
-            // Removed Quantity
-
+            
             foreach (var oneProduct in products)
-            {               
+            {
                 productList.Add(new
                 {
                     ProdId = oneProduct.ProdId,
@@ -154,7 +152,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 var foundProduct = Database.Products
                      .Where(eachProduct => eachProduct.ProdId == id)
                      .Include(eachProduct => eachProduct.Brand)
-                     .Include(eachProduct => eachProduct.Metrics)
+                     //.Include(eachProduct => eachProduct.Metrics)
                      .Include(eachProduct => eachProduct.Specials)
                      .Include(eachProduct => eachProduct.ProductPhotos).Single();
 
@@ -164,26 +162,19 @@ namespace WEBA_ASSIGNMENT.APIs
                     // var foundConsumable = Database.
                 }
 
-                //int quantity = 0;
-
-                //foreach (Metrics metric in foundProduct.Metrics)
-                //{
-                //    quantity += metric.Quantity;
-                //}
-
                 var response = new
                 {
                     ProdId = foundProduct.ProdId,
                     ProdName = foundProduct.ProdName,
                     Description = foundProduct.Description,
-                    Brand = foundProduct.Brand,
                     ThresholdInventoryQuantity = foundProduct.ThresholdInvertoryQuantity,
                     Quantity = foundProduct.Quantity,
-                    Metrics = foundProduct.Metrics,
                     ProductPhotos = foundProduct.ProductPhotos,
                     isConsumable = foundProduct.isConsumable,
                     Specials = foundProduct.Specials,
                     Published = foundProduct.Published,
+                    Brand = foundProduct.Brand,
+                    Metrics = foundProduct.Metrics,
                 };//end of creation of the response object
 
                 return new JsonResult(response);
@@ -467,12 +458,22 @@ namespace WEBA_ASSIGNMENT.APIs
                 newProduct.CreatedById = _userManager.GetUserId(User);
                 newProduct.UpdatedById = _userManager.GetUserId(User);
 
-                // Add the metrics and prices into the DB
+                // Implementing a foreach loop such that the quantity 
+                // is tabulated amongst many metrics of that particular
+                // product should there be more than once metric that is
+                // binded.
+                int quantity = 0;
+
+                // Let's save the metrics and price
                 foreach (var metric in newProduct.Metrics)
                 {
+                    quantity += metric.Quantity;
                     Database.Metrics.Add(metric);
-                    Database.Prices.Add(metric.Price);
+                    Database.Prices.Add(metric.Price); // Can work?
                 }
+
+                // Set the product's total quantity here
+                newProduct.Quantity = quantity;
 
                 // Default Product image adapted from
                 // http://gemkolabwell.com/Admin/images/product/075319default_product.jpg
@@ -713,13 +714,23 @@ namespace WEBA_ASSIGNMENT.APIs
             //Retrieve the new products data which is stashed inside the Session, "Product".
             Product newProduct = HttpContext.Session.GetObjectFromJson<Product>("Products");
 
+            // Implementing a foreach loop such that the quantity 
+            // is tabulated amongst many metrics of that particular
+            // product should there be more than once metric that is
+            // binded.
+            int quantity = 0;
+
             // Let's save the metrics and price
             foreach (var metric in newProduct.Metrics)
             {
+                quantity += metric.Quantity;
                 Database.Metrics.Add(metric);
                 Database.Prices.Add(metric.Price); // Can work?
             }
 
+            // Set the product's total quantity here
+            newProduct.Quantity = quantity;
+            
             Database.Products.Add(newProduct);
 
             //Add the Product record first, so that the newProduct
@@ -754,7 +765,7 @@ namespace WEBA_ASSIGNMENT.APIs
 
             Database.SaveChanges();
 
-            //computeProductsPerBrand();
+            computeProductsPerBrand();
 
             var successRequestResultMessage = new
             {
