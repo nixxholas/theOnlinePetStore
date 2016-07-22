@@ -70,13 +70,13 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<Price>()
                 .Property(input => input.Value)
                 .HasColumnName("Value")
-                .HasColumnType("DECIMAL(10,2)")
+                .HasColumnType("DECIMAL(19,4)")
                 .IsRequired();
 
             modelBuilder.Entity<Price>()
                 .Property(input => input.RRP)
                 .HasColumnName("RRP")
-                .HasColumnType("DECIMAL(10,2)")
+                .HasColumnType("DECIMAL(19,4)")
                 .IsRequired(false);
 
             // Two sets of Many to One relationship between User and ApplicationUser  entity (Start)
@@ -535,7 +535,7 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<Price>()
                 .Property(input => input.Value)
                 .HasColumnName("Value")
-                .HasColumnType("DECIMAL(6,2)")
+                .HasColumnType("DECIMAL(19,4)")
                 .IsRequired();
 
             modelBuilder.Entity<Price>()

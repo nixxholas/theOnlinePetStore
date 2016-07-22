@@ -61,7 +61,7 @@
                         <div class="form-group input-group col-md-9">
                             <span class="input-group-addon">$</span>
                             <input type="text" name="priceInput" id="priceInput" class="form-control font-bold"
-                                   maxlength="20" placeholder="Price" value="" onkeypress="return isNumberKey(event)" required />
+                                   maxlength="20" placeholder="Price" value="" pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" required />
                         </div>
                     </div>
                     <div class="form-group col-md-12" id="rrpInputBox">
@@ -69,7 +69,7 @@
                         <div class="form-group input-group col-md-9">
                             <span class="input-group-addon">$</span>
                             <input type="text" name="rrpInput" id="rrpInput" class="form-control font-bold"
-                                   maxlength="20" placeholder="Recommended Retail Price" value="" onkeypress="return isNumberKey(event)" required />
+                                   maxlength="20" placeholder="Recommended Retail Price" value="" pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" required />
                         </div>
                     </div>
                     <div class="form-group col-md-12">
@@ -796,7 +796,8 @@
                     data: "'" + webFormDataInString + "'"
                 });
                 $saveProductDBHandler.done(function (data, textStatus, jqXHR) {
-                    swal("Hurray!", data.message, "Success");
+                    swal("Hurray!", data.message, "success");
+                    return;
                 });
                 $saveProductDBHandler.fail(function (data, textStatus, jqXHR) {
                     swal("Oh no!", data.message, "error");

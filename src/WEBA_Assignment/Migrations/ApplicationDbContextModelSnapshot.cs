@@ -592,11 +592,11 @@ namespace WEBA_ASSIGNMENT.Migrations
 
                     b.Property<decimal?>("RRP")
                         .HasColumnName("RRP")
-                        .HasColumnType("DECIMAL(10,2)");
+                        .HasColumnType("DECIMAL(19,4)");
 
                     b.Property<decimal>("Value")
                         .HasColumnName("Value")
-                        .HasColumnType("DECIMAL(6,2)");
+                        .HasColumnType("DECIMAL(19,4)");
 
                     b.HasKey("PriceId")
                         .HasName("PrimaryKey_PriceId");
