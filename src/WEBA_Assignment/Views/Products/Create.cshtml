@@ -96,6 +96,14 @@
                             <div>
                                 <input type="checkbox" id="descriptionCheck" data-toggle="toggle" data-class="fast" >
                                 <label>Product has a description</label>
+
+                                <div class="form-group col-md-12 hidden" id="descriptionBox">
+                                   <!--<label class="control-label col-md-2" for="descBox">Description</label>--> 
+                                    <div class="form-group col-md-10">
+                                        <textarea class="tinymceStart" name="descriptionBox" id="descriptionBox"></textarea>
+                                    </div>
+                                </div>
+
                             </div><br>
                             <div>
                                 <!-- A Product does not need to comply with the metrics system.
@@ -103,6 +111,33 @@
                                 any properties and just throw in it's price into the row. -->
                                 <input type="checkbox" id="metricsCheck" data-toggle="toggle" data-class="fast" >
                                 <label>Product has many variations</label>
+
+
+                                <div class="form-group col-md-12 hidden" id="metricSegment">
+                                    <!--<label class="control-label col-md-1" for="dataTable">Metrics</label>-->
+                                    <div class="col-md-11">
+                                        <table id="dataTable" class="table table-hover">
+                                            <button type="button" id="customRowBtn" class="pull-right btn btn-default">
+                                                New Custom Row
+                                            </button>
+                                            <button type="button" id="rowBtn" class="pull-right btn btn-default" style="margin-right: 15px;">
+                                                New Row
+                                            </button>
+                                            <thead>
+                                                <tr>
+                                                    <th>Metric Amount</th>
+                                                    <th>Metric Type</th>
+                                                    <th>Quantity</th>
+                                                    <th>Status</th>
+                                                    <th>Price per type</th>
+                                                    <th>RRP</th> <!-- Recommended Retail Price -->
+                                                    <th>&nbsp;</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="metricsTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div><br>
                             <div>
                                 <input type="checkbox" id="consumableCheck" data-toggle="toggle" data-class="fast" >
@@ -112,37 +147,6 @@
                                 <input type="checkbox" id="specialsCheck" data-toggle="toggle" data-class="fast" >
                                 <label>Product has a special promotion</label>
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12 hidden" id="descriptionBox">
-                        <label class="control-label col-md-2" for="descBox">Description</label>
-                        <div class="form-group col-md-9">
-                            <textarea class="tinymceStart" name="descriptionBox" id="descriptionBox"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12 hidden" id="metricSegment">
-                        <label class="control-label col-md-1" for="dataTable">Metrics</label>
-                        <div class="col-md-11">
-                            <table id="dataTable" class="table table-hover">
-                                <button type="button" id="customRowBtn" class="pull-right btn btn-default">
-                                    New Custom Row
-                                </button>
-                                <button type="button" id="rowBtn" class="pull-right btn btn-default" style="margin-right: 15px;">
-                                    New Row
-                                </button>
-                                <thead>
-                                    <tr>
-                                        <th>Metric Amount</th>
-                                        <th>Metric Type</th>
-                                        <th>Quantity</th>
-                                        <th>Status</th>
-                                        <th>Price per type</th>
-                                        <th>RRP</th> <!-- Recommended Retail Price -->
-                                        <th>&nbsp;</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="metricsTableBody"></tbody>
-                            </table>
                         </div>
                     </div>
 

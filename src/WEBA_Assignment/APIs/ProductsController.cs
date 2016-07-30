@@ -298,6 +298,28 @@ namespace WEBA_ASSIGNMENT.APIs
                 newProduct.UpdatedById = _userManager.GetUserId(User);
                 newProduct.Metrics = new List<Metrics>();
 
+                // Consumable Weak Entity
+                if (newProduct.isConsumable == 1)
+                {
+                    // This method is also viable because it 
+                    // is immediately referred to newProduct as
+                    // it's parent. Nothing extra is needed to 
+                    // declare thei relationship
+                    //newProduct.Consumable = new Consumable({
+
+                    //});
+                    // Or should we do this instead?
+                    Consumable newConsumable = new Consumable();
+                    // We'll link this consumable to it's parent so
+                    // that the FK (Foreign Key) properly initializes
+                    newConsumable.Product = newProduct;
+                    newConsumable.TypicalAnalysis = productNewInput.Consumable.TypicalAnalysis.Value;
+                    newConsumable.GuranteedAnalysis = productNewInput.Consumable.GuranteedAnalysis.Value;
+                    newConsumable.Ingredients = productNewInput.Consumable.Ingredients.Value;
+                    newConsumable.ActiveIngredients = productNewInput.Consumable.ActiveIngredients.Value;
+                    newConsumable.InActiveIngredients = productNewInput.Consumable.InActiveIngredients.Value;
+                }
+
                 // Description
                 if (productNewInput.Description.Value != null)
                 {
