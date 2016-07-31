@@ -280,10 +280,22 @@ namespace WEBA_ASSIGNMENT.APIs
             var serializer = JsonSerializer.Create(settings);
 
             string customMessage = "";
+
             // Issue: Should I add a "'" into a the Product name String, the received from the
             // Client results in an unended json object..
             //Reconstruct a useful object from the input string value. 
             var productNewInput = JsonConvert.DeserializeObject<dynamic>(value);
+                        
+            // If there aren't any metrics, we'll toss it back to the user
+            if (productNewInput.Metrics.Count == 0)
+            {
+                customMessage = "Your product does not contain a metric.";
+                //Create a fail message anonymous object that has one property, Message.
+                //This anonymous object's Message property contains a simple string message
+                object httpFailRequestResultMessage = new { Message = customMessage };
+                //Return a bad http request message to the client
+                return BadRequest(httpFailRequestResultMessage);
+            }
 
             Product newProduct = new Product();
             try
@@ -335,22 +347,7 @@ namespace WEBA_ASSIGNMENT.APIs
 
                 // Initialize the ProductPhotos list first
                 newProduct.ProductPhotos = new List<ProductPhoto>();
-
-                //Database.Products.Add(newProduct);
-                // Shouldn't POST product object yet
-                //Database.SaveChanges();
-
-                // If there aren't any metrics, we'll toss it back to the user
-                if (productNewInput.Metrics.size < 1)
-                {
-                    customMessage = "Your product does not contain a metric.";
-                    //Create a fail message anonymous object that has one property, Message.
-                    //This anonymous object's Message property contains a simple string message
-                    object httpFailRequestResultMessage = new { Message = customMessage };
-                    //Return a bad http request message to the client
-                    return BadRequest(httpFailRequestResultMessage);
-                }
-
+                
                 // Iterate through the metric list
                 foreach (var Metric in productNewInput.Metrics)
                 {
@@ -496,7 +493,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 // product should there be more than once metric that is
                 // binded.
                 int quantity = 0;
-
+                                
                 // Let's save the metrics and price
                 foreach (var metric in newProduct.Metrics)
                 {

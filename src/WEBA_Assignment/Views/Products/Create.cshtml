@@ -637,13 +637,11 @@
 
         // Threshold Inventory Quantity
         var collectedTIQ = $('#tiqInput').val();        
-        if (!Math.floor(collectedTIQ) == collectedTIQ) {
-            swal("Error!", "Please enter the Threshold Inventory Quantity!", "error");
+        if (collectedTIQ == null || collectedTIQ == "") {
+            swal("Error!", "Please enter an input for Threshold Inventory Quantity!", "error");
             return; // Break out of the function
         }
 
-        console.dir("bypassed");
-        return;
         // Description
         var collectedDescription; // Define a variable to store the description
         if ($('#descriptionBox').hasClass('hidden')) {
@@ -840,14 +838,16 @@
                     return;
                 });
                 $saveProductDBHandler.fail(function (data, textStatus, jqXHR) {
-                    swal("Oh no!", data.message, "error");
+                    console.dir(data);
+                    swal("Oh no!", data.responseJSON.message, "error");
                 });
             } else {
                 window.$productPhotoInputElement.fileinput('upload');
             }
         });
         $saveProductHandler.fail(function (data, textStatus, jqXHR) {
-            swal("Oh no!", data.message, "error");
+            console.dir(data);
+            swal("Oh no!", data.responseJSON.message, "error");
         });
     });//end of $('#saveButton').on('click', function () {
 
