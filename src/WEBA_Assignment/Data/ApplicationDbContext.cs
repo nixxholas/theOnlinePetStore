@@ -828,7 +828,8 @@ namespace WEBA_ASSIGNMENT.Data
 
             modelBuilder.Entity<Product>()
                 .HasOne(input => input.Consumable)
-                .WithOne(input => input.Product);
+                .WithOne(input => input.Product)
+                .HasForeignKey<Consumable>(input => input.ProdId);
 
             //----------------------------------------------------------------------------
             // Define One to Many relationship between Product and ProductPhoto
@@ -1002,7 +1003,7 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<Consumable>()
                 .Property(input => input.Ingredients)
                 .HasColumnName("Ingredients")
-                .HasColumnName("VARCHAR(MAX)")
+                .HasColumnType("VARCHAR(MAX)")
                 .IsRequired(false);
 
             modelBuilder.Entity<Consumable>()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace WEBA_ASSIGNMENT.Models
     {
         public int ConsumableId { get; set; }
         public int ProdId { get; set; }
+        [JsonIgnore]
         public Product Product { get; set; }
         public String TypicalAnalysis { get; set; }
         public String GuranteedAnalysis { get; set; }

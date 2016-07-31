@@ -64,24 +64,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Consumable",
-                columns: table => new
-                {
-                    ConsumableId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ActiveIngredients = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
-                    GuranteedAnalysis = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
-                    InActiveIngredients = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
-                    VARCHARMAX = table.Column<string>(name: "VARCHAR(MAX)", nullable: true),
-                    ProdId = table.Column<int>(nullable: false),
-                    TypicalAnalysis = table.Column<string>(type: "VARCHAR(MAX)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PrimaryKey_ConsumableId", x => x.ConsumableId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PresetMetric",
                 columns: table => new
                 {
@@ -383,7 +365,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                     ProdId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     BrandId = table.Column<int>(type: "int", nullable: false),
-                    ConsumableId = table.Column<int>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
                     CreatedById = table.Column<string>(nullable: false),
                     DeletedAt = table.Column<DateTime>(nullable: true),
@@ -406,12 +387,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                         principalTable: "Brands",
                         principalColumn: "BrandId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Product_Consumable_ConsumableId",
-                        column: x => x.ConsumableId,
-                        principalTable: "Consumable",
-                        principalColumn: "ConsumableId",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Product_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
@@ -502,6 +477,30 @@ namespace WEBA_ASSIGNMENT.Migrations
                         column: x => x.SpecialId,
                         principalTable: "Specials",
                         principalColumn: "SpecialId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Consumable",
+                columns: table => new
+                {
+                    ConsumableId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ActiveIngredients = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
+                    GuranteedAnalysis = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
+                    InActiveIngredients = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
+                    Ingredients = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
+                    ProdId = table.Column<int>(nullable: false),
+                    TypicalAnalysis = table.Column<string>(type: "VARCHAR(MAX)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PrimaryKey_ConsumableId", x => x.ConsumableId);
+                    table.ForeignKey(
+                        name: "FK_Consumable_Product_ProdId",
+                        column: x => x.ProdId,
+                        principalTable: "Product",
+                        principalColumn: "ProdId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -832,6 +831,12 @@ namespace WEBA_ASSIGNMENT.Migrations
                 column: "SpecialId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Consumable_ProdId",
+                table: "Consumable",
+                column: "ProdId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Metrics_CreatedById",
                 table: "Metrics",
                 column: "CreatedById");
@@ -887,12 +892,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                 name: "IX_Product_BrandId",
                 table: "Product",
                 column: "BrandId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Product_ConsumableId",
-                table: "Product",
-                column: "ConsumableId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_CreatedById",
@@ -1002,6 +1001,9 @@ namespace WEBA_ASSIGNMENT.Migrations
                 name: "CategorySpecials");
 
             migrationBuilder.DropTable(
+                name: "Consumable");
+
+            migrationBuilder.DropTable(
                 name: "Price");
 
             migrationBuilder.DropTable(
@@ -1039,9 +1041,6 @@ namespace WEBA_ASSIGNMENT.Migrations
 
             migrationBuilder.DropTable(
                 name: "Brands");
-
-            migrationBuilder.DropTable(
-                name: "Consumable");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

@@ -8,7 +8,7 @@ using WEBA_ASSIGNMENT.Data;
 namespace WEBA_ASSIGNMENT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160731173246_setupdb")]
+    [Migration("20160731230208_setupdb")]
     partial class setupdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -443,7 +443,8 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnType("VARCHAR(MAX)");
 
                     b.Property<string>("Ingredients")
-                        .HasColumnName("VARCHAR(MAX)");
+                        .HasColumnName("Ingredients")
+                        .HasColumnType("VARCHAR(MAX)");
 
                     b.Property<int>("ProdId");
 
@@ -453,6 +454,9 @@ namespace WEBA_ASSIGNMENT.Migrations
 
                     b.HasKey("ConsumableId")
                         .HasName("PrimaryKey_ConsumableId");
+
+                    b.HasIndex("ProdId")
+                        .IsUnique();
 
                     b.ToTable("Consumable");
                 });
@@ -621,8 +625,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnName("BrandId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ConsumableId");
-
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("GETDATE()");
@@ -680,9 +682,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasName("PrimaryKey_Product_ProdId");
 
                     b.HasIndex("BrandId");
-
-                    b.HasIndex("ConsumableId")
-                        .IsUnique();
 
                     b.HasIndex("CreatedById");
 
@@ -1038,6 +1037,14 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("WEBA_ASSIGNMENT.Models.Consumable", b =>
+                {
+                    b.HasOne("WEBA_ASSIGNMENT.Models.Product", "Product")
+                        .WithOne("Consumable")
+                        .HasForeignKey("WEBA_ASSIGNMENT.Models.Consumable", "ProdId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("WEBA_ASSIGNMENT.Models.Metrics", b =>
                 {
                     b.HasOne("WEBA_ASSIGNMENT.Models.ApplicationUser", "CreatedBy")
@@ -1089,10 +1096,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .WithMany("Products")
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WEBA_ASSIGNMENT.Models.Consumable", "Consumable")
-                        .WithOne("Product")
-                        .HasForeignKey("WEBA_ASSIGNMENT.Models.Product", "ConsumableId");
 
                     b.HasOne("WEBA_ASSIGNMENT.Models.ApplicationUser", "CreatedBy")
                         .WithMany()

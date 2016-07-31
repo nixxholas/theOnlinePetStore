@@ -306,9 +306,6 @@ namespace WEBA_ASSIGNMENT.APIs
                 {
                     newProduct.isConsumable = 1; // It is a consumable
                     Consumable newConsumable = new Consumable();
-                    // We'll link this consumable to it's parent so
-                    // that the FK (Foreign Key) properly initializes
-                    newConsumable.Product = newProduct;
                     newConsumable.TypicalAnalysis = productNewInput.Consumable.TypicalAnalysis.Value;
                     newConsumable.GuranteedAnalysis = productNewInput.Consumable.GuranteedAnalysis.Value;
                     newConsumable.Ingredients = productNewInput.Consumable.Ingredients.Value;
@@ -363,12 +360,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         newMetric.StatusId = selectedStatus.StatusId;
                         newMetric.CreatedById = _userManager.GetUserId(User);
                         newMetric.UpdatedById = _userManager.GetUserId(User);
-
-                        // So we need to add metric to db first
-                        // in order for MetricId to autogenerate
-                        //Database.Metrics.Add(newMetric);
-                        //Database.SaveChanges();
-
+                        
                         int syncedMetricId = newMetric.MetricId;
 
                         Price price = new Price();
@@ -377,10 +369,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         price.RRP = Convert.ToDecimal(Metric.RRP.Value);
                         price.Value = Convert.ToDecimal(Metric.Price.Value);
                         price.CreatedById = _userManager.GetUserId(User);
-
-                        //Database.Prices.Add(price);
-                        //Database.SaveChanges();
-
+                        
                         // Push the Metric and price into the product object
                         newMetric.Price = price;
                         newProduct.Metrics.Add(newMetric);
@@ -401,10 +390,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         newMetric.StatusId = selectedStatus.StatusId;
                         newMetric.CreatedById = _userManager.GetUserId(User);
                         newMetric.UpdatedById = _userManager.GetUserId(User);
-
-                        //Database.Metrics.Add(newMetric);
-                        //Database.SaveChanges();
-
+                        
                         int syncedMetricId = newMetric.MetricId;
 
                         Price price = new Price();
@@ -413,16 +399,12 @@ namespace WEBA_ASSIGNMENT.APIs
                         price.RRP = Convert.ToDecimal(Metric.RRP.Value);
                         price.Value = Convert.ToDecimal(Metric.Price.Value);
                         price.CreatedById = _userManager.GetUserId(User);
-
-                        //Database.Prices.Add(price);
-                        //Database.SaveChanges();
-
+                        
                         // Push the Metric and price into the product object
                         newMetric.Price = price;
                         newProduct.Metrics.Add(newMetric);
                     }
                 }
-                //}
 
                 //I cannot save the products information into database yet. The 
                 //UploadProductPhotosAndSaveProductData has logic to upload the binary file to
