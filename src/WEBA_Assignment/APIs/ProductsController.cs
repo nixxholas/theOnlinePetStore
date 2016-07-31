@@ -313,14 +313,6 @@ namespace WEBA_ASSIGNMENT.APIs
                 // Consumable Weak Entity
                 if (newProduct.isConsumable == 1)
                 {
-                    // This method is also viable because it 
-                    // is immediately referred to newProduct as
-                    // it's parent. Nothing extra is needed to 
-                    // declare thei relationship
-                    //newProduct.Consumable = new Consumable({
-
-                    //});
-                    // Or should we do this instead?
                     Consumable newConsumable = new Consumable();
                     // We'll link this consumable to it's parent so
                     // that the FK (Foreign Key) properly initializes

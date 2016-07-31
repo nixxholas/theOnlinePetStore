@@ -763,6 +763,10 @@
                     switch (j) {
                         case 0: // Metric Amount
                             MetricAmount = row.cells[j].children[0].value;
+                            if (MetricAmount == null || MetricAmount == "") {
+                                swal("Hey there!", "You missed out something in the metrics table!", "error");
+                                return;
+                            }
                             break;
                         case 1: // Metric Type
                             // Dropdown box
@@ -779,24 +783,48 @@
                             if (row.cells[j].children[0].classList[1].toString() == "font-bold") {
                                 var isPreset = "0"; // 0 = false
                                 MetricType = row.cells[j].children[0].value;
+                                if (MetricType == null || MetricType == "") {
+                                    swal("Hey there!", "You missed out something in the metrics table!", "error");
+                                    return;
+                                }
                                 break;
                             } else {
                                 var isPreset = "1"; // 1 = true
                                 MetricType = row.cells[j].children[0].innerText.trim();
+                                if (MetricType == null || MetricType == "") {
+                                    swal("Hey there!", "You missed out something in the metrics table!", "error");
+                                    return;
+                                }
                                 break;
                             }
                             break;
                         case 2: // Quantity
                             Quantity = row.cells[j].children[0].value;
+                            if (Quantity == null || Quantity == "") {
+                                swal("Hey there!", "You missed out something in the metrics table!", "error");
+                                return;
+                            }
                             break;
                         case 3: // Status
                             Status = row.cells[j].children[0].innerText.trim();
+                            if (Status == null || Status == "") {
+                                swal("Hey there!", "You missed out something in the metrics table!", "error");
+                                return;
+                            }
                             break;
                         case 4: // Price per type
                             Price = row.cells[j].children[0].value;
+                            if (Price == null || Price == "") {
+                                swal("Hey there!", "You missed out something in the metrics table!", "error");
+                                return;
+                            }
                             break;
                         case 5:
                             RRP = row.cells[j].children[0].value;
+                            if (RRP == null || RRP == "") {
+                                swal("Hey there!", "You missed out something in the metrics table!", "error");
+                                return;
+                            }
                             break;
                         default:
                             swal("Error!", "Something went wrong..", "error");
@@ -838,7 +866,6 @@
                     return;
                 });
                 $saveProductDBHandler.fail(function (data, textStatus, jqXHR) {
-                    console.dir(data);
                     swal("Oh no!", data.responseJSON.message, "error");
                 });
             } else {
@@ -846,7 +873,6 @@
             }
         });
         $saveProductHandler.fail(function (data, textStatus, jqXHR) {
-            console.dir(data);
             swal("Oh no!", data.responseJSON.message, "error");
         });
     });//end of $('#saveButton').on('click', function () {
