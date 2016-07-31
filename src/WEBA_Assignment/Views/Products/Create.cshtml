@@ -1,12 +1,19 @@
 ﻿<div class="row">
     <div class="col-md-12">
-        <div class="alert alert-info" role="alert">
+        <div id="infoBox" class="alert alert-info" role="alert">
             <strong>Please check the properties first before filling up the page.</strong>
         </div>
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <strong>Not entering any input in either Quantity or Threshold Inventory Quantity<br />
             will be automatically replaced with 0.</strong>
         </div>
+        <div id="errorBox" class="alert alert-danger alert-dismissable hidden" role="alert">
+            <h2 style="font-family: 'Trebuchet MS'"><b>Hey there! You didn't key in some thing/s right. :(</b></h2>
+            <div id="errorBoxText">
+                <!-- Let us store client sided error messages for input validation here :)) -->
+            </div>
+            </div>
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="panel-title">Create Product Record</div>
@@ -413,7 +420,6 @@
     })
     ;
 
-
     var brandInput = $('#brandInput').magicSuggest({
         required: true,
         maxSelection: 1,
@@ -509,6 +515,7 @@
     //    $(this).val
     //});
 
+    // onClicks for Metrics Table
     $(document).ready(function () {
         // Custom Metric Row
         $("#customRowBtn").click(function () {
@@ -529,10 +536,10 @@
                 '</select>' +
                 '</td>' +
                 '<td>' +
-                '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price" onkeypress="return isNumberKey(event)"/>' +
+                '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price"  pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
                 '</td>' +
                 '<td>' +
-                '<input type="number" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP" onkeypress="return isNumberKey(event)"/>' +
+                '<input type="number" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP"  pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
                 '</br><a href="javascript:void(0);" class="remRow btn btn-danger inline">Remove</a>' +
                 '</td>' +
                 '</tr>'
@@ -564,10 +571,10 @@
                 '</select>' +
                 '</td>' +
                 '<td>' +
-                '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price" onkeypress="return isNumberKey(event)"/>' +
+                '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price" pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
                 '</td>' +
                 '<td>' +
-                '<input type="text" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP" onkeypress="return isNumberKey(event)"/>' +
+                '<input type="text" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP" pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
                 '</br><a href="javascript:void(0);" class="remRow btn btn-danger inline">Remove</a>' +
                 '</td>' +
                 '</tr>');
@@ -598,14 +605,7 @@
     //Using a function technique to create a JavaScript class, WebFormData
     // Special promotions & Consumable Entities unscripted
     // Things that are commented out will permanently be with the Metric Constructor
-    function WebFormData(inProdName,
-        inTiQ,
-        inBrandId,
-        inPublished,
-        inDescription,
-        inMetrics,
-        inIsConsumable,
-        inStatusId) {
+    function WebFormData(inProdName, inTiQ, inBrandId, inPublished, inDescription, inMetrics, inIsConsumable, inStatusId) {
         this.ProdName = inProdName;
         this.ThresholdInventoryQuantity = inTiQ;
         this.BrandId = inBrandId;
@@ -617,29 +617,58 @@
         this.StatusId = inStatusId;
     }
 
+    // function to unhide the errorbox
+    function errorBoxUnhide() {
+        if ($('#errorBox').hasClass('hidden')) {
+            $('#errorBox').removeClass('hidden');
+            $('html,body').animate({ scrollTop: 0 }, 'slow');
+            //location.href = "#infoBox"; // Send the user back to the top
+            // LET HIM SEE WHAT HE HAS DONE
+        }
+    }
+
+    // function to hide the errorbox
+    // Also clear up the box contents to make sure the errors don't repeat
+    // from a probable recurring submission
+    function errorBoxHide() {
+        if (!$('#errorBox').hasClass('hidden')) {
+            $('#errorBox').addClass('hidden');
+            // Just to double confirm what I am doing is right
+            // http://stackoverflow.com/questions/22593759/how-do-i-clear-inner-html
+            document.getElementById("errorBoxText").innerHTML = "";
+        }
+    }
+
     $('#saveButton').on('click', function () {
+        // Hide errorBox upon submission
+        errorBoxHide();
+
+        // RegEx for Decimal(19, 4), global standards for currency datatype
+        // http://www.w3schools.com/jsref/jsref_regexp_test.asp
+        var patt = new RegExp("^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$");
+
         // Everyone needs MetricData
         var MetricData = [];
 
         // Product Name
         var collectedProdName = $('#prodNameInput').val();
         if (collectedProdName == null || collectedProdName == "") {
-            swal("Error!", "Please enter a product name! ", "error");
-            return; // Break out of the function
+            document.getElementById("errorBoxText").innerHTML += "<strong> Please enter a product name! </strong><br />";
+            errorBoxUnhide();
         }
 
         // Brand id
         var collectedBrandId = brandInput.getValue().toString(); // Brand Id
         if (collectedBrandId == null || collectedBrandId == "") {
-            swal("Error!", "Please select a brand!", "error")
-            return; // Break out of the function
+            document.getElementById("errorBoxText").innerHTML += "<strong> Please select a brand! </strong><br />";
+            errorBoxUnhide();
         }
 
         // Threshold Inventory Quantity
         var collectedTIQ = $('#tiqInput').val();        
         if (collectedTIQ == null || collectedTIQ == "") {
-            swal("Error!", "Please enter an input for Threshold Inventory Quantity!", "error");
-            return; // Break out of the function
+            document.getElementById("errorBoxText").innerHTML += "<strong> Please enter an input for Threshold Inventory Quantity! </strong><br />";
+            errorBoxUnhide();
         }
 
         // Description
@@ -659,8 +688,8 @@
             // Metric Amount Input & Validation            
             var collectedMetricAmount = $('#metricAmountInput').val();
             if (collectedMetricAmount == null || collectedMetricAmount == "") {
-                swal("Error!", "Please enter a metric amount for your metric type!", "error")
-                return; // Break out of the function
+                document.getElementById("errorBoxText").innerHTML += "<strong> Please enter a metric amount for your metric type! </strong><br />";
+                errorBoxUnhide();
             }
 
             // Metric Type Input & Validation
@@ -668,16 +697,16 @@
                 var collectedMetricType = $('#customMetricTypeInput').val();
                 var collectedIsPreset = 0;
                 if (collectedMetricType == null || collectedMetricType == "") {
-                    swal("Hey!", "Please enter your custom metric type!", "error");
-                    return;
+                    document.getElementById("errorBoxText").innerHTML += "<strong> Please enter your custom metric type! </strong><br />";
+                    errorBoxUnhide();
                 }
             } else {
                 if ($('#pMetricSuggest').magicSuggest().isValid() == true) {
                     var collectedIsPreset = 1;
                     var collectedMetricType = $('#pMetricSuggest').magicSuggest().getValue().toString();
                 } else {
-                    swal("Oh no..", "Please enter a Preset Metric!", "error");
-                    return;
+                    document.getElementById("errorBoxText").innerHTML += "<strong> Please choose a Preset Metric! </strong><br />";
+                    errorBoxUnhide();
                 }
             }
 
@@ -685,18 +714,34 @@
             if ($('#statusSuggest').magicSuggest().isValid()) {
                 var collectedStatusId = $('#statusSuggest').magicSuggest().getValue().toString();
             } else {
-                swal("Oh no..", "Please select a status!", "error");
-                return;                
+                document.getElementById("errorBoxText").innerHTML += "<strong> Please select a status! </strong><br />";
+                errorBoxUnhide();
             }
 
             // We have to make sure that the user won't be able to input any spamming dots
             // into either TIQ's input or the quantity input
 
-            // Price and RRP is also needed to be verified by using accounting.js
             var collectedQuantity = $('#qtyInput').val();
-            var collectedPrice = $('#priceInput').val();
-            var collectedRRP = $('#rrpInput').val();
+            
+            var collectedPrice;
 
+            // If the price input is not valid,
+            if (!patt.test($('#priceInput').val())) {
+                document.getElementById("errorBoxText").innerHTML += "<strong> Please enter a valid price! (Maximum of 4 Decimal Places.) </strong><br />";
+                errorBoxUnhide();
+            }
+            // Else we'll carry on with the price
+            collectedPrice = $('#priceInput').val();
+
+            var collectedRRP;
+            // If the Recommended Retail Price input is not valid,
+            if (!patt.test($('#priceInput').val())) {
+                document.getElementById("errorBoxText").innerHTML += "<strong> Please enter a valid recommended retail price! (Maximum of 4 Decimal Places.) </strong><br />";
+                errorBoxUnhide();
+            }
+            // Else we'll carry on with the RRP
+            collectedRRP = $('#rrpInput').val();
+            
             // Push the single metric into the array of metrics
             // (inMetricAmount, inMetricType, inQuantity, inPrice, inRRP, inStatus) 
             MetricData.push(new Metric(collectedMetricAmount, collectedMetricType, collectedQuantity, collectedPrice, collectedRRP, collectedStatusId, collectedIsPreset))
@@ -743,8 +788,8 @@
 
             // If the user didn't try entering any metric for the product
             if (table.rows < 1) {
-                swal("Error!", "Hey, you did not enter any metric for your product!", "error");
-                return;
+                document.getElementById("errorBoxText").innerHTML += "<h5><strong> Hey, you did not enter any metric for your product! (Maximum of 4 Decimal Places.) </strong></h5><br />";
+                errorBoxUnhide();
             }
 
             // For each row in metricsTableBody javascript style
@@ -760,12 +805,14 @@
                 var Status = '';
 
                 for (var j = 0, col; col = row.cells[j]; j++) {
+                    // Define a variable for validation
+                    var isValid = 1;
+
                     switch (j) {
                         case 0: // Metric Amount
                             MetricAmount = row.cells[j].children[0].value;
                             if (MetricAmount == null || MetricAmount == "") {
-                                swal("Hey there!", "You missed out something in the metrics table!", "error");
-                                return;
+                                isValid = 0;
                             }
                             break;
                         case 1: // Metric Type
@@ -784,16 +831,14 @@
                                 var isPreset = "0"; // 0 = false
                                 MetricType = row.cells[j].children[0].value;
                                 if (MetricType == null || MetricType == "") {
-                                    swal("Hey there!", "You missed out something in the metrics table!", "error");
-                                    return;
+                                    isValid = 0;
                                 }
                                 break;
                             } else {
                                 var isPreset = "1"; // 1 = true
                                 MetricType = row.cells[j].children[0].innerText.trim();
                                 if (MetricType == null || MetricType == "") {
-                                    swal("Hey there!", "You missed out something in the metrics table!", "error");
-                                    return;
+                                    isValid = 0;
                                 }
                                 break;
                             }
@@ -801,33 +846,35 @@
                         case 2: // Quantity
                             Quantity = row.cells[j].children[0].value;
                             if (Quantity == null || Quantity == "") {
-                                swal("Hey there!", "You missed out something in the metrics table!", "error");
-                                return;
+                                isValid = 0;
                             }
                             break;
                         case 3: // Status
                             Status = row.cells[j].children[0].innerText.trim();
                             if (Status == null || Status == "") {
-                                swal("Hey there!", "You missed out something in the metrics table!", "error");
-                                return;
+                                isValid = 0;
                             }
                             break;
                         case 4: // Price per type
                             Price = row.cells[j].children[0].value;
                             if (Price == null || Price == "") {
-                                swal("Hey there!", "You missed out something in the metrics table!", "error");
-                                return;
+                                isValid = 0;
                             }
                             break;
                         case 5:
                             RRP = row.cells[j].children[0].value;
                             if (RRP == null || RRP == "") {
-                                swal("Hey there!", "You missed out something in the metrics table!", "error");
-                                return;
+                                isValid = 0;
                             }
                             break;
                         default:
-                            swal("Error!", "Something went wrong..", "error");
+                            isValid = 0;
+                    }
+
+                    // Set the error here
+                    if (isValid = 0) {
+                        document.getElementById("errorBoxText").innerHTML += "<strong> You missed out something at row " + j + " of the metrics table! </strong><br />";
+                        errorBoxUnhide();
                     }
                 }
                 // Finally we push the metric object to the MetricData
@@ -840,6 +887,12 @@
             var webFormData = new WebFormData(collectedProdName, collectedTIQ, collectedBrandId, collectedPublished,
                 collectedDescription, MetricData, collectedConsumable, "0");
 
+        }
+
+        // Before we stringify webFormData, toss out if the erroBox is exposed
+        if (!($('#errorBox').hasClass('hidden'))) {
+            // Toss a return and that's it
+            return;
         }
 
         //Serialize the webFormData object which contains the type name
