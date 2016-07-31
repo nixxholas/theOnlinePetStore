@@ -824,6 +824,12 @@ namespace WEBA_ASSIGNMENT.Data
                 .WithOne(input => input.Product)
                 .HasForeignKey(input => input.ProdId);
 
+            // 1-1 Relationship for Consumable
+
+            modelBuilder.Entity<Product>()
+                .HasOne(input => input.Consumable)
+                .WithOne(input => input.Product);
+
             //----------------------------------------------------------------------------
             // Define One to Many relationship between Product and ProductPhoto
             //
@@ -1010,13 +1016,6 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasColumnName("InActiveIngredients")
                 .HasColumnType("VARCHAR(MAX)")
                 .IsRequired(false);
-
-            // Foreign Key initializations
-
-            modelBuilder.Entity<Consumable>()
-                .HasOne(input => input.Product)
-                .WithOne(input => input.Consumable)
-                .HasForeignKey<Consumable>(input => input.ProdId);
 
             //----------- Defining Consumable Entity - End --------------
 

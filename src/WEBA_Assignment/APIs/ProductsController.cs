@@ -271,14 +271,6 @@ namespace WEBA_ASSIGNMENT.APIs
         [HttpPost("SaveNewProductInformationInSession")]
         public IActionResult SaveNewProductInformationInSession([FromBody]string value)
         {
-            // Ignore Self References
-            // http://stackoverflow.com/questions/17818386/how-to-serialize-as-json-an-object-structure-with-circular-references
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects
-            };
-            var serializer = JsonSerializer.Create(settings);
-
             string customMessage = "";
 
             // Issue: Should I add a "'" into a the Product name String, the received from the
@@ -312,6 +304,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 // Consumable Weak Entity
                 if (productNewInput.Consumable != null)
                 {
+                    newProduct.isConsumable = 1; // It is a consumable
                     Consumable newConsumable = new Consumable();
                     // We'll link this consumable to it's parent so
                     // that the FK (Foreign Key) properly initializes
@@ -324,6 +317,9 @@ namespace WEBA_ASSIGNMENT.APIs
 
                     // Push the consumable object into the product object
                     newProduct.Consumable = newConsumable;
+                } else
+                {
+                    newProduct.isConsumable = 0; // It is NOT a consumable
                 }
 
                 // Description
@@ -499,7 +495,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 {
                     quantity += metric.Quantity;
                     Database.Metrics.Add(metric);
-                    Database.Prices.Add(metric.Price); // Can work?
+                    Database.Prices.Add(metric.Price);
                 }
 
                 // Set the product's total quantity here
@@ -749,6 +745,12 @@ namespace WEBA_ASSIGNMENT.APIs
             // product should there be more than once metric that is
             // binded.
             int quantity = 0;
+
+            // Let's save the Consumable object if it exists
+            if (newProduct.Consumable != null)
+            {
+                Database.Consumables.Add(newProduct.Consumable);
+            }
 
             // Let's save the metrics and price
             foreach (var metric in newProduct.Metrics)
