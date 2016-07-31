@@ -23,6 +23,7 @@ namespace WEBA_ASSIGNMENT.Data
         public DbSet<PresetMetric> PresetMetrics { get; set; }
         public DbSet<Price> Prices { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Consumable> Consumables { get; set; }
         public DbSet<ProductPhoto> ProductPhotos { get; set; }
         public DbSet<BrandCategory> BrandCategory { get; set; }
         public DbSet<ProductCategory> ProductCategory { get; set; }
@@ -983,31 +984,31 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<Consumable>()
                 .Property(input => input.TypicalAnalysis)
                 .HasColumnName("TypicalAnalysis")
-                .HasColumnType("VARCHAR(1000)")
+                .HasColumnType("VARCHAR(MAX)")
                 .IsRequired(false);
 
             modelBuilder.Entity<Consumable>()
                 .Property(input => input.GuranteedAnalysis)
                 .HasColumnName("GuranteedAnalysis")
-                .HasColumnType("VARCHAR(1000)")
+                .HasColumnType("VARCHAR(MAX)")
                 .IsRequired(false);
 
             modelBuilder.Entity<Consumable>()
                 .Property(input => input.Ingredients)
                 .HasColumnName("Ingredients")
-                .HasColumnName("VARCHAR(1000)")
+                .HasColumnName("VARCHAR(MAX)")
                 .IsRequired(false);
 
             modelBuilder.Entity<Consumable>()
                 .Property(input => input.ActiveIngredients)
                 .HasColumnName("ActiveIngredients")
-                .HasColumnType("VARCHAR(1000)")
+                .HasColumnType("VARCHAR(MAX)")
                 .IsRequired(false);
 
             modelBuilder.Entity<Consumable>()
                 .Property(input => input.InActiveIngredients)
                 .HasColumnName("InActiveIngredients")
-                .HasColumnType("VARCHAR(1000)")
+                .HasColumnType("VARCHAR(MAX)")
                 .IsRequired(false);
 
             // Foreign Key initializations

@@ -305,13 +305,12 @@ namespace WEBA_ASSIGNMENT.APIs
                 newProduct.ProdName = productNewInput.ProdName.Value;
                 newProduct.BrandId = Int32.Parse(productNewInput.BrandId.Value);
                 newProduct.Published = Int32.Parse(productNewInput.Published.Value);
-                newProduct.isConsumable = Int32.Parse(productNewInput.isConsumable.Value);
                 newProduct.CreatedById = _userManager.GetUserId(User);
                 newProduct.UpdatedById = _userManager.GetUserId(User);
                 newProduct.Metrics = new List<Metrics>();
 
                 // Consumable Weak Entity
-                if (newProduct.isConsumable == 1)
+                if (productNewInput.Consumable != null)
                 {
                     Consumable newConsumable = new Consumable();
                     // We'll link this consumable to it's parent so
@@ -322,6 +321,9 @@ namespace WEBA_ASSIGNMENT.APIs
                     newConsumable.Ingredients = productNewInput.Consumable.Ingredients.Value;
                     newConsumable.ActiveIngredients = productNewInput.Consumable.ActiveIngredients.Value;
                     newConsumable.InActiveIngredients = productNewInput.Consumable.InActiveIngredients.Value;
+
+                    // Push the consumable object into the product object
+                    newProduct.Consumable = newConsumable;
                 }
 
                 // Description
@@ -485,7 +487,13 @@ namespace WEBA_ASSIGNMENT.APIs
                 // product should there be more than once metric that is
                 // binded.
                 int quantity = 0;
-                                
+
+                // Let's save the Consumable object if it exists
+                if (newProduct.Consumable != null)
+                {
+                    Database.Consumables.Add(newProduct.Consumable);
+                }
+                
                 // Let's save the metrics and price
                 foreach (var metric in newProduct.Metrics)
                 {

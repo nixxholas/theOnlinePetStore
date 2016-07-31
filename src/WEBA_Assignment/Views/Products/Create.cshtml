@@ -109,7 +109,19 @@
                                 <div class="form-group col-md-12 hidden" id="consumableContainer" name="consumableContainer">
                                     <!--<label class="control-label col-md-2" for="descBox">Description</label>-->
                                     <div class="form-group col-md-10">
-                                        <textarea class="tinymceStart" name="consumableBox" id="consumableBox"></textarea>
+                                        <textarea class="tinymceStart" name="TypicalAnalysisBox" id="TypicalAnalysisBox"></textarea>
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <textarea class="tinymceStart" name="GuranteedAnalysisBox" id="GuranteedAnalysisBox"></textarea>
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <textarea class="tinymceStart" name="IngredientsBox" id="IngredientsBox"></textarea>
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <textarea class="tinymceStart" name="ActiveIngredientsBox" id="ActiveIngredientsBox"></textarea>
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <textarea class="tinymceStart" name="InActiveIngredientsBox" id="InActiveIngredientsBox"></textarea>
                                     </div>
                                 </div>
 
@@ -584,6 +596,15 @@
         });
     });
 
+    // Function Constructor for creating a consumable object
+    function Consumable(inTypicalAnalysis, inGuranteedAnalysis, inIngredients, inActiveIngredients, inInActiveIngredients) {
+        this.TypicalAnalysis = inTypicalAnalysis;
+        this.GuranteedAnalysis = inGuranteedAnalysis;
+        this.Ingredients = inIngredients;
+        this.ActiveIngredients = inActiveIngredients;
+        this.InActiveIngredients = inInActiveIngredients;
+    }
+
     // Function Constructor for creating a metrics object
     function Metric(inMetricAmount, inMetricType, inQuantity, inPrice, inRRP, inStatus, inIsPreset) {
         this.MetricAmount = inMetricAmount;
@@ -598,14 +619,14 @@
     //Using a function technique to create a JavaScript class, WebFormData
     // Special promotions & Consumable Entities unscripted
     // Things that are commented out will permanently be with the Metric Constructor
-    function WebFormData(inProdName, inTiQ, inBrandId, inPublished, inDescription, inMetrics, inIsConsumable, inStatusId) {
+    function WebFormData(inProdName, inTiQ, inBrandId, inPublished, inDescription, inMetrics, inConsumable, inStatusId) {
         this.ProdName = inProdName;
         this.ThresholdInventoryQuantity = inTiQ;
         this.BrandId = inBrandId;
         this.Published = inPublished;
         this.Description = inDescription;
         this.Metrics = inMetrics;
-        this.isConsumable = inIsConsumable;
+        this.Consumable = inConsumable;
         // Incase the product has only one metric
         this.StatusId = inStatusId;
     }
@@ -658,7 +679,7 @@
         }
 
         // Threshold Inventory Quantity
-        var collectedTIQ = $('#tiqInput').val();        
+        var collectedTIQ = $('#tiqInput').val();
         if (collectedTIQ == null || collectedTIQ == "") {
             document.getElementById("errorBoxText").innerHTML += "<strong> Please enter an input for Threshold Inventory Quantity! </strong><br />";
             errorBoxUnhide();
@@ -673,20 +694,26 @@
         }
 
         // Static variables
+        var collectedPublished;
         if (!$('#publishBox').hasClass('hidden')) { // if the product is set to be published
             // Setup the identifying variable
-            var collectedPublished = "1";
+            collectedPublished = "1";
         } else {
-            var collectedPublished = "0";
+            collectedPublished = "0";
         }
 
         if (!$('#consumableContainer').hasClass('hidden')) { // if the product is a consumable
-            // Setup the identifying variable
-            var collectedConsumable = "1";
-
             // Iterate through those boxes and take their stuff to make a consumable object
+            //Consumable(inTypicalAnalysis, inGuranteedAnalysis, inIngredients, inActiveIngredients, inInActiveIngredients)
+            var collectedTypicalAnalysis = tinyMCE.get('TypicalAnalysisBox').getContent();
+            var collectedGuranteedAnalysis = tinyMCE.get('GuranteedAnalysisBox').getContent();
+            var collectedIngredients = tinyMCE.get('IngredientsBox').getContent();
+            var collectedActiveIngredients = tinyMCE.get('ActiveIngredientsBox').getContent();
+            var collectedInActiveIngredients = tinyMCE.get('InActiveIngredientsBox').getContent();
+
+            var collectedConsumable = new Consumable(collectedTypicalAnalysis, collectedGuranteedAnalysis, collectedIngredients, collectedActiveIngredients, collectedInActiveIngredients);
         } else {
-            var collectedConsumable = "0";
+            var collectedConsumable = null;
         }
 
         // If there are no custom sizes or variations
