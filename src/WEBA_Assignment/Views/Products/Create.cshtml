@@ -1,5 +1,8 @@
 ﻿<div class="row">
     <div class="col-md-12">
+        <div class="alert alert-warning" role="alert">
+            <a href="#" class="alert-link">Please check the switches first before filling up the page.</a>
+        </div>
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="panel-title">Create Product Record</div>
@@ -21,6 +24,83 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-2" for="productProperties">Properties</label>
+                        <div id="checkboxContainer" class="col-md-10">
+                            <div>
+                                <input type="checkbox" id="publishCheck" data-toggle="toggle" data-class="fast">
+                                <label>Publish product upon save</label>
+                            </div><br>
+                            <div>
+                                <input type="checkbox" id="descriptionCheck" data-toggle="toggle" data-class="fast">
+                                <label>Product has a description</label>
+
+                                <div class="form-group col-md-12 hidden" id="descriptionBox">
+                                    <!--<label class="control-label col-md-2" for="descBox">Description</label>-->
+                                    <div class="form-group col-md-10">
+                                        <textarea class="tinymceStart" name="descriptionBox" id="descriptionBox"></textarea>
+                                    </div>
+                                </div>
+
+                            </div><br>
+                            <div>
+                                <!-- A Product does not need to comply with the metrics system.
+                In such cases, we'll be creating a row within metrics without
+                any properties and just throw in it's price into the row. -->
+                                <input type="checkbox" id="metricsCheck" data-toggle="toggle" data-class="fast">
+                                <label>Product has many variations</label>
+
+
+                                <div class="form-group col-md-12 hidden" id="metricSegment">
+                                    <!--<label class="control-label col-md-1" for="dataTable">Metrics</label>-->
+                                    <div class="col-md-11">
+                                        <table id="dataTable" class="table table-hover">
+                                            <button type="button" id="customRowBtn" class="pull-right btn btn-default">
+                                                New Custom Row
+                                            </button>
+                                            <button type="button" id="rowBtn" class="pull-right btn btn-default" style="margin-right: 15px;">
+                                                New Row
+                                            </button>
+                                            <thead>
+                                                <tr>
+                                                    <th>Metric Amount</th>
+                                                    <th>Metric Type</th>
+                                                    <th>Quantity</th>
+                                                    <th>Status</th>
+                                                    <th>Price per type</th>
+                                                    <th>RRP</th> <!-- Recommended Retail Price -->
+                                                    <th>&nbsp;</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="metricsTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div><br>
+                            <div>
+                                <input type="checkbox" id="consumableCheck" data-toggle="toggle" data-class="fast">
+                                <label>Product is a consumable</label>
+
+                                <!-- Will have to implement a few more TinyMCE elements here for Consumables -->
+                                <div class="form-group col-md-12 hidden" id="descriptionBox">
+                                    <!--<label class="control-label col-md-2" for="descBox">Description</label>-->
+                                    <div class="form-group col-md-10">
+                                        <textarea class="tinymceStart" name="descriptionBox" id="descriptionBox"></textarea>
+                                    </div>
+                                </div>
+
+                            </div><br>
+                            <div>
+                                <input type="checkbox" id="specialsCheck" data-toggle="toggle" data-class="fast">
+                                <label>Product has a special promotion</label>
+
+                                <!-- Probably the same method like the Metrics Dynamic Table -->
+
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group col-md-12" id="metricAmountBox">
                         <label class="control-label col-md-2" for="metricAmountInput">Metric Amount</label>
                         <div class="form-group col-md-9">
@@ -80,85 +160,11 @@
                             </div>
                         </div>
                     </div>
+                    
                     <div class="form-group col-md-12">
                         <label class="control-label col-md-2 photoUploadMarginFixProducts" for="fileInput">Photo</label>
                         <div class="col-md-9">
                             <input id="fileInput" name="fileInput" type="file" class="file input-group-lg" multiple />
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="control-label col-md-2" for="productProperties">Properties</label>
-                        <div id="checkboxContainer" class="col-md-10">
-                            <div>
-                                <input type="checkbox" id="publishCheck" data-toggle="toggle" data-class="fast" >
-                                <label>Publish product upon save</label>
-                            </div><br>
-                            <div>
-                                <input type="checkbox" id="descriptionCheck" data-toggle="toggle" data-class="fast" >
-                                <label>Product has a description</label>
-
-                                <div class="form-group col-md-12 hidden" id="descriptionBox">
-                                   <!--<label class="control-label col-md-2" for="descBox">Description</label>--> 
-                                    <div class="form-group col-md-10">
-                                        <textarea class="tinymceStart" name="descriptionBox" id="descriptionBox"></textarea>
-                                    </div>
-                                </div>
-
-                            </div><br>
-                            <div>
-                                <!-- A Product does not need to comply with the metrics system.
-                                In such cases, we'll be creating a row within metrics without
-                                any properties and just throw in it's price into the row. -->
-                                <input type="checkbox" id="metricsCheck" data-toggle="toggle" data-class="fast" >
-                                <label>Product has many variations</label>
-
-
-                                <div class="form-group col-md-12 hidden" id="metricSegment">
-                                    <!--<label class="control-label col-md-1" for="dataTable">Metrics</label>-->
-                                    <div class="col-md-11">
-                                        <table id="dataTable" class="table table-hover">
-                                            <button type="button" id="customRowBtn" class="pull-right btn btn-default">
-                                                New Custom Row
-                                            </button>
-                                            <button type="button" id="rowBtn" class="pull-right btn btn-default" style="margin-right: 15px;">
-                                                New Row
-                                            </button>
-                                            <thead>
-                                                <tr>
-                                                    <th>Metric Amount</th>
-                                                    <th>Metric Type</th>
-                                                    <th>Quantity</th>
-                                                    <th>Status</th>
-                                                    <th>Price per type</th>
-                                                    <th>RRP</th> <!-- Recommended Retail Price -->
-                                                    <th>&nbsp;</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="metricsTableBody"></tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div><br>
-                            <div>
-                                <input type="checkbox" id="consumableCheck" data-toggle="toggle" data-class="fast" >
-                                <label>Product is a consumable</label>
-
-                            <!-- Will have to implement a few more TinyMCE elements here for Consumables -->
-                                <div class="form-group col-md-12 hidden" id="descriptionBox">
-                                    <!--<label class="control-label col-md-2" for="descBox">Description</label>-->
-                                    <div class="form-group col-md-10">
-                                        <textarea class="tinymceStart" name="descriptionBox" id="descriptionBox"></textarea>
-                                    </div>
-                                </div>
-
-                            </div><br>
-                            <div>
-                                <input type="checkbox" id="specialsCheck" data-toggle="toggle" data-class="fast" >
-                                <label>Product has a special promotion</label>
-
-                            <!-- Probably the same method like the Metrics Dynamic Table -->
-
-                            </div>
                         </div>
                     </div>
 
