@@ -52,6 +52,8 @@
                             <div>
                                 <input type="checkbox" id="publishCheck" data-toggle="toggle" data-class="fast">
                                 <label>Publish product upon save</label>
+                            <!-- Empty div box for identifying publish status-->
+                            <div id="publishBox" class="hidden"></div>
                             </div><br>
                             <div>
                                 <input type="checkbox" id="descriptionCheck" data-toggle="toggle" data-class="fast">
@@ -104,10 +106,10 @@
                                 <label>Product is a consumable</label>
 
                                 <!-- Will have to implement a few more TinyMCE elements here for Consumables -->
-                                <div class="form-group col-md-12 hidden" id="descriptionBox">
+                                <div class="form-group col-md-12 hidden" id="consumableContainer" name="consumableContainer">
                                     <!--<label class="control-label col-md-2" for="descBox">Description</label>-->
                                     <div class="form-group col-md-10">
-                                        <textarea class="tinymceStart" name="descriptionBox" id="descriptionBox"></textarea>
+                                        <textarea class="tinymceStart" name="consumableBox" id="consumableBox"></textarea>
                                     </div>
                                 </div>
 
@@ -207,8 +209,6 @@
 
 <script>
     var customMetric = 0;
-    var isPublished = 0;
-    var isConsumable = 0;
     var PresetMetricData = [];
     var StatusData = [];
     var metricsTable = $('#metricSegment');
@@ -218,6 +218,7 @@
     var $statusElements = '';
 
     // Money Input Checker
+    // DEPRECATED
     function isNumberKey(evt) {
         var charCode = (evt.which) ? evt.which : evt.keyCode;
         if (charCode != 46 && charCode > 31
@@ -270,9 +271,7 @@
             '</div><div style="clear:both;"></div>'; // make sure we have closed our dom stuff
         }
     });
-
-
-
+    
     // Status GET Method
     var $dCTForStatus = jQuery.ajax({
         contentType: 'application/json',
@@ -319,8 +318,7 @@
     $dCTForPresetMetrics.fail(function (data, textStatus, jqXHR) {
         swal("Oh no!", data.message, "error");
     });
-
-
+    
     var descriptionBox = $('#descriptionBox');
 
     tinymce.init({
@@ -343,10 +341,10 @@
     });
 
     $('#publishCheck').change(function () {
-        if (isPublished = 0) {
-            isPublished = 1;
+        if ($('#publishBox').hasClass('hidden')) {
+            $('#publishBox').addClass('hidden');
         } else {
-            isPublished = 0;
+            $('#publishBox').removeClass('hidden');
         }
     });
 
@@ -403,10 +401,10 @@
     ;
 
     $('#consumableCheck').change(function () {
-        if (isConsumable = 0) {
-            isConsumable = 1;
+        if ($('#consumableContainer').hasClass('hidden')) {
+            $('#consumableContainer').removeClass('hidden');
         } else {
-            isConsumable = 0;
+            $('#consumableContainer').addClass('hidden');
         }
     })
     ;
@@ -509,11 +507,6 @@
         style: 'btn-info',
         size: 3
     });
-
-    // Class for selectpicker onClick
-    //$('.selectReader').on('change', function(){
-    //    $(this).val
-    //});
 
     // onClicks for Metrics Table
     $(document).ready(function () {
@@ -680,8 +673,21 @@
         }
 
         // Static variables
-        var collectedPublished = isPublished.toString();
-        var collectedConsumable = isConsumable.toString();
+        if (!$('#publishBox').hasClass('hidden')) { // if the product is set to be published
+            // Setup the identifying variable
+            var collectedPublished = "1";
+        } else {
+            var collectedPublished = "0";
+        }
+
+        if (!$('#consumableContainer').hasClass('hidden')) { // if the product is a consumable
+            // Setup the identifying variable
+            var collectedConsumable = "1";
+
+            // Iterate through those boxes and take their stuff to make a consumable object
+        } else {
+            var collectedConsumable = "0";
+        }
 
         // If there are no custom sizes or variations
         if ($('#metricSegment').hasClass('hidden')) {
@@ -735,7 +741,7 @@
 
             var collectedRRP;
             // If the Recommended Retail Price input is not valid,
-            if (!patt.test($('#priceInput').val())) {
+            if (!patt.test($('#rrpInput').val())) {
                 document.getElementById("errorBoxText").innerHTML += "<strong> Please enter a valid recommended retail price! (Maximum of 4 Decimal Places.) </strong><br />";
                 errorBoxUnhide();
             }
