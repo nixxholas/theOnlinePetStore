@@ -14,6 +14,7 @@ namespace WEBA_ASSIGNMENT.Models
         //Defining a Brand class property to indicate that
         //there is a one to one relationship with the Brand entity.
         public Brands Brand { get; set; }
+        public List<ProductCategory> ProductCategory { get; set; }
         public int Quantity { get; set; }
         // Threshold inventory quantity is the minimum amount
         // of inventory a company wants to have on hand.

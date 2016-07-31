@@ -694,6 +694,24 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.ToTable("Product");
                 });
 
+            modelBuilder.Entity("WEBA_ASSIGNMENT.Models.ProductCategory", b =>
+                {
+                    b.Property<int>("ProdId");
+
+                    b.Property<int>("CatId");
+
+                    b.Property<int?>("ProductProdId");
+
+                    b.HasKey("ProdId", "CatId")
+                        .HasName("ProductCategory_CompositeKey");
+
+                    b.HasIndex("CatId");
+
+                    b.HasIndex("ProductProdId");
+
+                    b.ToTable("ProductCategory");
+                });
+
             modelBuilder.Entity("WEBA_ASSIGNMENT.Models.ProductPhoto", b =>
                 {
                     b.Property<int>("ProductPhotoId")
@@ -1088,6 +1106,18 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.HasOne("WEBA_ASSIGNMENT.Models.ApplicationUser", "UpdatedBy")
                         .WithMany()
                         .HasForeignKey("UpdatedById");
+                });
+
+            modelBuilder.Entity("WEBA_ASSIGNMENT.Models.ProductCategory", b =>
+                {
+                    b.HasOne("WEBA_ASSIGNMENT.Models.Category", "Category")
+                        .WithMany("ProductCategory")
+                        .HasForeignKey("CatId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WEBA_ASSIGNMENT.Models.Product", "Product")
+                        .WithMany("ProductCategory")
+                        .HasForeignKey("ProductProdId");
                 });
 
             modelBuilder.Entity("WEBA_ASSIGNMENT.Models.ProductPhoto", b =>

@@ -566,6 +566,31 @@ namespace WEBA_ASSIGNMENT.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductCategory",
+                columns: table => new
+                {
+                    ProdId = table.Column<int>(nullable: false),
+                    CatId = table.Column<int>(nullable: false),
+                    ProductProdId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("ProductCategory_CompositeKey", x => new { x.ProdId, x.CatId });
+                    table.ForeignKey(
+                        name: "FK_ProductCategory_Category_CatId",
+                        column: x => x.CatId,
+                        principalTable: "Category",
+                        principalColumn: "CatId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductCategory_Product_ProductProdId",
+                        column: x => x.ProductProdId,
+                        principalTable: "Product",
+                        principalColumn: "ProdId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductPhoto",
                 columns: table => new
                 {
@@ -890,6 +915,16 @@ namespace WEBA_ASSIGNMENT.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductCategory_CatId",
+                table: "ProductCategory",
+                column: "CatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductCategory_ProductProdId",
+                table: "ProductCategory",
+                column: "ProductProdId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductPhoto_CreatedById",
                 table: "ProductPhoto",
                 column: "CreatedById");
@@ -972,6 +1007,9 @@ namespace WEBA_ASSIGNMENT.Migrations
                 name: "Price");
 
             migrationBuilder.DropTable(
+                name: "ProductCategory");
+
+            migrationBuilder.DropTable(
                 name: "ProductPhoto");
 
             migrationBuilder.DropTable(
@@ -981,16 +1019,13 @@ namespace WEBA_ASSIGNMENT.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Category");
-
-            migrationBuilder.DropTable(
                 name: "Metrics");
 
             migrationBuilder.DropTable(
-                name: "Specials");
+                name: "Category");
 
             migrationBuilder.DropTable(
-                name: "Visibility");
+                name: "Specials");
 
             migrationBuilder.DropTable(
                 name: "PresetMetric");
@@ -1000,6 +1035,9 @@ namespace WEBA_ASSIGNMENT.Migrations
 
             migrationBuilder.DropTable(
                 name: "Status");
+
+            migrationBuilder.DropTable(
+                name: "Visibility");
 
             migrationBuilder.DropTable(
                 name: "Brands");

@@ -11,6 +11,7 @@ namespace WEBA_ASSIGNMENT.Models
         public String CatName { get; set; }
         // public int NoOfSubCategories { get; set; }
         public List<BrandCategory> BrandCategory { get; set; }
+        public List<ProductCategory> ProductCategory { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
