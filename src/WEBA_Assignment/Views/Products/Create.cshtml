@@ -1,7 +1,11 @@
 ﻿<div class="row">
     <div class="col-md-12">
+        <div class="alert alert-info" role="alert">
+            <strong>Please check the properties first before filling up the page.</strong>
+        </div>
         <div class="alert alert-warning" role="alert">
-            <a href="#" class="alert-link">Please check the switches first before filling up the page.</a>
+            <strong>Not entering any input in either Quantity or Threshold Inventory Quantity<br />
+            will be automatically replaced with 0.</strong>
         </div>
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -16,6 +20,16 @@
                                    maxlength="50" placeholder="Product Name" value="" required />
                         </div>
                     </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-2 photoUploadMarginFixProducts" for="brandInput">Brand</label>
+                        <div class="col-md-5">
+                            <div id="brandInput" class="form-group">
+
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group col-md-12" id="statusBox">
                         <label class="control-label col-md-2" for="statusSuggest">Status</label>
                         <div class="form-group col-md-4">
@@ -150,14 +164,6 @@
                             <span class="input-group-addon">$</span>
                             <input type="text" name="rrpInput" id="rrpInput" class="form-control font-bold"
                                    maxlength="20" placeholder="Recommended Retail Price" value="" pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" required />
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="control-label col-md-2 photoUploadMarginFixProducts" for="brandInput">Brand</label>
-                        <div class="col-md-5">
-                            <div id="brandInput" class="form-group">
-
-                            </div>
                         </div>
                     </div>
                     
@@ -629,6 +635,15 @@
             return; // Break out of the function
         }
 
+        // Threshold Inventory Quantity
+        var collectedTIQ = $('#tiqInput').val();        
+        if (!Math.floor(collectedTIQ) == collectedTIQ) {
+            swal("Error!", "Please enter the Threshold Inventory Quantity!", "error");
+            return; // Break out of the function
+        }
+
+        console.dir("bypassed");
+        return;
         // Description
         var collectedDescription; // Define a variable to store the description
         if ($('#descriptionBox').hasClass('hidden')) {
@@ -681,7 +696,6 @@
 
             // Price and RRP is also needed to be verified by using accounting.js
             var collectedQuantity = $('#qtyInput').val();
-            var collectedTIQ = $('#tiqInput').val();
             var collectedPrice = $('#priceInput').val();
             var collectedRRP = $('#rrpInput').val();
 
@@ -700,8 +714,6 @@
 
         } else {
             // If there are custom variations, we'll have to utitilize the Metrics system
-            var collectedTIQ = $('#tiqInput').val(); // Only this is still needed
-
             // Look for the table
             var table = document.getElementById("metricsTableBody");
             
@@ -730,6 +742,12 @@
             //return
             
             **/
+
+            // If the user didn't try entering any metric for the product
+            if (table.rows < 1) {
+                swal("Error!", "Hey, you did not enter any metric for your product!", "error");
+                return;
+            }
 
             // For each row in metricsTableBody javascript style
             for (var i = 0, row; row = table.rows[i]; i++) {

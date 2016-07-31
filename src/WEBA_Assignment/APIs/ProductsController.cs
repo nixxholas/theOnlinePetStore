@@ -340,6 +340,17 @@ namespace WEBA_ASSIGNMENT.APIs
                 // Shouldn't POST product object yet
                 //Database.SaveChanges();
 
+                // If there aren't any metrics, we'll toss it back to the user
+                if (productNewInput.Metrics.size < 1)
+                {
+                    customMessage = "Your product does not contain a metric.";
+                    //Create a fail message anonymous object that has one property, Message.
+                    //This anonymous object's Message property contains a simple string message
+                    object httpFailRequestResultMessage = new { Message = customMessage };
+                    //Return a bad http request message to the client
+                    return BadRequest(httpFailRequestResultMessage);
+                }
+
                 // Iterate through the metric list
                 foreach (var Metric in productNewInput.Metrics)
                 {
@@ -454,7 +465,7 @@ namespace WEBA_ASSIGNMENT.APIs
             {
                 Message = "Saved product into session"
             };
-
+            
             //Create a OkObjectResult class instance, httpOkResult.
             //When creating the object, provide the previous message object into it.
             OkObjectResult httpOkResult =
