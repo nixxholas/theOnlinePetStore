@@ -508,6 +508,9 @@
             // InnerSystem System for Multi ProductPhotos
             // Even numbers identify it as a primary photo
             // Odd does the other way round
+            // Learnt alot from this
+            // And from Mr Tan's way of identifying the value for his fileinput
+            // http://plugins.krajee.com/file-input-ajax-demo/7
 
             //in the array pack the value you want for the very exact parameter name you have in the UploadAsync method/function
             //if UploadAsync(string mytext) then out['mytext']=THE_VALUE;
@@ -526,66 +529,6 @@
             });
             return out;
         }
-
-        //function() {  // callback example
-
-
-        //        $('.primaryRadioClass').each(function () {
-        //            $el = $(this);
-
-        //            if (($el[0].checked) = true) {
-        //                return { isPrimaryPhoto: '1' };
-        //            } else {
-        //                return { isPrimaryPhoto: '0' };
-        //            }
-
-        //            // We'll have a logic to count the number of photos we have
-        //            //counter++;
-        //        });
-
-
-        //if (('input[name="isPrimaryRadioBox"]:checked')) {
-        //    data[counter] = '1';
-        //} else {
-        //    data[counter] = '0';
-        //}
-        //counter++
-        //$('.primaryRadioClass').each(function () {
-
-        //    key = $el ? 'new_' + counter : 'init_' + counter;
-
-        //    counter++;
-        //});
-
-        //return data;
-    
-
-        //    function (previewId, index) {
-        //    var data = {
-        //        isPrimaryPhoto: $('input[name="isPrimaryRadioBox"]').val()
-        //    };
-        //    return data;
-        //}
-            //{ isPrimaryPhoto : $('input[name="isPrimaryRadioBox"]').val() }
-        //    function () {  // callback example
-        //    var out = {
-        //        isPrimaryPhoto : $('input[name="isPrimaryRadioBox"]').val()
-        //    };
-        //    console.dir(out);
-        //    //Deprecated
-        //    // onClick function for the Image radio buttons
-        //    //$('input[name="isPrimaryRadioBox"]').change(function () {
-        //    //    if ($(this).attr('checked', true)) {
-        //    //        $(this).attr('value', 1);
-        //    //        console.dir(this.attr('value'));
-        //    //    } else {
-        //    //        $(this).attr('value', 0);
-        //    //        console.dir(this.attr('value'));
-        //    //    }
-        //    //});
-
-        //    return out;
-        //}
     });
     $('#fileInput').on('filepreupload', function (event, data, previewId, index) {
         var form = data.form, files = data.files, extra = data.uploadExtraData,
