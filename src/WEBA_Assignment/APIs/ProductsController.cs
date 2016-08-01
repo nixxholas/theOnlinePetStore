@@ -73,7 +73,7 @@ namespace WEBA_ASSIGNMENT.APIs
             //to construct a List container of anonymous objects(which has 6 properties).
             //Then use the new JsonResult(productsList) technique to generate the
             //JSON formatted string data which can be sent back to the web browser client.
-            
+
             foreach (var oneProduct in products)
             {
                 productList.Add(new
@@ -121,7 +121,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 .Include(eachProductEntity => eachProductEntity.ProductPhotos).AsNoTracking();
 
             foreach (var oneProduct in products)
-            { 
+            {
 
                 productList.Add(new
                 {
@@ -156,7 +156,7 @@ namespace WEBA_ASSIGNMENT.APIs
                      //.Include(eachProduct => eachProduct.Metrics)
                      .Include(eachProduct => eachProduct.Specials)
                      .Include(eachProduct => eachProduct.ProductPhotos).Single();
-                
+
                 var response = new
                 {
                     ProdId = foundProduct.ProdId,
@@ -273,7 +273,7 @@ namespace WEBA_ASSIGNMENT.APIs
             // Client results in an unended json object..
             //Reconstruct a useful object from the input string value. 
             var productNewInput = JsonConvert.DeserializeObject<dynamic>(value);
-                        
+
             // If there aren't any metrics, we'll toss it back to the user
             if (productNewInput.Metrics.Count == 0)
             {
@@ -311,7 +311,8 @@ namespace WEBA_ASSIGNMENT.APIs
 
                     // Push the consumable object into the product object
                     newProduct.Consumable = newConsumable;
-                } else
+                }
+                else
                 {
                     newProduct.isConsumable = 0; // It is NOT a consumable
                 }
@@ -331,7 +332,7 @@ namespace WEBA_ASSIGNMENT.APIs
 
                 // Initialize the ProductPhotos list first
                 newProduct.ProductPhotos = new List<ProductPhoto>();
-                
+
                 // Iterate through the metric list
                 foreach (var Metric in productNewInput.Metrics)
                 {
@@ -357,7 +358,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         newMetric.StatusId = selectedStatus.StatusId;
                         newMetric.CreatedById = _userManager.GetUserId(User);
                         newMetric.UpdatedById = _userManager.GetUserId(User);
-                        
+
                         int syncedMetricId = newMetric.MetricId;
 
                         Price price = new Price();
@@ -366,7 +367,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         price.RRP = Convert.ToDecimal(Metric.RRP.Value);
                         price.Value = Convert.ToDecimal(Metric.Price.Value);
                         price.CreatedById = _userManager.GetUserId(User);
-                        
+
                         // Push the Metric and price into the product object
                         newMetric.Price = price;
                         newProduct.Metrics.Add(newMetric);
@@ -387,7 +388,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         newMetric.StatusId = selectedStatus.StatusId;
                         newMetric.CreatedById = _userManager.GetUserId(User);
                         newMetric.UpdatedById = _userManager.GetUserId(User);
-                        
+
                         int syncedMetricId = newMetric.MetricId;
 
                         Price price = new Price();
@@ -396,7 +397,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         price.RRP = Convert.ToDecimal(Metric.RRP.Value);
                         price.Value = Convert.ToDecimal(Metric.Price.Value);
                         price.CreatedById = _userManager.GetUserId(User);
-                        
+
                         // Push the Metric and price into the product object
                         newMetric.Price = price;
                         newProduct.Metrics.Add(newMetric);
@@ -431,7 +432,7 @@ namespace WEBA_ASSIGNMENT.APIs
             {
                 Message = "Saved product into session"
             };
-            
+
             //Create a OkObjectResult class instance, httpOkResult.
             //When creating the object, provide the previous message object into it.
             OkObjectResult httpOkResult =
@@ -468,7 +469,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 {
                     Database.Consumables.Add(newProduct.Consumable);
                 }
-                
+
                 // Let's save the metrics and price
                 foreach (var metric in newProduct.Metrics)
                 {
@@ -715,7 +716,7 @@ namespace WEBA_ASSIGNMENT.APIs
         public async Task<IActionResult> UploadProductPhotosAndSaveProductData(IList<IFormFile> fileInput)
         {
             // boolean to force the first image to be the default image
-            bool firstImage = true;
+            bool alreadyHasPrimary = false;
             //Retrieve the new products data which is stashed inside the Session, "Product".
             Product newProduct = HttpContext.Session.GetObjectFromJson<Product>("Product");
 
@@ -741,8 +742,6 @@ namespace WEBA_ASSIGNMENT.APIs
 
             // Set the product's total quantity here
             newProduct.Quantity = quantity;
-            
-            Database.Products.Add(newProduct);
 
             // Define values for the isPrimaryPhoto Array
             int fileDataIndex = 0;
@@ -752,7 +751,7 @@ namespace WEBA_ASSIGNMENT.APIs
             //Add the Product record first, so that the newProduct
             //object's ProdId property is updated with the new record's
             //id.
-            
+
             foreach (var oneFile in fileInput)
             {
                 fileDataValue = Request.Form["NEW_" + fileDataIndex.ToString()].ToString();
@@ -772,9 +771,10 @@ namespace WEBA_ASSIGNMENT.APIs
                     newProductPhoto.ProdId = newProduct.ProdId;
                     newProductPhoto.CreatedById = _userManager.GetUserId(User);
                     // Attempt to test the isPrimaryPhoto variable
-                    if (fileDataValue == (innerSystem).ToString())
+                    if (fileDataValue == (innerSystem).ToString() && alreadyHasPrimary == false)
                     {
                         newProductPhoto.isPrimaryPhoto = 1;
+                        alreadyHasPrimary = true;
                     }
                     else
                     {
@@ -792,6 +792,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 fileDataIndex += 1;
             }
 
+            Database.Products.Add(newProduct);
             Database.SaveChanges();
 
             computeProductsPerBrand();

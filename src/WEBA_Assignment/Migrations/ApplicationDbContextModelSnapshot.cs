@@ -494,7 +494,9 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnName("PMetricId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PriceId");
+                    b.Property<int>("PriceId")
+                        .HasColumnName("PriceId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ProdId")
                         .HasColumnName("ProdId")
@@ -525,6 +527,9 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.HasIndex("DeletedById");
 
                     b.HasIndex("PMetricId");
+
+                    b.HasIndex("PriceId")
+                        .IsUnique();
 
                     b.HasIndex("ProdId");
 
@@ -605,9 +610,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("DeletedById");
-
-                    b.HasIndex("MetricId")
-                        .IsUnique();
 
                     b.ToTable("Price");
                 });
@@ -751,7 +753,9 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(0);
 
-                    b.Property<int>("ProdId");
+                    b.Property<int>("ProdId")
+                        .HasColumnName("ProdId")
+                        .HasColumnType("int");
 
                     b.Property<string>("PublicCloudinaryId")
                         .ValueGeneratedOnAdd()
@@ -1058,6 +1062,11 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .WithMany("Metrics")
                         .HasForeignKey("PMetricId");
 
+                    b.HasOne("WEBA_ASSIGNMENT.Models.Price", "Price")
+                        .WithOne("Metric")
+                        .HasForeignKey("WEBA_ASSIGNMENT.Models.Metrics", "PriceId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("WEBA_ASSIGNMENT.Models.Product", "Product")
                         .WithMany("Metrics")
                         .HasForeignKey("ProdId")
@@ -1082,11 +1091,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.HasOne("WEBA_ASSIGNMENT.Models.ApplicationUser", "DeletedBy")
                         .WithMany()
                         .HasForeignKey("DeletedById");
-
-                    b.HasOne("WEBA_ASSIGNMENT.Models.Metrics", "Metric")
-                        .WithOne("Price")
-                        .HasForeignKey("WEBA_ASSIGNMENT.Models.Price", "MetricId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WEBA_ASSIGNMENT.Models.Product", b =>

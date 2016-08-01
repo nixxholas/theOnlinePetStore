@@ -18,7 +18,7 @@
         </div>
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="panel-title">Update Product Record</div>
+                <div class="panel-title">Create Product Record</div>
             </div>
             <div class="panel-body">
                 <form id="dataForm" data-toggle="validator" role="form" class="form-horizontal">
@@ -222,9 +222,6 @@
 </div><!-- end of div element with class="row" -->
 
 <script>
-    
-    // --------------- CSHTML Loaders ---------------------- //
-
     var customMetric = 0;
     var PresetMetricData = [];
     var StatusData = [];
@@ -449,7 +446,6 @@
                 '<div style="float: left;"><img height="75px" width="75px" src="' + data.photoUrl + '" /></div>' +
                 '<div style="float: left; margin-left: 5px">' +
                     '<div style="font-weight: bold; color: #333; font-size: 15px; line-height: 11px">' + data.brandName + '</div>' +
-                    //'<div style="color: #999; font-size: 9px">' + data.email + '</div>' +
                 '</div>' +
             '</div><div style="clear:both;"></div>'; // make sure we have closed our dom stuff
         }
@@ -485,6 +481,7 @@
     var actionTemplate = '<div class="file-actions">\n' +
      '       <div class="file-footer-buttons">\n {delete} </div>\n' +
      '    <div class="file-upload-indicator" tabindex="-1" title="{indicatorTitle}">{indicator}</div>\n' +
+     '   <div class="radio"><input class="primaryRadioClass" id="isPrimaryRadioBox" name="isPrimaryRadioBox" type="radio" ><label for="isPrimaryRadioBox">Primary Photo</label></div>' +
      '    <div class="clearfix"></div>\n' +
      '</div>';
 
@@ -493,7 +490,7 @@
         allowedFileTypes: ['image'],
         uploadUrl: '/API/Products/UploadProductPhotosAndSaveProductData',
         uploadAsync: false,
-        maxFileCount: 3,
+        maxFileCount: 5,
         layoutTemplates: { footer: footerTemplate, actions: actionTemplate },
         type: 'post',
         msgInvalidFileType: 'Invalid type for file "{name}". Only "{types}" files are supported.',
@@ -505,16 +502,47 @@
         browseClass: 'btn btn-primary btn-md pull-right',
         previewFileIcon: '<i class="glyphicon glyphicon-king"></i>',
         allowedFileExtensions: ['jpg', 'jpeg', 'png'],
-        uploadExtraData: function () {  // callback example
-            var out = {};
+        uploadExtraData: function () {
+            var out = {}, counter = 0, key, innerSystem = 0;
+
+            // InnerSystem System for Multi ProductPhotos
+            // Even numbers identify it as a primary photo
+            // Odd does the other way round
+            // Learnt alot from this
+            // And from Mr Tan's way of identifying the value for his fileinput
+            // http://plugins.krajee.com/file-input-ajax-demo/7
+
+            //in the array pack the value you want for the very exact parameter name you have in the UploadAsync method/function
+            //if UploadAsync(string mytext) then out['mytext']=THE_VALUE;
+            $('.primaryRadioClass').each(function () {
+                $el = $(this);
+
+                key = $el ? 'new_' + counter : 'init_' + counter;
+                if (($el[0].checked) = true) {
+                    out[key] = innerSystem; // Even is yes
+                } else {
+                    out[key] = innerSystem + 1; // odd is no
+                }
+
+                innerSystem = innerSystem + 2;
+                counter++;
+            });
             return out;
         }
+    });
+    $('#fileInput').on('filepreupload', function (event, data, previewId, index) {
+        var form = data.form, files = data.files, extra = data.uploadExtraData,
+            response = data.response, reader = data.reader;
+    });
+    $('#fileInput').on('filebatchpreupload', function (event, data, jqXHR) {
+        var form = data.form, files = data.files, extra = data.uploadExtraData,
+            response = data.response, reader = data.reader;
     });
     window.$productPhotoInputElement.on('filebatchuploadsuccess',
                          function (event, data, previewId, index) {
                              var form = data.form, files = data.files, extra = data.extra,
                                  response = data.response, reader = data.reader;
-                             swal("Hurray!", data.message, "Success");
+                             swal("Hurray!", data.responseJSON.message, "Success");
                          });
 
     // End of Product Image Element
@@ -527,6 +555,7 @@
 
     // onClicks for Metrics Table
     $(document).ready(function () {
+
         // Custom Metric Row
         $("#customRowBtn").click(function () {
             $("#metricsTableBody").append(
@@ -641,6 +670,8 @@
         if ($('#errorBox').hasClass('hidden')) {
             $('#errorBox').removeClass('hidden');
             $('html,body').animate({ scrollTop: 0 }, 'slow');
+            //location.href = "#infoBox"; // Send the user back to the top
+            // LET HIM SEE WHAT HE HAS DONE
         }
     }
 
@@ -655,8 +686,6 @@
             document.getElementById("errorBoxText").innerHTML = "";
         }
     }
-
-    // --------------- CSHTML Loaders END ---------------------- //
 
     $('#saveButton').on('click', function () {
         // Hide errorBox upon submission
@@ -855,16 +884,7 @@
                             break;
                         case 1: // Metric Type
                             // Dropdown box
-                            // I'm only getting the name of the preset metric..
-                            // It'll be easier if we can pull the Id instead
-                            // $('select#loltesting').val();
-                            // I can only grab the name, so we'll have to search
-                            // for the preset metric with its name
-
-                            // I freaking spent 5 days on this.
-
                             // If this element is not selectpicker
-
                             if (row.cells[j].children[0].classList[1].toString() == "font-bold") {
                                 var isPreset = "0"; // 0 = false
                                 MetricType = row.cells[j].children[0].value;

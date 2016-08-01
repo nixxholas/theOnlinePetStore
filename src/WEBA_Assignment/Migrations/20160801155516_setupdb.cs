@@ -229,6 +229,37 @@ namespace WEBA_ASSIGNMENT.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Price",
+                columns: table => new
+                {
+                    PriceId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
+                    CreatedById = table.Column<string>(nullable: false),
+                    DeletedAt = table.Column<DateTime>(nullable: true),
+                    DeletedById = table.Column<string>(nullable: true),
+                    MetricId = table.Column<int>(type: "int", nullable: false),
+                    RRP = table.Column<decimal>(type: "DECIMAL(19,4)", nullable: true),
+                    Value = table.Column<decimal>(type: "DECIMAL(19,4)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PrimaryKey_PriceId", x => x.PriceId);
+                    table.ForeignKey(
+                        name: "FK_Price_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Price_AspNetUsers_DeletedById",
+                        column: x => x.DeletedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Specials",
                 columns: table => new
                 {
@@ -517,7 +548,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     MetricAmount = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     MetricName = table.Column<string>(type: "VARCHAR(200)", nullable: false),
                     PMetricId = table.Column<int>(type: "int", nullable: true),
-                    PriceId = table.Column<int>(nullable: false),
+                    PriceId = table.Column<int>(type: "int", nullable: false),
                     ProdId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     StatusId = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
@@ -545,6 +576,12 @@ namespace WEBA_ASSIGNMENT.Migrations
                         principalTable: "PresetMetric",
                         principalColumn: "PMetricId",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Metrics_Price_PriceId",
+                        column: x => x.PriceId,
+                        principalTable: "Price",
+                        principalColumn: "PriceId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Metrics_Product_ProdId",
                         column: x => x.ProdId,
@@ -603,7 +640,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     Format = table.Column<string>(type: "VARCHAR(14)", nullable: false, defaultValue: ""),
                     Height = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     ImageSize = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    ProdId = table.Column<int>(nullable: false),
+                    ProdId = table.Column<int>(type: "int", nullable: false),
                     PublicCloudinaryId = table.Column<string>(type: "VARCHAR(100)", nullable: true, defaultValue: ""),
                     SecureUrl = table.Column<string>(type: "VARCHAR(300)", nullable: true, defaultValue: ""),
                     Url = table.Column<string>(type: "VARCHAR(300)", nullable: false, defaultValue: ""),
@@ -656,43 +693,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                         column: x => x.SpecialId,
                         principalTable: "Specials",
                         principalColumn: "SpecialId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Price",
-                columns: table => new
-                {
-                    PriceId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CreatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
-                    CreatedById = table.Column<string>(nullable: false),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
-                    DeletedById = table.Column<string>(nullable: true),
-                    MetricId = table.Column<int>(type: "int", nullable: false),
-                    RRP = table.Column<decimal>(type: "DECIMAL(19,4)", nullable: true),
-                    Value = table.Column<decimal>(type: "DECIMAL(19,4)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PrimaryKey_PriceId", x => x.PriceId);
-                    table.ForeignKey(
-                        name: "FK_Price_AspNetUsers_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Price_AspNetUsers_DeletedById",
-                        column: x => x.DeletedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Price_Metrics_MetricId",
-                        column: x => x.MetricId,
-                        principalTable: "Metrics",
-                        principalColumn: "MetricId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -852,6 +852,12 @@ namespace WEBA_ASSIGNMENT.Migrations
                 column: "PMetricId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Metrics_PriceId",
+                table: "Metrics",
+                column: "PriceId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Metrics_ProdId",
                 table: "Metrics",
                 column: "ProdId");
@@ -881,12 +887,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                 name: "IX_Price_DeletedById",
                 table: "Price",
                 column: "DeletedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Price_MetricId",
-                table: "Price",
-                column: "MetricId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_BrandId",
@@ -1004,7 +1004,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                 name: "Consumable");
 
             migrationBuilder.DropTable(
-                name: "Price");
+                name: "Metrics");
 
             migrationBuilder.DropTable(
                 name: "ProductCategory");
@@ -1019,22 +1019,22 @@ namespace WEBA_ASSIGNMENT.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Metrics");
+                name: "PresetMetric");
+
+            migrationBuilder.DropTable(
+                name: "Price");
+
+            migrationBuilder.DropTable(
+                name: "Status");
 
             migrationBuilder.DropTable(
                 name: "Category");
 
             migrationBuilder.DropTable(
-                name: "Specials");
-
-            migrationBuilder.DropTable(
-                name: "PresetMetric");
-
-            migrationBuilder.DropTable(
                 name: "Product");
 
             migrationBuilder.DropTable(
-                name: "Status");
+                name: "Specials");
 
             migrationBuilder.DropTable(
                 name: "Visibility");

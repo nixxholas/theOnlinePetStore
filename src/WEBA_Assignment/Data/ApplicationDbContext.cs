@@ -561,7 +561,7 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<Price>()
                 .HasOne(input => input.Metric)
                 .WithOne(input => input.Price)
-                .HasForeignKey<Metrics>(input => input.PriceId);
+                .HasForeignKey<Price>(input => input.MetricId);
 
             // Two sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<Price>()
@@ -624,14 +624,12 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasColumnName("Quantity")
                 .HasColumnType("int")
                 .IsRequired();
-
-            // Price Entity will carry a metricid for identification
-            // Price Entity has MetricId as an FK relationship already
-            //modelBuilder.Entity<Metrics>()
-            //    .Property(input => input.PriceId)
-            //    .HasColumnName("PriceId")
-            //    .HasColumnType("int")
-            //    .IsRequired();
+            
+            modelBuilder.Entity<Metrics>()
+                .Property(input => input.PriceId)
+                .HasColumnName("PriceId")
+                .HasColumnType("int")
+                .IsRequired();
 
             modelBuilder.Entity<Metrics>()
                 .Property(input => input.StatusId)
@@ -662,7 +660,7 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<Metrics>()
                 .HasOne(input => input.Price)
                 .WithOne(input => input.Metric)
-                .HasForeignKey<Price>(input => input.MetricId);
+                .HasForeignKey<Metrics>(input => input.PriceId);
 
             modelBuilder.Entity<Metrics>()
                 .HasOne(input => input.Status)
@@ -812,6 +810,17 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasIndex(input => input.ProdName).IsUnique()
                 .HasName("Product_ProdName_UniqueConstraint");
 
+            //----------------------------------------------------------------------------
+            // Define One to Many relationship between Product and ProductPhoto
+            //
+            // This ensures that many ProductPhoto objects/rows can be directed to just
+            // one entity of Product.
+            //----------------------------------------------------------------------------
+
+            //modelBuilder.Entity<Product>()
+            //    .HasMany(input => input.ProductPhotos)
+            //    .WithOne(input => input.Product);
+
             //Foreign Key Initializations
 
             modelBuilder.Entity<Product>()
@@ -830,18 +839,6 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasOne(input => input.Consumable)
                 .WithOne(input => input.Product)
                 .HasForeignKey<Consumable>(input => input.ProdId);
-
-            //----------------------------------------------------------------------------
-            // Define One to Many relationship between Product and ProductPhoto
-            //
-            // This ensures that many ProductPhoto objects/rows can be directed to just
-            // one entity of Product.
-            //----------------------------------------------------------------------------
-
-            modelBuilder.Entity<Product>()
-                .HasMany(input => input.ProductPhotos)
-                .WithOne(input => input.Product)
-                .HasForeignKey(input => input.ProdId);
 
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<Product>()
@@ -881,6 +878,13 @@ namespace WEBA_ASSIGNMENT.Data
             .UseSqlServerIdentityColumn()
             .ValueGeneratedOnAdd()
             .IsRequired(true);
+
+            // ProdId
+            modelBuilder.Entity<ProductPhoto>()
+            .Property(ProductPhotoObject => ProductPhotoObject.ProdId)
+            .HasColumnName("ProdId")
+            .HasColumnType("int")
+            .IsRequired();
 
             // Created At
             modelBuilder.Entity<ProductPhoto>()
@@ -957,6 +961,19 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasColumnType("int")
                 .HasDefaultValue(0)
                 .IsRequired();
+
+            //----------------------------------------------------------------------------
+            // Define One to Many relationship between Product and ProductPhoto
+            //
+            // This ensures that many ProductPhoto objects/rows can be directed to just
+            // one entity of Product.
+            //----------------------------------------------------------------------------
+
+            modelBuilder.Entity<ProductPhoto>()
+                .HasOne(input => input.Product)
+                .WithMany(input => input.ProductPhotos);
+            // We cannot have a foreign key constraint. 1 - M Relationship    
+            //.HasForeignKey(input => input.ProdId);
 
             //Three sets of Many to One relationship between User and ApplicationUser  entity (Start)
             modelBuilder.Entity<ProductPhoto>()
