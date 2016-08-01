@@ -663,12 +663,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductPhoto_Product_ProdId",
-                        column: x => x.ProdId,
-                        principalTable: "Product",
-                        principalColumn: "ProdId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
