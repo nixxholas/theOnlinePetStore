@@ -152,16 +152,11 @@ namespace WEBA_ASSIGNMENT.APIs
                 var foundProduct = Database.Products
                      .Where(eachProduct => eachProduct.ProdId == id)
                      .Include(eachProduct => eachProduct.Brand)
+                     .Include(eachProduct => eachProduct.Consumable)
                      //.Include(eachProduct => eachProduct.Metrics)
                      .Include(eachProduct => eachProduct.Specials)
                      .Include(eachProduct => eachProduct.ProductPhotos).Single();
-
-                // Not yet implemented
-                if (foundProduct.isConsumable == 1)
-                {
-                    // var foundConsumable = Database.
-                }
-
+                
                 var response = new
                 {
                     ProdId = foundProduct.ProdId,
@@ -171,6 +166,7 @@ namespace WEBA_ASSIGNMENT.APIs
                     Quantity = foundProduct.Quantity,
                     ProductPhotos = foundProduct.ProductPhotos,
                     isConsumable = foundProduct.isConsumable,
+                    Consumable = foundProduct.Consumable,
                     Specials = foundProduct.Specials,
                     Published = foundProduct.Published,
                     Brand = foundProduct.Brand,
@@ -297,6 +293,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 newProduct.ProdName = productNewInput.ProdName.Value;
                 newProduct.BrandId = Int32.Parse(productNewInput.BrandId.Value);
                 newProduct.Published = Int32.Parse(productNewInput.Published.Value);
+                newProduct.ThresholdInvertoryQuantity = Int32.Parse(productNewInput.ThresholdInventoryQuantity.Value);
                 newProduct.CreatedById = _userManager.GetUserId(User);
                 newProduct.UpdatedById = _userManager.GetUserId(User);
                 newProduct.Metrics = new List<Metrics>();
