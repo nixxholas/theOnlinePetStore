@@ -20,7 +20,7 @@
             </div>
             <div class="panel-body">
                 <form id="dataForm" data-toggle="validator" role="form" class="form-horizontal">
-                    <div class="form-group col-md-12">
+                     <div class="form-group col-md-12">
                         <label class="control-label col-md-2" for="prodNameInput">Product Name</label>
                         <div class="form-group col-md-9">
                             <input type="text" name="prodNameInput" id="prodNameInput" class="form-control font-bold"
@@ -480,7 +480,7 @@
     var actionTemplate = '<div class="file-actions">\n' +
      '       <div class="file-footer-buttons">\n {delete} </div>\n' +
      '    <div class="file-upload-indicator" tabindex="-1" title="{indicatorTitle}">{indicator}</div>\n' +
-     '    '+
+     '   <div class="radio"><input class="primaryRadioClass" name="isPrimaryRadioBox" type="radio" ><label for="isPrimaryRadioBox">Primary Photo</label></div>' +
      '    <div class="clearfix"></div>\n' +
      '</div>';
 
@@ -489,7 +489,7 @@
         allowedFileTypes: ['image'],
         uploadUrl: '/API/Products/UploadProductPhotosAndSaveProductData',
         uploadAsync: false,
-        maxFileCount: 3,
+        maxFileCount: 5,
         layoutTemplates: { footer: footerTemplate, actions: actionTemplate },
         type: 'post',
         msgInvalidFileType: 'Invalid type for file "{name}". Only "{types}" files are supported.',
@@ -502,9 +502,49 @@
         previewFileIcon: '<i class="glyphicon glyphicon-king"></i>',
         allowedFileExtensions: ['jpg', 'jpeg', 'png'],
         uploadExtraData: function () {  // callback example
-            var out = {};
-            return out;
-        }
+            var data = {};
+
+            $('.primaryRadioClass').each(function () {
+                $el = $(this);
+                var counter = 0;
+
+                if (($el[0].checked) = true) {
+                    data[counter] = '1';
+                } else {
+                    data[counter] = '0';
+                }
+                
+                counter++;
+            });
+            return data;
+          }
+
+        //    function (previewId, index) {
+        //    var data = {
+        //        isPrimaryPhoto: $('input[name="isPrimaryRadioBox"]').val()
+        //    };
+        //    return data;
+        //}
+            //{ isPrimaryPhoto : $('input[name="isPrimaryRadioBox"]').val() }
+        //    function () {  // callback example
+        //    var out = {
+        //        isPrimaryPhoto : $('input[name="isPrimaryRadioBox"]').val()
+        //    };
+        //    console.dir(out);
+        //    //Deprecated
+        //    // onClick function for the Image radio buttons
+        //    //$('input[name="isPrimaryRadioBox"]').change(function () {
+        //    //    if ($(this).attr('checked', true)) {
+        //    //        $(this).attr('value', 1);
+        //    //        console.dir(this.attr('value'));
+        //    //    } else {
+        //    //        $(this).attr('value', 0);
+        //    //        console.dir(this.attr('value'));
+        //    //    }
+        //    //});
+                
+        //    return out;
+        //}
     });
     window.$productPhotoInputElement.on('filebatchuploadsuccess',
                          function (event, data, previewId, index) {
@@ -512,7 +552,7 @@
                                  response = data.response, reader = data.reader;
                              swal("Hurray!", data.message, "Success");
                          });
-
+    
     // End of Product Image Element
 
     // Initialize selectpicker
@@ -523,6 +563,7 @@
 
     // onClicks for Metrics Table
     $(document).ready(function () {
+
         // Custom Metric Row
         $("#customRowBtn").click(function () {
             $("#metricsTableBody").append(
@@ -954,5 +995,5 @@
             swal("Oh no!", data.responseJSON.message, "error");
         });
     });//end of $('#saveButton').on('click', function () {
-
+    
 </script>

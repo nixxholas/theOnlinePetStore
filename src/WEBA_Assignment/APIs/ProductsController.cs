@@ -409,7 +409,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 //Therefore, I need to save the products data as a Session variable first.
                 //The command below will save the product data inside a
                 //Session variable, Product (I can use other names...it is just a name)
-                HttpContext.Session.SetObjectAsJson("Products", newProduct);
+                HttpContext.Session.SetObjectAsJson("Product", newProduct);
             }
             catch (Exception exceptionObject)
             {
@@ -449,7 +449,7 @@ namespace WEBA_ASSIGNMENT.APIs
             // Issue: Should I add a "'" into a the Product name String, the received from the
             // Client results in an unended json object..
             //Reconstruct a useful object from the input string value. 
-            Product newProduct = HttpContext.Session.GetObjectFromJson<Product>("Products");
+            Product newProduct = HttpContext.Session.GetObjectFromJson<Product>("Product");
 
             try
             {
@@ -550,7 +550,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 productToBeUpdated.ProdName = productChangeInput.ProdName.Value;
 
                 //Saved it into a Session variable
-                HttpContext.Session.SetObjectAsJson("Products", productToBeUpdated);
+                HttpContext.Session.SetObjectAsJson("Product", productToBeUpdated);
                 customMessage = "Saved product into session";
             }
             catch (Exception exceptionObject)
@@ -640,7 +640,7 @@ namespace WEBA_ASSIGNMENT.APIs
         {
             //Retrieve the products data which is stashed inside the Session, "Product".
             //http://benjii.me/2015/07/using-sessions-and-httpcontext-in-aspnet5-and-mvc6/
-            Product productToBeUpdated = HttpContext.Session.GetObjectFromJson<Product>("Products");
+            Product productToBeUpdated = HttpContext.Session.GetObjectFromJson<Product>("Product");
             //Get the current products data from the database.
             //Also get the current products Photo information.
             var oneProduct = Database.Products
@@ -717,7 +717,7 @@ namespace WEBA_ASSIGNMENT.APIs
             // boolean to force the first image to be the default image
             bool firstImage = true;
             //Retrieve the new products data which is stashed inside the Session, "Product".
-            Product newProduct = HttpContext.Session.GetObjectFromJson<Product>("Products");
+            Product newProduct = HttpContext.Session.GetObjectFromJson<Product>("Product");
 
             // Implementing a foreach loop such that the quantity 
             // is tabulated amongst many metrics of that particular
@@ -765,11 +765,14 @@ namespace WEBA_ASSIGNMENT.APIs
                     //newProductPhotos. 
                     newProductPhoto.ProdId = newProduct.ProdId;
                     newProductPhoto.CreatedById = _userManager.GetUserId(User);
-                    if (firstImage == true)
-                    {
-                        firstImage = false;
-                        newProductPhoto.isPrimaryPhoto = 1;
-                    }
+                    // Attempt to test the isPrimaryPhoto variable
+                    //newProductPhoto.isPrimaryPhoto = Int32.Parse(oneFile.Value);
+
+                    //if (firstImage == true)
+                    //{
+                    //    firstImage = false;
+                    //    newProductPhoto.isPrimaryPhoto = 1;
+                    //}
                     Database.ProductPhotos.Add(newProductPhoto);
                 }
             }
