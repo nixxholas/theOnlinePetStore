@@ -744,12 +744,18 @@ namespace WEBA_ASSIGNMENT.APIs
             
             Database.Products.Add(newProduct);
 
+            // Define values for the isPrimaryPhoto Array
+            int fileDataIndex = 0;
+            int innerSystem = 0;
+            string fileDataValue = "";
+
             //Add the Product record first, so that the newProduct
             //object's ProdId property is updated with the new record's
             //id.
-
+            
             foreach (var oneFile in fileInput)
             {
+                fileDataValue = Request.Form["NEW_" + fileDataIndex.ToString()].ToString();
                 ProductPhoto newProductPhoto;
                 var fileName = ContentDispositionHeaderValue
                       .Parse(oneFile.ContentDisposition)
@@ -766,7 +772,14 @@ namespace WEBA_ASSIGNMENT.APIs
                     newProductPhoto.ProdId = newProduct.ProdId;
                     newProductPhoto.CreatedById = _userManager.GetUserId(User);
                     // Attempt to test the isPrimaryPhoto variable
-                    //newProductPhoto.isPrimaryPhoto = Int32.Parse(oneFile.Value);
+                    if (fileDataValue == (innerSystem).ToString())
+                    {
+                        newProductPhoto.isPrimaryPhoto = 1;
+                    }
+                    else
+                    {
+                        newProductPhoto.isPrimaryPhoto = 0;
+                    }
 
                     //if (firstImage == true)
                     //{
@@ -775,6 +788,8 @@ namespace WEBA_ASSIGNMENT.APIs
                     //}
                     Database.ProductPhotos.Add(newProductPhoto);
                 }
+                innerSystem = innerSystem + 2;
+                fileDataIndex += 1;
             }
 
             Database.SaveChanges();
