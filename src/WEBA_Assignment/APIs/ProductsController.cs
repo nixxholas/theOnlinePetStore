@@ -511,7 +511,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 //Message member variable (property)
                 var successRequestResultMessage = new
                 {
-                    Message = "Your amazing product has been saved!"
+                    Message = "Your amazing product has been saved with a default image!"
                 };
 
                 //Create a OkObjectResult class instance, httpOkResult.

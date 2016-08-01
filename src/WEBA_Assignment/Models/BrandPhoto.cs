@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -64,6 +65,7 @@ namespace WEBA_ASSIGNMENT.Models
         /// <summary>
         /// Navigation Property
         /// </summary>
+        [JsonIgnore]        
         public Brands Brand { get; set; }
         /// <summary>
         /// Foreign Key

@@ -480,6 +480,7 @@
     var actionTemplate = '<div class="file-actions">\n' +
      '       <div class="file-footer-buttons">\n {delete} </div>\n' +
      '    <div class="file-upload-indicator" tabindex="-1" title="{indicatorTitle}">{indicator}</div>\n' +
+     '    '+
      '    <div class="clearfix"></div>\n' +
      '</div>';
 
@@ -850,16 +851,7 @@
                             break;
                         case 1: // Metric Type
                             // Dropdown box
-                            // I'm only getting the name of the preset metric..
-                            // It'll be easier if we can pull the Id instead
-                            // $('select#loltesting').val();
-                            // I can only grab the name, so we'll have to search
-                            // for the preset metric with its name
-
-                            // I freaking spent 5 days on this.
-
                             // If this element is not selectpicker
-
                             if (row.cells[j].children[0].classList[1].toString() == "font-bold") {
                                 var isPreset = "0"; // 0 = false
                                 MetricType = row.cells[j].children[0].value;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace WEBA_ASSIGNMENT.Models
         public int StatusId { get; set; }
         public Status Status { get; set; }
         // Product that is binded to this metric system
+        [JsonIgnore]
         public Product Product { get; set; }
         public int PriceId { get; set; }
         // Price per metric

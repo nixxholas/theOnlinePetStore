@@ -1,5 +1,21 @@
 ﻿<div class="row">
     <div class="col-md-12">
+        <div id="infoBox" class="alert alert-info" role="alert">
+            <strong>Please check the properties first before filling up the page.</strong>
+        </div>
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>
+                Not entering any input in either Quantity or Threshold Inventory Quantity<br />
+                will be automatically replaced with 0.
+            </strong>
+        </div>
+        <div id="errorBox" class="alert alert-danger alert-dismissable hidden" role="alert">
+            <h2 style="font-family: 'Trebuchet MS'"><b>Hey there! You didn't key in some thing/s right. :(</b></h2>
+            <div id="errorBoxText">
+                <!-- Let us store client sided error messages for input validation here :)) -->
+            </div>
+        </div>
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="panel-title">Update Product Record</div>
@@ -13,6 +29,16 @@
                                    maxlength="50" placeholder="Product Name" value="" required />
                         </div>
                     </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-2 photoUploadMarginFixProducts" for="brandInput">Brand</label>
+                        <div class="col-md-5">
+                            <div id="brandInput" class="form-group">
+
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group col-md-12" id="statusBox">
                         <label class="control-label col-md-2" for="statusSuggest">Status</label>
                         <div class="form-group col-md-4">
@@ -21,6 +47,97 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-md-2" for="productProperties">Properties</label>
+                        <div id="checkboxContainer" class="col-md-10">
+                            <div>
+                                <input type="checkbox" id="publishCheck" data-toggle="toggle" data-class="fast">
+                                <label>Publish product upon save</label>
+                                <!-- Empty div box for identifying publish status-->
+                                <div id="publishBox" class="hidden"></div>
+                            </div><br>
+                            <div>
+                                <input type="checkbox" id="descriptionCheck" data-toggle="toggle" data-class="fast">
+                                <label>Product has a description</label>
+
+                                <div class="form-group col-md-12 hidden" id="descriptionBox">
+                                    <!--<label class="control-label col-md-2" for="descBox">Description</label>-->
+                                    <div class="form-group col-md-10">
+                                        <textarea class="tinymceStart" name="descriptionBox" id="descriptionBox"></textarea>
+                                    </div>
+                                </div>
+
+                            </div><br>
+                            <div>
+                                <!-- A Product does not need to comply with the metrics system.
+                                In such cases, we'll be creating a row within metrics without
+                                any properties and just throw in it's price into the row. -->
+                                <input type="checkbox" id="metricsCheck" data-toggle="toggle" data-class="fast">
+                                <label>Product has many variations</label>
+
+
+                                <div class="form-group col-md-12 hidden" id="metricSegment">
+                                    <!--<label class="control-label col-md-1" for="dataTable">Metrics</label>-->
+                                    <div class="col-md-11">
+                                        <table id="dataTable" class="table table-hover">
+                                            <button type="button" id="customRowBtn" class="pull-right btn btn-default">
+                                                New Custom Row
+                                            </button>
+                                            <button type="button" id="rowBtn" class="pull-right btn btn-default" style="margin-right: 15px;">
+                                                New Row
+                                            </button>
+                                            <thead>
+                                                <tr>
+                                                    <th>Metric Amount</th>
+                                                    <th>Metric Type</th>
+                                                    <th>Quantity</th>
+                                                    <th>Status</th>
+                                                    <th>Price per type</th>
+                                                    <th>RRP</th> <!-- Recommended Retail Price -->
+                                                    <th>&nbsp;</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="metricsTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div><br>
+                            <div>
+                                <input type="checkbox" id="consumableCheck" data-toggle="toggle" data-class="fast">
+                                <label>Product is a consumable</label>
+
+                                <!-- Will have to implement a few more TinyMCE elements here for Consumables -->
+                                <div class="form-group col-md-12 hidden" id="consumableContainer" name="consumableContainer">
+                                    <!--<label class="control-label col-md-2" for="descBox">Description</label>-->
+                                    <div class="form-group col-md-10">
+                                        <textarea class="tinymceStart" name="TypicalAnalysisBox" id="TypicalAnalysisBox"></textarea>
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <textarea class="tinymceStart" name="GuranteedAnalysisBox" id="GuranteedAnalysisBox"></textarea>
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <textarea class="tinymceStart" name="IngredientsBox" id="IngredientsBox"></textarea>
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <textarea class="tinymceStart" name="ActiveIngredientsBox" id="ActiveIngredientsBox"></textarea>
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <textarea class="tinymceStart" name="InActiveIngredientsBox" id="InActiveIngredientsBox"></textarea>
+                                    </div>
+                                </div>
+
+                            </div><br>
+                            <div>
+                                <input type="checkbox" id="specialsCheck" data-toggle="toggle" data-class="fast">
+                                <label>Product has a special promotion</label>
+
+                                <!-- Probably the same method like the Metrics Dynamic Table -->
+
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group col-md-12" id="metricAmountBox">
                         <label class="control-label col-md-2" for="metricAmountInput">Metric Amount</label>
                         <div class="form-group col-md-9">
@@ -61,7 +178,7 @@
                         <div class="form-group input-group col-md-9">
                             <span class="input-group-addon">$</span>
                             <input type="text" name="priceInput" id="priceInput" class="form-control font-bold"
-                                   maxlength="20" placeholder="Price" value="" onkeypress="return isNumberKey(event)" required />
+                                   maxlength="20" placeholder="Price" value="" pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" required />
                         </div>
                     </div>
                     <div class="form-group col-md-12" id="rrpInputBox">
@@ -69,82 +186,14 @@
                         <div class="form-group input-group col-md-9">
                             <span class="input-group-addon">$</span>
                             <input type="text" name="rrpInput" id="rrpInput" class="form-control font-bold"
-                                   maxlength="20" placeholder="Recommended Retail Price" value="" onkeypress="return isNumberKey(event)" required />
+                                   maxlength="20" placeholder="Recommended Retail Price" value="" pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" required />
                         </div>
                     </div>
-                    <div class="form-group col-md-12">
-                        <label class="control-label col-md-2 photoUploadMarginFixProducts" for="brandInput">Brand</label>
-                        <div class="col-md-5">
-                            <div id="brandInput" class="form-group">
 
-                            </div>
-                        </div>
-                    </div>
                     <div class="form-group col-md-12">
                         <label class="control-label col-md-2 photoUploadMarginFixProducts" for="fileInput">Photo</label>
                         <div class="col-md-9">
                             <input id="fileInput" name="fileInput" type="file" class="file input-group-lg" multiple />
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="control-label col-md-2" for="productProperties">Properties</label>
-                        <div id="checkboxContainer" class="col-md-10">
-                            <div>
-                                <input type="checkbox" id="publishCheck" data-toggle="toggle" data-class="fast">
-                                <label>Publish product upon save</label>
-                            </div><br>
-                            <div>
-                                <input type="checkbox" id="descriptionCheck" data-toggle="toggle" data-class="fast">
-                                <label>Product has a description</label>
-                            </div><br>
-                            <div>
-                                <!-- A Product does not need to comply with the metrics system.
-                                In such cases, we'll be creating a row within metrics without
-                                any properties and just throw in it's price into the row. -->
-                                <input type="checkbox" id="metricsCheck" data-toggle="toggle" data-class="fast">
-                                <label>Product has many variations</label>
-
-
-                            </div><br>
-                            <div>
-                                <input type="checkbox" id="consumableCheck" data-toggle="toggle" data-class="fast">
-                                <label>Product is a consumable</label>
-                            </div><br>
-                            <div>
-                                <input type="checkbox" id="specialsCheck" data-toggle="toggle" data-class="fast">
-                                <label>Product has a special promotion</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12 hidden" id="descriptionBox">
-                        <label class="control-label col-md-2" for="descBox">Description</label>
-                        <div class="form-group col-md-9">
-                            <textarea class="tinymceStart" name="descriptionBox" id="descriptionBox"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12 hidden" id="metricSegment">
-                        <label class="control-label col-md-1" for="dataTable">Metrics</label>
-                        <div class="col-md-11">
-                            <table id="dataTable" class="table table-hover">
-                                <button type="button" id="customRowBtn" class="pull-right btn btn-default">
-                                    New Custom Row
-                                </button>
-                                <button type="button" id="rowBtn" class="pull-right btn btn-default" style="margin-right: 15px;">
-                                    New Row
-                                </button>
-                                <thead>
-                                    <tr>
-                                        <th>Metric Amount</th>
-                                        <th>Metric Type</th>
-                                        <th>Quantity</th>
-                                        <th>Status</th>
-                                        <th>Price per type</th>
-                                        <th>RRP</th> <!-- Recommended Retail Price -->
-                                        <th>&nbsp;</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="metricsTableBody"></tbody>
-                            </table>
                         </div>
                     </div>
 
@@ -173,10 +222,10 @@
 </div><!-- end of div element with class="row" -->
 
 <script>
-    //------------------------------------ User Interface Configuration logic -----------------------------------
+    
+    // --------------- CSHTML Loaders ---------------------- //
+
     var customMetric = 0;
-    var isPublished = 0;
-    var isConsumable = 0;
     var PresetMetricData = [];
     var StatusData = [];
     var metricsTable = $('#metricSegment');
@@ -186,6 +235,7 @@
     var $statusElements = '';
 
     // Money Input Checker
+    // DEPRECATED
     function isNumberKey(evt) {
         var charCode = (evt.which) ? evt.which : evt.keyCode;
         if (charCode != 46 && charCode > 31
@@ -239,8 +289,6 @@
         }
     });
 
-
-
     // Status GET Method
     var $dCTForStatus = jQuery.ajax({
         contentType: 'application/json',
@@ -288,7 +336,6 @@
         swal("Oh no!", data.message, "error");
     });
 
-
     var descriptionBox = $('#descriptionBox');
 
     tinymce.init({
@@ -311,10 +358,10 @@
     });
 
     $('#publishCheck').change(function () {
-        if (isPublished = 0) {
-            isPublished = 1;
+        if ($('#publishBox').hasClass('hidden')) {
+            $('#publishBox').addClass('hidden');
         } else {
-            isPublished = 0;
+            $('#publishBox').removeClass('hidden');
         }
     });
 
@@ -371,10 +418,10 @@
     ;
 
     $('#consumableCheck').change(function () {
-        if (isConsumable = 0) {
-            isConsumable = 1;
+        if ($('#consumableContainer').hasClass('hidden')) {
+            $('#consumableContainer').removeClass('hidden');
         } else {
-            isConsumable = 0;
+            $('#consumableContainer').addClass('hidden');
         }
     })
     ;
@@ -387,7 +434,6 @@
         }
     })
     ;
-
 
     var brandInput = $('#brandInput').magicSuggest({
         required: true,
@@ -479,11 +525,7 @@
         size: 3
     });
 
-    // Class for selectpicker onClick
-    //$('.selectReader').on('change', function(){
-    //    $(this).val
-    //});
-
+    // onClicks for Metrics Table
     $(document).ready(function () {
         // Custom Metric Row
         $("#customRowBtn").click(function () {
@@ -504,10 +546,10 @@
                 '</select>' +
                 '</td>' +
                 '<td>' +
-                '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price" onkeypress="return isNumberKey(event)"/>' +
+                '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price"  pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
                 '</td>' +
                 '<td>' +
-                '<input type="number" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP" onkeypress="return isNumberKey(event)"/>' +
+                '<input type="number" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP"  pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
                 '</br><a href="javascript:void(0);" class="remRow btn btn-danger inline">Remove</a>' +
                 '</td>' +
                 '</tr>'
@@ -539,10 +581,10 @@
                 '</select>' +
                 '</td>' +
                 '<td>' +
-                '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price" onkeypress="return isNumberKey(event)"/>' +
+                '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price" pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
                 '</td>' +
                 '<td>' +
-                '<input type="text" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP" onkeypress="return isNumberKey(event)"/>' +
+                '<input type="text" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP" pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
                 '</br><a href="javascript:void(0);" class="remRow btn btn-danger inline">Remove</a>' +
                 '</td>' +
                 '</tr>');
@@ -558,47 +600,15 @@
             $(this).parent().parent().remove();
         });
     });
-    //----------------------------------------- User Interface Configuration logic ---(End)----------------------
 
-
-    //------------------------------------ Client-side Load Data logic -----------------------------------
-
-    var g_prodId = getProdIdFromAddressBar();
-    function getProdIdFromAddressBar() {
-        //Get employee id from the url string in the browser's address bar
-        var urlArray = window.location.href.split('/');
-        var id = urlArray[urlArray.length - 1];
-        return id;
-    };
-
-
-    $loadSelectedMetricDataHandler = jQuery.ajax({
-        contentType: 'application/json',
-        method: 'get',
-        url: 'http://localhost:5008/API/Metrics/' + g_prodId,
-    })
-    $loadSelectedMetricDataHandler.done(function (data, textStatus, jqXHR) {
-        console.dir(data);
-        return;
-
-        // If there is only one metric
-
-
-        // Else there are lots of metrics, load em into the metric table
-
-
-    } //end of JavaScript anonymous function
-
-          )//end of the done() method;
-    $loadSelectedMetricDataHandler.fail(function (data, textStatus, jqXHR) {
-        swal("Oh no!", data.response.message, "error");
-    })//end of $loadBrandDataHandler.fail()
-
-
-    //----------------------------------------- Client-side Upload logic ---(End)----------------------
-
-
-    //----------------------------------------- Client-side Update logic --------------------------------
+    // Function Constructor for creating a consumable object
+    function Consumable(inTypicalAnalysis, inGuranteedAnalysis, inIngredients, inActiveIngredients, inInActiveIngredients) {
+        this.TypicalAnalysis = inTypicalAnalysis;
+        this.GuranteedAnalysis = inGuranteedAnalysis;
+        this.Ingredients = inIngredients;
+        this.ActiveIngredients = inActiveIngredients;
+        this.InActiveIngredients = inInActiveIngredients;
+    }
 
     // Function Constructor for creating a metrics object
     function Metric(inMetricAmount, inMetricType, inQuantity, inPrice, inRRP, inStatus, inIsPreset) {
@@ -614,41 +624,70 @@
     //Using a function technique to create a JavaScript class, WebFormData
     // Special promotions & Consumable Entities unscripted
     // Things that are commented out will permanently be with the Metric Constructor
-    function WebFormData(inProdName,
-        inTiQ,
-        inBrandId,
-        inPublished,
-        inDescription,
-        inMetrics,
-        inIsConsumable,
-        inStatusId) {
+    function WebFormData(inProdName, inTiQ, inBrandId, inPublished, inDescription, inMetrics, inConsumable, inStatusId) {
         this.ProdName = inProdName;
         this.ThresholdInventoryQuantity = inTiQ;
         this.BrandId = inBrandId;
         this.Published = inPublished;
         this.Description = inDescription;
         this.Metrics = inMetrics;
-        this.isConsumable = inIsConsumable;
+        this.Consumable = inConsumable;
         // Incase the product has only one metric
         this.StatusId = inStatusId;
     }
 
+    // function to unhide the errorbox
+    function errorBoxUnhide() {
+        if ($('#errorBox').hasClass('hidden')) {
+            $('#errorBox').removeClass('hidden');
+            $('html,body').animate({ scrollTop: 0 }, 'slow');
+        }
+    }
+
+    // function to hide the errorbox
+    // Also clear up the box contents to make sure the errors don't repeat
+    // from a probable recurring submission
+    function errorBoxHide() {
+        if (!$('#errorBox').hasClass('hidden')) {
+            $('#errorBox').addClass('hidden');
+            // Just to double confirm what I am doing is right
+            // http://stackoverflow.com/questions/22593759/how-do-i-clear-inner-html
+            document.getElementById("errorBoxText").innerHTML = "";
+        }
+    }
+
+    // --------------- CSHTML Loaders END ---------------------- //
+
     $('#saveButton').on('click', function () {
+        // Hide errorBox upon submission
+        errorBoxHide();
+
+        // RegEx for Decimal(19, 4), global standards for currency datatype
+        // http://www.w3schools.com/jsref/jsref_regexp_test.asp
+        var patt = new RegExp("^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$");
+
         // Everyone needs MetricData
         var MetricData = [];
 
         // Product Name
         var collectedProdName = $('#prodNameInput').val();
         if (collectedProdName == null || collectedProdName == "") {
-            swal("Error!", "Please enter a product name! ", "error");
-            return; // Break out of the function
+            document.getElementById("errorBoxText").innerHTML += "<strong> Please enter a product name! </strong><br />";
+            errorBoxUnhide();
         }
 
         // Brand id
         var collectedBrandId = brandInput.getValue().toString(); // Brand Id
         if (collectedBrandId == null || collectedBrandId == "") {
-            swal("Error!", "Please select a brand!", "error")
-            return; // Break out of the function
+            document.getElementById("errorBoxText").innerHTML += "<strong> Please select a brand! </strong><br />";
+            errorBoxUnhide();
+        }
+
+        // Threshold Inventory Quantity
+        var collectedTIQ = $('#tiqInput').val();
+        if (collectedTIQ == null || collectedTIQ == "") {
+            document.getElementById("errorBoxText").innerHTML += "<strong> Please enter an input for Threshold Inventory Quantity! </strong><br />";
+            errorBoxUnhide();
         }
 
         // Description
@@ -660,16 +699,35 @@
         }
 
         // Static variables
-        var collectedPublished = isPublished.toString();
-        var collectedConsumable = isConsumable.toString();
+        var collectedPublished;
+        if (!$('#publishBox').hasClass('hidden')) { // if the product is set to be published
+            // Setup the identifying variable
+            collectedPublished = "1";
+        } else {
+            collectedPublished = "0";
+        }
+
+        if (!$('#consumableContainer').hasClass('hidden')) { // if the product is a consumable
+            // Iterate through those boxes and take their stuff to make a consumable object
+            //Consumable(inTypicalAnalysis, inGuranteedAnalysis, inIngredients, inActiveIngredients, inInActiveIngredients)
+            var collectedTypicalAnalysis = tinyMCE.get('TypicalAnalysisBox').getContent();
+            var collectedGuranteedAnalysis = tinyMCE.get('GuranteedAnalysisBox').getContent();
+            var collectedIngredients = tinyMCE.get('IngredientsBox').getContent();
+            var collectedActiveIngredients = tinyMCE.get('ActiveIngredientsBox').getContent();
+            var collectedInActiveIngredients = tinyMCE.get('InActiveIngredientsBox').getContent();
+
+            var collectedConsumable = new Consumable(collectedTypicalAnalysis, collectedGuranteedAnalysis, collectedIngredients, collectedActiveIngredients, collectedInActiveIngredients);
+        } else {
+            var collectedConsumable = null;
+        }
 
         // If there are no custom sizes or variations
         if ($('#metricSegment').hasClass('hidden')) {
             // Metric Amount Input & Validation
             var collectedMetricAmount = $('#metricAmountInput').val();
             if (collectedMetricAmount == null || collectedMetricAmount == "") {
-                swal("Error!", "Please enter a metric amount for your metric type!", "error")
-                return; // Break out of the function
+                document.getElementById("errorBoxText").innerHTML += "<strong> Please enter a metric amount for your metric type! </strong><br />";
+                errorBoxUnhide();
             }
 
             // Metric Type Input & Validation
@@ -677,16 +735,16 @@
                 var collectedMetricType = $('#customMetricTypeInput').val();
                 var collectedIsPreset = 0;
                 if (collectedMetricType == null || collectedMetricType == "") {
-                    swal("Hey!", "Please enter your custom metric type!", "error");
-                    return;
+                    document.getElementById("errorBoxText").innerHTML += "<strong> Please enter your custom metric type! </strong><br />";
+                    errorBoxUnhide();
                 }
             } else {
                 if ($('#pMetricSuggest').magicSuggest().isValid() == true) {
                     var collectedIsPreset = 1;
                     var collectedMetricType = $('#pMetricSuggest').magicSuggest().getValue().toString();
                 } else {
-                    swal("Oh no..", "Please enter a Preset Metric!", "error");
-                    return;
+                    document.getElementById("errorBoxText").innerHTML += "<strong> Please choose a Preset Metric! </strong><br />";
+                    errorBoxUnhide();
                 }
             }
 
@@ -694,18 +752,33 @@
             if ($('#statusSuggest').magicSuggest().isValid()) {
                 var collectedStatusId = $('#statusSuggest').magicSuggest().getValue().toString();
             } else {
-                swal("Oh no..", "Please select a status!", "error");
-                return;
+                document.getElementById("errorBoxText").innerHTML += "<strong> Please select a status! </strong><br />";
+                errorBoxUnhide();
             }
 
             // We have to make sure that the user won't be able to input any spamming dots
             // into either TIQ's input or the quantity input
 
-            // Price and RRP is also needed to be verified by using accounting.js
             var collectedQuantity = $('#qtyInput').val();
-            var collectedTIQ = $('#tiqInput').val();
-            var collectedPrice = $('#priceInput').val();
-            var collectedRRP = $('#rrpInput').val();
+
+            var collectedPrice;
+
+            // If the price input is not valid,
+            if (!patt.test($('#priceInput').val())) {
+                document.getElementById("errorBoxText").innerHTML += "<strong> Please enter a valid price! (Maximum of 4 Decimal Places.) </strong><br />";
+                errorBoxUnhide();
+            }
+            // Else we'll carry on with the price
+            collectedPrice = $('#priceInput').val();
+
+            var collectedRRP;
+            // If the Recommended Retail Price input is not valid,
+            if (!patt.test($('#rrpInput').val())) {
+                document.getElementById("errorBoxText").innerHTML += "<strong> Please enter a valid recommended retail price! (Maximum of 4 Decimal Places.) </strong><br />";
+                errorBoxUnhide();
+            }
+            // Else we'll carry on with the RRP
+            collectedRRP = $('#rrpInput').val();
 
             // Push the single metric into the array of metrics
             // (inMetricAmount, inMetricType, inQuantity, inPrice, inRRP, inStatus)
@@ -722,8 +795,6 @@
 
         } else {
             // If there are custom variations, we'll have to utitilize the Metrics system
-            var collectedTIQ = $('#tiqInput').val(); // Only this is still needed
-
             // Look for the table
             var table = document.getElementById("metricsTableBody");
 
@@ -753,6 +824,12 @@
 
             **/
 
+            // If the user didn't try entering any metric for the product
+            if (table.rows < 1) {
+                document.getElementById("errorBoxText").innerHTML += "<h5><strong> Hey, you did not enter any metric for your product! (Maximum of 4 Decimal Places.) </strong></h5><br />";
+                errorBoxUnhide();
+            }
+
             // For each row in metricsTableBody javascript style
             for (var i = 0, row; row = table.rows[i]; i++) {
                 // iterate through rows
@@ -766,9 +843,15 @@
                 var Status = '';
 
                 for (var j = 0, col; col = row.cells[j]; j++) {
+                    // Define a variable for validation
+                    var isValid = 1;
+
                     switch (j) {
                         case 0: // Metric Amount
                             MetricAmount = row.cells[j].children[0].value;
+                            if (MetricAmount == null || MetricAmount == "") {
+                                isValid = 0;
+                            }
                             break;
                         case 1: // Metric Type
                             // Dropdown box
@@ -785,27 +868,51 @@
                             if (row.cells[j].children[0].classList[1].toString() == "font-bold") {
                                 var isPreset = "0"; // 0 = false
                                 MetricType = row.cells[j].children[0].value;
+                                if (MetricType == null || MetricType == "") {
+                                    isValid = 0;
+                                }
                                 break;
                             } else {
                                 var isPreset = "1"; // 1 = true
                                 MetricType = row.cells[j].children[0].innerText.trim();
+                                if (MetricType == null || MetricType == "") {
+                                    isValid = 0;
+                                }
                                 break;
                             }
                             break;
                         case 2: // Quantity
                             Quantity = row.cells[j].children[0].value;
+                            if (Quantity == null || Quantity == "") {
+                                isValid = 0;
+                            }
                             break;
                         case 3: // Status
                             Status = row.cells[j].children[0].innerText.trim();
+                            if (Status == null || Status == "") {
+                                isValid = 0;
+                            }
                             break;
                         case 4: // Price per type
                             Price = row.cells[j].children[0].value;
+                            if (Price == null || Price == "") {
+                                isValid = 0;
+                            }
                             break;
                         case 5:
                             RRP = row.cells[j].children[0].value;
+                            if (RRP == null || RRP == "") {
+                                isValid = 0;
+                            }
                             break;
                         default:
-                            swal("Error!", "Something went wrong..", "error");
+                            isValid = 0;
+                    }
+
+                    // Set the error here
+                    if (isValid = 0) {
+                        document.getElementById("errorBoxText").innerHTML += "<strong> You missed out something at row " + j + " of the metrics table! </strong><br />";
+                        errorBoxUnhide();
                     }
                 }
                 // Finally we push the metric object to the MetricData
@@ -818,6 +925,12 @@
             var webFormData = new WebFormData(collectedProdName, collectedTIQ, collectedBrandId, collectedPublished,
                 collectedDescription, MetricData, collectedConsumable, "0");
 
+        }
+
+        // Before we stringify webFormData, toss out if the erroBox is exposed
+        if (!($('#errorBox').hasClass('hidden'))) {
+            // Toss a return and that's it
+            return;
         }
 
         //Serialize the webFormData object which contains the type name
@@ -840,17 +953,18 @@
                     data: "'" + webFormDataInString + "'"
                 });
                 $saveProductDBHandler.done(function (data, textStatus, jqXHR) {
-                    swal("Hurray!", data.message, "Success");
+                    swal("Hurray!", data.message, "success");
+                    return;
                 });
                 $saveProductDBHandler.fail(function (data, textStatus, jqXHR) {
-                    swal("Oh no!", data.message, "error");
+                    swal("Oh no!", data.responseJSON.message, "error");
                 });
             } else {
                 window.$productPhotoInputElement.fileinput('upload');
             }
         });
         $saveProductHandler.fail(function (data, textStatus, jqXHR) {
-            swal("Oh no!", data.message, "error");
+            swal("Oh no!", data.responseJSON.message, "error");
         });
     });//end of $('#saveButton').on('click', function () {
 
