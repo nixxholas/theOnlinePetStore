@@ -608,12 +608,11 @@ namespace WEBA_ASSIGNMENT.Migrations
                 columns: table => new
                 {
                     ProdId = table.Column<int>(nullable: false),
-                    CatId = table.Column<int>(nullable: false),
-                    ProductProdId = table.Column<int>(nullable: true)
+                    CatId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("ProductCategory_CompositeKey", x => new { x.ProdId, x.CatId });
+                    table.PrimaryKey("ProductsOfCategory_CompositeKey", x => new { x.ProdId, x.CatId });
                     table.ForeignKey(
                         name: "FK_ProductCategory_Category_CatId",
                         column: x => x.CatId,
@@ -621,11 +620,11 @@ namespace WEBA_ASSIGNMENT.Migrations
                         principalColumn: "CatId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductCategory_Product_ProductProdId",
-                        column: x => x.ProductProdId,
+                        name: "FK_ProductCategory_Product_ProdId",
+                        column: x => x.ProdId,
                         principalTable: "Product",
                         principalColumn: "ProdId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -664,8 +663,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    // We do not want FK Constraint for ProdId in ProductPhoto.
-                    // We need to have multiple photos for each product
                     //table.ForeignKey(
                     //    name: "FK_ProductPhoto_Product_ProdId",
                     //    column: x => x.ProdId,
@@ -923,9 +920,9 @@ namespace WEBA_ASSIGNMENT.Migrations
                 column: "CatId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductCategory_ProductProdId",
+                name: "IX_ProductCategory_ProdId",
                 table: "ProductCategory",
-                column: "ProductProdId");
+                column: "ProdId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductPhoto_CreatedById",

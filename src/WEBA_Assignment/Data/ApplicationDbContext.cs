@@ -515,14 +515,6 @@ namespace WEBA_ASSIGNMENT.Data
 
             // ------------ End of Defining ProductSpecials Entity ------------ //
 
-            // -------------- Defining ProductCategory Entity ----------------- //
-
-            modelBuilder.Entity<ProductCategory>()
-                .HasKey(input => new { input.ProdId, input.CatId })
-                .HasName("ProductCategory_CompositeKey");
-
-            // ------------ End of Defining ProductCategory Entity ------------ //
-
             // -------------- Defining Price Entity ----------------- //
 
             modelBuilder.Entity<Price>()
@@ -870,6 +862,14 @@ namespace WEBA_ASSIGNMENT.Data
 
             // -------------- Defining Product Entity --------------- //
             // END.
+
+            // -------------- Defining ProductCategory Entity ----------------- //
+
+            modelBuilder.Entity<ProductCategory>()
+                .HasKey(input => new { input.ProdId, input.CatId })
+                .HasName("ProductsOfCategory_CompositeKey");
+
+            // ------------ End of Defining ProductCategory Entity ------------ //
 
 
             // -------------- Defining ProductPhoto Entity --------------- //

@@ -8,7 +8,7 @@ using WEBA_ASSIGNMENT.Data;
 namespace WEBA_ASSIGNMENT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160801233835_setupdb")]
+    [Migration("20160802055958_setupdb")]
     partial class setupdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -708,14 +708,12 @@ namespace WEBA_ASSIGNMENT.Migrations
 
                     b.Property<int>("CatId");
 
-                    b.Property<int?>("ProductProdId");
-
                     b.HasKey("ProdId", "CatId")
-                        .HasName("ProductCategory_CompositeKey");
+                        .HasName("ProductsOfCategory_CompositeKey");
 
                     b.HasIndex("CatId");
 
-                    b.HasIndex("ProductProdId");
+                    b.HasIndex("ProdId");
 
                     b.ToTable("ProductCategory");
                 });
@@ -1127,7 +1125,8 @@ namespace WEBA_ASSIGNMENT.Migrations
 
                     b.HasOne("WEBA_ASSIGNMENT.Models.Product", "Product")
                         .WithMany("ProductCategory")
-                        .HasForeignKey("ProductProdId");
+                        .HasForeignKey("ProdId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WEBA_ASSIGNMENT.Models.ProductPhoto", b =>

@@ -364,7 +364,6 @@ public void computeProductsPerBrand()
                     ProductCategory newProductCategory = new ProductCategory();                                    
 
                     newProductCategory.ProdId = newProduct.ProdId; // NullReferenceException
-                    newProductCategory.Product = newProduct;
                     newProductCategory.CatId = CatId;
                     newProduct.ProductCategory.Add(newProductCategory);
                 }
