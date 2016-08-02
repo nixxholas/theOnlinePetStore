@@ -164,7 +164,7 @@
     //----------------------------------------- Client-side Update logic --------------------------------
     $('#saveButton').on('click', function () {
         //Collect data from input elements
-        var collectedBrandName = json_quote($('#brandNameInput').val());
+        var collectedBrandName = addslashes($('#brandNameInput').val());
         if (collectedBrandName == null || collectedBrandName == "") {
             swal("Oh no!", "Please enter a brand name!", "error");
             return; // Break out of the function
@@ -265,26 +265,11 @@
         location.replace('/Brands/Index');
     }// end of redirectPage() method (function)
     //----------------------------------------- Client-side Delete logic -(End)-------------------------------------------
-    var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
-    escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
-    meta = { // table of character substitutions
-        '\b': '\\b',
-        '\t': '\\t',
-        '\n': '\\n',
-        '\f': '\\f',
-        '\r': '\\r',
-        '"': '\\"',
-        '\\': '\\\\'
-    };
 
-    // Escape Characters Converter
-    // Source:http://bernhardhaeussner.de/odd/json-escape/#desc
-    function json_quote(string) {
-        escapable.lastIndex = 0;
-        return escapable.test(string) ? '' + string.replace(escapable, function (a) {
-            var c = meta[a];
-            return typeof c === 'string' ? c :
-                '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
-        }) + '' : '' + string + '';
+
+    // Escape Characters System
+    // http://stackoverflow.com/questions/770523/escaping-strings-in-javascript
+    function addslashes(str) {
+        return (str + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
     }
 </script>

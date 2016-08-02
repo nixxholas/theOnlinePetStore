@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WEBA_ASSIGNMENT.Models
 {
@@ -28,6 +26,7 @@ namespace WEBA_ASSIGNMENT.Models
         // Metric Character
         public String MetricCharacter { get; set; }
         // Link this with Metrics through Metrics' class
+        [JsonIgnore]
         public List<Metrics> Metrics { get; set; }
     }
 }

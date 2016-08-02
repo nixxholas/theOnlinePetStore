@@ -65,13 +65,12 @@ namespace WEBA_ASSIGNMENT.APIs
                  
                 foreach (var metric in foundMetrics)
                 {
-                   // if (metric.PMetricId)
-
-
-
                     metricList.Add(new
                     {
-
+                        MetricId = metric.MetricId,
+                        MetricType = metric.MetricType,
+                        MetricAmount = metric.MetricAmount,
+                        PresetMetric = metric.PresetMetric
                     });
                 }
 
@@ -83,7 +82,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 //This anonymous object only has one Message property 
                 //which contains a simple string message
                 object httpFailRequestResultMessage =
-                                            new { Message = "Unable to obtain Category information." };
+                                            new { Message = "Unable to obtain Metrics information for your product." };
                 //Return a bad http response message to the client
                 return BadRequest(httpFailRequestResultMessage);
             }

@@ -160,11 +160,10 @@ namespace WEBA_ASSIGNMENT.APIs
                      .Where(eachProduct => eachProduct.ProdId == id)
                      .Include(eachProduct => eachProduct.Brand)
                      .Include(eachProduct => eachProduct.Consumable)
-                     //.Include(eachProduct => eachProduct.Metrics)
                      .Include(eachProduct => eachProduct.Specials)
                      .Include(eachProduct => eachProduct.ProductCategory)
                      .Include(eachProduct => eachProduct.ProductPhotos).Single();
-
+                
                 var response = new
                 {
                     ProdId = foundProduct.ProdId,
@@ -178,8 +177,7 @@ namespace WEBA_ASSIGNMENT.APIs
                     Specials = foundProduct.Specials,
                     Published = foundProduct.Published,
                     Brand = foundProduct.Brand,
-                    ProductCategory = foundProduct.ProductCategory,
-                    Metrics = foundProduct.Metrics
+                    ProductCategory = foundProduct.ProductCategory
                 };//end of creation of the response object
 
                 return new JsonResult(response);

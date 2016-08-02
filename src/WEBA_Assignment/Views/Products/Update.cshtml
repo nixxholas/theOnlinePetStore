@@ -732,7 +732,7 @@
         var MetricData = [];
 
         // Product Name
-        var collectedProdName = $('#prodNameInput').val();
+        var collectedProdName = json_quote($('#prodNameInput').val());
         if (collectedProdName == null || collectedProdName == "") {
             document.getElementById("errorBoxText").innerHTML += "<strong> Please enter a product name! </strong><br />";
             errorBoxUnhide();
@@ -760,7 +760,8 @@
         if ($('#savingsOverviewBox').hasClass('hidden')) {
             collectedSavingsOverview = null
         } else {
-            collectedSavingsOverview = tinyMCE.get('savingsOverviewBox').getContent();
+            collectedSavingsOverview = json_quote(tinyMCE.get('savingsOverviewBox').getContent());
+            console.dir(collectedSavingsOverview);
         }
 
         // Description
@@ -768,7 +769,7 @@
         if ($('#descriptionBox').hasClass('hidden')) {
             collectedDescription = null
         } else {
-            collectedDescription = tinyMCE.get('descriptionBox').getContent();
+            collectedDescription = json_quote(tinyMCE.get('descriptionBox').getContent());
         }
 
         // Static variables
@@ -783,11 +784,11 @@
         if (!$('#consumableContainer').hasClass('hidden')) { // if the product is a consumable
             // Iterate through those boxes and take their stuff to make a consumable object
             //Consumable(inTypicalAnalysis, inGuranteedAnalysis, inIngredients, inActiveIngredients, inInActiveIngredients)
-            var collectedTypicalAnalysis = tinyMCE.get('TypicalAnalysisBox').getContent();
-            var collectedGuranteedAnalysis = tinyMCE.get('GuranteedAnalysisBox').getContent();
-            var collectedIngredients = tinyMCE.get('IngredientsBox').getContent();
-            var collectedActiveIngredients = tinyMCE.get('ActiveIngredientsBox').getContent();
-            var collectedInActiveIngredients = tinyMCE.get('InActiveIngredientsBox').getContent();
+            var collectedTypicalAnalysis = json_quote(tinyMCE.get('TypicalAnalysisBox').getContent());
+            var collectedGuranteedAnalysis = json_quote(tinyMCE.get('GuranteedAnalysisBox').getContent());
+            var collectedIngredients = json_quote(tinyMCE.get('IngredientsBox').getContent());
+            var collectedActiveIngredients = json_quote(tinyMCE.get('ActiveIngredientsBox').getContent());
+            var collectedInActiveIngredients = json_quote(tinyMCE.get('InActiveIngredientsBox').getContent());
 
             var collectedConsumable = new Consumable(collectedTypicalAnalysis, collectedGuranteedAnalysis, collectedIngredients, collectedActiveIngredients, collectedInActiveIngredients);
         } else {
@@ -805,7 +806,7 @@
 
             // Metric Type Input & Validation
             if (customMetric == 1) {
-                var collectedMetricType = $('#customMetricTypeInput').val();
+                var collectedMetricType = json_quote($('#customMetricTypeInput').val());
                 var collectedIsPreset = 0;
                 if (collectedMetricType == null || collectedMetricType == "") {
                     document.getElementById("errorBoxText").innerHTML += "<strong> Please enter your custom metric type! </strong><br />";
@@ -954,7 +955,7 @@
                     }
                 }
                 // Finally we push the metric object to the MetricData
-                MetricData.push(new Metric(MetricAmount, MetricType, Quantity, Price, RRP, Status, isPreset));
+                MetricData.push(new Metric(MetricAmount, json_quote(MetricType), Quantity, Price, RRP, Status, isPreset));
             }
             // Constructing the webformdata object for a product with alot of metric units
 
@@ -1006,4 +1007,26 @@
         });
     });//end of $('#saveButton').on('click', function () {
 
+    var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+    escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+    meta = { // table of character substitutions
+        '\b': '\\b',
+        '\t': '\\t',
+        '\n': '\\n',
+        '\f': '\\f',
+        '\r': '\\r',
+        '"': '\\"',
+        '\\': '\\\\'
+    };
+
+    // Escape Characters Converter
+    // Source:http://bernhardhaeussner.de/odd/json-escape/#desc
+    function json_quote(string) {
+        escapable.lastIndex = 0;
+        return escapable.test(string) ? '' + string.replace(escapable, function (a) {
+            var c = meta[a];
+            return typeof c === 'string' ? c :
+                '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+        }) + '' : '' + string + '';
+    }
 </script>
