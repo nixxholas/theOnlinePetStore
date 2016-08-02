@@ -9,7 +9,6 @@ namespace WEBA_ASSIGNMENT.Models
     {
         public int PriceId { get; set; }
         public Metrics Metric { get; set; }
-        public int MetricId { get; set; }
         public decimal Value { get; set; }
         // This must be nullable incase there is an in-house brand
         public decimal? RRP { get; set; }

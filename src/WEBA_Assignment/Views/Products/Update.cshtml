@@ -18,7 +18,7 @@
         </div>
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="panel-title">Update Product Record</div>
+                <div class="panel-title">Create Product Record</div>
             </div>
             <div class="panel-body">
                 <form id="dataForm" data-toggle="validator" role="form" class="form-horizontal">
@@ -34,6 +34,15 @@
                         <label class="control-label col-md-2 photoUploadMarginFixProducts" for="brandInput">Brand</label>
                         <div class="col-md-5">
                             <div id="brandInput" class="form-group">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12" id="categoryBox">
+                        <label class="control-label col-md-2" for="categorySuggest">Categories</label>
+                        <div class="form-group col-md-4">
+                            <div id="categorySuggest" class="form-control ms-ctn categorySuggest">
 
                             </div>
                         </div>
@@ -57,6 +66,18 @@
                                 <!-- Empty div box for identifying publish status-->
                                 <div id="publishBox" class="hidden"></div>
                             </div><br>
+                            <div>
+                                <input type="checkbox" id="savingsOverviewCheck" data-toggle="toggle" data-class="fast">
+                                <label>Product has Savings Overview</label>
+
+                                <div class="form-group col-md-12 hidden" id="savingsOverviewBox">
+                                    <!--<label class="control-label col-md-2" for="descBox">Description</label>-->
+                                    <div class="form-group col-md-10">
+                                        <textarea class="tinymceStart" name="savingsOverviewBox" id="savingsOverviewBox"></textarea>
+                                    </div>
+                                </div>
+
+                            </div><br />
                             <div>
                                 <input type="checkbox" id="descriptionCheck" data-toggle="toggle" data-class="fast">
                                 <label>Product has a description</label>
@@ -231,16 +252,16 @@
     var $presetElements = '';
     var $statusElements = '';
 
-    // Money Input Checker
-    // DEPRECATED
-    function isNumberKey(evt) {
-        var charCode = (evt.which) ? evt.which : evt.keyCode;
-        if (charCode != 46 && charCode > 31
-          && (charCode < 48 || charCode > 57))
-            return false;
-
-        return true;
-    }
+    // MagicSuggest for Categories.
+    var msCategoryList = $('#categorySuggest').magicSuggest({
+        method: 'get',
+        data: 'http://localhost:5008/API/Categories',
+        dataType: 'json',
+        displayField: 'catName',
+        valueField: 'catId',
+        allowFreeEntries: false,
+        autoSelect: false
+    });
 
     $('.pMetricSuggest').magicSuggest({
         required: true,
@@ -354,14 +375,6 @@
         //]
     });
 
-    $('#publishCheck').change(function () {
-        if ($('#publishBox').hasClass('hidden')) {
-            $('#publishBox').addClass('hidden');
-        } else {
-            $('#publishBox').removeClass('hidden');
-        }
-    });
-
     $('#customUnitSwitch').change(function () {
         if ($('#customMetricTypeInput').hasClass('hidden')) {
             customMetric = 1;
@@ -377,6 +390,24 @@
             });
             $('#pMetricSuggest').removeClass('hidden')
             $('#customMetricTypeInput').addClass('hidden');
+        }
+    });
+
+    $('#savingsOverviewCheck').change(function () {
+        if ($('#savingsOverviewBox').hasClass('hidden')) {
+            $('#savingsOverviewBox').removeClass('hidden');
+        } else {
+            $('#savingsOverviewBox').addClass('hidden');
+        }
+    })
+    ;
+
+    $('#publishCheck').change(function () {
+        // http://stackoverflow.com/questions/33621053/how-to-get-the-value-of-a-bootstrap-toggle-button-in-jquery
+        if ($(this).prop("checked") == true) {
+            $('#publishBox').removeClass('hidden');
+        } else {
+            $('#publishBox').addClass('hidden');
         }
     });
 
@@ -653,11 +684,13 @@
     //Using a function technique to create a JavaScript class, WebFormData
     // Special promotions & Consumable Entities unscripted
     // Things that are commented out will permanently be with the Metric Constructor
-    function WebFormData(inProdName, inTiQ, inBrandId, inPublished, inDescription, inMetrics, inConsumable, inStatusId) {
+    function WebFormData(inProdName, inTiQ, inCategories, inBrandId, inPublished, inSavingsOverview, inDescription, inMetrics, inConsumable, inStatusId) {
         this.ProdName = inProdName;
         this.ThresholdInventoryQuantity = inTiQ;
+        this.Categories = inCategories;
         this.BrandId = inBrandId;
         this.Published = inPublished;
+        this.SavingsOverview = inSavingsOverview;
         this.Description = inDescription;
         this.Metrics = inMetrics;
         this.Consumable = inConsumable;
@@ -712,11 +745,22 @@
             errorBoxUnhide();
         }
 
+        // Categories
+        var collectedCategories = JSON.stringify(msCategoryList.getValue());
+
         // Threshold Inventory Quantity
         var collectedTIQ = $('#tiqInput').val();
         if (collectedTIQ == null || collectedTIQ == "") {
             document.getElementById("errorBoxText").innerHTML += "<strong> Please enter an input for Threshold Inventory Quantity! </strong><br />";
             errorBoxUnhide();
+        }
+
+        // Savings Overview
+        var collectedSavingsOverview; // Define a variable to store the description
+        if ($('#savingsOverviewBox').hasClass('hidden')) {
+            collectedSavingsOverview = null
+        } else {
+            collectedSavingsOverview = tinyMCE.get('savingsOverviewBox').getContent();
         }
 
         // Description
@@ -729,7 +773,7 @@
 
         // Static variables
         var collectedPublished;
-        if (!$('#publishBox').hasClass('hidden')) { // if the product is set to be published
+        if ($('#publishCheck').is('checked')) { // if the product is set to be published
             // Setup the identifying variable
             collectedPublished = "1";
         } else {
@@ -819,39 +863,13 @@
 
             // Create the object for POST
             //(inProdName, inTiQ, inBrandId, inPublished, inDescription, inMetrics, inIsConsumable, inStatusId)
-            var webFormData = new WebFormData(collectedProdName, collectedTIQ, collectedBrandId, collectedPublished,
-                collectedDescription, MetricData, collectedConsumable, collectedStatusId);
+            var webFormData = new WebFormData(collectedProdName, collectedTIQ, collectedCategories, collectedBrandId, collectedPublished,
+                collectedSavingsOverview, collectedDescription, MetricData, collectedConsumable, collectedStatusId);
 
         } else {
             // If there are custom variations, we'll have to utitilize the Metrics system
             // Look for the table
             var table = document.getElementById("metricsTableBody");
-
-            /**
-                Declared Ineffective
-
-                Unable to effectively provide a 5 way statement to help identify
-                which column the current loop is identifying/looking for.
-            //// jQuery Method for each row in metricsTableBody
-            //$("#metricsTableBody tr").each(function () {
-            //    // Define the attributes of each Metric
-            //    var MetricAmount = '';
-            //    var MetricType = '';
-            //    var Quantity = '';
-            //    var Price = '';
-            //    var RRP = '';
-            //    var Status = '';
-
-            //    // Iterate through each Column
-            //    $('td', this).each(function () {
-            //        console.dir(this);
-            //    })
-
-            //})
-
-            //return
-
-            **/
 
             // If the user didn't try entering any metric for the product
             if (table.rows < 1) {
@@ -942,8 +960,8 @@
 
             // Create the object for POST
             //(inProdName, inTiQ, inBrandId, inPublished, inDescription, inMetrics, inIsConsumable, inStatusId)
-            var webFormData = new WebFormData(collectedProdName, collectedTIQ, collectedBrandId, collectedPublished,
-                collectedDescription, MetricData, collectedConsumable, "0");
+            var webFormData = new WebFormData(collectedProdName, collectedTIQ, collectedCategories, collectedBrandId, collectedPublished,
+                collectedSavingsOverview, collectedDescription, MetricData, collectedConsumable, "0");
 
         }
 

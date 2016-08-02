@@ -234,17 +234,16 @@ namespace WEBA_ASSIGNMENT.Migrations
                 {
                     PriceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CreatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
+                    CreatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "GetDate()"),
                     CreatedById = table.Column<string>(nullable: false),
                     DeletedAt = table.Column<DateTime>(nullable: true),
                     DeletedById = table.Column<string>(nullable: true),
-                    MetricId = table.Column<int>(type: "int", nullable: false),
                     RRP = table.Column<decimal>(type: "DECIMAL(19,4)", nullable: true),
                     Value = table.Column<decimal>(type: "DECIMAL(19,4)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PrimaryKey_PriceId", x => x.PriceId);
+                    table.PrimaryKey("PrimaryKey_Price_PriceId", x => x.PriceId);
                     table.ForeignKey(
                         name: "FK_Price_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
@@ -663,6 +662,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    // Remove FK Constraints
                     //table.ForeignKey(
                     //    name: "FK_ProductPhoto_Product_ProdId",
                     //    column: x => x.ProdId,

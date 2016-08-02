@@ -63,11 +63,11 @@ namespace WEBA_ASSIGNMENT.Data
                 .ValueGeneratedOnAdd()
                 .IsRequired();
 
-            modelBuilder.Entity<Price>()
-                .Property(input => input.MetricId)
-                .HasColumnName("MetricId")
-                .HasColumnType("int")
-                .IsRequired();
+            //modelBuilder.Entity<Price>()
+            //    .Property(input => input.MetricId)
+            //    .HasColumnName("MetricId")
+            //    .HasColumnType("int")
+            //    .IsRequired();
 
             modelBuilder.Entity<Price>()
                 .Property(input => input.Value)
@@ -79,6 +79,14 @@ namespace WEBA_ASSIGNMENT.Data
                 .Property(input => input.RRP)
                 .HasColumnName("RRP")
                 .HasColumnType("DECIMAL(19,4)")
+                .IsRequired(false);
+
+            modelBuilder.Entity<Price>()
+                .Property(input => input.CreatedAt)
+                .HasDefaultValueSql("GetDate()");
+
+            modelBuilder.Entity<Price>()
+                .Property(input => input.DeletedAt)
                 .IsRequired(false);
 
             // Two sets of Many to One relationship between User and ApplicationUser  entity (Start)
@@ -514,64 +522,7 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasName("ProductSpecials_CompositeKey");
 
             // ------------ End of Defining ProductSpecials Entity ------------ //
-
-            // -------------- Defining Price Entity ----------------- //
-
-            modelBuilder.Entity<Price>()
-                .HasKey(input => input.PriceId)
-                .HasName("PrimaryKey_PriceId");
-
-            modelBuilder.Entity<Price>()
-                .Property(input => input.PriceId)
-                .HasColumnName("PriceId")
-                .HasColumnType("int")
-                .UseSqlServerIdentityColumn()
-                .ValueGeneratedOnAdd()
-                .IsRequired();
-
-            modelBuilder.Entity<Price>()
-                .Property(input => input.MetricId)
-                .HasColumnName("MetricId")
-                .HasColumnType("int")
-                .IsRequired();
-
-            modelBuilder.Entity<Price>()
-                .Property(input => input.Value)
-                .HasColumnName("Value")
-                .HasColumnType("DECIMAL(19,4)")
-                .IsRequired();
-
-            modelBuilder.Entity<Price>()
-                .Property(input => input.CreatedAt)
-                .HasDefaultValueSql("GETDATE()");
-
-            modelBuilder.Entity<Price>()
-                .Property(input => input.DeletedAt)
-                .IsRequired(false);
-
-            // Foreign Key Relations
-
-            modelBuilder.Entity<Price>()
-                .HasOne(input => input.Metric)
-                .WithOne(input => input.Price)
-                .HasForeignKey<Price>(input => input.MetricId);
-
-            // Two sets of Many to One relationship between User and ApplicationUser  entity (Start)
-            modelBuilder.Entity<Price>()
-             .HasOne(userClass => userClass.CreatedBy)
-             .WithMany()
-             .HasForeignKey(userClass => userClass.CreatedById)
-             .OnDelete(DeleteBehavior.Restrict)
-             .IsRequired();
-
-            modelBuilder.Entity<Price>()
-                .HasOne(userClass => userClass.DeletedBy)
-                .WithMany()
-                .HasForeignKey(userClass => userClass.DeletedById)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // ------------ End of Defining Price Entity ------------ //
-
+            
             // --------------- Defining Metric Entity --------------- //
 
             modelBuilder.Entity<Metrics>()

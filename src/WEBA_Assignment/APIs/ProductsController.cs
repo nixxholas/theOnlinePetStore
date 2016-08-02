@@ -202,7 +202,7 @@ namespace WEBA_ASSIGNMENT.APIs
          * compute the amount of products within a brand
          * 
          * */
-public void computeProductsPerBrand()
+        public void computeProductsPerBrand()
         {
             // Get all the brands first
             var allBrands = Database.Brands
@@ -396,11 +396,8 @@ public void computeProductsPerBrand()
                         newMetric.StatusId = selectedStatus.StatusId;
                         newMetric.CreatedById = _userManager.GetUserId(User);
                         newMetric.UpdatedById = _userManager.GetUserId(User);
-
-                        int syncedMetricId = newMetric.MetricId;
-
+                        
                         Price price = new Price();
-                        price.MetricId = syncedMetricId;
                         // Have not converted to decimal yet
                         price.RRP = Convert.ToDecimal(Metric.RRP.Value);
                         price.Value = Convert.ToDecimal(Metric.Price.Value);
@@ -426,11 +423,8 @@ public void computeProductsPerBrand()
                         newMetric.StatusId = selectedStatus.StatusId;
                         newMetric.CreatedById = _userManager.GetUserId(User);
                         newMetric.UpdatedById = _userManager.GetUserId(User);
-
-                        int syncedMetricId = newMetric.MetricId;
-
+                        
                         Price price = new Price();
-                        price.MetricId = syncedMetricId;
                         // Have not converted to decimal yet
                         price.RRP = Convert.ToDecimal(Metric.RRP.Value);
                         price.Value = Convert.ToDecimal(Metric.Price.Value);

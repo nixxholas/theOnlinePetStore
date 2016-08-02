@@ -8,7 +8,7 @@ using WEBA_ASSIGNMENT.Data;
 namespace WEBA_ASSIGNMENT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160802055958_setupdb")]
+    [Migration("20160802070949_setupdb")]
     partial class setupdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -584,7 +584,7 @@ namespace WEBA_ASSIGNMENT.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasDefaultValueSql("GetDate()");
 
                     b.Property<string>("CreatedById")
                         .IsRequired();
@@ -592,10 +592,6 @@ namespace WEBA_ASSIGNMENT.Migrations
                     b.Property<DateTime?>("DeletedAt");
 
                     b.Property<string>("DeletedById");
-
-                    b.Property<int>("MetricId")
-                        .HasColumnName("MetricId")
-                        .HasColumnType("int");
 
                     b.Property<decimal?>("RRP")
                         .HasColumnName("RRP")
@@ -606,7 +602,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnType("DECIMAL(19,4)");
 
                     b.HasKey("PriceId")
-                        .HasName("PrimaryKey_PriceId");
+                        .HasName("PrimaryKey_Price_PriceId");
 
                     b.HasIndex("CreatedById");
 
