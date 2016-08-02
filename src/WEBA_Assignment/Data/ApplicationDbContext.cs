@@ -758,6 +758,12 @@ namespace WEBA_ASSIGNMENT.Data
                 .IsRequired();
 
             modelBuilder.Entity<Product>()
+                .Property(input => input.SavingsOverview)
+                .HasColumnName("SavingsOverview")
+                .HasColumnType("VARCHAR(MAX)")
+                .IsRequired(false);
+
+            modelBuilder.Entity<Product>()
                 .Property(input => input.Description)
                 .HasColumnName("Description")
                 .HasColumnType("VARCHAR(MAX)")

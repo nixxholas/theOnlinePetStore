@@ -658,6 +658,10 @@ namespace WEBA_ASSIGNMENT.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(0);
 
+                    b.Property<string>("SavingsOverview")
+                        .HasColumnName("SavingsOverview")
+                        .HasColumnType("VARCHAR(MAX)");
+
                     b.Property<int?>("ThresholdInvertoryQuantity")
                         .IsRequired()
                         .ValueGeneratedOnAdd()

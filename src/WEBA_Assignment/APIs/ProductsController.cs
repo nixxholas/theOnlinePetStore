@@ -20,6 +20,13 @@ using WEBA_ASSIGNMENT.Controllers;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+/**
+ * 
+ * Potential Worker
+ * http://stackoverflow.com/questions/4661760/c-sharp-equivalent-for-java-executorservice-newsinglethreadexecutor-or-how-t
+ * 
+ * **/
+
 
 namespace WEBA_ASSIGNMENT.APIs
 {
@@ -155,6 +162,7 @@ namespace WEBA_ASSIGNMENT.APIs
                      .Include(eachProduct => eachProduct.Consumable)
                      //.Include(eachProduct => eachProduct.Metrics)
                      .Include(eachProduct => eachProduct.Specials)
+                     .Include(eachProduct => eachProduct.ProductCategory)
                      .Include(eachProduct => eachProduct.ProductPhotos).Single();
 
                 var response = new
@@ -170,7 +178,8 @@ namespace WEBA_ASSIGNMENT.APIs
                     Specials = foundProduct.Specials,
                     Published = foundProduct.Published,
                     Brand = foundProduct.Brand,
-                    Metrics = foundProduct.Metrics,
+                    ProductCategory = foundProduct.ProductCategory,
+                    Metrics = foundProduct.Metrics
                 };//end of creation of the response object
 
                 return new JsonResult(response);
@@ -193,7 +202,7 @@ namespace WEBA_ASSIGNMENT.APIs
          * compute the amount of products within a brand
          * 
          * */
-        public void computeProductsPerBrand()
+public void computeProductsPerBrand()
         {
             // Get all the brands first
             var allBrands = Database.Brands
@@ -274,20 +283,21 @@ namespace WEBA_ASSIGNMENT.APIs
             //Reconstruct a useful object from the input string value. 
             var productNewInput = JsonConvert.DeserializeObject<dynamic>(value);
 
-            // If there aren't any metrics, we'll toss it back to the user
-            if (productNewInput.Metrics.Count == 0)
-            {
-                customMessage = "Your product does not contain a metric.";
-                //Create a fail message anonymous object that has one property, Message.
-                //This anonymous object's Message property contains a simple string message
-                object httpFailRequestResultMessage = new { Message = customMessage };
-                //Return a bad http request message to the client
-                return BadRequest(httpFailRequestResultMessage);
-            }
 
             Product newProduct = new Product();
             try
             {
+                // If there aren't any metrics, we'll toss it back to the user
+                if (productNewInput.Metrics.Count == 0)
+                {
+                    customMessage = "Your product does not contain a metric.";
+                    //Create a fail message anonymous object that has one property, Message.
+                    //This anonymous object's Message property contains a simple string message
+                    object httpFailRequestResultMessage = new { Message = customMessage };
+                    //Return a bad http request message to the client
+                    return BadRequest(httpFailRequestResultMessage);
+                }
+
                 //Copy out all the products data into the new Product instance,
                 //newProduct.
                 newProduct.ProdName = productNewInput.ProdName.Value;
@@ -317,6 +327,16 @@ namespace WEBA_ASSIGNMENT.APIs
                     newProduct.isConsumable = 0; // It is NOT a consumable
                 }
 
+                // Savings Overview
+                if (productNewInput.SavingsOverview.Value != null)
+                {
+                    newProduct.SavingsOverview = productNewInput.SavingsOverview.Value;
+                }
+                else
+                {
+                    newProduct.SavingsOverview = null;
+                }
+
                 // Description
                 if (productNewInput.Description.Value != null)
                 {
@@ -329,6 +349,23 @@ namespace WEBA_ASSIGNMENT.APIs
 
                 // Brand Id Relation
                 newProduct.BrandId = Int32.Parse(productNewInput.BrandId.Value);
+
+                // ProductCategory Relation
+                var categories = productNewInput.Categories.Value;
+                categories = categories.TrimEnd(']');
+                categories = categories.TrimStart('[');
+
+                newProduct.ProductCategory = new List<ProductCategory>();
+                foreach (string catId in categories.Split(','))
+                {
+                    int CatId = Int32.Parse(catId);
+                    
+                    // Create the necessary object to store the composites
+                    ProductCategory newProductCategory = new ProductCategory();
+                    newProductCategory.ProdId = newProduct.ProdId;
+                    newProductCategory.CatId = CatId;
+                    newProduct.ProductCategory.Add(newProductCategory);
+                }
 
                 // Initialize the ProductPhotos list first
                 newProduct.ProductPhotos = new List<ProductPhoto>();
@@ -476,6 +513,12 @@ namespace WEBA_ASSIGNMENT.APIs
                     quantity += metric.Quantity;
                     Database.Metrics.Add(metric);
                     Database.Prices.Add(metric.Price);
+                }
+
+                // Set the ProductCategories
+                foreach (var ProdCat in newProduct.ProductCategory)
+                {
+                    Database.ProductCategory.Add(ProdCat);
                 }
 
                 // Set the product's total quantity here

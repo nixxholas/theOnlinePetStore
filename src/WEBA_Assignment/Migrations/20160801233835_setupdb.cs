@@ -404,6 +404,7 @@ namespace WEBA_ASSIGNMENT.Migrations
                     ProdName = table.Column<string>(type: "VARCHAR(100)", nullable: false),
                     Published = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     Quantity = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    SavingsOverview = table.Column<string>(type: "VARCHAR(MAX)", nullable: true),
                     ThresholdInventoryQuantity = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     UpdatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
                     UpdatedById = table.Column<string>(nullable: false),
@@ -663,6 +664,14 @@ namespace WEBA_ASSIGNMENT.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    // We do not want FK Constraint for ProdId in ProductPhoto.
+                    // We need to have multiple photos for each product
+                    //table.ForeignKey(
+                    //    name: "FK_ProductPhoto_Product_ProdId",
+                    //    column: x => x.ProdId,
+                    //    principalTable: "Product",
+                    //    principalColumn: "ProdId",
+                    //    onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

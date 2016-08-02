@@ -7,6 +7,7 @@ namespace WEBA_ASSIGNMENT.Models
     {
         public int ProdId { get; set; }
         public String ProdName { get; set; }     
+        public String SavingsOverview { get; set; }
         public String Description { get; set; }
         public int BrandId { get; set; }
         //Defining a Brand class property to indicate that
