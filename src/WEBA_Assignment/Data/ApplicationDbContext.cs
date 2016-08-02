@@ -213,6 +213,7 @@ namespace WEBA_ASSIGNMENT.Data
              .HasForeignKey(userClass => userClass.CreatedById)
              .OnDelete(DeleteBehavior.Restrict)
              .IsRequired();
+
             modelBuilder.Entity<Category>()
                 .HasOne(userClass => userClass.UpdatedBy)
                 .WithMany()

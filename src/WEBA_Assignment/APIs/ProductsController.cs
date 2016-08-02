@@ -361,8 +361,10 @@ public void computeProductsPerBrand()
                     int CatId = Int32.Parse(catId);
                     
                     // Create the necessary object to store the composites
-                    ProductCategory newProductCategory = new ProductCategory();
-                    newProductCategory.ProdId = newProduct.ProdId;
+                    ProductCategory newProductCategory = new ProductCategory();                                    
+
+                    newProductCategory.ProdId = newProduct.ProdId; // NullReferenceException
+                    newProductCategory.Product = newProduct;
                     newProductCategory.CatId = CatId;
                     newProduct.ProductCategory.Add(newProductCategory);
                 }
