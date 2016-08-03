@@ -131,30 +131,30 @@
                                 <!-- Will have to implement a few more TinyMCE elements here for Consumables -->
                                 <div class="form-group col-md-12 hidden" id="consumableContainer" name="consumableContainer">
                                     <!--<label class="control-label col-md-2" for="descBox">Description</label>-->
-                                    <label class="col-md-push-4 control-label left" for="TypicalAnalysisBox">Typical Analysis</label>
+                                    <label class="col-md-push-4 control-label left" for="typicalAnalysisBox">Typical Analysis</label>
                                     </br>
                                     <div class="form-group col-md-12">
-                                        <textarea class="tinymceStart" name="TypicalAnalysisBox" id="TypicalAnalysisBox"></textarea>
+                                        <textarea class="tinymceStart" name="typicalAnalysisBox" id="typicalAnalysisBox"></textarea>
                                     </div>
-                                    <label class="col-md-push-4 control-label left" for="GuranteedAnalysisBox">Guranteed Analysis</label>
+                                    <label class="col-md-push-4 control-label left" for="guranteedAnalysisBox">Guranteed Analysis</label>
                                     </br>
                                     <div class="form-group col-md-12">
-                                        <textarea class="tinymceStart" name="GuranteedAnalysisBox" id="GuranteedAnalysisBox"></textarea>
+                                        <textarea class="tinymceStart" name="guranteedAnalysisBox" id="guranteedAnalysisBox"></textarea>
                                     </div>
-                                    <label class="col-md-push-4 control-label left" for="IngredientsBox">Ingredients</label>
+                                    <label class="col-md-push-4 control-label left" for="ingredientsBox">Ingredients</label>
                                     </br>
                                     <div class="form-group col-md-12">
-                                        <textarea class="tinymceStart" name="IngredientsBox" id="IngredientsBox"></textarea>
+                                        <textarea class="tinymceStart" name="ingredientsBox" id="ingredientsBox"></textarea>
                                     </div>
-                                    <label class="col-md-push-4 control-label left" for="ActiveIngredientsBox">Active Ingredients</label>
+                                    <label class="col-md-push-4 control-label left" for="activeIngredientsBox">Active Ingredients</label>
                                     </br>
                                     <div class="form-group col-md-12">
-                                        <textarea class="tinymceStart" name="ActiveIngredientsBox" id="ActiveIngredientsBox"></textarea>
+                                        <textarea class="tinymceStart" name="activeIngredientsBox" id="activeIngredientsBox"></textarea>
                                     </div>
-                                    <label class="col-md-push-4 control-label left" for="InActiveIngredientsBox">In-Active Ingredients</label>
+                                    <label class="col-md-push-4 control-label left" for="inActiveIngredientsBox">In-Active Ingredients</label>
                                     </br>
                                     <div class="form-group col-md-12">
-                                        <textarea class="tinymceStart" name="InActiveIngredientsBox" id="InActiveIngredientsBox"></textarea>
+                                        <textarea class="tinymceStart" name="inActiveIngredientsBox" id="inActiveIngredientsBox"></textarea>
                                     </div>
                                 </div>
 
@@ -759,9 +759,35 @@
                 $('#consumableContainer').removeClass('hidden');
 
                 // If statements for each attribute
-                
 
-            }
+                // Typical Analysis
+                if (data.consumable.typicalAnalysis != null && data.consumable.typicalAnalysis != "") {
+                    tinyMCE.get('typicalAnalysisBox').setContent(data.consumable.typicalAnalysis);
+                }
+
+                // Guranteed Analysis
+                if (data.consumable.guranteedAnalysis != null && data.consumable.guranteedAnalysis != "") {
+                    tinyMCE.get('guranteedAnalysisBox').setContent(data.consumable.guranteedAnalysis);
+
+                }
+
+                // Ingredients
+                if (data.consumable.ingredients != null && data.consumable.ingredients != "") {
+                    tinyMCE.get('ingredientsBox').setContent(data.consumable.ingredients);
+                }
+
+                // Active Ingredients
+                if (data.consumable.activeIngredients != null && data.consumable.activeIngredients != "") {
+                    tinyMCE.get('activeIngredientsBox').setContent(data.consumable.activeIngredients);
+                }
+
+                // In-Active Ingredients
+                if (data.consumable.inActiveIngredients != null && data.consumable.inActiveIngredients != "") {
+                    tinyMCE.get('inActiveIngredientsBox').setContent(data.consumable.inActiveIngredients);
+                }
+            } // End of Is a consumable
+
+
 
         }//end of JavaScript anonymous function
 

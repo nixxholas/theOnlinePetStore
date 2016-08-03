@@ -61,6 +61,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 var foundMetrics = Database.Metrics
                     .Where(input => input.ProdId == id)
                     .Where(input => input.DeletedAt == null)
+                    .Include(input => input.Price)
                     .Include(input => input.PresetMetric).AsNoTracking();
                  
                 foreach (var metric in foundMetrics)
@@ -70,6 +71,10 @@ namespace WEBA_ASSIGNMENT.APIs
                         MetricId = metric.MetricId,
                         MetricType = metric.MetricType,
                         MetricAmount = metric.MetricAmount,
+                        Quantity = metric.Quantity,
+                        Status = metric.Status,
+                        Price = metric.Price.Value,
+                        RRP = metric.Price.RRP,
                         PresetMetric = metric.PresetMetric
                     });
                 }
