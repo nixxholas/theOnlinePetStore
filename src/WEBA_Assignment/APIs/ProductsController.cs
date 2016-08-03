@@ -161,7 +161,8 @@ namespace WEBA_ASSIGNMENT.APIs
                      .Include(eachProduct => eachProduct.Brand)
                      .Include(eachProduct => eachProduct.Consumable)
                      .Include(eachProduct => eachProduct.Specials)
-                     .Include(eachProduct => eachProduct.ProductPhotos).Single();
+                     .Include(eachProduct => eachProduct.ProductPhotos)
+                     .Single();
                 
                 var response = new
                 {
@@ -803,7 +804,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 {
                     //Copy over the new products id information to the ProductPhotos object,
                     //newProductPhotos. 
-                    newProductPhoto.ProdId = newProduct.ProdId;
+                    //newProductPhoto.ProdId = newProduct.ProdId;
                     newProductPhoto.CreatedById = _userManager.GetUserId(User);
                     // Attempt to test the isPrimaryPhoto variable
                     if (fileDataValue == (innerSystem).ToString() && alreadyHasPrimary == false)
