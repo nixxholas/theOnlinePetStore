@@ -694,19 +694,32 @@
             url: 'http://localhost:5008/API/Metrics/' + g_prodId,
         })
         $loadMetricsDataHandler.done(function (data, textStatus, jqXHR) {
-            // We'll have to check if there is 1 or more Metrics
+            // We'll have to check if there is 1 or more Metric
             if (data.length == 1) {
                 console.dir(data[0]);
                 $('#metricAmountInput').val(data[0].metricAmount); // Metric Amount
-
-                if (data[0].presetMetric != null) {
+                
+                // Metric Type
+                if (data[0].presetMetric != null) { // If it's a preset metric
                     pMetricSuggest.setSelection(data[0].presetMetric); // Preset Metric Type (eg. Pounds)
                 } else {
-
+                    // Or if it's not
+                    $('#customUnitSwitch').bootstrapToggle('on');
+                    $('#customMetricTypeInput').removeClass('hidden');
+                    $('#customMetricTypeInput').val(data[0].metricType);
                 }
+                
+                // Stock
+                $('#qtyInput').val(data[0].quantity);
+                
+                // Price
+                $('#priceInput').val(data[0].price);
+
+                // RRP
+                $('#rrpInput').val(data[0].rrp);
 
             } else {
-
+                // Else we'll have to show the multi metric table
 
             }
 
