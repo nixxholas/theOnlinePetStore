@@ -73,7 +73,7 @@
                                 <div class="form-group col-md-12 hidden" id="savingsOverviewBox">
                                     <!--<label class="control-label col-md-2" for="descBox">Description</label>-->
                                     <div class="form-group col-md-10">
-                                        <textarea class="tinymceStart" name="savingsOverviewBox" id="savingsOverviewBox"></textarea>
+                                        <textarea class="tinymceStart" name="savingsOverviewEditor" id="savingsOverviewEditor"></textarea>
                                     </div>
                                 </div>
 
@@ -85,7 +85,7 @@
                                 <div class="form-group col-md-12 hidden" id="descriptionBox">
                                     <!--<label class="control-label col-md-2" for="descBox">Description</label>-->
                                     <div class="form-group col-md-10">
-                                        <textarea class="tinymceStart" name="descriptionBox" id="descriptionBox"></textarea>
+                                        <textarea class="tinymceStart" name="descriptionEditor" id="descriptionEditor"></textarea>
                                     </div>
                                 </div>
 
@@ -131,19 +131,29 @@
                                 <!-- Will have to implement a few more TinyMCE elements here for Consumables -->
                                 <div class="form-group col-md-12 hidden" id="consumableContainer" name="consumableContainer">
                                     <!--<label class="control-label col-md-2" for="descBox">Description</label>-->
-                                    <div class="form-group col-md-10">
+                                    <label class="col-md-push-4 control-label left" for="TypicalAnalysisBox">Typical Analysis</label>
+                                    </br>
+                                    <div class="form-group col-md-12">
                                         <textarea class="tinymceStart" name="TypicalAnalysisBox" id="TypicalAnalysisBox"></textarea>
                                     </div>
-                                    <div class="form-group col-md-10">
+                                    <label class="col-md-push-4 control-label left" for="GuranteedAnalysisBox">Guranteed Analysis</label>
+                                    </br>
+                                    <div class="form-group col-md-12">
                                         <textarea class="tinymceStart" name="GuranteedAnalysisBox" id="GuranteedAnalysisBox"></textarea>
                                     </div>
-                                    <div class="form-group col-md-10">
+                                    <label class="col-md-push-4 control-label left" for="IngredientsBox">Ingredients</label>
+                                    </br>
+                                    <div class="form-group col-md-12">
                                         <textarea class="tinymceStart" name="IngredientsBox" id="IngredientsBox"></textarea>
                                     </div>
-                                    <div class="form-group col-md-10">
+                                    <label class="col-md-push-4 control-label left" for="ActiveIngredientsBox">Active Ingredients</label>
+                                    </br>
+                                    <div class="form-group col-md-12">
                                         <textarea class="tinymceStart" name="ActiveIngredientsBox" id="ActiveIngredientsBox"></textarea>
                                     </div>
-                                    <div class="form-group col-md-10">
+                                    <label class="col-md-push-4 control-label left" for="InActiveIngredientsBox">In-Active Ingredients</label>
+                                    </br>
+                                    <div class="form-group col-md-12">
                                         <textarea class="tinymceStart" name="InActiveIngredientsBox" id="InActiveIngredientsBox"></textarea>
                                     </div>
                                 </div>
@@ -252,6 +262,25 @@
     var $presetElements = '';
     var $statusElements = '';
 
+    tinymce.init({
+        selector: '.tinymceStart',
+        height: 250,
+        theme: 'modern',
+        plugins: [
+          'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+          'searchreplace wordcount visualblocks visualchars code fullscreen',
+          'insertdatetime media nonbreaking save table contextmenu directionality',
+          'emoticons template paste textcolor colorpicker textpattern imagetools'
+        ],
+        toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+        toolbar2: 'print preview media | forecolor backcolor emoticons',
+        image_advtab: true,
+        //content_css: [
+        //  '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+        //  '//www.tinymce.com/css/codepen.min.css'
+        //]
+    });
+
     // MagicSuggest for Categories.
     var msCategoryList = $('#categorySuggest').magicSuggest({
         method: 'get',
@@ -263,7 +292,7 @@
         autoSelect: false
     });
 
-    $('.pMetricSuggest').magicSuggest({
+    var pMetricSuggest = $('#pMetricSuggest').magicSuggest({
         required: true,
         style: 'border-radius: 0 !important',
         maxSelection: 1,
@@ -355,25 +384,6 @@
     });
 
     var descriptionBox = $('#descriptionBox');
-
-    tinymce.init({
-        selector: '.tinymceStart',
-        height: 250,
-        theme: 'modern',
-        plugins: [
-          'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-          'searchreplace wordcount visualblocks visualchars code fullscreen',
-          'insertdatetime media nonbreaking save table contextmenu directionality',
-          'emoticons template paste textcolor colorpicker textpattern imagetools'
-        ],
-        toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-        toolbar2: 'print preview media | forecolor backcolor emoticons',
-        image_advtab: true,
-        //content_css: [
-        //  '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-        //  '//www.tinymce.com/css/codepen.min.css'
-        //]
-    });
 
     $('#customUnitSwitch').change(function () {
         if ($('#customMetricTypeInput').hasClass('hidden')) {
@@ -535,7 +545,6 @@
         allowedFileExtensions: ['jpg', 'jpeg', 'png'],
         uploadExtraData: function () {
             var out = {}, counter = 0, key, innerSystem = 0;
-
             // InnerSystem System for Multi ProductPhotos
             // Even numbers identify it as a primary photo
             // Odd does the other way round
@@ -659,6 +668,121 @@
             // lol
             $(this).parent().parent().remove();
         });
+    });
+
+    // Best way to force these codes here to wait for the other things
+    // outside of it to load first before running
+    // http://stackoverflow.com/questions/544993/official-way-to-ask-jquery-wait-for-all-images-to-load-before-executing-somethin
+    $(window).on("load", function () {
+
+        //------------------------------------ Client-side Load Data logic -----------------------------------
+        var g_prodId = getBrandIdFromAddressBar();
+        function getBrandIdFromAddressBar() {
+            //Get employee id from the url string in the browser's address bar
+            var urlArray = window.location.href.split('/');
+            var id = urlArray[urlArray.length - 1];
+            return id;
+        };
+
+        /**
+         * Metric Dataloader for Products Update View
+         *  By Nicholas
+        **/
+        $loadMetricsDataHandler = jQuery.ajax({
+            contentType: 'application/json',
+            method: 'get',
+            url: 'http://localhost:5008/API/Metrics/' + g_prodId,
+        })
+        $loadMetricsDataHandler.done(function (data, textStatus, jqXHR) {
+            // We'll have to check if there is 1 or more Metrics
+            if (data.length == 1) {
+                console.dir(data[0]);
+                $('#metricAmountInput').val(data[0].metricAmount); // Metric Amount
+
+                if (data[0].presetMetric != null) {
+                    pMetricSuggest.setSelection(data[0].presetMetric); // Preset Metric Type (eg. Pounds)
+                } else {
+
+                }
+
+            } else {
+
+
+            }
+
+        } //end of JavaScript anonymous function
+
+              )//end of the done() method;
+        $loadMetricsDataHandler.fail(function (data, textStatus, jqXHR) {
+            swal("Oh no!", data.response.message, "error");
+        })//end of $loadBrandDataHandler.fail()
+
+        // Product Dataloader
+        //Note: jQuery.ajax(..) is also often written is $.ajax(..)
+        $loadProductHandler = jQuery.ajax({
+            type: 'GET',
+            url: '/API/Products/' + g_prodId,
+        })
+        $loadProductHandler.done(function (data, textStatus, jqXHR) {
+            console.dir(data);
+            // Load the variables that will always be needed
+            $('#prodNameInput').val(data.prodName);
+            brandInput.setSelection(data.brand);
+            // Selected Categories are now loaded from a seperate API
+            //msCategoryList.setSelection(data.productCategory.catId);
+            $('#tiqInput').val(data.thresholdInventoryQuantity);
+
+            // Let's set the product isPublished as well
+            if (data.published != "0") {
+                $('#publishCheck').bootstrapToggle('on');
+                $('#publishBox').removeClass('hidden');
+            }
+
+            // Description
+            if (data.description != null && data.description != "") {
+                $('#descriptionCheck').bootstrapToggle('on');
+                $('#descriptionBox').removeClass('hidden');
+                tinyMCE.get('descriptionEditor').setContent(data.description);
+            }
+
+            // Savings Overview
+            if (data.savingsOverview != "" && data.savingsOverview != null) {
+                // Since there's something, we'll put it into the tinyMCE box and enable the toggle
+                $('#savingsOverviewCheck').bootstrapToggle('on');
+                $('#savingsOverviewBox').removeClass('hidden');
+                tinyMCE.get('savingsOverviewEditor').setContent(data.savingsOverview);
+            }
+
+            // Is a Consumable
+            if (data.isConsumable != "0") {
+                $('#consumableCheck').bootstrapToggle('on');
+                $('#consumableContainer').removeClass('hidden');
+
+                // If statements for each attribute
+                
+
+            }
+
+        }//end of JavaScript anonymous function
+
+        )//end of the done() method;
+
+        /**
+         * ProductCategory Loader
+         */
+        //Note: jQuery.ajax(..) is also often written is $.ajax(..)
+        $loadProductCategoryHandler = jQuery.ajax({
+            type: 'GET',
+            url: '/API/ProductCategory/' + g_prodId,
+        })
+        $loadProductCategoryHandler.done(function (data, textStatus, jqXHR) {
+            msCategoryList.setSelection(data);
+        }//end of JavaScript anonymous function
+
+        )//end of the done() method;
+
+        //------------------------------------ Client-side Load Data logic ---(End)---------------------------
+
     });
 
     // Function Constructor for creating a consumable object

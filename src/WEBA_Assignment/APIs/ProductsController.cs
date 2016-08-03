@@ -161,7 +161,6 @@ namespace WEBA_ASSIGNMENT.APIs
                      .Include(eachProduct => eachProduct.Brand)
                      .Include(eachProduct => eachProduct.Consumable)
                      .Include(eachProduct => eachProduct.Specials)
-                     .Include(eachProduct => eachProduct.ProductCategory)
                      .Include(eachProduct => eachProduct.ProductPhotos).Single();
                 
                 var response = new
@@ -169,6 +168,7 @@ namespace WEBA_ASSIGNMENT.APIs
                     ProdId = foundProduct.ProdId,
                     ProdName = foundProduct.ProdName,
                     Description = foundProduct.Description,
+                    SavingsOverview = foundProduct.SavingsOverview,
                     ThresholdInventoryQuantity = foundProduct.ThresholdInvertoryQuantity,
                     Quantity = foundProduct.Quantity,
                     ProductPhotos = foundProduct.ProductPhotos,
@@ -176,8 +176,7 @@ namespace WEBA_ASSIGNMENT.APIs
                     Consumable = foundProduct.Consumable,
                     Specials = foundProduct.Specials,
                     Published = foundProduct.Published,
-                    Brand = foundProduct.Brand,
-                    ProductCategory = foundProduct.ProductCategory
+                    Brand = foundProduct.Brand
                 };//end of creation of the response object
 
                 return new JsonResult(response);
@@ -188,7 +187,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 //This anonymous object only has one Message property 
                 //which contains a simple string message
                 object httpFailRequestResultMessage =
-                                            new { Message = "Unable to obtain Category information." };
+                                            new { Message = "Unable to obtain Product information." };
                 //Return a bad http response message to the client
                 return BadRequest(httpFailRequestResultMessage);
             }
