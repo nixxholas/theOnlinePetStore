@@ -62,6 +62,7 @@ namespace WEBA_ASSIGNMENT.APIs
                     .Where(input => input.ProdId == id)
                     .Where(input => input.DeletedAt == null)
                     .Include(input => input.Price)
+                    .Include(input => input.Status)
                     .Include(input => input.PresetMetric).AsNoTracking();
                  
                 foreach (var metric in foundMetrics)
