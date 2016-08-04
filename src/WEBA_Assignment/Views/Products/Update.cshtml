@@ -221,6 +221,9 @@
                         </div>
                     </div>
 
+                    <div class="form-group col-md-12" id="currentImageBox">
+                    </div>
+
                     <div class="form-group col-md-12">
                         <label class="control-label col-md-2 photoUploadMarginFixProducts" for="fileInput">Photo</label>
                         <div class="col-md-9">
@@ -518,81 +521,77 @@
 
     window.$productPhotoInputElement = $('#fileInput');
 
-    function initializeFileInput() {
-        console.dir(imageData);
+    var footerTemplate = '<div class="file-thumbnail-footer">\n' +
+    '    <div class="file-caption-name" style="width:{width}">{caption}</div>\n' +
+    '    {actions}\n' +
+    '</div>';
+    var actionTemplate = '<div class="file-actions">\n' +
+     '       <div class="file-footer-buttons">\n {delete} </div>\n' +
+     '    <div class="file-upload-indicator" tabindex="-1" title="{indicatorTitle}">{indicator}</div>\n' +
+     '   <div class="radio"><input class="primaryRadioClass" id="isPrimaryRadioBox" name="isPrimaryRadioBox" type="radio" {TAG_PRIMARY_PHOTO} /><label for="isPrimaryRadioBox">Primary Photo</label></div>' +
+     '    <div class="clearfix"></div>\n' +
+     '</div>';
 
-        var footerTemplate = '<div class="file-thumbnail-footer">\n' +
-        '    <div class="file-caption-name" style="width:{width}">{caption}</div>\n' +
-        '    {actions}\n' +
-        '</div>';
-        var actionTemplate = '<div class="file-actions">\n' +
-         '       <div class="file-footer-buttons">\n {delete} </div>\n' +
-         '    <div class="file-upload-indicator" tabindex="-1" title="{indicatorTitle}">{indicator}</div>\n' +
-         '   <div class="radio"><input class="primaryRadioClass" id="isPrimaryRadioBox" name="isPrimaryRadioBox" type="radio" {TAG_PRIMARY_PHOTO} /><label for="isPrimaryRadioBox">Primary Photo</label></div>' +
-         '    <div class="clearfix"></div>\n' +
-         '</div>';
+    $('#fileInput').fileinput({
+        previewFileType: 'image',
+        allowedFileTypes: ['image'],
+        uploadUrl: '/API/Products/UploadProductPhotosAndSaveProductData',
+        uploadAsync: false,
+        maxFileCount: 5,
+        layoutTemplates: { footer: footerTemplate, actions: actionTemplate },
+        type: 'post',
+        msgInvalidFileType: 'Invalid type for file "{name}". Only "{types}" files are supported.',
+        autoReplace: true,
+        overwriteInitial: false,
+        showUploadedThumbs: false,
+        showUpload: false,
+        showRemove: false,
+        initialPreview: imageData,
+        //initialPreviewConfig: getImageData,
+        browseClass: 'btn btn-primary btn-md pull-right',
+        previewFileIcon: '<i class="glyphicon glyphicon-king"></i>',
+        allowedFileExtensions: ['jpg', 'jpeg', 'png'],
+        uploadExtraData: function () {
+            var out = {}, counter = 0, key, innerSystem = 0;
+            // InnerSystem System for Multi ProductPhotos
+            // Even numbers identify it as a primary photo
+            // Odd does the other way round
+            // Learnt alot from this
+            // And from Mr Tan's way of identifying the value for his fileinput
+            // http://plugins.krajee.com/file-input-ajax-demo/7
 
-        $('#fileInput').fileinput({
-            previewFileType: 'image',
-            allowedFileTypes: ['image'],
-            uploadUrl: '/API/Products/UploadProductPhotosAndSaveProductData',
-            uploadAsync: false,
-            maxFileCount: 5,
-            layoutTemplates: { footer: footerTemplate, actions: actionTemplate },
-            type: 'post',
-            msgInvalidFileType: 'Invalid type for file "{name}". Only "{types}" files are supported.',
-            autoReplace: true,
-            overwriteInitial: false,
-            showUploadedThumbs: false,
-            showUpload: false,
-            showRemove: false,
-            initialPreview: imageData,
-            //initialPreviewConfig: getImageData,
-            browseClass: 'btn btn-primary btn-md pull-right',
-            previewFileIcon: '<i class="glyphicon glyphicon-king"></i>',
-            allowedFileExtensions: ['jpg', 'jpeg', 'png'],
-            uploadExtraData: function () {
-                var out = {}, counter = 0, key, innerSystem = 0;
-                // InnerSystem System for Multi ProductPhotos
-                // Even numbers identify it as a primary photo
-                // Odd does the other way round
-                // Learnt alot from this
-                // And from Mr Tan's way of identifying the value for his fileinput
-                // http://plugins.krajee.com/file-input-ajax-demo/7
+            //in the array pack the value you want for the very exact parameter name you have in the UploadAsync method/function
+            //if UploadAsync(string mytext) then out['mytext']=THE_VALUE;
+            $('.primaryRadioClass').each(function () {
+                $el = $(this);
 
-                //in the array pack the value you want for the very exact parameter name you have in the UploadAsync method/function
-                //if UploadAsync(string mytext) then out['mytext']=THE_VALUE;
-                $('.primaryRadioClass').each(function () {
-                    $el = $(this);
+                key = $el ? 'new_' + counter : 'init_' + counter;
+                if (($el[0].checked) = true) {
+                    out[key] = innerSystem; // Even is yes
+                } else {
+                    out[key] = innerSystem + 1; // odd is no
+                }
 
-                    key = $el ? 'new_' + counter : 'init_' + counter;
-                    if (($el[0].checked) = true) {
-                        out[key] = innerSystem; // Even is yes
-                    } else {
-                        out[key] = innerSystem + 1; // odd is no
-                    }
-
-                    innerSystem = innerSystem + 2;
-                    counter++;
-                });
-                return out;
-            }
-        });
-        $('#fileInput').on('filepreupload', function (event, data, previewId, index) {
-            var form = data.form, files = data.files, extra = data.uploadExtraData,
-                response = data.response, reader = data.reader;
-        });
-        $('#fileInput').on('filebatchpreupload', function (event, data, jqXHR) {
-            var form = data.form, files = data.files, extra = data.uploadExtraData,
-                response = data.response, reader = data.reader;
-        });
-        window.$productPhotoInputElement.on('filebatchuploadsuccess',
-                             function (event, data, previewId, index) {
-                                 var form = data.form, files = data.files, extra = data.extra,
-                                     response = data.response, reader = data.reader;
-                                 swal("Hurray!", data.responseJSON.message, "Success");
-                             });
-    }
+                innerSystem = innerSystem + 2;
+                counter++;
+            });
+            return out;
+        }
+    });
+    $('#fileInput').on('filepreupload', function (event, data, previewId, index) {
+        var form = data.form, files = data.files, extra = data.uploadExtraData,
+            response = data.response, reader = data.reader;
+    });
+    $('#fileInput').on('filebatchpreupload', function (event, data, jqXHR) {
+        var form = data.form, files = data.files, extra = data.uploadExtraData,
+            response = data.response, reader = data.reader;
+    });
+    window.$productPhotoInputElement.on('filebatchuploadsuccess',
+                         function (event, data, previewId, index) {
+                             var form = data.form, files = data.files, extra = data.extra,
+                                 response = data.response, reader = data.reader;
+                             swal("Hurray!", data.responseJSON.message, "Success");
+                         });
 
     // End of Product Image Element
 
@@ -733,6 +732,23 @@
             } else {
                 // Else we'll have to show the multi metric table
 
+                // Check the has many variations switch first
+                $('#metricsCheck').bootstrapToggle('on');
+                // Then unhide the whole table
+                $('#metricSegment').removeClass('hidden');
+
+                // Now spam the for loop for dynamic loading/creation
+                for (i = 0; i < data.length; i++) {
+                    // If preset metric is not null
+                    if (data[i].presetMetric != null) {
+                        // We'll have to add the presetMetric row here
+
+                    } else {
+                        // Else we'll add
+
+                    }
+
+                }
             }
 
         } //end of JavaScript anonymous function
@@ -814,14 +830,12 @@
 
             // Time to load the fileInput by pushing the images into the getImageData array first
             for (i = 0; i < data.productPhotos.length; i++) {
-                var tempInitialPreview = '<img style="height:220px" src="' + data.productPhotos[i].url + '" class="file-preview-image " alt="" title="" />';
-                imageData.push(tempInitialPreview);
+                // For loop to load currentImageBox
 
             }
 
-            // Done, now load the image data into krajee's fileinput
-            initializeFileInput();
-        
+            console.dir(imageData);
+
         }//end of JavaScript anonymous function
 
         )//end of the done() method;
