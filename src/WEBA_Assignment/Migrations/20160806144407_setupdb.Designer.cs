@@ -8,7 +8,7 @@ using WEBA_ASSIGNMENT.Data;
 namespace WEBA_ASSIGNMENT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160806120851_setupdb")]
+    [Migration("20160806144407_setupdb")]
     partial class setupdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -18,20 +18,20 @@ namespace WEBA_ASSIGNMENT.Cloudinary
     public class CloudinaryAPIs
     {
         // APIs keys.. [Replace it with your own. It can be found under https://cloudinary.com/console when you login]
-        //private const string CLOUDINARY_CLOUDNAME = "nixxholas";
-        //private const string CLOUDINARY_APIKEY = "641797399696439";
-        //private const string CLOUDINARY_SECRETKEY = "nvqH9yk5j2WeD8ZAG0BbH0ySrYk";
+        private const string CLOUDINARY_CLOUDNAME = "nixxholas";
+        private const string CLOUDINARY_APIKEY = "641797399696439";
+        private const string CLOUDINARY_SECRETKEY = "nvqH9yk5j2WeD8ZAG0BbH0ySrYk";
 
         // Zheng Hao's Keys
-        private const string CLOUDINARY_CLOUDNAME = "diniplvxf";
-        private const string CLOUDINARY_APIKEY = "731691584916841";
-        private const string CLOUDINARY_SECRETKEY = "rxDm0VLdv_zjkCn1VzTT86dSCKg";
-        private const string CLOUDINARY_UPLOADPRESET_FOR_PRODUCTS = "pgfrlqut";
+        //private const string CLOUDINARY_CLOUDNAME = "diniplvxf";
+        //private const string CLOUDINARY_APIKEY = "731691584916841";
+        //private const string CLOUDINARY_SECRETKEY = "rxDm0VLdv_zjkCn1VzTT86dSCKg";
+        //private const string CLOUDINARY_UPLOADPRESET_FOR_PRODUCTS = "pgfrlqut";
         // End of Zheng Hao's Keys
 
         // If we need to upload another type (eg. Products), we'll need to make this again. 
         private const string CLOUDINARY_UPLOADPRESET_FOR_BRANDS = "upload_to_brands";
-        //private const string CLOUDINARY_UPLOADPRESET_FOR_PRODUCTS = "upload_to_products";
+        private const string CLOUDINARY_UPLOADPRESET_FOR_PRODUCTS = "upload_to_products";
 
 
         // Constants - Don't touch this!

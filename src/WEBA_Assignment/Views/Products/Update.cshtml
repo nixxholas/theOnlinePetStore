@@ -673,7 +673,7 @@
 
                         // We'll have to add the presetMetric row here
                         table.append(
-                        '<tr value="1" valign="top">' +
+                        '<tr value="1" valign="top" id="' + MetricId + '">' +
                         // Store a value in the first column to show whether
                         // if it's preset or custom.
                         '<td name="metricAmountField">' +
@@ -714,7 +714,7 @@
                     } else {
                         // Else we'll add
                         table.append(
-                        '<tr value="0" valign="top">' +
+                        '<tr value="0" valign="top" id="' + MetricId + '">' +
                         '<td name="metricAmountField">' +
                         '<input type="text" class="form-control font-bold" id="metricAmount" name="metricAmount" value="' + MetricAmount + '" placeholder="Metric Amount" />' +
                         '</td>' +
@@ -862,7 +862,8 @@
     }
 
     // Function Constructor for creating a metrics object
-    function Metric(inMetricAmount, inMetricType, inQuantity, inPrice, inRRP, inStatus, inIsPreset) {
+    function Metric(inMetricId, inMetricAmount, inMetricType, inQuantity, inPrice, inRRP, inStatus, inIsPreset) {
+        this.MetricId = inMetricId;
         this.MetricAmount = inMetricAmount;
         this.MetricType = inMetricType;
         this.Quantity = inQuantity;
@@ -1080,6 +1081,7 @@
                 var Price = '';
                 var RRP = '';
                 var Status = '';
+                var StatusId = table.rows[i].id;
 
                 for (var j = 0, col; col = row.cells[j]; j++) {
                     // Define a variable for validation
@@ -1146,7 +1148,7 @@
                     }
                 }
                 // Finally we push the metric object to the MetricData
-                MetricData.push(new Metric(MetricAmount, json_quote(MetricType), Quantity, Price, RRP, Status, isPreset));
+                MetricData.push(new Metric(StatusId, MetricAmount, json_quote(MetricType), Quantity, Price, RRP, Status, isPreset));
             }
             // Constructing the webformdata object for a product with alot of metric units
 

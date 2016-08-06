@@ -37,7 +37,7 @@ namespace WEBA_ASSIGNMENT.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=NIXHOLAS\SQLEXPRESS;database=WEBA_ASSIGNMENTDB;Trusted_Connection=True;MultipleActiveResultSets=True");
+            optionsBuilder.UseSqlServer(@"Server=NIXH\SQLEXPRESS;database=WEBA_ASSIGNMENTDB;Trusted_Connection=True;MultipleActiveResultSets=True");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

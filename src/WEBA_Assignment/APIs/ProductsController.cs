@@ -699,12 +699,18 @@ namespace WEBA_ASSIGNMENT.APIs
                     }
                 }
 
+                // Pull the product 
                 var foundOneProduct = Database.Products
                         .Where(eachProduct => eachProduct.ProdId == id)
                         .Include(eachProduct => eachProduct.Brand)
                         .Include(eachProduct => eachProduct.Consumable)
-                        .Include(eachProduct => eachProduct.Metrics).ThenInclude(eachMetric => eachMetric.Price)
                         .Single();
+
+                // Pull the Metrics
+                var metricsOfProduct = Database.Metrics
+                    .Where(eachMetric => eachMetric.ProdId == id)
+                    .Where(eachMetric => eachMetric.DeletedAt == null)
+                    .Include(eachMetric => eachMetric.Price);                    
 
                 // Let's update the general stuff first           
                 foundOneProduct.ProdName = productToBeUpdated.ProdName;
@@ -721,19 +727,25 @@ namespace WEBA_ASSIGNMENT.APIs
                  * But in this case, we delete all of the old ones 
                  * and add the new ones 
                  **/
-                 // All begone
-                 foreach (var Metric in foundOneProduct.Metrics)
+                 foreach (var Metric in metricsOfProduct) // For each metric row in the database
                 {
-                    Metric.DeletedAt = DateTime.Now;
-                    Metric.Price.DeletedAt = DateTime.Now;
-                    Metric.DeletedById = _userManager.GetUserId(User);
-                    Metric.Price.DeletedById = _userManager.GetUserId(User);
+                    // Iterate through what is going to be updated
                 }
 
-                foreach (var Metric in productToBeUpdated.Metrics)
-                {
-                    foundOneProduct.Metrics.Add(Metric);
-                }
+                // All begone
+                // foreach (var Metric in foundOneProduct.Metrics)
+                //{
+                //    Metric.DeletedAt = DateTime.Now;
+                //    Metric.Price.DeletedAt = DateTime.Now;
+                //    Metric.DeletedById = _userManager.GetUserId(User);
+                //    Metric.Price.DeletedById = _userManager.GetUserId(User);
+                //    Database.Metrics.Update(Metric);
+                //}
+
+                //foreach (var Metric in productToBeUpdated.Metrics)
+                //{
+                //    foundOneProduct.Metrics.Add(Metric);
+                //}
                 
 
                 foundOneProduct.UpdatedAt = DateTime.Now;
