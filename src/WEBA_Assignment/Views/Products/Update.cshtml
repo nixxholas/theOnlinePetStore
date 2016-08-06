@@ -128,7 +128,6 @@
                                 <input type="checkbox" id="consumableCheck" data-toggle="toggle" data-class="fast">
                                 <label>Product is a consumable</label>
 
-                                <!-- Will have to implement a few more TinyMCE elements here for Consumables -->
                                 <div class="form-group col-md-12 hidden" id="consumableContainer" name="consumableContainer">
                                     <!--<label class="control-label col-md-2" for="descBox">Description</label>-->
                                     <label class="col-md-push-4 control-label left" for="typicalAnalysisBox">Typical Analysis</label>
@@ -1038,11 +1037,11 @@
 
         // Static variables
         var collectedPublished;
-        if ($('#publishCheck').is('checked')) { // if the product is set to be published
+        if ($('#publishBox').hasClass('hidden')) { // if the product is set to be published
             // Setup the identifying variable
-            collectedPublished = "1";
-        } else {
             collectedPublished = "0";
+        } else {
+            collectedPublished = "1";
         }
 
         if (!$('#consumableContainer').hasClass('hidden')) { // if the product is a consumable

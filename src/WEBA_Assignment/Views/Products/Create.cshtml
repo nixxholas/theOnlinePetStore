@@ -128,23 +128,32 @@
                                 <input type="checkbox" id="consumableCheck" data-toggle="toggle" data-class="fast">
                                 <label>Product is a consumable</label>
 
-                                <!-- Will have to implement a few more TinyMCE elements here for Consumables -->
                                 <div class="form-group col-md-12 hidden" id="consumableContainer" name="consumableContainer">
                                     <!--<label class="control-label col-md-2" for="descBox">Description</label>-->
-                                    <div class="form-group col-md-10">
-                                        <textarea class="tinymceStart" name="TypicalAnalysisBox" id="TypicalAnalysisBox"></textarea>
+                                    <label class="col-md-push-4 control-label left" for="typicalAnalysisBox">Typical Analysis</label>
+                                    </br>
+                                    <div class="form-group col-md-12">
+                                        <textarea class="tinymceStart" name="typicalAnalysisBox" id="typicalAnalysisBox"></textarea>
                                     </div>
-                                    <div class="form-group col-md-10">
-                                        <textarea class="tinymceStart" name="GuranteedAnalysisBox" id="GuranteedAnalysisBox"></textarea>
+                                    <label class="col-md-push-4 control-label left" for="guranteedAnalysisBox">Guranteed Analysis</label>
+                                    </br>
+                                    <div class="form-group col-md-12">
+                                        <textarea class="tinymceStart" name="guranteedAnalysisBox" id="guranteedAnalysisBox"></textarea>
                                     </div>
-                                    <div class="form-group col-md-10">
-                                        <textarea class="tinymceStart" name="IngredientsBox" id="IngredientsBox"></textarea>
+                                    <label class="col-md-push-4 control-label left" for="ingredientsBox">Ingredients</label>
+                                    </br>
+                                    <div class="form-group col-md-12">
+                                        <textarea class="tinymceStart" name="ingredientsBox" id="ingredientsBox"></textarea>
                                     </div>
-                                    <div class="form-group col-md-10">
-                                        <textarea class="tinymceStart" name="ActiveIngredientsBox" id="ActiveIngredientsBox"></textarea>
+                                    <label class="col-md-push-4 control-label left" for="activeIngredientsBox">Active Ingredients</label>
+                                    </br>
+                                    <div class="form-group col-md-12">
+                                        <textarea class="tinymceStart" name="activeIngredientsBox" id="activeIngredientsBox"></textarea>
                                     </div>
-                                    <div class="form-group col-md-10">
-                                        <textarea class="tinymceStart" name="InActiveIngredientsBox" id="InActiveIngredientsBox"></textarea>
+                                    <label class="col-md-push-4 control-label left" for="inActiveIngredientsBox">In-Active Ingredients</label>
+                                    </br>
+                                    <div class="form-group col-md-12">
+                                        <textarea class="tinymceStart" name="inActiveIngredientsBox" id="inActiveIngredientsBox"></textarea>
                                     </div>
                                 </div>
 
@@ -703,8 +712,6 @@
         if ($('#errorBox').hasClass('hidden')) {
             $('#errorBox').removeClass('hidden');
             $('html,body').animate({ scrollTop: 0 }, 'slow');
-            //location.href = "#infoBox"; // Send the user back to the top
-            // LET HIM SEE WHAT HE HAS DONE
         }
     }
 
@@ -774,11 +781,11 @@
 
         // Static variables
         var collectedPublished;
-        if ($('#publishCheck').is('checked')) { // if the product is set to be published
+        if ($('#publishBox').hasClass('hidden')) { // if the product is set to be published
             // Setup the identifying variable
-            collectedPublished = "1";
-        } else {
             collectedPublished = "0";
+        } else {
+            collectedPublished = "1";
         }
 
         if (!$('#consumableContainer').hasClass('hidden')) { // if the product is a consumable
