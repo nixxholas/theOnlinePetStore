@@ -763,7 +763,6 @@
             url: '/API/Products/' + g_prodId,
         })
         $loadProductHandler.done(function (data, textStatus, jqXHR) {
-            console.dir(data);
             // Load the variables that will always be needed
             $('#prodNameInput').val(data.prodName);
             brandInput.setSelection(data.brand);
@@ -951,7 +950,7 @@
         if ($('#savingsOverviewBox').hasClass('hidden')) {
             collectedSavingsOverview = null
         } else {
-            collectedSavingsOverview = json_quote(tinyMCE.get('savingsOverviewBox').getContent());
+            collectedSavingsOverview = json_quote(tinyMCE.get('savingsOverviewEditor').getContent());
             console.dir(collectedSavingsOverview);
         }
 
@@ -960,7 +959,7 @@
         if ($('#descriptionBox').hasClass('hidden')) {
             collectedDescription = null
         } else {
-            collectedDescription = json_quote(tinyMCE.get('descriptionBox').getContent());
+            collectedDescription = json_quote(tinyMCE.get('descriptionEditor').getContent());
         }
 
         // Static variables
@@ -975,11 +974,11 @@
         if (!$('#consumableContainer').hasClass('hidden')) { // if the product is a consumable
             // Iterate through those boxes and take their stuff to make a consumable object
             //Consumable(inTypicalAnalysis, inGuranteedAnalysis, inIngredients, inActiveIngredients, inInActiveIngredients)
-            var collectedTypicalAnalysis = json_quote(tinyMCE.get('TypicalAnalysisBox').getContent());
-            var collectedGuranteedAnalysis = json_quote(tinyMCE.get('GuranteedAnalysisBox').getContent());
-            var collectedIngredients = json_quote(tinyMCE.get('IngredientsBox').getContent());
-            var collectedActiveIngredients = json_quote(tinyMCE.get('ActiveIngredientsBox').getContent());
-            var collectedInActiveIngredients = json_quote(tinyMCE.get('InActiveIngredientsBox').getContent());
+            var collectedTypicalAnalysis = json_quote(tinyMCE.get('TypicalAnalysisEditor').getContent());
+            var collectedGuranteedAnalysis = json_quote(tinyMCE.get('GuranteedAnalysisEditor').getContent());
+            var collectedIngredients = json_quote(tinyMCE.get('IngredientsEditor').getContent());
+            var collectedActiveIngredients = json_quote(tinyMCE.get('ActiveIngredientsEditor').getContent());
+            var collectedInActiveIngredients = json_quote(tinyMCE.get('InActiveIngredientsEditor').getContent());
 
             var collectedConsumable = new Consumable(collectedTypicalAnalysis, collectedGuranteedAnalysis, collectedIngredients, collectedActiveIngredients, collectedInActiveIngredients);
         } else {
@@ -1169,7 +1168,7 @@
 
         // Instead of updating the Images here, we'll solely work on the product itself.
         $saveProductHandler = jQuery.ajax({
-            method: 'post',
+            method: 'put',
             contentType: 'application/json',
             url: '/Api/Products/SaveProductUpdateInformationIntoDatabase/' + g_prodId,
             data: "'" + webFormDataInString + "'"
