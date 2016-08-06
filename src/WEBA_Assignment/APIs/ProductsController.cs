@@ -386,7 +386,6 @@ namespace WEBA_ASSIGNMENT.APIs
                             .Where(input => input.StatusName == StatusName).Single();
                         newMetric.StatusId = selectedStatus.StatusId;
                         newMetric.CreatedById = _userManager.GetUserId(User);
-                        newMetric.UpdatedById = _userManager.GetUserId(User);
                         
                         Price price = new Price();
                         // Have not converted to decimal yet
@@ -413,7 +412,6 @@ namespace WEBA_ASSIGNMENT.APIs
                             .Where(input => input.StatusName == StatusName).Single();
                         newMetric.StatusId = selectedStatus.StatusId;
                         newMetric.CreatedById = _userManager.GetUserId(User);
-                        newMetric.UpdatedById = _userManager.GetUserId(User);
                         
                         Price price = new Price();
                         // Have not converted to decimal yet
@@ -662,7 +660,6 @@ namespace WEBA_ASSIGNMENT.APIs
                             .Where(input => input.StatusName == StatusName).Single();
                         newMetric.StatusId = selectedStatus.StatusId;
                         newMetric.CreatedById = _userManager.GetUserId(User);
-                        newMetric.UpdatedById = _userManager.GetUserId(User);
 
                         Price price = new Price();
                         // Have not converted to decimal yet
@@ -689,7 +686,6 @@ namespace WEBA_ASSIGNMENT.APIs
                             .Where(input => input.StatusName == StatusName).Single();
                         newMetric.StatusId = selectedStatus.StatusId;
                         newMetric.CreatedById = _userManager.GetUserId(User);
-                        newMetric.UpdatedById = _userManager.GetUserId(User);
 
                         Price price = new Price();
                         // Have not converted to decimal yet
@@ -722,15 +718,41 @@ namespace WEBA_ASSIGNMENT.APIs
                  * if it doesn't exist, add it
                  * if an old metric no longer exists, delete it 
                  **/
-                foundOneProduct.Metrics = productToBeUpdated.Metrics;
-                //foreach (var incomingMetric in productToBeUpdated.Metrics)
-                //{
-                //    foreach (var metricFromDB in foundOneProduct.Metrics)
-                //    {
-                        
-                //    }
-                //} 
-                
+
+                // We'll perform updating first
+                // MetricAmount and Type must be the same if the user wants it to be updating.
+                // Changing the Amount is equivalent to creating a new Metric
+                foreach (var incomingMetric in productToBeUpdated.Metrics)
+                {
+                    foreach (var metricFromDB in foundOneProduct.Metrics)
+                    {
+                        // If we can find it, update it
+                        if (incomingMetric.MetricAmount == metricFromDB.MetricAmount && incomingMetric.MetricType == metricFromDB.MetricType)
+                        {
+                            // If it's a preset metric
+                            if (incomingMetric.PresetMetric != null)
+                            {
+                                metricFromDB.PresetMetric = null;
+                                metricFromDB.PMetricId = null;
+                                metricFromDB.Status = incomingMetric.Status;
+                                metricFromDB.StatusId = incomingMetric.StatusId;
+                                metricFromDB.Quantity = incomingMetric.Quantity;
+
+                                // Update the price as well
+                                // Remove the old pricing
+                                metricFromDB.Price.DeletedAt = DateTime.Now;
+                                metricFromDB.Price.DeletedById = _userManager.GetUserId(User);
+                                // Add the new price
+                                metricFromDB.Price = incomingMetric.Price;
+                                
+                            } else
+                            {
+
+                            }
+                        }  
+                    }
+                }
+
                 foundOneProduct.UpdatedAt = DateTime.Now;
                 foundOneProduct.UpdatedById = _userManager.GetUserId(User);
 

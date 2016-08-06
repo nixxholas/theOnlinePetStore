@@ -31,17 +31,11 @@ namespace WEBA_ASSIGNMENT.Models
         // Price per metric
         public Price Price { get; set; }
         public string CreatedById { get; set; }
-
-        public string UpdatedById { get; set; }
-
         public string DeletedById { get; set; }
         public ApplicationUser CreatedBy { get; set; }
-        public ApplicationUser UpdatedBy { get; set; }
         public ApplicationUser DeletedBy { get; set; }
 
         public DateTime CreatedAt { get; set; }
-
-        public DateTime UpdatedAt { get; set; }
         //Defining a property with a ? symbol after the DateTime datatype,
         //to tell the .NET engine's Entity Framework that, this is a Nullable property.
         public DateTime? DeletedAt { get; set; }

@@ -585,11 +585,7 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<Metrics>()
                 .Property(input => input.CreatedAt)
                 .HasDefaultValueSql("GETDATE()");
-
-            modelBuilder.Entity<Metrics>()
-                .Property(input => input.UpdatedAt)
-                .HasDefaultValueSql("GETDATE()");
-
+            
             modelBuilder.Entity<Metrics>()
                 .Property(input => input.DeletedAt)
                 .IsRequired(false);
@@ -617,13 +613,8 @@ namespace WEBA_ASSIGNMENT.Data
              .WithMany()
              .HasForeignKey(userClass => userClass.CreatedById)
              .OnDelete(DeleteBehavior.Restrict)
-             .IsRequired();
-            modelBuilder.Entity<Metrics>()
-                .HasOne(userClass => userClass.UpdatedBy)
-                .WithMany()
-                .HasForeignKey(userClass => userClass.UpdatedById)
-                .OnDelete(DeleteBehavior.Restrict)
-                .IsRequired();
+             .IsRequired();           
+
             modelBuilder.Entity<Metrics>()
                 .HasOne(userClass => userClass.DeletedBy)
                 .WithMany()
