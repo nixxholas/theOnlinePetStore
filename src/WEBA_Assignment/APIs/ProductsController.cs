@@ -710,11 +710,29 @@ namespace WEBA_ASSIGNMENT.APIs
                         .Include(eachProduct => eachProduct.Consumable)
                         .Single();
 
-                // Let's update the general stuff first              
-                foundOneProduct.UpdatedAt = DateTime.Now;
+                // Let's update the general stuff first           
                 foundOneProduct.ProdName = productToBeUpdated.ProdName;
+                foundOneProduct.BrandId = productToBeUpdated.BrandId;
+                foundOneProduct.Published = productToBeUpdated.Published;
+                foundOneProduct.ThresholdInvertoryQuantity = productToBeUpdated.ThresholdInvertoryQuantity;
 
-
+                // Update Metrics
+                /**
+                 * We need to check whether it exists first, then update it
+                 * if it doesn't exist, add it
+                 * if an old metric no longer exists, delete it 
+                 **/
+                foundOneProduct.Metrics = productToBeUpdated.Metrics;
+                //foreach (var incomingMetric in productToBeUpdated.Metrics)
+                //{
+                //    foreach (var metricFromDB in foundOneProduct.Metrics)
+                //    {
+                        
+                //    }
+                //} 
+                
+                foundOneProduct.UpdatedAt = DateTime.Now;
+                foundOneProduct.UpdatedById = _userManager.GetUserId(User);
 
                 Database.Products.Update(foundOneProduct);
                 Database.SaveChanges();//Without this command, the changes are not committed.
