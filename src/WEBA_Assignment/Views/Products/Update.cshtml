@@ -225,8 +225,8 @@
 
                     <div class="form-group col-md-12">
                         <label class="control-label col-md-2 photoUploadMarginFixProducts" for="fileInput">Photo</label>
-                        <div class="col-md-9">
-                            <input id="fileInput" name="fileInput" type="file" class="file input-group-lg" multiple />
+                        <div class="col-md-9" id="fileInput">
+                            <!-- Dynamically Create a Button Here to manage Images -->
                         </div>
                     </div>
 
@@ -743,12 +743,15 @@
                     var MetricAmount = data[i].metricAmount;
                     var MetricType = data[i].metricType;
                     var Quantity = data[i].quantity;
-                    var Status = data[i].status.statusName;
+                    var StatusName = data[i].status.statusName;
+                    var StatusId = data[i].status.statusId;
                     var Price = data[i].price;
                     var RRP = data[i].rrp;
 
                     // If preset metric is not null
                     if (data[i].presetMetric != null) {
+                        var PresetMetricId = data[i].presetMetric.pMetricId;
+
                         // We'll have to add the presetMetric row here
                         table.append(
                         '<tr value="1" valign="top">' +
@@ -780,12 +783,14 @@
                         '</tr>');
 
                         // Now we'll need to set the dropdown box choices made
-
+                        // http://stackoverflow.com/questions/14804253/how-to-set-selected-value-on-select-using-selectpicker-plugin-from-bootstrap
+                        $('select[name=metricTypeInput]').val(PresetMetricId);
+                        $('select[name=statusInput]').val(StatusId);
 
                         $('.selectpicker').selectpicker('refresh');
                     } else {
                         // Else we'll add
-                        table.appead(
+                        table.append(
                         '<tr value="0" valign="top">' +
                         '<td name="metricAmountField">' +
                         '<input type="text" class="form-control font-bold" id="metricAmount" name="metricAmount" value="' + MetricAmount + '" placeholder="Metric Amount" />' +
@@ -794,7 +799,7 @@
                         '<input type="text" class="form-control font-bold" id="metricTypeInput" name="metricTypeInput" value="' + MetricType + '" placeholder="Metric Type" />' +
                         '</td>' +
                         '<td>' +
-                        '<input type="number" min="0" pattern="[0-9]" class="form-control font-bold" id="qtyInput" name="qtyInput" value="" placeholder="Quantity" />' +
+                        '<input type="number" min="0" pattern="[0-9]" class="form-control font-bold" id="qtyInput" name="qtyInput" value="' + Quantity + '" placeholder="Quantity" />' +
                         '</td>' +
                         '<td>' +
                         '<select class="form-control selectpicker" id="statusInput" name="statusInput">' +
@@ -802,14 +807,17 @@
                         '</select>' +
                         '</td>' +
                         '<td>' +
-                        '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price"  pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
+                        '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="' + Price + '" placeholder="Price"  pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
                         '</td>' +
                         '<td>' +
-                        '<input type="number" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP"  pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
+                        '<input type="number" class="form-control font-bold" id="rrpInput" name="rrpInput" value="' + RRP + '" placeholder="RRP"  pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
                         '</br><a href="javascript:void(0);" class="remRow btn btn-danger inline">Remove</a>' +
                         '</td>' +
                         '</tr>');
 
+                        // Now we'll need to set the dropdown box choices made
+                        //http://stackoverflow.com/questions/14804253/how-to-set-selected-value-on-select-using-selectpicker-plugin-from-bootstrap
+                        $('select[name=statusInput]').val(StatusId);
 
                         $('.selectpicker').selectpicker('refresh');
                     }

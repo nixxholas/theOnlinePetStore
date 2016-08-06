@@ -99,8 +99,8 @@ namespace WEBA_ASSIGNMENT
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
-            });
-          app.SeedData();
+            });           
+          //app.SeedData();
         }//end of Configure()
     }
 }

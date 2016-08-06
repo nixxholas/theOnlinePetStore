@@ -113,40 +113,33 @@ namespace WEBA_ASSIGNMENT.APIs
             return TotalQuantity;
         }
 
-        // GET ProductsUnderBrand
-        // Not going to do this for now.
-        // Takes in an integer as a Category Id
-        [HttpGet("GetProductsUnderBrand/{id}")]
+        // GET ViewProductPhotos
+        // Takes in an integer as a Product Id
+        [HttpGet("ViewProductPhotos/{id}")]
         public JsonResult ProductsUnderCategory(int id)
         {
-            List<object> productList = new List<object>();
+            List<object> productPhotosList = new List<object>();
 
-            var products = Database.Products
-                .Where(eachProductEntity => eachProductEntity.Brand.BrandId == id)
-                .Include(eachProductEntity => eachProductEntity.Brand)
-                .Include(eachProductEntity => eachProductEntity.Metrics)
-                .Include(eachProductEntity => eachProductEntity.ProductPhotos).AsNoTracking();
+            var productPhotos = Database.ProductPhotos
+                .Where(eachProductEntity => eachProductEntity.ProdId == id);
 
-            foreach (var oneProduct in products)
+            foreach (var oneProductPhoto in productPhotos)
             {
 
-                productList.Add(new
+                productPhotosList.Add(new
                 {
-                    ProdId = oneProduct.ProdId,
-                    ProdName = oneProduct.ProdName,
-                    Brand = oneProduct.Brand,
-                    BrandName = oneProduct.Brand.BrandName,
-                    //PhotoUrl = oneProduct.ProductPhotos.Url,
-                    TiS = oneProduct.ThresholdInvertoryQuantity,
-                    Quantity = oneProduct.Quantity,
-                    Published = oneProduct.Published,
-                    CreatedAt = oneProduct.CreatedAt,
-                    CreatedBy = oneProduct.CreatedBy.FullName,
-                    UpdatedAt = oneProduct.UpdatedAt,
-                    UpdatedBy = oneProduct.UpdatedBy.FullName
+                    ProductPhotoId = oneProductPhoto.ProductPhotoId,
+                    Format = oneProductPhoto.Format,
+                    Height = oneProductPhoto.Height,
+                    PublicCloudinaryId = oneProductPhoto.PublicCloudinaryId,
+                    SecureUrl = oneProductPhoto.SecureUrl,
+                    Url = oneProductPhoto.Url,
+                    Version = oneProductPhoto.Version,
+                    Width = oneProductPhoto.Width,
+                    IsPrimaryPhoto = oneProductPhoto.isPrimaryPhoto
                 });
             }//end of foreach loop which builds the productsList .
-            return new JsonResult(productList);
+            return new JsonResult(productPhotosList);
         }
 
 
@@ -803,7 +796,9 @@ namespace WEBA_ASSIGNMENT.APIs
                 if (newProductPhoto.PublicCloudinaryId != "")
                 {
                     //Copy over the new products id information to the ProductPhotos object,
-                    //newProductPhotos. 
+
+                    newProductPhoto.Product = newProduct; // Relationship Fix
+
                     //newProductPhoto.ProdId = newProduct.ProdId;
                     newProductPhoto.CreatedById = _userManager.GetUserId(User);
                     // Attempt to test the isPrimaryPhoto variable
