@@ -658,6 +658,7 @@
 
                 // Now spam the for loop for dynamic loading/creation
                 for (i = 0; i < data.length; i++) {
+                    var MetricId = data[i].metricId;
                     var MetricAmount = data[i].metricAmount;
                     var MetricType = data[i].metricType;
                     var Quantity = data[i].quantity;
@@ -679,7 +680,7 @@
                         '<input type="text" class="form-control font-bold" id="metricAmount" name="metricAmount" value="'+ MetricAmount +'" placeholder="Metric Amount" />' +
                         '</td>' +
                         '<td name="metricTypeField">' +
-                        '<select class="form-control selectpicker" id="metricTypeInput" name="metricTypeInput" data-live-search="true">' +
+                        '<select class="form-control selectpicker" id="metricTypeInput' + MetricId + '" name="metricTypeInput' + MetricId + '" data-live-search="true">' +
                         $presetElements +
                         '</select>' +
                         '</td>' +
@@ -687,7 +688,7 @@
                         '<input type="number" min="0" pattern="[0-9]" class="form-control font-bold" id="qtyInput" name="qtyInput" value="'+ Quantity +'" placeholder="Stock" />' +
                         '</td>' +
                         '<td>' +
-                        '<select class="form-control selectpicker" id="statusInput" name="statusInput">' +
+                        '<select class="form-control selectpicker" id="statusInput' + MetricId + '" name="statusInput">' +
                         $statusElements +
                         '</select>' +
                         '</td>' +
@@ -704,11 +705,12 @@
                         //http://stackoverflow.com/questions/14804253/how-to-set-selected-value-on-select-using-selectpicker-plugin-from-bootstrap
                         // The one above is deprecated.
                         //http://stackoverflow.com/questions/25510796/jquery-setting-preselected-values-for-bootstrap-select-picker
+                        $('#metricTypeInput' + MetricId).val(JSON.parse(PresetMetricId));
+                        $('#metricTypeInput' + MetricId).selectpicker('refresh');
+                        $('#statusInput' + MetricId).val(JSON.parse(StatusId));
+                        $('#statusInput' + MetricId).selectpicker('refresh');
 
-                        $('#metricTypeInput').val(JSON.parse(PresetMetricId));
-                        $('#statusInput').val(JSON.parse(StatusId));
-
-                        $('.selectpicker').selectpicker('refresh');
+                        //$('.selectpicker').selectpicker('refresh');
                     } else {
                         // Else we'll add
                         table.append(
@@ -723,7 +725,7 @@
                         '<input type="number" min="0" pattern="[0-9]" class="form-control font-bold" id="qtyInput" name="qtyInput" value="' + Quantity + '" placeholder="Quantity" />' +
                         '</td>' +
                         '<td>' +
-                        '<select class="form-control selectpicker" id="statusInput" name="statusInput">' +
+                        '<select class="form-control selectpicker" id="statusInput' + MetricId + '" name="statusInput">' +
                         $statusElements +
                         '</select>' +
                         '</td>' +
@@ -740,8 +742,7 @@
                         //http://stackoverflow.com/questions/14804253/how-to-set-selected-value-on-select-using-selectpicker-plugin-from-bootstrap
                         // The one above is deprecated.
                         //http://stackoverflow.com/questions/25510796/jquery-setting-preselected-values-for-bootstrap-select-picker
-
-                        $('#statusInput').val(JSON.parse(StatusId));
+                        $('#statusInput' + MetricId).val(JSON.parse(StatusId));
 
                         $('.selectpicker').selectpicker('refresh');
                     }
