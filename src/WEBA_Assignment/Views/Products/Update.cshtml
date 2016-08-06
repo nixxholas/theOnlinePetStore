@@ -24,10 +24,14 @@
                 <form id="dataForm" data-toggle="validator" role="form" class="form-horizontal">
                     <div class="form-group col-md-12">
                         <label class="control-label col-md-2" for="prodNameInput">Product Name</label>
-                        <div class="form-group col-md-9">
+                        <div class="form-group col-md-7">
                             <input type="text" name="prodNameInput" id="prodNameInput" class="form-control font-bold"
                                    maxlength="50" placeholder="Product Name" value="" required />
                         </div>
+
+                        <div class="form-group col-md-3" id="currentImageBox">
+                        </div>
+
                     </div>
 
                     <div class="form-group col-md-12">
@@ -220,16 +224,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-md-12" id="currentImageBox">
-                    </div>
-
-                    <div class="form-group col-md-12">
-                        <label class="control-label col-md-2 photoUploadMarginFixProducts" for="fileInput">Photo</label>
-                        <div class="col-md-9" id="fileInput">
-                            <!-- Dynamically Create a Button Here to manage Images -->
-                        </div>
-                    </div>
-
                     <div class="form-group col-md-12 hidden" id="specialsBox">
                         <label class="control-label col-md-2 photoUploadMarginFixProducts" for="specialInput">Specials</label>
                         <div class="col-md-6">
@@ -293,6 +287,8 @@
         //  '//www.tinymce.com/css/codepen.min.css'
         //]
     });
+
+    var productPhotosBox = $('#currentImageBox');
 
     // MagicSuggest for Categories.
     var msCategoryList = $('#categorySuggest').magicSuggest({
@@ -829,14 +825,10 @@
                     tinyMCE.get('inActiveIngredientsBox').setContent(data.consumable.inActiveIngredients);
                 }
             } // End of Is a consumable
-
-            // Time to load the fileInput by pushing the images into the getImageData array first
-            for (i = 0; i < data.productPhotos.length; i++) {
-                // For loop to load currentImageBox
-
-            }
-
-            console.dir(imageData);
+            
+            $hyperLinkElement = $('<a>View this product\'s photos</a>').attr('href', '/Products/ViewProductPhotos/' + g_prodId);
+            $hyperLinkElement.addClass('btn btn-primary');
+            productPhotosBox.append($hyperLinkElement);
 
         }//end of JavaScript anonymous function
 
