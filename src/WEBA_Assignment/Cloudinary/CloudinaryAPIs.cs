@@ -23,9 +23,9 @@ namespace WEBA_ASSIGNMENT.Cloudinary
         //private const string CLOUDINARY_SECRETKEY = "nvqH9yk5j2WeD8ZAG0BbH0ySrYk";
 
         // Zheng Hao's Keys
-        private const string Cloudinary_CloudName = "diniplvxf";
-        private const string Cloudinary_APIKey = "731691584916841";
-        private const string Cloudinary_SecretKey = "rxDm0VLdv_zjkCn1VzTT86dSCKg";
+        private const string CLOUDINARY_CLOUDNAME = "diniplvxf";
+        private const string CLOUDINARY_APIKEY = "731691584916841";
+        private const string CLOUDINARY_SECRETKEY = "rxDm0VLdv_zjkCn1VzTT86dSCKg";
         private const string CLOUDINARY_UPLOADPRESET_FOR_PRODUCTS = "pgfrlqut";
         // End of Zheng Hao's Keys
 
