@@ -561,56 +561,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 return BadRequest(httpFailRequestResultMessage);
             }//End of Try..Catch block
         }//End of SaveNewProductInformationInSession() method
-
-        // PUT /api/Products/SaveProductUpdateInformationIntoSession
-        [HttpPut("SaveProductUpdateInformationIntoSession/{id}")]
-        public IActionResult SaveProductUpdateInformationIntoSession(int id, [FromBody]string value)
-        {
-
-            string customMessage = "";
-            //Reconstruct a useful object from the input string value. 
-            var productChangeInput = JsonConvert.DeserializeObject<dynamic>(value);
-
-            Product productToBeUpdated = new Product();
-            try
-            {
-                //Copy out all the products data into the new Product instance,
-                //newProduct.
-                productToBeUpdated.ProdId = id;
-                productToBeUpdated.ProdName = productChangeInput.ProdName.Value;
-
-                //Saved it into a Session variable
-                HttpContext.Session.SetObjectAsJson("Product", productToBeUpdated);
-                customMessage = "Saved product into session";
-            }
-            catch (Exception exceptionObject)
-            {
-                customMessage = "Unable to save product into database.";
-                //Create a fail message anonymous object that has one property, Message.
-                //This anonymous object's Message property contains a simple string message
-                object httpFailRequestResultMessage = new { Message = customMessage };
-                //Return a bad http request message to the client
-                return BadRequest(httpFailRequestResultMessage);
-            }//End of Try..Catch block
-
-            //If there is no runtime error in the try catch block, the code execution
-            //should reach here. Sending success message back to the client.
-            //******************************************************
-            //Construct a custom message for the client
-            //Create a success message anonymous object which has a 
-            //Message member variable (property)
-            var successRequestResultMessage = new
-            {
-                Message = customMessage
-            };
-            //Create a OkObjectResult class instance, httpOkResult.
-            //When creating the object, provide the previous message object into it.
-            OkObjectResult httpOkResult =
-                            new OkObjectResult(successRequestResultMessage);
-            //Send the OkObjectResult class object back to the client.
-            return httpOkResult;
-        }//End of SaveProductUpdateInformationIntoSession() method
-
+        
         // PUT /api/Products/SaveProductUpdateInformationIntoDatabase
         [HttpPut("SaveProductUpdateInformationIntoDatabase/{id}")]
         public IActionResult SaveProductUpdateInformationIntoDatabase(int id, [FromBody]string value)
@@ -623,14 +574,148 @@ namespace WEBA_ASSIGNMENT.APIs
             try
             {
                 productToBeUpdated.ProdName = productChangeInput.ProdName.Value;
+                productToBeUpdated.BrandId = Int32.Parse(productChangeInput.BrandId.Value);
+                productToBeUpdated.Published = Int32.Parse(productChangeInput.Published.Value);
+                productToBeUpdated.ThresholdInvertoryQuantity = Int32.Parse(productChangeInput.ThresholdInventoryQuantity.Value);
+                productToBeUpdated.CreatedById = _userManager.GetUserId(User);
+                productToBeUpdated.UpdatedById = _userManager.GetUserId(User);
+                productToBeUpdated.Metrics = new List<Metrics>();
+
+                // Consumable Weak Entity
+                if (productChangeInput.Consumable != null)
+                {
+                    productToBeUpdated.isConsumable = 1; // It is a consumable
+                    Consumable newConsumable = new Consumable();
+                    newConsumable.TypicalAnalysis = productChangeInput.Consumable.TypicalAnalysis.Value;
+                    newConsumable.GuranteedAnalysis = productChangeInput.Consumable.GuranteedAnalysis.Value;
+                    newConsumable.Ingredients = productChangeInput.Consumable.Ingredients.Value;
+                    newConsumable.ActiveIngredients = productChangeInput.Consumable.ActiveIngredients.Value;
+                    newConsumable.InActiveIngredients = productChangeInput.Consumable.InActiveIngredients.Value;
+
+                    // Push the consumable object into the product object
+                    productToBeUpdated.Consumable = newConsumable;
+                }
+                else
+                {
+                    productToBeUpdated.isConsumable = 0; // It is NOT a consumable
+                }
+
+                // Savings Overview
+                if (productChangeInput.SavingsOverview.Value != null)
+                {
+                    productToBeUpdated.SavingsOverview = productChangeInput.SavingsOverview.Value;
+                }
+                else
+                {
+                    productToBeUpdated.SavingsOverview = null;
+                }
+
+                // Description
+                if (productChangeInput.Description.Value != null)
+                {
+                    productToBeUpdated.Description = productChangeInput.Description.Value;
+                }
+                else
+                {
+                    productToBeUpdated.Description = null;
+                }
+                
+                // ProductCategory Relation
+                var categories = productChangeInput.Categories.Value;
+                categories = categories.TrimEnd(']');
+                categories = categories.TrimStart('[');
+
+                productToBeUpdated.ProductCategory = new List<ProductCategory>();
+                foreach (string catId in categories.Split(','))
+                {
+                    int CatId = Int32.Parse(catId);
+
+                    // Create the necessary object to store the composites
+                    ProductCategory newProductCategory = new ProductCategory();
+
+                    newProductCategory.ProdId = productToBeUpdated.ProdId; // NullReferenceException
+                    newProductCategory.CatId = CatId;
+                    productToBeUpdated.ProductCategory.Add(newProductCategory);
+                }
+                
+                // Iterate through the metric list
+                foreach (var Metric in productChangeInput.Metrics)
+                {
+                    // We need have an if statement to identify a custom metric row
+                    // or preset metric row as well
+
+                    // If the metric is preset
+                    if (Metric.isPreset == "1")
+                    {
+                        String MetricType = Metric.MetricType.Value;
+                        var presetMetricUsed = Database.PresetMetrics
+                            .Where(input => input.MetricSubType == MetricType).Single();
+                        Metrics newMetric = new Metrics();
+                        //newMetric.ProdId = newProduct.ProdId;
+                        newMetric.MetricAmount = Int32.Parse(Metric.MetricAmount.Value);
+                        newMetric.MetricType = presetMetricUsed.MetricType; // Taken from PresetMetrics Table
+                        newMetric.PMetricId = presetMetricUsed.PMetricId; // Only for Preset Metrics
+                        newMetric.Quantity = Int32.Parse(Metric.Quantity.Value);
+                        String StatusName = Metric.Status.Value;
+                        // Status is parsed in a string format
+                        var selectedStatus = Database.Statuses
+                            .Where(input => input.StatusName == StatusName).Single();
+                        newMetric.StatusId = selectedStatus.StatusId;
+                        newMetric.CreatedById = _userManager.GetUserId(User);
+                        newMetric.UpdatedById = _userManager.GetUserId(User);
+
+                        Price price = new Price();
+                        // Have not converted to decimal yet
+                        price.RRP = Convert.ToDecimal(Metric.RRP.Value);
+                        price.Value = Convert.ToDecimal(Metric.Price.Value);
+                        price.CreatedById = _userManager.GetUserId(User);
+
+                        // Push the Metric and price into the product object
+                        newMetric.Price = price;
+                        productToBeUpdated.Metrics.Add(newMetric);
+                    }
+                    else
+                    // Else, it'll be a custom preset metric
+                    {
+                        // Time to construct a custom metric
+                        Metrics newMetric = new Metrics();
+                        //newMetric.ProdId = newProduct.ProdId;
+                        newMetric.MetricAmount = Int32.Parse(Metric.MetricAmount.Value);
+                        newMetric.MetricType = Metric.MetricType.Value;
+                        newMetric.Quantity = Int32.Parse(Metric.Quantity.Value);
+                        String StatusName = Metric.Status.Value;
+                        // Status is parsed in a string format
+                        var selectedStatus = Database.Statuses
+                            .Where(input => input.StatusName == StatusName).Single();
+                        newMetric.StatusId = selectedStatus.StatusId;
+                        newMetric.CreatedById = _userManager.GetUserId(User);
+                        newMetric.UpdatedById = _userManager.GetUserId(User);
+
+                        Price price = new Price();
+                        // Have not converted to decimal yet
+                        price.RRP = Convert.ToDecimal(Metric.RRP.Value);
+                        price.Value = Convert.ToDecimal(Metric.Price.Value);
+                        price.CreatedById = _userManager.GetUserId(User);
+
+                        // Push the Metric and price into the product object
+                        newMetric.Price = price;
+                        productToBeUpdated.Metrics.Add(newMetric);
+                    }
+                }
 
                 var foundOneProduct = Database.Products
                         .Where(eachProduct => eachProduct.ProdId == id)
                         .Include(eachProduct => eachProduct.Brand)
+                        .Include(eachProduct => eachProduct.Metrics)
+                        .Include(eachProduct => eachProduct.Consumable)
                         .Single();
 
-                foundOneProduct.ProdName = productToBeUpdated.ProdName;
+                // Let's update the general stuff first              
                 foundOneProduct.UpdatedAt = DateTime.Now;
+                foundOneProduct.ProdName = productToBeUpdated.ProdName;
+
+
+
                 Database.Products.Update(foundOneProduct);
                 Database.SaveChanges();//Without this command, the changes are not committed.
                 computeProductsPerBrand();
@@ -638,10 +723,10 @@ namespace WEBA_ASSIGNMENT.APIs
             }
             catch (Exception exceptionObject)
             {
-                customMessage = "Unable to save product into database.";
+                customMessage = "Unable to save product into database. Error: ";
                 //Create a fail message anonymous object that has one property, Message.
                 //This anonymous object's Message property contains a simple string message
-                object httpFailRequestResultMessage = new { Message = customMessage };
+                object httpFailRequestResultMessage = new { Message = customMessage + exceptionObject };
                 //Return a bad http request message to the client
                 return BadRequest(httpFailRequestResultMessage);
             }//End of Try..Catch block
