@@ -585,7 +585,11 @@ namespace WEBA_ASSIGNMENT.Data
             modelBuilder.Entity<Metrics>()
                 .Property(input => input.CreatedAt)
                 .HasDefaultValueSql("GETDATE()");
-            
+
+            modelBuilder.Entity<Metrics>()
+                .Property(input => input.UpdatedAt)
+                .HasDefaultValueSql("GETDATE()");
+
             modelBuilder.Entity<Metrics>()
                 .Property(input => input.DeletedAt)
                 .IsRequired(false);

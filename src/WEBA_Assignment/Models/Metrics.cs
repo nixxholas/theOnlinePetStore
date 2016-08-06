@@ -36,6 +36,10 @@ namespace WEBA_ASSIGNMENT.Models
         public ApplicationUser DeletedBy { get; set; }
 
         public DateTime CreatedAt { get; set; }
+        /*
+         * UpdatedAt is solely used for quantity and price updates. 
+         */
+        public DateTime UpdatedAt { get; set; }
         //Defining a property with a ? symbol after the DateTime datatype,
         //to tell the .NET engine's Entity Framework that, this is a Nullable property.
         public DateTime? DeletedAt { get; set; }

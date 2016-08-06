@@ -551,7 +551,8 @@ namespace WEBA_ASSIGNMENT.Migrations
                     PriceId = table.Column<int>(type: "int", nullable: false),
                     ProdId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    StatusId = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
+                    StatusId = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    UpdatedAt = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()")
                 },
                 constraints: table =>
                 {
@@ -654,12 +655,12 @@ namespace WEBA_ASSIGNMENT.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductPhoto_Product_ProdId",
-                        column: x => x.ProdId,
-                        principalTable: "Product",
-                        principalColumn: "ProdId",
-                        onDelete: ReferentialAction.Cascade);
+                    //table.ForeignKey(
+                    //    name: "FK_ProductPhoto_Product_ProdId",
+                    //    column: x => x.ProdId,
+                    //    principalTable: "Product",
+                    //    principalColumn: "ProdId",
+                    //    onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

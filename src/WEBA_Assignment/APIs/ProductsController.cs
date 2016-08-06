@@ -576,7 +576,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 productToBeUpdated.Published = Int32.Parse(productChangeInput.Published.Value);
                 productToBeUpdated.ThresholdInvertoryQuantity = Int32.Parse(productChangeInput.ThresholdInventoryQuantity.Value);
                 productToBeUpdated.CreatedById = _userManager.GetUserId(User);
-                productToBeUpdated.UpdatedById = _userManager.GetUserId(User);
+                productToBeUpdated.UpdatedById = _userManager.GetUserId(User); // Placeholder
                 productToBeUpdated.Metrics = new List<Metrics>();
 
                 // Consumable Weak Entity
@@ -702,8 +702,8 @@ namespace WEBA_ASSIGNMENT.APIs
                 var foundOneProduct = Database.Products
                         .Where(eachProduct => eachProduct.ProdId == id)
                         .Include(eachProduct => eachProduct.Brand)
-                        .Include(eachProduct => eachProduct.Metrics)
                         .Include(eachProduct => eachProduct.Consumable)
+                        .Include(eachProduct => eachProduct.Metrics).ThenInclude(eachMetric => eachMetric.Price)
                         .Single();
 
                 // Let's update the general stuff first           
@@ -717,41 +717,24 @@ namespace WEBA_ASSIGNMENT.APIs
                  * We need to check whether it exists first, then update it
                  * if it doesn't exist, add it
                  * if an old metric no longer exists, delete it 
+                 * 
+                 * But in this case, we delete all of the old ones 
+                 * and add the new ones 
                  **/
-
-                // We'll perform updating first
-                // MetricAmount and Type must be the same if the user wants it to be updating.
-                // Changing the Amount is equivalent to creating a new Metric
-                foreach (var incomingMetric in productToBeUpdated.Metrics)
+                 // All begone
+                 foreach (var Metric in foundOneProduct.Metrics)
                 {
-                    foreach (var metricFromDB in foundOneProduct.Metrics)
-                    {
-                        // If we can find it, update it
-                        if (incomingMetric.MetricAmount == metricFromDB.MetricAmount && incomingMetric.MetricType == metricFromDB.MetricType)
-                        {
-                            // If it's a preset metric
-                            if (incomingMetric.PresetMetric != null)
-                            {
-                                metricFromDB.PresetMetric = null;
-                                metricFromDB.PMetricId = null;
-                                metricFromDB.Status = incomingMetric.Status;
-                                metricFromDB.StatusId = incomingMetric.StatusId;
-                                metricFromDB.Quantity = incomingMetric.Quantity;
-
-                                // Update the price as well
-                                // Remove the old pricing
-                                metricFromDB.Price.DeletedAt = DateTime.Now;
-                                metricFromDB.Price.DeletedById = _userManager.GetUserId(User);
-                                // Add the new price
-                                metricFromDB.Price = incomingMetric.Price;
-                                
-                            } else
-                            {
-
-                            }
-                        }  
-                    }
+                    Metric.DeletedAt = DateTime.Now;
+                    Metric.Price.DeletedAt = DateTime.Now;
+                    Metric.DeletedById = _userManager.GetUserId(User);
+                    Metric.Price.DeletedById = _userManager.GetUserId(User);
                 }
+
+                foreach (var Metric in productToBeUpdated.Metrics)
+                {
+                    foundOneProduct.Metrics.Add(Metric);
+                }
+                
 
                 foundOneProduct.UpdatedAt = DateTime.Now;
                 foundOneProduct.UpdatedById = _userManager.GetUserId(User);
