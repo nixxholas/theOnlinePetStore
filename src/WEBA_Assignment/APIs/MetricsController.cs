@@ -67,17 +67,33 @@ namespace WEBA_ASSIGNMENT.APIs
                  
                 foreach (var metric in foundMetrics)
                 {
-                    metricList.Add(new
+                    if (metric.PresetMetric == null)
                     {
-                        MetricId = metric.MetricId,
-                        MetricType = metric.MetricType,
-                        MetricAmount = metric.MetricAmount,
-                        Quantity = metric.Quantity,
-                        Status = metric.Status,
-                        Price = metric.Price.Value,
-                        RRP = metric.Price.RRP,
-                        PresetMetric = metric.PresetMetric
-                    });
+                        metricList.Add(new
+                        {
+                            MetricId = metric.MetricId,
+                            MetricType = metric.MetricType,
+                            MetricAmount = metric.MetricAmount,
+                            Quantity = metric.Quantity,
+                            Status = metric.Status,
+                            Price = metric.Price.Value,
+                            RRP = metric.Price.RRP,
+                            PresetMetric = metric.PresetMetric
+                        });
+                    } else
+                    {
+                        metricList.Add(new
+                        {
+                            MetricId = metric.MetricId,
+                            MetricSubType = metric.PresetMetric.MetricSubType,
+                            MetricAmount = metric.MetricAmount,
+                            Quantity = metric.Quantity,
+                            Status = metric.Status,
+                            Price = metric.Price.Value,
+                            RRP = metric.Price.RRP,
+                            PresetMetric = metric.PresetMetric
+                        });
+                    }
                 }
 
                 return new JsonResult(metricList);

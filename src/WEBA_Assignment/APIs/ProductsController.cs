@@ -76,7 +76,7 @@ namespace WEBA_ASSIGNMENT.APIs
             //After obtaining all the Product entity rows(records) from the database,
             //the products variable will become an container holding these
             //Product class entity rows.
-            //I need to loop through each  Product instance inside productss
+            //I need to loop through each  Product instance inside products
             //to construct a List container of anonymous objects(which has 6 properties).
             //Then use the new JsonResult(productsList) technique to generate the
             //JSON formatted string data which can be sent back to the web browser client.

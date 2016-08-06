@@ -71,7 +71,7 @@ namespace WEBA_ASSIGNMENT.APIs
             return new JsonResult(productPhotosList);
         }
 
-        // GET BrandsUnderCategory
+        // GET ProductPhotosUnderBrands
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {

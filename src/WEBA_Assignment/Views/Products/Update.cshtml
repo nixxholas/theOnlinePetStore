@@ -737,15 +737,82 @@
                 // Then unhide the whole table
                 $('#metricSegment').removeClass('hidden');
 
+                var table = $('#metricsTableBody');
+
                 // Now spam the for loop for dynamic loading/creation
                 for (i = 0; i < data.length; i++) {
+                    var MetricAmount = data[i].metricAmount;
+                    var MetricType = data[i].metricType;
+                    var Quantity = data[i].quantity;
+                    var Status = data[i].status.statusName;
+                    var Price = data[i].price;
+                    var RRP = data[i].rrp;
+
                     // If preset metric is not null
                     if (data[i].presetMetric != null) {
                         // We'll have to add the presetMetric row here
+                        table.append(
+                        '<tr value="1" valign="top">' +
+                        // Store a value in the first column to show whether
+                        // if it's preset or custom.
+                        '<td name="metricAmountField">' +
+                        '<input type="text" class="form-control font-bold" id="metricAmount" name="metricAmount" value="'+ MetricAmount +'" placeholder="Metric Amount" />' +
+                        '</td>' +
+                        '<td name="metricTypeField">' +
+                        '<select class="form-control selectpicker" id="metricTypeInput" name="metricTypeInput" data-live-search="true">' +
+                        $presetElements +
+                        '</select>' +
+                        '</td>' +
+                        '<td>' +
+                        '<input type="number" min="0" pattern="[0-9]" class="form-control font-bold" id="qtyInput" name="qtyInput" value="'+ Quantity +'" placeholder="Stock" />' +
+                        '</td>' +
+                        '<td>' +
+                        '<select class="form-control selectpicker" id="statusInput" name="statusInput">' +
+                        $statusElements +
+                        '</select>' +
+                        '</td>' +
+                        '<td>' +
+                        '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="' + Price + '" placeholder="Price" pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
+                        '</td>' +
+                        '<td>' +
+                        '<input type="text" class="form-control font-bold" id="rrpInput" name="rrpInput" value="' + RRP + '" placeholder="RRP" pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
+                        '</br><a href="javascript:void(0);" class="remRow btn btn-danger inline">Remove</a>' +
+                        '</td>' +
+                        '</tr>');
 
+                        // Now we'll need to set the dropdown box choices made
+
+
+                        $('.selectpicker').selectpicker('refresh');
                     } else {
                         // Else we'll add
+                        table.appead(
+                        '<tr value="0" valign="top">' +
+                        '<td name="metricAmountField">' +
+                        '<input type="text" class="form-control font-bold" id="metricAmount" name="metricAmount" value="' + MetricAmount + '" placeholder="Metric Amount" />' +
+                        '</td>' +
+                        '<td name="metricTypeField">' +
+                        '<input type="text" class="form-control font-bold" id="metricTypeInput" name="metricTypeInput" value="' + MetricType + '" placeholder="Metric Type" />' +
+                        '</td>' +
+                        '<td>' +
+                        '<input type="number" min="0" pattern="[0-9]" class="form-control font-bold" id="qtyInput" name="qtyInput" value="" placeholder="Quantity" />' +
+                        '</td>' +
+                        '<td>' +
+                        '<select class="form-control selectpicker" id="statusInput" name="statusInput">' +
+                        $statusElements +
+                        '</select>' +
+                        '</td>' +
+                        '<td>' +
+                        '<input type="number" class="form-control font-bold" id="pptInput" name="pptInput" value="" placeholder="Price"  pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
+                        '</td>' +
+                        '<td>' +
+                        '<input type="number" class="form-control font-bold" id="rrpInput" name="rrpInput" value="" placeholder="RRP"  pattern="^[0-9]{1,19}\.[0-9]{1,4}$|^[0-9]{1,19}$" />' +
+                        '</br><a href="javascript:void(0);" class="remRow btn btn-danger inline">Remove</a>' +
+                        '</td>' +
+                        '</tr>');
 
+
+                        $('.selectpicker').selectpicker('refresh');
                     }
 
                 }
