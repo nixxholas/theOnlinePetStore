@@ -255,6 +255,14 @@
 </div><!-- end of div element with class="row" -->
 
 <script>
+    var g_prodId = getBrandIdFromAddressBar();
+    function getBrandIdFromAddressBar() {
+        //Get employee id from the url string in the browser's address bar
+        var urlArray = window.location.href.split('/');
+        var id = urlArray[urlArray.length - 1];
+        return id;
+    };
+
     var customMetric = 0;
     var PresetMetricData = [];
     var StatusData = [];
@@ -352,7 +360,7 @@
             var liElement = "";
             var status = data[i];
             StatusData.push(status);
-
+            
             // Toss the data into the element storage variable as well
             liElement = "<option value=" + status.statusId + ">" + status.statusName + "</option>";
 
@@ -516,84 +524,6 @@
     //    }
     //});
 
-    // Start of Product Image Element
-
-    window.$productPhotoInputElement = $('#fileInput');
-
-    var footerTemplate = '<div class="file-thumbnail-footer">\n' +
-    '    <div class="file-caption-name" style="width:{width}">{caption}</div>\n' +
-    '    {actions}\n' +
-    '</div>';
-    var actionTemplate = '<div class="file-actions">\n' +
-     '       <div class="file-footer-buttons">\n {delete} </div>\n' +
-     '    <div class="file-upload-indicator" tabindex="-1" title="{indicatorTitle}">{indicator}</div>\n' +
-     '   <div class="radio"><input class="primaryRadioClass" id="isPrimaryRadioBox" name="isPrimaryRadioBox" type="radio" {TAG_PRIMARY_PHOTO} /><label for="isPrimaryRadioBox">Primary Photo</label></div>' +
-     '    <div class="clearfix"></div>\n' +
-     '</div>';
-
-    $('#fileInput').fileinput({
-        previewFileType: 'image',
-        allowedFileTypes: ['image'],
-        uploadUrl: '/API/Products/UploadProductPhotosAndSaveProductData',
-        uploadAsync: false,
-        maxFileCount: 5,
-        layoutTemplates: { footer: footerTemplate, actions: actionTemplate },
-        type: 'post',
-        msgInvalidFileType: 'Invalid type for file "{name}". Only "{types}" files are supported.',
-        autoReplace: true,
-        overwriteInitial: false,
-        showUploadedThumbs: false,
-        showUpload: false,
-        showRemove: false,
-        initialPreview: imageData,
-        //initialPreviewConfig: getImageData,
-        browseClass: 'btn btn-primary btn-md pull-right',
-        previewFileIcon: '<i class="glyphicon glyphicon-king"></i>',
-        allowedFileExtensions: ['jpg', 'jpeg', 'png'],
-        uploadExtraData: function () {
-            var out = {}, counter = 0, key, innerSystem = 0;
-            // InnerSystem System for Multi ProductPhotos
-            // Even numbers identify it as a primary photo
-            // Odd does the other way round
-            // Learnt alot from this
-            // And from Mr Tan's way of identifying the value for his fileinput
-            // http://plugins.krajee.com/file-input-ajax-demo/7
-
-            //in the array pack the value you want for the very exact parameter name you have in the UploadAsync method/function
-            //if UploadAsync(string mytext) then out['mytext']=THE_VALUE;
-            $('.primaryRadioClass').each(function () {
-                $el = $(this);
-
-                key = $el ? 'new_' + counter : 'init_' + counter;
-                if (($el[0].checked) = true) {
-                    out[key] = innerSystem; // Even is yes
-                } else {
-                    out[key] = innerSystem + 1; // odd is no
-                }
-
-                innerSystem = innerSystem + 2;
-                counter++;
-            });
-            return out;
-        }
-    });
-    $('#fileInput').on('filepreupload', function (event, data, previewId, index) {
-        var form = data.form, files = data.files, extra = data.uploadExtraData,
-            response = data.response, reader = data.reader;
-    });
-    $('#fileInput').on('filebatchpreupload', function (event, data, jqXHR) {
-        var form = data.form, files = data.files, extra = data.uploadExtraData,
-            response = data.response, reader = data.reader;
-    });
-    window.$productPhotoInputElement.on('filebatchuploadsuccess',
-                         function (event, data, previewId, index) {
-                             var form = data.form, files = data.files, extra = data.extra,
-                                 response = data.response, reader = data.reader;
-                             swal("Hurray!", data.responseJSON.message, "Success");
-                         });
-
-    // End of Product Image Element
-
     // Initialize selectpicker
     $('.selectpicker').selectpicker({
         style: 'btn-info',
@@ -683,14 +613,6 @@
     $(window).on("load", function () {
 
         //------------------------------------ Client-side Load Data logic -----------------------------------
-        var g_prodId = getBrandIdFromAddressBar();
-        function getBrandIdFromAddressBar() {
-            //Get employee id from the url string in the browser's address bar
-            var urlArray = window.location.href.split('/');
-            var id = urlArray[urlArray.length - 1];
-            return id;
-        };
-
         /**
          * Metric Dataloader for Products Update View
          *  By Nicholas
@@ -783,9 +705,12 @@
                         '</tr>');
 
                         // Now we'll need to set the dropdown box choices made
-                        // http://stackoverflow.com/questions/14804253/how-to-set-selected-value-on-select-using-selectpicker-plugin-from-bootstrap
-                        $('select[name=metricTypeInput]').val(PresetMetricId);
-                        $('select[name=statusInput]').val(StatusId);
+                        //http://stackoverflow.com/questions/14804253/how-to-set-selected-value-on-select-using-selectpicker-plugin-from-bootstrap
+                        // The one above is deprecated.
+                        //http://stackoverflow.com/questions/25510796/jquery-setting-preselected-values-for-bootstrap-select-picker
+
+                        $('#metricTypeInput').val(JSON.parse(PresetMetricId));
+                        $('#statusInput').val(JSON.parse(StatusId));
 
                         $('.selectpicker').selectpicker('refresh');
                     } else {
@@ -817,7 +742,10 @@
 
                         // Now we'll need to set the dropdown box choices made
                         //http://stackoverflow.com/questions/14804253/how-to-set-selected-value-on-select-using-selectpicker-plugin-from-bootstrap
-                        $('select[name=statusInput]').val(StatusId);
+                        // The one above is deprecated.
+                        //http://stackoverflow.com/questions/25510796/jquery-setting-preselected-values-for-bootstrap-select-picker
+
+                        $('#statusInput').val(JSON.parse(StatusId));
 
                         $('.selectpicker').selectpicker('refresh');
                     }
@@ -1247,31 +1175,15 @@
         //data into a flat string. So that, it can be sent accross the Internet network successfully.
         var webFormDataInString = JSON.stringify(webFormData);
 
+        // Instead of updating the Images here, we'll solely work on the product itself.
         $saveProductHandler = jQuery.ajax({
             method: 'post',
             contentType: 'application/json',
-            url: '/Api/Products/SaveNewProductInformationInSession',
+            url: '/Api/Products/SaveProductUpdateInformationIntoDatabase/' + g_prodId,
             data: "'" + webFormDataInString + "'"
         });
         $saveProductHandler.done(function (data, textStatus, jqXHR) {
-            // If no images are uploaded, we'll post with a stock image
-            if ($('#fileInput').get(0).files.length == 0) {
-                $saveProductDBHandler = jQuery.ajax({
-                    method: 'post',
-                    contentType: 'application/json',
-                    url: '/Api/Products/SaveProductData',
-                    data: "'" + webFormDataInString + "'"
-                });
-                $saveProductDBHandler.done(function (data, textStatus, jqXHR) {
-                    swal("Hurray!", data.message, "success");
-                    return;
-                });
-                $saveProductDBHandler.fail(function (data, textStatus, jqXHR) {
-                    swal("Oh no!", data.responseJSON.message, "error");
-                });
-            } else {
-                window.$productPhotoInputElement.fileinput('upload');
-            }
+            console.dir(data);
         });
         $saveProductHandler.fail(function (data, textStatus, jqXHR) {
             swal("Oh no!", data.responseJSON.message, "error");

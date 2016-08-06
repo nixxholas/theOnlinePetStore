@@ -49,7 +49,8 @@ namespace WEBA_ASSIGNMENT.APIs
         public JsonResult Get()
         {
             List<object> statusList = new List<object>();
-            var statuses = Database.Statuses;
+            var statuses = Database.Statuses
+                .OrderBy(input => input.StatusId); // Orderly manner pls
 
             foreach (var status in statuses)
             {
