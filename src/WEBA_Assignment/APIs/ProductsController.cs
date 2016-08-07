@@ -951,7 +951,7 @@ namespace WEBA_ASSIGNMENT.APIs
 
             var successRequestResultMessage = new
             {
-                Message = "Saved Product"
+                Message = "Your amazing product and image/s have been saved!"
             };
 
             OkObjectResult httpOkResult =
