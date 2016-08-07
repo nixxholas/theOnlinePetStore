@@ -763,6 +763,8 @@ namespace WEBA_ASSIGNMENT.APIs
                         }
 
                         newMetricToDB.StatusId = newMetric.StatusId;
+                        newMetricToDB.CreatedAt = DateTime.Now;
+                        newMetricToDB.UpdatedAt = DateTime.Now;
                         newMetricToDB.CreatedById = _userManager.GetUserId(User);
 
                         Price price = new Price();
@@ -777,7 +779,10 @@ namespace WEBA_ASSIGNMENT.APIs
                         newMetricToDB.Prices.Add(price);
                         foundOneProduct.Metrics.Add(newMetricToDB);
                     } else // Else it would be updating a metric
-                    {                       
+                    {
+                        // For crossing checking later
+                        DateTime currentTime = DateTime.Now;
+
                         // We'll need to search for the existing metric in
                         // metricsOfProduct
                         foreach (var existingMetric in metricsOfProduct)
@@ -808,7 +813,7 @@ namespace WEBA_ASSIGNMENT.APIs
                                     }
                                 }
 
-                                // Add now
+                                // Add the price now
                                 Price price = new Price();
                                 foreach (var newPrice in newMetric.Prices)
                                 {
@@ -820,6 +825,9 @@ namespace WEBA_ASSIGNMENT.APIs
                                 // Add the price back in
                                 existingMetric.Prices.Add(price);
 
+                                // Let the db know :)
+                                existingMetric.UpdatedAt = DateTime.Now;
+
                                 // Finally, we update the metric
                                 Database.Metrics.Update(existingMetric);
                             }
@@ -827,7 +835,16 @@ namespace WEBA_ASSIGNMENT.APIs
                         }
 
                         // Now we'll need to delete entries that do not exist anymore...
-
+                        foreach (var existingMetric in metricsOfProduct)
+                        {
+                            if (existingMetric.UpdatedAt < currentTime) // If it's old
+                            {
+                                // Begone
+                                existingMetric.DeletedAt = DateTime.Now;
+                                existingMetric.DeletedById = _userManager.GetUserId(User);
+                                Database.Metrics.Update(existingMetric);
+                            }   
+                        }
                     }
                 }  
 
