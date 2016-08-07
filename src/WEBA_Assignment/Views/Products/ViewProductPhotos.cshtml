@@ -1,1 +1,305 @@
-﻿
+﻿<div class="container">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="panel-title" id="viewTitle">Update Product Photos</div>
+            </div>
+            <div class="panel-body">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="dataTable" class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Is Primary Photo</th>
+                                        <th>Created At</th>
+                                        <th>Created By</th>
+                                        <th>&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productPhotosTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> <!-- end of div element with class="panel-body" -->
+                <div class="form-group col-md-12">
+                    <label class="control-label col-md-2" for="fileInput">Upload New Photos</label>
+                    <div class="col-md-10">
+                        <input id="fileInput" name="fileInput" type="file" class="file input-group-lg" multiple />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3"></label>
+                    <div class="col-md-12">
+                        <div class="pull-right">
+                            <input type="button" class="btn btn-primary" value="Save" id="saveButton" />
+                            <a class="btn btn-default" asp-action="Index" asp-controler="Products">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end of div element which has the class="panel-body" -->
+        </div><!-- end of the div element which has the class="panel" -->
+    </div><!-- end of the div element which has class="col-md-offset-2 col-md-8" -->
+</div><!-- end of div element which has the class="container" -->
+
+<script>
+    var brandCategories = [];
+
+    //------------------------------------ Client-side Load Data logic -----------------------------------
+    var g_prodId = getProdIdFromAddressBar();
+    function getProdIdFromAddressBar() {
+        //Get product id from the url string in the browser's address bar
+        var urlArray = window.location.href.split('/');
+        var id = urlArray[urlArray.length - 1];
+        return id;
+    };
+
+    //Note: jQuery.ajax(..) is also often written is $.ajax(..)
+    $loadProductPhotosHandler = jQuery.ajax({
+        type: 'GET',
+        url: '/API/ProductPhotos/' + g_prodId,
+    })
+    $loadProductPhotosHandler.done(function (data, textStatus, jqXHR) {
+        // Layout the data
+        var productPhotos = data;
+
+        // Element Variables
+        var ProductPhotoId = '';
+        var isPrimaryPhoto = '';
+        var visibleisPrimaryPhoto = '';
+        var Url = '';
+        var CreatedAt = "";
+        var CreatedBy = "";
+
+        // Element Objects
+        var $tableElement = null;
+        var $cellElement = null;
+        var $rowElement = null;
+
+        //-------- Find the table element -----------
+        //I am using the $tableElement variable
+        //to represent the found HTML element which has a matching id of brandTableBody
+        $tableBodyElement = $('#productPhotosTableBody');
+
+        //I want to build rows and cells (using tr and td HTML elements) so that
+        //I can display category name, created at, updated at information
+        //within the HTML table element, brandTableBody. Recall that, I have already asked the
+        //$tableBodyElement variable to represent (reference) the table element.
+
+        //-------- Begin creating <tr> and <td> HTML element ------
+        for (index = 0; index < productPhotos.length; index++) {
+            //Set this brand variable to reference a brand object
+            //inside the brandList Array.
+            productPhoto = productPhotos[index];
+            //Copy out the brand information
+            ProductPhotoId = productPhoto.productPhotoId;
+            isPrimaryPhoto = productPhoto.isPrimaryPhoto;
+
+            // Worded form
+            if (isPrimaryPhoto == 1) {
+                visibleisPrimaryPhoto = "Yes";
+            } else {
+                visibleisPrimaryPhoto = "No";
+            }
+
+            Url = productPhoto.url;
+            CreatedAt = productPhoto.createdAt;
+            CreatedBy = productPhoto.createdBy;
+
+            //Create new HTML <tr> element.
+            //At the same time let the $rowElement variable to represent it.
+            $rowElement = $('<tr value="' + ProductPhotoId + '"></tr>');
+
+            //Create the 1st cell element which displays the Image
+            // Responsiveness : http://www.w3schools.com/css/css_rwd_images.asp
+            $cellElement = $('<td><img src="' + Url + '" height="auto" width="100%"></td>');
+            $rowElement.append($cellElement);
+            //Create the 2nd cell element which displays the Category Name
+            $cellElement = $('<td></td>', { text: visibleisPrimaryPhoto });
+            $rowElement.append($cellElement);
+            // Create the 3rd cell element which displays the Visibility
+            $cellElement = $('<td></td>', { text: moment(CreatedAt).format('DD/MM/YYYY HH:mm ZZ') });
+            $rowElement.append($cellElement);
+            //Create the 4th cell element which display created at information
+            $cellElement = $('<td></td>', { text: CreatedBy });
+            $rowElement.append($cellElement);
+
+            //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
+            $hyperLinkElement = $('<a onClick="deleteImage(this)" id="' + ProductPhotoId + '">Delete</a>');
+            $hyperLinkElement.addClass('btn btn-danger');
+            //---------------- Using jQuery() to create the 2nd hyperlink element using the <a></a> --------
+            $hyperLinkElement2 = $('<a onClick="setPrimary(this)" id="' + ProductPhotoId + '">Set as Primary</a>');
+            $hyperLinkElement2.addClass('btn btn-primary');
+            //-----------------Using jQuery() to creating the 6th cell for the row----------------------
+            $cellElement = $('<td></td>');
+            //-----------------Add the previous created hyperlink element, $hyperLinkElement
+            $cellElement.append($hyperLinkElement);
+            $cellElement.append($hyperLinkElement2);
+            //---------------Add the 6th cell into the row represented by the $rowElement
+            $rowElement.append($cellElement);
+            //Insert the $rowElement into the table element represented by $tableElement.
+            $tableBodyElement.append($rowElement);
+            //----End of creating one row to display one brand by using <tr> and <td> HTML element ---
+            //       Proceed to the next brand object in the brandList Array.
+        }//end of for loop.
+    }//end of JavaScript anonymous function
+
+    )//end of the done() method;
+
+    //------------------------------------ Client-side Load Data logic ---(End)---------------------------
+
+    //------------------------------------ Client-side Upload logic -----------------------------------------
+    window.$productPhotoInputElement = $('#fileInput');
+    var footerTemplate = '<div class="file-thumbnail-footer">\n' +
+    '    <div class="file-caption-name" style="width:{width}">{caption}</div>\n' +
+    '    {actions}\n' +
+    '</div>';
+    var actionTemplate = '<div class="file-actions">\n' +
+     '       <div class="file-footer-buttons">\n {delete} </div>\n' +
+     '    <div class="file-upload-indicator" tabindex="-1" title="{indicatorTitle}">{indicator}</div>\n' +
+     '    <div class="clearfix"></div>\n' +
+     '</div>';
+    window.$productPhotoInputElement.fileinput({
+        previewFileType: 'image',
+        allowedFileTypes: ['image'],
+        uploadUrl: '/API/Brands/UploadBrandPhotoAndUpdateBrandData',
+        uploadAsync: false,
+        maxFileCount: 1,
+        layoutTemplates: { footer: footerTemplate, actions: actionTemplate },
+        type: 'post',
+        msgInvalidFileType: 'Invalid type for file "{name}". Only "{types}" files are supported.',
+        autoReplace: true,/*http://plugins.krajee.com/file-auto-replace-demo*/
+        overwriteInitial: false,
+        showUploadedThumbs: false,
+        showUpload: false,
+        showRemove: false,
+        browseClass: 'btn btn-primary btn-md pull-right',
+        previewFileIcon: '<i class="glyphicon glyphicon-king"></i>',
+        allowedFileExtensions: ['jpg', 'jpeg', 'png'],
+        uploadExtraData: function () {  // callback example
+            var out = {};
+            return out;
+        }
+    });
+
+    window.$productPhotoInputElement.on('filebatchuploadsuccess',
+                  function (event, data, previewId, index) {
+                      //It is not necessary that an upload has occurred because the user
+                      //may have only made changes to the employee data but did not
+                      //select a new file.
+                      var form = data.form, files = data.files, extra = data.extra,
+                      response = data.response, reader = data.reader;
+                      swal("Hurray!", data.response.message, "Success");
+                  });
+    //----------------------------------------- Client-side Upload logic ---(End)----------------------
+
+
+    //----------------------------------------- Client-side Update logic --------------------------------
+    $('#saveButton').on('click', function () {
+        //Collect data from input elements
+        if ($('#fileInput').get(0).files.length > 0) {
+            $saveProductPhotoHandler = jQuery.ajax({
+                method: 'PUT',
+                contentType: 'application/json',
+                url: '/Api/ProductPhotos/UploadProductPhotos/' + g_prodId,
+                data: "'" + webFormDataInString + "'"
+            });
+            $saveProductPhotoHandler.done(function (data, textStatus, jqXHR) {
+                if (window.$brandPhotoInputElement.val() != '') {
+                    //Using this command will get the FileUpload widget to begin upload
+                    window.$productPhotoInputElement.fileinput('upload');
+                } else {
+                    swal("Hurray!", data.response.message, "success");
+                }
+            });
+            $saveProductPhotoHandler.fail(function (data, textStatus, jqXHR) {
+                swal("Oh no!", data.response.message, "error");
+            });
+        }//end of if (numberOfFiles>0) condition block
+
+        if ($('#fileInput').get(0).files.length == 0) {
+            swal("Hey there!", "You did not add any new image!", "error");
+
+        }//end of if (numberOfFiles==0) condition block
+
+
+    });
+    //Define the object constructor, WebFormData which you can create
+    //a suitable object of information which is needed by the Web API Post() method
+
+    function WebFormData(inBrandName, inCategories) {
+        this.BrandName = inBrandName;
+        this.BrandCategories = inCategories;
+    }
+    //----------------------------------------- Client-Side Update logic ---(End)-------------------------------------
+
+    //----------------------------------------- Client-side Set Primary logic -------------------------------------------------
+
+    function setPrimary(element) {
+        var photoId = element.id;
+
+        $setPrimaryProductPhotoHandler = jQuery.ajax({
+            type: 'PUT',
+            url: '/API/ProductPhotos/SetPrimary/' + photoId
+        })//end of jQuery.ajax() call
+        $setPrimaryProductPhotoHandler.done(function (data, textStatus, jqXHR) {
+            swal({
+                title: "Success!",
+                text: data.response.message,
+                type: "success",
+                showCancelButton: false,
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true,
+            },
+            function () {
+                $('body').fadeOut(2000, redirectPage);
+            });
+        });//end of $deleteEmployeeHandler.done()
+
+        $setPrimaryProductPhotoHandler.fail(function (data, textStatus, jqXHR) {
+            swal("Oh no!", data.response.message, "error");
+        });//end of $deleteEmployeeHandler.fail()
+    }
+
+    //----------------------------------------- Client-Side Set Primary logic ---(End)-------------------------------------
+
+    //----------------------------------------- Client-side Delete logic -------------------------------------------------
+    function deleteImage(element) {
+        var photoId = element.id;
+
+        $deleteProductPhotoHandler = jQuery.ajax({
+            type: 'DELETE',
+            url: '/API/ProductPhotos/' + photoId
+        })//end of jQuery.ajax() call
+        $deleteProductPhotoHandler.done(function (data, textStatus, jqXHR) {
+            swal({
+                title: "Success!",
+                text: data.response.message,
+                type: "success",
+                showCancelButton: false,
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true,
+            },
+            function () {
+                $('body').fadeOut(2000, redirectPage);
+            });
+        });//end of $deleteEmployeeHandler.done()
+
+        $deleteProductPhotoHandler.fail(function (data, textStatus, jqXHR) {
+            swal("Oh no!", data.response.message, "error");
+        });//end of $deleteEmployeeHandler.fail()
+
+    }// end of $('#deleteButton').on('click', function () { ...}
+
+    function redirectPage() {
+        location.replace('/ViewProductPhotos/' + g_prodId);
+    }// end of redirectPage() method (function)
+    //----------------------------------------- Client-side Delete logic -(End)-------------------------------------------
+
+    // Escape Characters System
+    // http://stackoverflow.com/questions/770523/escaping-strings-in-javascript
+    function addslashes(str) {
+        return (str + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
+    }
+</script>

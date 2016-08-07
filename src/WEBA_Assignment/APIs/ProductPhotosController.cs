@@ -43,14 +43,14 @@ namespace WEBA_ASSIGNMENT.APIs
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
-        // GET: api/values
+        // GET: api/values 
         [HttpGet]
         public JsonResult Get()
         {
             List<object> productPhotosList = new List<object>();
             var productPhotos = Database.ProductPhotos
-                .Include(input => input.CreatedBy)
-                .Include(input => input.DeletedBy);
+                .Include(input => input.CreatedBy);
+                //.Include(input => input.DeletedBy);
 
             foreach (var productphoto in productPhotos)
             {
@@ -64,30 +64,42 @@ namespace WEBA_ASSIGNMENT.APIs
                     isPrimaryPhoto = productphoto.isPrimaryPhoto,
                     CreatedAt = productphoto.CreatedAt,
                     CreatedBy = productphoto.CreatedBy.FullName,
-                    DeletedAt = productphoto.DeletedAt,
-                    DeletedBy = productphoto.DeletedBy.FullName
+                    //DeletedAt = productphoto.DeletedAt,
+                    //DeletedBy = productphoto.DeletedBy.FullName
                 });
-            }//end of foreach loop which builds the categoryList .
+            }//end of foreach loop which builds the categoryList . 
             return new JsonResult(productPhotosList);
         }
 
-        // GET ProductPhotosUnderBrands
+        // GET api/values/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
+            List<Object> productPhotoList = new List<Object>();
+
             try
             {
-                var foundCategory = Database.Categories
-                     .Where(item => item.CatId == id).Single();
-                var response = new
+                var foundProductPhotos = Database.ProductPhotos
+                    .Where(input => input.ProdId == id)
+                    .Where(input => input.DeletedAt == null)
+                    .Include(input => input.CreatedBy);
+
+                foreach (var productPhoto in foundProductPhotos)
                 {
-                    CatId = foundCategory.CatId,
-                    CatName = foundCategory.CatName,
-                    VisibilityId = foundCategory.VisibilityId,
-                    StartDate = foundCategory.StartDate,
-                    EndDate = foundCategory.EndDate
-                };//end of creation of the response object
-                return new JsonResult(response);
+                    productPhotoList.Add(new
+                    {
+                        ProductPhotoId = productPhoto.ProductPhotoId,
+                        ProdId = productPhoto.ProdId,
+                        PublicCloudinaryId = productPhoto.PublicCloudinaryId,
+                        SecureUrl = productPhoto.SecureUrl,
+                        Url = productPhoto.Url,
+                        isPrimaryPhoto = productPhoto.isPrimaryPhoto,
+                        CreatedAt = productPhoto.CreatedAt,
+                        CreatedBy = productPhoto.CreatedBy.FullName
+                    });
+                }
+
+                return new JsonResult(productPhotoList);
             }
             catch (Exception exceptionObject)
             {
@@ -95,12 +107,11 @@ namespace WEBA_ASSIGNMENT.APIs
                 //This anonymous object only has one Message property 
                 //which contains a simple string message
                 object httpFailRequestResultMessage =
-                                    new { Message = "Unable to obtain Category information." };
+                                            new { Message = "Unable to obtain images for your product." };
                 //Return a bad http response message to the client
                 return BadRequest(httpFailRequestResultMessage);
             }
         }
-
 
         // POST api/values
         [HttpPost]
@@ -341,20 +352,20 @@ namespace WEBA_ASSIGNMENT.APIs
             //--------------------------------------------------------------------------------------------
             try
             {
-                var foundOneCategory = Database.Categories
-                           .Single(item => item.CatId == id);
-                foundOneCategory.DeletedAt = DateTime.Now;
-                foundOneCategory.DeletedById = _userManager.GetUserId(User);
+                var foundOneProductPhoto = Database.ProductPhotos
+                           .Single(item => item.ProductPhotoId == id);
+                foundOneProductPhoto.DeletedAt = DateTime.Now;
+                foundOneProductPhoto.DeletedById = _userManager.GetUserId(User);
 
                 //Update the database model
-                Database.Update(foundOneCategory);
+                Database.Update(foundOneProductPhoto);
                 //Tell the db model to commit/persist the changes to the database, 
                 //I use the following command.
                 Database.SaveChanges();
             }
             catch (Exception ex)
             {
-                customMessage = "Unable to delete category record.";
+                customMessage = "Unable to delete Product Photo record.";
                 object httpFailRequestResultMessage = new { Message = customMessage };
                 //Return a bad http request message to the client
                 return BadRequest(httpFailRequestResultMessage);
@@ -365,7 +376,7 @@ namespace WEBA_ASSIGNMENT.APIs
             //Message member variable (property)
             var successRequestResultMessage = new
             {
-                Message = "Deleted category record"
+                Message = "Your Product Image has been deleted!"
             };
 
             //Create a OkObjectResult class instance, httpOkResult.
