@@ -18,7 +18,7 @@
         </div>
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="panel-title">Create Product Record</div>
+                <div class="panel-title">Update Product Record</div>
             </div>
             <div class="panel-body">
                 <form id="dataForm" data-toggle="validator" role="form" class="form-horizontal">
@@ -638,10 +638,10 @@
                 $('#qtyInput').val(data[0].quantity);
 
                 // Price
-                $('#priceInput').val(data[0].price);
+                $('#priceInput').val(data[0].price.value);
 
                 // RRP
-                $('#rrpInput').val(data[0].rrp);
+                $('#rrpInput').val(data[0].price.rrp);
 
                 // Status
                 statusSuggest.setSelection(data[0].status);

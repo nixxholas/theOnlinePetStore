@@ -722,6 +722,12 @@ namespace WEBA_ASSIGNMENT.APIs
                 foundOneProduct.Published = productToBeUpdated.Published;
                 foundOneProduct.ThresholdInvertoryQuantity = productToBeUpdated.ThresholdInvertoryQuantity;
 
+                // For crossing checking later
+                // Using date to check is horrible, switch to a list
+                // of IDs so that we'll know what is coming
+                // DateTime currentTime = DateTime.Now;
+                List<int> metricIdList = new List<int>();
+
                 /**
                  * Compared to the POST for Products,
                  * The Metrics that we are taking in from Update includes
@@ -781,14 +787,9 @@ namespace WEBA_ASSIGNMENT.APIs
                         // Push the Metric and price to the product
                         newMetricToDB.Prices.Add(price);
                         foundOneProduct.Metrics.Add(newMetricToDB);
+                        metricIdList.Add(newMetricToDB.MetricId);
                     } else // Else it would be updating a metric
                     {
-                        // For crossing checking later
-                        // Using date to check is horrible, switch to a list
-                        // of IDs so that we'll know what is coming
-                        // DateTime currentTime = DateTime.Now;
-                        List<Int32> metricIdList = new List<Int32>();
-
                         // We'll need to search for the existing metric in
                         // metricsOfProduct
                         foreach (var existingMetric in metricsOfProduct)
@@ -844,23 +845,20 @@ namespace WEBA_ASSIGNMENT.APIs
 
                         }
 
-                        // NOT WORKING YET
-                        // Now we'll need to delete entries that do not exist anymore...
-                        //foreach (var existingMetric in foundOneProduct.Metrics)
-                        //{
-                        //    if (existingMetric.ProdId == id) // Check prodId first just incase
-                        //    {
-                        //        if (!metricIdList.Contains(existingMetric.MetricId))
-                        //        {
-                        //            // Begone
-                        //            existingMetric.DeletedAt = DateTime.Now;
-                        //            existingMetric.DeletedById = _userManager.GetUserId(User);
-                        //            Database.Metrics.Update(existingMetric);
-                        //        } 
-                        //    }   
-                        //}
                     }
-                }  
+                }
+                
+                // Now we'll need to delete entries that do not exist anymore...
+                foreach (var existingMetric in foundOneProduct.Metrics)
+                {
+                        if (!metricIdList.Contains(existingMetric.MetricId) && existingMetric.DeletedAt == null)
+                        {
+                            // Begone
+                            existingMetric.DeletedAt = DateTime.Now;
+                            existingMetric.DeletedById = _userManager.GetUserId(User);
+                            Database.Metrics.Update(existingMetric);
+                        }
+                }
 
                 foundOneProduct.UpdatedAt = DateTime.Now;
                 foundOneProduct.UpdatedById = _userManager.GetUserId(User);
