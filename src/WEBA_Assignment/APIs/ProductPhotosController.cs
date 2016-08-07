@@ -116,91 +116,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 return BadRequest(httpFailRequestResultMessage);
             }
         }
-
-        // POST api/values
-        [HttpPost]
-        public IActionResult Post([FromBody]string value)
-        {
-            string customMessage = "";
-            string format = "dd/MM/yyyy";
-            //Reconstruct a useful object from the input string value. 
-            dynamic categoryNewInput = JsonConvert.DeserializeObject<dynamic>(value);
-            Category newCategory = new Category();
-            try
-            {
-                //Copy out all the category data into the new category instance,
-                //newcategory.
-                newCategory.CatName = categoryNewInput.CatName.Value;
-                newCategory.VisibilityId = Int32.Parse(categoryNewInput.VisibilityId.Value);
-                if (newCategory.VisibilityId == 2)
-                {
-                    newCategory.StartDate = DateTime.ParseExact(categoryNewInput.StartDate.Value, format, System.Globalization.CultureInfo.InvariantCulture);
-                    newCategory.EndDate = DateTime.ParseExact(categoryNewInput.EndDate.Value, format, System.Globalization.CultureInfo.InvariantCulture);
-                    // The one big reason why I implemented server-sided validation.
-                    // http://net-informations.com/faq/asp/validation.htm
-                    //
-                    // Let's compare the two dates to make sure the StartDate is later than EndDate
-                    if (DateTime.Compare(newCategory.StartDate.Value, newCategory.EndDate.Value) > 0)
-                    {
-                        // But if it is later, we'll toss them an error for SweetAlert to throw out.
-                        customMessage = "Please enter your start date that is before your end date.";
-                        object httpFailRequestResultMessage = new { Message = customMessage };
-                        // Return a bad http request message to the client
-                        // Good job to the user who's trolling with me, good try
-                        return BadRequest(httpFailRequestResultMessage);
-                    }
-                }
-                else
-                {
-                    newCategory.StartDate = null;
-                    newCategory.EndDate = null;
-                }
-
-                newCategory.CreatedById = _userManager.GetUserId(User);
-                newCategory.UpdatedById = _userManager.GetUserId(User);
-
-                // Change the string of Category Name to uppercase
-                newCategory.CatName.ToUpper();
-
-                Database.Categories.Add(newCategory);
-                Database.SaveChanges();//Telling the database model to save the changes
-            }
-            catch (Exception exceptionObject)
-            {
-                if (exceptionObject.InnerException.Message
-                          .Contains("Category_CatName_UniqueConstraint") == true)
-                {
-                    customMessage = "Unable to save Category record due " +
-                                  "to another record having the same name as : " +
-                                  categoryNewInput.CatName.Value;
-                    //Create a fail message anonymous object that has one property, Message.
-                    //This anonymous object's Message property contains a simple string message
-                    object httpFailRequestResultMessage = new { Message = customMessage };
-                    //Return a bad http request message to the client
-                    return BadRequest(httpFailRequestResultMessage);
-                }
-            }//End of Try..Catch block
-
-            //If there is no runtime error in the try catch block, the code execution
-            //should reach here. Sending success message back to the client.
-
-            //******************************************************
-            //Construct a custom message for the client
-            //Create a success message anonymous object which has a 
-            //Message member variable (property)
-            var successRequestResultMessage = new
-            {
-                Message = "Saved Category record"
-            };
-
-            //Create a OkObjectResult class instance, httpOkResult.
-            //When creating the object, provide the previous message object into it.
-            OkObjectResult httpOkResult =
-                        new OkObjectResult(successRequestResultMessage);
-            //Send the OkObjectResult class object back to the client.
-            return httpOkResult;
-        }
-
+        
         //POST /Api/Products/UploadProductPhotosAndSaveProductData
         [HttpPost("UploadNewUpdatedProductPhotos/{id}")]
         public async Task<IActionResult> UploadProductPhotosAndSaveProductData(int id, IList<IFormFile> fileInput)
@@ -252,12 +168,7 @@ namespace WEBA_ASSIGNMENT.APIs
                     {
                         newProductPhoto.isPrimaryPhoto = 0;
                     }
-
-                    //if (firstImage == true)
-                    //{
-                    //    firstImage = false;
-                    //    newProductPhoto.isPrimaryPhoto = 1;
-                    //}
+                    
                     Database.ProductPhotos.Add(newProductPhoto);
                 }
                 innerSystem = innerSystem + 2;
@@ -269,7 +180,7 @@ namespace WEBA_ASSIGNMENT.APIs
             
             var successRequestResultMessage = new
             {
-                Message = "Your amazing product and image/s have been saved!"
+                Message = "Your amazing product image/s have been saved!"
             };
 
             OkObjectResult httpOkResult =
@@ -277,61 +188,7 @@ namespace WEBA_ASSIGNMENT.APIs
             return httpOkResult;
 
         }//End of UploadProductPhotosAndSaveProductData()
-
-        // PUT api/values/5
-        [HttpPut("Restore/{id}")]
-        public IActionResult Restore(int id, [FromBody]string value)
-        {
-            string customMessage = "";
-            var categoryChangeInput = JsonConvert.DeserializeObject<dynamic>(value);
-            try
-            {
-                //Find the category Entity through the Categories Entity Set
-                //by calling the Single() method.
-                //I learnt Single() method from this online reference:
-                //http://geekswithblogs.net/BlackRabbitCoder/archive/2011/04/14/c.net-little-wonders-first-and-single---similar-yet-different.aspx
-                var foundOneCategory = Database.Categories
-                                    .Single(item => item.CatId == id);
-                // No validation checks required, no user provided data.
-                foundOneCategory.DeletedAt = null;
-                foundOneCategory.DeletedById = null;
-                foundOneCategory.UpdatedAt = DateTime.Now;
-                foundOneCategory.UpdatedById = _userManager.GetUserId(User);
-                //Tell the database model to commit/persist the changes to the database, 
-                //I use the following command.
-                Database.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                if (ex.InnerException.Message
-                     .Contains("Category_CatName_UniqueConstraint") == true)
-                {
-                    customMessage = "Unable to Restore Category record due " +
-                                      "to another record having the same name as : " +
-                    categoryChangeInput.CatName.Value;
-                    //Create a fail message anonymous object that has one property, Message.
-                    //This anonymous object's Message property contains a simple string message
-                    object httpFailRequestResultMessage = new { Message = customMessage };
-                    //Return a bad http request message to the client
-                    return BadRequest(httpFailRequestResultMessage);
-                }
-            }//End of try .. catch block on saving data
-             //Construct a custom message for the client
-             //Create a success message anonymous object which has a 
-             //Message member variable (property)
-            var successRequestResultMessage = new
-            {
-                Message = "The category has been restored to glory!"
-            };
-
-            //Create a OkObjectResult class instance, httpOkResult.
-            //When creating the object, provide the previous message object into it.
-            OkObjectResult httpOkResult =
-                   new OkObjectResult(successRequestResultMessage);
-            //Send the OkObjectResult class object back to the client.
-            return httpOkResult;
-        }
-
+              
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
