@@ -150,7 +150,9 @@
     //------------------------------------ Client-side Load Data logic ---(End)---------------------------
 
     //------------------------------------ Client-side Upload logic -----------------------------------------
+
     window.$productPhotoInputElement = $('#fileInput');
+
     var footerTemplate = '<div class="file-thumbnail-footer">\n' +
     '    <div class="file-caption-name" style="width:{width}">{caption}</div>\n' +
     '    {actions}\n' +
@@ -158,18 +160,20 @@
     var actionTemplate = '<div class="file-actions">\n' +
      '       <div class="file-footer-buttons">\n {delete} </div>\n' +
      '    <div class="file-upload-indicator" tabindex="-1" title="{indicatorTitle}">{indicator}</div>\n' +
+     '   <div class="radio"><input class="primaryRadioClass" id="isPrimaryRadioBox" name="isPrimaryRadioBox" type="radio" ><label for="isPrimaryRadioBox">Primary Photo</label></div>' +
      '    <div class="clearfix"></div>\n' +
      '</div>';
-    window.$productPhotoInputElement.fileinput({
+
+    $('#fileInput').fileinput({
         previewFileType: 'image',
         allowedFileTypes: ['image'],
-        uploadUrl: '/API/Brands/UploadBrandPhotoAndUpdateBrandData',
+        uploadUrl: '/API/ProductPhotos/UploadNewUpdatedProductPhotos/' + g_prodId,
         uploadAsync: false,
-        maxFileCount: 1,
+        maxFileCount: 5,
         layoutTemplates: { footer: footerTemplate, actions: actionTemplate },
         type: 'post',
         msgInvalidFileType: 'Invalid type for file "{name}". Only "{types}" files are supported.',
-        autoReplace: true,/*http://plugins.krajee.com/file-auto-replace-demo*/
+        autoReplace: true,
         overwriteInitial: false,
         showUploadedThumbs: false,
         showUpload: false,
@@ -177,21 +181,49 @@
         browseClass: 'btn btn-primary btn-md pull-right',
         previewFileIcon: '<i class="glyphicon glyphicon-king"></i>',
         allowedFileExtensions: ['jpg', 'jpeg', 'png'],
-        uploadExtraData: function () {  // callback example
-            var out = {};
+        uploadExtraData: function () {
+            var out = {}, counter = 0, key, innerSystem = 0;
+
+            // InnerSystem System for Multi ProductPhotos
+            // Even numbers identify it as a primary photo
+            // Odd does the other way round
+            // Learnt alot from this
+            // And from Mr Tan's way of identifying the value for his fileinput
+            // http://plugins.krajee.com/file-input-ajax-demo/7
+
+            //in the array pack the value you want for the very exact parameter name you have in the UploadAsync method/function
+            //if UploadAsync(string mytext) then out['mytext']=THE_VALUE;
+            $('.primaryRadioClass').each(function () {
+                $el = $(this);
+
+                key = $el ? 'new_' + counter : 'init_' + counter;
+                if (($el[0].checked) = true) {
+                    out[key] = innerSystem; // Even is yes
+                } else {
+                    out[key] = innerSystem + 1; // odd is no
+                }
+
+                innerSystem = innerSystem + 2;
+                counter++;
+            });
             return out;
         }
     });
-
+    $('#fileInput').on('filepreupload', function (event, data, previewId, index) {
+        var form = data.form, files = data.files, extra = data.uploadExtraData,
+            response = data.response, reader = data.reader;
+    });
+    $('#fileInput').on('filebatchpreupload', function (event, data, jqXHR) {
+        var form = data.form, files = data.files, extra = data.uploadExtraData,
+            response = data.response, reader = data.reader;
+    });
     window.$productPhotoInputElement.on('filebatchuploadsuccess',
-                  function (event, data, previewId, index) {
-                      //It is not necessary that an upload has occurred because the user
-                      //may have only made changes to the employee data but did not
-                      //select a new file.
-                      var form = data.form, files = data.files, extra = data.extra,
-                      response = data.response, reader = data.reader;
-                      swal("Hurray!", data.response.message, "Success");
-                  });
+                         function (event, data, previewId, index) {
+                             var form = data.form, files = data.files, extra = data.extra,
+                                 response = data.response, reader = data.reader;
+                             swal("Hurray!", data.response.message, "Success");
+                         });
+
     //----------------------------------------- Client-side Upload logic ---(End)----------------------
 
 
@@ -199,23 +231,12 @@
     $('#saveButton').on('click', function () {
         //Collect data from input elements
         if ($('#fileInput').get(0).files.length > 0) {
-            $saveProductPhotoHandler = jQuery.ajax({
-                method: 'PUT',
-                contentType: 'application/json',
-                url: '/Api/ProductPhotos/UploadProductPhotos/' + g_prodId,
-                data: "'" + webFormDataInString + "'"
-            });
-            $saveProductPhotoHandler.done(function (data, textStatus, jqXHR) {
-                if (window.$brandPhotoInputElement.val() != '') {
-                    //Using this command will get the FileUpload widget to begin upload
-                    window.$productPhotoInputElement.fileinput('upload');
-                } else {
-                    swal("Hurray!", data.response.message, "success");
-                }
-            });
-            $saveProductPhotoHandler.fail(function (data, textStatus, jqXHR) {
-                swal("Oh no!", data.response.message, "error");
-            });
+            if (window.$productPhotoInputElement.val() != '') {
+                //Using this command will get the FileUpload widget to begin upload
+                window.$productPhotoInputElement.fileinput('upload');
+            } else {
+                swal("Hurray!", data.response.message, "success");
+            }
         }//end of if (numberOfFiles>0) condition block
 
         if ($('#fileInput').get(0).files.length == 0) {

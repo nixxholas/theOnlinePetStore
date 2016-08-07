@@ -13,6 +13,10 @@ using Microsoft.AspNetCore.Identity;
 using WEBA_ASSIGNMENT.Services;
 using Microsoft.Extensions.Logging;
 using WEBA_ASSIGNMENT.Controllers;
+using Microsoft.Net.Http.Headers;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using WEBA_ASSIGNMENT.Helper;
 
 namespace WEBA_ASSIGNMENT.APIs
 {
@@ -197,94 +201,82 @@ namespace WEBA_ASSIGNMENT.APIs
             return httpOkResult;
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]string value)
+        //POST /Api/Products/UploadProductPhotosAndSaveProductData
+        [HttpPost("UploadNewUpdatedProductPhotos/{id}")]
+        public async Task<IActionResult> UploadProductPhotosAndSaveProductData(int id, IList<IFormFile> fileInput)
         {
-            string customMessage = "";
-            string format = "dd/MM/yyyy";
-            var categoryChangeInput = JsonConvert.DeserializeObject<dynamic>(value);
-            //To obtain the category name information:
-            //use categoryChangeInput.categoryName.value
-            //To obtain the address information:
-            //use categoryChangeInput.Address.value
-            try
+            // boolean to force the first image to be the default image
+            bool alreadyHasPrimary = false;
+
+            // Let's get the current product linked to these images first
+            var foundProduct = Database.Products
+                .Where(Product => Product.ProdId == id)
+                .Include(Product => Product.ProductPhotos)
+                .Single();
+
+            // Define values for the isPrimaryPhoto Array
+            int fileDataIndex = 0;
+            int innerSystem = 0;
+            string fileDataValue = "";
+
+            //Add the Product record first, so that the newProduct
+            //object's ProdId property is updated with the new record's
+            //id.
+
+            foreach (var oneFile in fileInput)
             {
-                //Find the category Entity through the Categories Entity Set
-                //by calling the Single() method.
-                //I learnt Single() method from this online reference:
-                //http://geekswithblogs.net/BlackRabbitCoder/archive/2011/04/14/c.net-little-wonders-first-and-single---similar-yet-different.aspx
-                var foundOneCategory = Database.Categories
-                                    .Single(item => item.CatId == id);
-                foundOneCategory.CatName = categoryChangeInput.CatName;
-                foundOneCategory.VisibilityId = categoryChangeInput.VisibilityId;
-                if (foundOneCategory.VisibilityId == 2)
+                fileDataValue = Request.Form["NEW_" + fileDataIndex.ToString()].ToString();
+                ProductPhoto newProductPhoto;
+                var fileName = ContentDispositionHeaderValue
+                      .Parse(oneFile.ContentDisposition)
+                      .FileName
+                      .Trim('"');
+                string contentType = oneFile.ContentType;
+
+                newProductPhoto = await Cloudinary.CloudinaryAPIs.UploadProductImageToCloudinary(oneFile.OpenReadStream(), contentType, fileName, "Products");
+
+                if (newProductPhoto.PublicCloudinaryId != "")
                 {
-                    foundOneCategory.StartDate = DateTime.ParseExact(categoryChangeInput.StartDate.Value, format, System.Globalization.CultureInfo.InvariantCulture);
-                    foundOneCategory.EndDate = DateTime.ParseExact(categoryChangeInput.EndDate.Value, format, System.Globalization.CultureInfo.InvariantCulture);
-                    // The one big reason why I implemented server-sided validation.
-                    // http://net-informations.com/faq/asp/validation.htm
-                    //
-                    // Let's compare the two dates to make sure the StartDate is later than EndDate
-                    if (DateTime.Compare(foundOneCategory.StartDate.Value, foundOneCategory.EndDate.Value) > 0)
+                    //Copy over the new products id information to the ProductPhotos object,
+                    newProductPhoto.Product = foundProduct; // Relationship Fix
+
+                    //newProductPhoto.ProdId = newProduct.ProdId;
+                    newProductPhoto.CreatedById = _userManager.GetUserId(User);
+                    // Attempt to test the isPrimaryPhoto variable
+                    if (fileDataValue == (innerSystem).ToString() && alreadyHasPrimary == false)
                     {
-                        // But if it is later, we'll toss them an error for SweetAlert to throw out.
-                        customMessage = "Please enter your start date that is before your end date.";
-                        object httpFailRequestResultMessage = new { Message = customMessage };
-                        // Return a bad http request message to the client
-                        // Good job to the user who's trolling with me, good try
-                        return BadRequest(httpFailRequestResultMessage);
+                        newProductPhoto.isPrimaryPhoto = 1;
+                        alreadyHasPrimary = true;
                     }
+                    else
+                    {
+                        newProductPhoto.isPrimaryPhoto = 0;
+                    }
+
+                    //if (firstImage == true)
+                    //{
+                    //    firstImage = false;
+                    //    newProductPhoto.isPrimaryPhoto = 1;
+                    //}
+                    Database.ProductPhotos.Add(newProductPhoto);
                 }
-                else
-                {
-                    foundOneCategory.StartDate = null;
-                    foundOneCategory.EndDate = null;
-                }
-
-
-                // Turn the category name input to upper case
-                foundOneCategory.CatName.ToUpper();
-
-                // Not needed, we don't have to modify the id.
-                // foundOneCategory.CatId = Int32.Parse(categoryChangeInput.CatId.Value);
-                foundOneCategory.UpdatedAt = DateTime.Now;
-                foundOneCategory.UpdatedById = _userManager.GetUserId(User);
-
-                //Tell the database model to commit/persist the changes to the database, 
-                //I use the following command.
-                Database.SaveChanges();
+                innerSystem = innerSystem + 2;
+                fileDataIndex += 1;
             }
-            catch (Exception ex)
-            {
-                if (ex.InnerException.Message
-                     .Contains("Category_CatName_UniqueConstraint") == true)
-                {
-                    customMessage = "Unable to save Category record due " +
-                                      "to another record having the same name as : " +
-                    categoryChangeInput.CatName.Value;
-                    //Create a fail message anonymous object that has one property, Message.
-                    //This anonymous object's Message property contains a simple string message
-                    object httpFailRequestResultMessage = new { Message = customMessage };
-                    //Return a bad http request message to the client
-                    return BadRequest(httpFailRequestResultMessage);
-                }
-            }//End of try .. catch block on saving data
-             //Construct a custom message for the client
-             //Create a success message anonymous object which has a 
-             //Message member variable (property)
+
+            Database.Products.Update(foundProduct);
+            Database.SaveChanges();
+            
             var successRequestResultMessage = new
             {
-                Message = "The amazing category record has been saved!"
+                Message = "Your amazing product and image/s have been saved!"
             };
 
-            //Create a OkObjectResult class instance, httpOkResult.
-            //When creating the object, provide the previous message object into it.
             OkObjectResult httpOkResult =
-                   new OkObjectResult(successRequestResultMessage);
-            //Send the OkObjectResult class object back to the client.
+                new OkObjectResult(successRequestResultMessage);
             return httpOkResult;
-        }
+
+        }//End of UploadProductPhotosAndSaveProductData()
 
         // PUT api/values/5
         [HttpPut("Restore/{id}")]
