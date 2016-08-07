@@ -171,7 +171,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <div id="metricId" value="0"></div>
                     <div class="form-group col-md-12" id="metricAmountBox">
                         <label class="control-label col-md-2" for="metricAmountInput">Metric Amount</label>
                         <div class="form-group col-md-9">
@@ -532,7 +532,7 @@
         // Custom Metric Row
         $("#customRowBtn").click(function () {
             $("#metricsTableBody").append(
-                '<tr value="0" valign="top">' +
+                '<tr value="0" valign="top" value="0">' +
                 '<td name="metricAmountField">' +
                 '<input type="text" class="form-control font-bold" id="metricAmount" name="metricAmount" value="" placeholder="Metric Amount" />' +
                 '</td>' +
@@ -563,7 +563,7 @@
         // Preset Metric Row
         $("#rowBtn").click(function () {
             $("#metricsTableBody").append(
-                '<tr value="1" valign="top">' +
+                '<tr value="1" valign="top" value="0">' +
                 // Store a value in the first column to show whether
                 // if it's preset or custom.
                 '<td name="metricAmountField">' +
@@ -621,7 +621,7 @@
         $loadMetricsDataHandler.done(function (data, textStatus, jqXHR) {
             // We'll have to check if there is 1 or more Metric
             if (data.length == 1) {
-                console.dir(data[0]);
+                $('#metricId').val(data[0].metricId); // MetricId
                 $('#metricAmountInput').val(data[0].metricAmount); // Metric Amount
 
                 // Metric Type
@@ -990,6 +990,7 @@
         // If there are no custom sizes or variations
         if ($('#metricSegment').hasClass('hidden')) {
             // Metric Amount Input & Validation
+            var collectedMetricId = $('#metricId');
             var collectedMetricAmount = $('#metricAmountInput').val();
             if (collectedMetricAmount == null || collectedMetricAmount == "") {
                 document.getElementById("errorBoxText").innerHTML += "<strong> Please enter a metric amount for your metric type! </strong><br />";
@@ -1048,7 +1049,7 @@
 
             // Push the single metric into the array of metrics
             // (inMetricAmount, inMetricType, inQuantity, inPrice, inRRP, inStatus)
-            MetricData.push(new Metric(collectedMetricAmount, collectedMetricType, collectedQuantity, collectedPrice, collectedRRP, collectedStatusId, collectedIsPreset))
+            MetricData.push(new Metric(collectedMetricId, collectedMetricAmount, collectedMetricType, collectedQuantity, collectedPrice, collectedRRP, collectedStatusId, collectedIsPreset))
 
             // DONE
 
@@ -1081,7 +1082,7 @@
                 var Price = '';
                 var RRP = '';
                 var Status = '';
-                var StatusId = table.rows[i].id;
+                var MetricId = table.rows[i].id;
 
                 for (var j = 0, col; col = row.cells[j]; j++) {
                     // Define a variable for validation
@@ -1148,7 +1149,7 @@
                     }
                 }
                 // Finally we push the metric object to the MetricData
-                MetricData.push(new Metric(StatusId, MetricAmount, json_quote(MetricType), Quantity, Price, RRP, Status, isPreset));
+                MetricData.push(new Metric(MetricId, MetricAmount, json_quote(MetricType), Quantity, Price, RRP, Status, isPreset));
             }
             // Constructing the webformdata object for a product with alot of metric units
 

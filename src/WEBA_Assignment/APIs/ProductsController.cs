@@ -657,7 +657,7 @@ namespace WEBA_ASSIGNMENT.APIs
                             .Where(input => input.MetricSubType == MetricType).Single();
                         Metrics newMetric = new Metrics();
                         newMetric.Prices = new List<Price>();
-                        //newMetric.ProdId = newProduct.ProdId;
+                        newMetric.MetricId = Int32.Parse(Metric.MetricId.Value); // Used for Identification
                         newMetric.MetricAmount = Int32.Parse(Metric.MetricAmount.Value);
                         newMetric.MetricType = presetMetricUsed.MetricType; // Taken from PresetMetrics Table
                         newMetric.PMetricId = presetMetricUsed.PMetricId; // Only for Preset Metrics
@@ -685,7 +685,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         // Time to construct a custom metric
                         Metrics newMetric = new Metrics();
                         newMetric.Prices = new List<Price>();
-                        //newMetric.ProdId = newProduct.ProdId;
+                        newMetric.MetricId = Int32.Parse(Metric.MetricId.Value); // Used for Identification
                         newMetric.MetricAmount = Int32.Parse(Metric.MetricAmount.Value);
                         newMetric.MetricType = Metric.MetricType.Value;
                         newMetric.Quantity = Int32.Parse(Metric.Quantity.Value);
@@ -721,32 +721,115 @@ namespace WEBA_ASSIGNMENT.APIs
                 foundOneProduct.Published = productToBeUpdated.Published;
                 foundOneProduct.ThresholdInvertoryQuantity = productToBeUpdated.ThresholdInvertoryQuantity;
 
+                /**
+                 * Compared to the POST for Products,
+                 * The Metrics that we are taking in from Update includes
+                 * the MetricId of the previously created Metrics.
+                 * 
+                 * This allows us to easily identify and modify the Metrics to our liking.
+                 * 
+                 * Transistor Method,
+                 * 
+                 * The Update.cshtml body tags each Metric with its own MetricId.
+                 * However, if the MetricId didn't exist in the first place, It will be 0.
+                 * If it isn't 0, means it is a metric that has already existed.
+                 * 
+                 * This way, we can update, add or even remove the Metrics that was modified by the user.
+                 **/
 
                 // Pull the List of Metrics if there are lots of em'
                 var metricsOfProduct = Database.Metrics
                     .Where(eachMetric => eachMetric.ProdId == id)
                     .Where(eachMetric => eachMetric.DeletedAt == null)
-                    .Include(eachMetric => eachMetric.Prices);
+                    .Include(eachMetric => eachMetric.Prices).Where(price => price.DeletedAt == null);
                 
-                    foreach (var Metric in metricsOfProduct)
+                // Using the Transistor Method,
+                foreach (var newMetric in productToBeUpdated.Metrics)
+                {
+                    if (newMetric.MetricId == 0) // If this is a new Metric
                     {
-                        // Iterate through the productToBeUpdated Metric
-                        foreach (var updatedMetric in productToBeUpdated.Metrics)
+                        // We'll then add it into the metricsOfProduct
+                        // However, we cannot use newMetric because 0 has been
+                        // hardcoded as its key..
+                        // We'll now create a new object to reinitialize a key for it
+                        Metrics newMetricToDB = new Metrics();
+                        newMetricToDB.MetricAmount = newMetric.MetricAmount;
+                        newMetricToDB.MetricType = newMetric.MetricType;
+                        
+                        // if this is a preset metric
+                        if (newMetric.PMetricId != null)
                         {
-                            // Both the metrics have the same amount and type, we'll update it
-                            if (updatedMetric.PMetricId == Metric.PMetricId && updatedMetric.MetricAmount == Metric.MetricAmount)
-                            {
-                            // Update the general metric attributes
-                            Metric.Quantity = updatedMetric.Quantity;
-                            Metric.Status = updatedMetric.Status;
-                            Metric.StatusId = updatedMetric.StatusId;
-                            
-                            // Then update the price
-                            
-                            }
+                            newMetricToDB.PMetricId = newMetric.PMetricId;
                         }
+
+                        newMetricToDB.StatusId = newMetric.StatusId;
+                        newMetricToDB.CreatedById = _userManager.GetUserId(User);
+
+                        Price price = new Price();
+                        foreach (var newPrice in newMetric.Prices)
+                        {
+                            price.RRP = newPrice.RRP;
+                            price.Value = newPrice.Value;
+                            price.CreatedById = _userManager.GetUserId(User);
+                        }
+
+                        // Push the Metric and price to the product
+                        newMetricToDB.Prices.Add(price);
+                        foundOneProduct.Metrics.Add(newMetricToDB);
+                    } else // Else it would be updating a metric
+                    {                       
+                        // We'll need to search for the existing metric in
+                        // metricsOfProduct
+                        foreach (var existingMetric in metricsOfProduct)
+                        {
+                            // If we've found it, Update it
+                            if (existingMetric.MetricId == newMetric.MetricId)
+                            {
+                                existingMetric.MetricAmount = newMetric.MetricAmount;
+                                existingMetric.MetricType = newMetric.MetricType;
+
+                                // if this is a preset metric
+                                if (newMetric.PMetricId != null)
+                                {
+                                    existingMetric.PMetricId = newMetric.PMetricId;
+                                }
+
+                                // Update the price as well
+                                // In order to follow the standards, I've set, delete
+                                // the existing row and add the new one in
+
+                                // Delete first
+                                foreach (var existingPrice in existingMetric.Prices)
+                                {
+                                    if (existingPrice.DeletedAt == null)
+                                    {
+                                        existingPrice.DeletedAt = DateTime.Now;
+                                        existingPrice.DeletedById = _userManager.GetUserId(User);
+                                    }
+                                }
+
+                                // Add now
+                                Price price = new Price();
+                                foreach (var newPrice in newMetric.Prices)
+                                {
+                                    price.RRP = newPrice.RRP;
+                                    price.Value = newPrice.Value;
+                                    price.CreatedById = _userManager.GetUserId(User);
+                                }
+
+                                // Add the price back in
+                                existingMetric.Prices.Add(price);
+
+                                // Finally, we update the metric
+                                Database.Metrics.Update(existingMetric);
+                            }
+
+                        }
+
+                        // Now we'll need to delete entries that do not exist anymore...
+
                     }
-                                   
+                }  
 
                 foundOneProduct.UpdatedAt = DateTime.Now;
                 foundOneProduct.UpdatedById = _userManager.GetUserId(User);
