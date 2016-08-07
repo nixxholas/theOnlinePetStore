@@ -532,7 +532,7 @@
         // Custom Metric Row
         $("#customRowBtn").click(function () {
             $("#metricsTableBody").append(
-                '<tr value="0" valign="top" value="0">' +
+                '<tr value="0" valign="top" id="0">' +
                 '<td name="metricAmountField">' +
                 '<input type="text" class="form-control font-bold" id="metricAmount" name="metricAmount" value="" placeholder="Metric Amount" />' +
                 '</td>' +
@@ -563,7 +563,7 @@
         // Preset Metric Row
         $("#rowBtn").click(function () {
             $("#metricsTableBody").append(
-                '<tr value="1" valign="top" value="0">' +
+                '<tr value="1" valign="top" id="0">' +
                 // Store a value in the first column to show whether
                 // if it's preset or custom.
                 '<td name="metricAmountField">' +
@@ -1178,10 +1178,10 @@
             data: "'" + webFormDataInString + "'"
         });
         $saveProductHandler.done(function (data, textStatus, jqXHR) {
-            console.dir(data);
+            swal("Hurray!", data.message, "success");
         });
         $saveProductHandler.fail(function (data, textStatus, jqXHR) {
-            swal("Oh no!", data.responseJSON.message, "error");
+            swal("Oh no!", data.message, "error");
         });
     });//end of $('#saveButton').on('click', function () {
 

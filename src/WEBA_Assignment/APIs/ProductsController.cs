@@ -713,6 +713,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         .Where(eachProduct => eachProduct.ProdId == id)
                         .Include(eachProduct => eachProduct.Brand)
                         .Include(eachProduct => eachProduct.Consumable)
+                        .Include(eachProduct => eachProduct.Metrics)
                         .Single();
 
                 // Let's update the general stuff first           
@@ -753,6 +754,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         // hardcoded as its key..
                         // We'll now create a new object to reinitialize a key for it
                         Metrics newMetricToDB = new Metrics();
+                        newMetricToDB.Prices = new List<Price>();
                         newMetricToDB.MetricAmount = newMetric.MetricAmount;
                         newMetricToDB.MetricType = newMetric.MetricType;
                         
@@ -781,7 +783,10 @@ namespace WEBA_ASSIGNMENT.APIs
                     } else // Else it would be updating a metric
                     {
                         // For crossing checking later
-                        DateTime currentTime = DateTime.Now;
+                        // Using date to check is horrible, switch to a list
+                        // of IDs so that we'll know what is coming
+                        // DateTime currentTime = DateTime.Now;
+                        List<Int32> metricIdList = new List<Int32>();
 
                         // We'll need to search for the existing metric in
                         // metricsOfProduct
@@ -790,6 +795,9 @@ namespace WEBA_ASSIGNMENT.APIs
                             // If we've found it, Update it
                             if (existingMetric.MetricId == newMetric.MetricId)
                             {
+                                // let's add it to the MetricIdList first
+                                metricIdList.Add(existingMetric.MetricId);
+
                                 existingMetric.MetricAmount = newMetric.MetricAmount;
                                 existingMetric.MetricType = newMetric.MetricType;
 
@@ -837,12 +845,15 @@ namespace WEBA_ASSIGNMENT.APIs
                         // Now we'll need to delete entries that do not exist anymore...
                         foreach (var existingMetric in metricsOfProduct)
                         {
-                            if (existingMetric.UpdatedAt < currentTime) // If it's old
+                            if (existingMetric.ProdId == id) // Check prodId first just incase
                             {
-                                // Begone
-                                existingMetric.DeletedAt = DateTime.Now;
-                                existingMetric.DeletedById = _userManager.GetUserId(User);
-                                Database.Metrics.Update(existingMetric);
+                                if (!metricIdList.Contains(existingMetric.MetricId))
+                                {
+                                    // Begone
+                                    existingMetric.DeletedAt = DateTime.Now;
+                                    existingMetric.DeletedById = _userManager.GetUserId(User);
+                                    Database.Metrics.Update(existingMetric);
+                                } 
                             }   
                         }
                     }
