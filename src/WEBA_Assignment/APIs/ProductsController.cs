@@ -743,7 +743,7 @@ namespace WEBA_ASSIGNMENT.APIs
                     .Where(eachMetric => eachMetric.ProdId == id)
                     .Where(eachMetric => eachMetric.DeletedAt == null)
                     .Include(eachMetric => eachMetric.Prices);
-                
+
                 // Using the Transistor Method,
                 foreach (var newMetric in productToBeUpdated.Metrics)
                 {
@@ -757,6 +757,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         newMetricToDB.Prices = new List<Price>();
                         newMetricToDB.MetricAmount = newMetric.MetricAmount;
                         newMetricToDB.MetricType = newMetric.MetricType;
+                        newMetricToDB.Quantity = newMetric.Quantity;
                         
                         // if this is a preset metric
                         if (newMetric.PMetricId != null)
@@ -800,6 +801,7 @@ namespace WEBA_ASSIGNMENT.APIs
 
                                 existingMetric.MetricAmount = newMetric.MetricAmount;
                                 existingMetric.MetricType = newMetric.MetricType;
+                                existingMetric.Quantity = newMetric.Quantity;
 
                                 // if this is a preset metric
                                 if (newMetric.PMetricId != null)
@@ -842,20 +844,21 @@ namespace WEBA_ASSIGNMENT.APIs
 
                         }
 
+                        // NOT WORKING YET
                         // Now we'll need to delete entries that do not exist anymore...
-                        foreach (var existingMetric in metricsOfProduct)
-                        {
-                            if (existingMetric.ProdId == id) // Check prodId first just incase
-                            {
-                                if (!metricIdList.Contains(existingMetric.MetricId))
-                                {
-                                    // Begone
-                                    existingMetric.DeletedAt = DateTime.Now;
-                                    existingMetric.DeletedById = _userManager.GetUserId(User);
-                                    Database.Metrics.Update(existingMetric);
-                                } 
-                            }   
-                        }
+                        //foreach (var existingMetric in foundOneProduct.Metrics)
+                        //{
+                        //    if (existingMetric.ProdId == id) // Check prodId first just incase
+                        //    {
+                        //        if (!metricIdList.Contains(existingMetric.MetricId))
+                        //        {
+                        //            // Begone
+                        //            existingMetric.DeletedAt = DateTime.Now;
+                        //            existingMetric.DeletedById = _userManager.GetUserId(User);
+                        //            Database.Metrics.Update(existingMetric);
+                        //        } 
+                        //    }   
+                        //}
                     }
                 }  
 
