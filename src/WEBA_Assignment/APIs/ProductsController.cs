@@ -741,7 +741,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 var metricsOfProduct = Database.Metrics
                     .Where(eachMetric => eachMetric.ProdId == id)
                     .Where(eachMetric => eachMetric.DeletedAt == null)
-                    .Include(eachMetric => eachMetric.Prices).Where(price => price.DeletedAt == null);
+                    .Include(eachMetric => eachMetric.Prices);
                 
                 // Using the Transistor Method,
                 foreach (var newMetric in productToBeUpdated.Metrics)
