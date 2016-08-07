@@ -656,6 +656,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         var presetMetricUsed = Database.PresetMetrics
                             .Where(input => input.MetricSubType == MetricType).Single();
                         Metrics newMetric = new Metrics();
+                        newMetric.Prices = new List<Price>();
                         //newMetric.ProdId = newProduct.ProdId;
                         newMetric.MetricAmount = Int32.Parse(Metric.MetricAmount.Value);
                         newMetric.MetricType = presetMetricUsed.MetricType; // Taken from PresetMetrics Table
@@ -683,6 +684,7 @@ namespace WEBA_ASSIGNMENT.APIs
                     {
                         // Time to construct a custom metric
                         Metrics newMetric = new Metrics();
+                        newMetric.Prices = new List<Price>();
                         //newMetric.ProdId = newProduct.ProdId;
                         newMetric.MetricAmount = Int32.Parse(Metric.MetricAmount.Value);
                         newMetric.MetricType = Metric.MetricType.Value;
