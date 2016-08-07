@@ -361,7 +361,7 @@ namespace WEBA_ASSIGNMENT.APIs
 
                 // Initialize the ProductPhotos list first
                 newProduct.ProductPhotos = new List<ProductPhoto>();
-
+                
                 // Iterate through the metric list
                 foreach (var Metric in productNewInput.Metrics)
                 {
@@ -375,6 +375,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         var presetMetricUsed = Database.PresetMetrics
                             .Where(input => input.MetricSubType == MetricType).Single();
                         Metrics newMetric = new Metrics();
+                        newMetric.Prices = new List<Price>();
                         //newMetric.ProdId = newProduct.ProdId;
                         newMetric.MetricAmount = Int32.Parse(Metric.MetricAmount.Value);
                         newMetric.MetricType = presetMetricUsed.MetricType; // Taken from PresetMetrics Table
@@ -389,6 +390,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         
                         Price price = new Price();
                         // Have not converted to decimal yet
+                        price.Metric = newMetric; // Relationship Declaration?
                         price.RRP = Convert.ToDecimal(Metric.RRP.Value);
                         price.Value = Convert.ToDecimal(Metric.Price.Value);
                         price.CreatedById = _userManager.GetUserId(User);
@@ -402,6 +404,7 @@ namespace WEBA_ASSIGNMENT.APIs
                     {
                         // Time to construct a custom metric
                         Metrics newMetric = new Metrics();
+                        newMetric.Prices = new List<Price>();
                         //newMetric.ProdId = newProduct.ProdId;
                         newMetric.MetricAmount = Int32.Parse(Metric.MetricAmount.Value);
                         newMetric.MetricType = Metric.MetricType.Value;

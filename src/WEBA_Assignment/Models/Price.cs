@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace WEBA_ASSIGNMENT.Models
 {
@@ -9,6 +7,7 @@ namespace WEBA_ASSIGNMENT.Models
     {
         public int PriceId { get; set; }
         public int MetricId { get; set; }
+        [JsonIgnore]
         public Metrics Metric { get; set; }
         public decimal Value { get; set; }
         // This must be nullable incase there is an in-house brand
