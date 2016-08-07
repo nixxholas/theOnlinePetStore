@@ -27,9 +27,8 @@ namespace WEBA_ASSIGNMENT.Models
         // Product that is binded to this metric system
         [JsonIgnore]
         public Product Product { get; set; }
-        public int PriceId { get; set; }
         // Price per metric
-        public Price Price { get; set; }
+        public List<Price> Prices { get; set; }
         public string CreatedById { get; set; }
         public string DeletedById { get; set; }
         public ApplicationUser CreatedBy { get; set; }

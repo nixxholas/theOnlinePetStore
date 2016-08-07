@@ -569,11 +569,11 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasColumnType("int")
                 .IsRequired();
             
-            modelBuilder.Entity<Metrics>()
-                .Property(input => input.PriceId)
-                .HasColumnName("PriceId")
-                .HasColumnType("int")
-                .IsRequired();
+            //modelBuilder.Entity<Metrics>()
+            //    .Property(input => input.PriceId)
+            //    .HasColumnName("PriceId")
+            //    .HasColumnType("int")
+            //    .IsRequired();
 
             modelBuilder.Entity<Metrics>()
                 .Property(input => input.StatusId)
@@ -602,9 +602,9 @@ namespace WEBA_ASSIGNMENT.Data
                 .HasForeignKey(input => input.PMetricId);
 
             modelBuilder.Entity<Metrics>()
-                .HasOne(input => input.Price)
+                .HasMany(input => input.Prices)
                 .WithOne(input => input.Metric)
-                .HasForeignKey<Metrics>(input => input.PriceId);
+                .HasForeignKey(input => input.MetricId);
 
             modelBuilder.Entity<Metrics>()
                 .HasOne(input => input.Status)

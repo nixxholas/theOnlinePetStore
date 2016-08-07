@@ -706,47 +706,38 @@ namespace WEBA_ASSIGNMENT.APIs
                         .Include(eachProduct => eachProduct.Consumable)
                         .Single();
 
-                // Pull the Metrics
-                var metricsOfProduct = Database.Metrics
-                    .Where(eachMetric => eachMetric.ProdId == id)
-                    .Where(eachMetric => eachMetric.DeletedAt == null)
-                    .Include(eachMetric => eachMetric.Price);                    
-
                 // Let's update the general stuff first           
                 foundOneProduct.ProdName = productToBeUpdated.ProdName;
                 foundOneProduct.BrandId = productToBeUpdated.BrandId;
                 foundOneProduct.Published = productToBeUpdated.Published;
                 foundOneProduct.ThresholdInvertoryQuantity = productToBeUpdated.ThresholdInvertoryQuantity;
 
-                // Update Metrics
-                /**
-                 * We need to check whether it exists first, then update it
-                 * if it doesn't exist, add it
-                 * if an old metric no longer exists, delete it 
-                 * 
-                 * But in this case, we delete all of the old ones 
-                 * and add the new ones 
-                 **/
-                 foreach (var Metric in metricsOfProduct) // For each metric row in the database
-                {
-                    // Iterate through what is going to be updated
-                }
 
-                // All begone
-                // foreach (var Metric in foundOneProduct.Metrics)
-                //{
-                //    Metric.DeletedAt = DateTime.Now;
-                //    Metric.Price.DeletedAt = DateTime.Now;
-                //    Metric.DeletedById = _userManager.GetUserId(User);
-                //    Metric.Price.DeletedById = _userManager.GetUserId(User);
-                //    Database.Metrics.Update(Metric);
-                //}
-
-                //foreach (var Metric in productToBeUpdated.Metrics)
-                //{
-                //    foundOneProduct.Metrics.Add(Metric);
-                //}
+                // Pull the List of Metrics if there are lots of em'
+                var metricsOfProduct = Database.Metrics
+                    .Where(eachMetric => eachMetric.ProdId == id)
+                    .Where(eachMetric => eachMetric.DeletedAt == null)
+                    .Include(eachMetric => eachMetric.Price);
                 
+                    foreach (var Metric in metricsOfProduct)
+                    {
+                        // Iterate through the productToBeUpdated Metric
+                        foreach (var updatedMetric in productToBeUpdated.Metrics)
+                        {
+                            // Both the metrics have the same amount and type, we'll update it
+                            if (updatedMetric.PMetricId == Metric.PMetricId && updatedMetric.MetricAmount == Metric.MetricAmount)
+                            {
+                            // Update the general metric attributes
+                            Metric.Quantity = updatedMetric.Quantity;
+                            Metric.Status = updatedMetric.Status;
+                            Metric.StatusId = updatedMetric.StatusId;
+                            
+                            // Then update the price
+                            
+                            }
+                        }
+                    }
+                                   
 
                 foundOneProduct.UpdatedAt = DateTime.Now;
                 foundOneProduct.UpdatedById = _userManager.GetUserId(User);
