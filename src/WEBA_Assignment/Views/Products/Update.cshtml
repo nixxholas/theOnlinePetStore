@@ -664,8 +664,8 @@
                     var Quantity = data[i].quantity;
                     var StatusName = data[i].status.statusName;
                     var StatusId = data[i].status.statusId;
-                    var Price = data[i].price;
-                    var RRP = data[i].rrp;
+                    var Price = data[i].price.value;
+                    var RRP = data[i].price.rrp;
 
                     // If preset metric is not null
                     if (data[i].presetMetric != null) {
@@ -826,7 +826,7 @@
                 }
             } // End of Is a consumable
             
-            $hyperLinkElement = $('<a>View this product\'s photos</a>').attr('href', '/Products/ViewProductPhotos/' + g_prodId);
+            $hyperLinkElement = $('<a>View or Edit this product\'s photos</a>').attr('href', '/Products/ViewProductPhotos/' + g_prodId);
             $hyperLinkElement.addClass('btn btn-primary');
             productPhotosBox.append($hyperLinkElement);
 

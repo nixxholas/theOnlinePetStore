@@ -61,12 +61,15 @@ namespace WEBA_ASSIGNMENT.APIs
                 var foundMetrics = Database.Metrics
                     .Where(input => input.ProdId == id)
                     .Where(input => input.DeletedAt == null)
-                    .Include(input => input.Prices).Where(price => price.DeletedAt == null)
                     .Include(input => input.Status)
                     .Include(input => input.PresetMetric).AsNoTracking();
                  
                 foreach (var metric in foundMetrics)
                 {
+                    var price =  Database.Prices
+                        .Where(input => input.MetricId == metric.MetricId)
+                        .Where(input => input.DeletedAt == null).Single();
+
                     if (metric.PresetMetric == null)
                     {
                         metricList.Add(new
@@ -76,7 +79,7 @@ namespace WEBA_ASSIGNMENT.APIs
                             MetricAmount = metric.MetricAmount,
                             Quantity = metric.Quantity,
                             Status = metric.Status,
-                            Prices = metric.Prices,
+                            Price = price,
                             PresetMetric = metric.PresetMetric
                         });
                     } else
@@ -88,7 +91,7 @@ namespace WEBA_ASSIGNMENT.APIs
                             MetricAmount = metric.MetricAmount,
                             Quantity = metric.Quantity,
                             Status = metric.Status,
-                            Prices = metric.Prices,
+                            Price = price,
                             PresetMetric = metric.PresetMetric
                         });
                     }
