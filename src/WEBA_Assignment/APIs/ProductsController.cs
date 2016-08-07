@@ -394,7 +394,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         price.CreatedById = _userManager.GetUserId(User);
 
                         // Push the Metric and price into the product object
-                        newMetric.Price = price;
+                        newMetric.Prices.Add(price);
                         newProduct.Metrics.Add(newMetric);
                     }
                     else
@@ -420,7 +420,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         price.CreatedById = _userManager.GetUserId(User);
 
                         // Push the Metric and price into the product object
-                        newMetric.Price = price;
+                        newMetric.Prices.Add(price);
                         newProduct.Metrics.Add(newMetric);
                     }
                 }
@@ -496,7 +496,11 @@ namespace WEBA_ASSIGNMENT.APIs
                 {
                     quantity += metric.Quantity;
                     Database.Metrics.Add(metric);
-                    Database.Prices.Add(metric.Price);
+                    // Add the price into the Price table
+                    foreach (var price in metric.Prices)
+                    {
+                        Database.Prices.Add(price);
+                    }
                 }
 
                 // Set the ProductCategories
@@ -668,7 +672,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         price.CreatedById = _userManager.GetUserId(User);
 
                         // Push the Metric and price into the product object
-                        newMetric.Price = price;
+                        newMetric.Prices.Add(price);
                         productToBeUpdated.Metrics.Add(newMetric);
                     }
                     else
@@ -694,7 +698,7 @@ namespace WEBA_ASSIGNMENT.APIs
                         price.CreatedById = _userManager.GetUserId(User);
 
                         // Push the Metric and price into the product object
-                        newMetric.Price = price;
+                        newMetric.Prices.Add(price);
                         productToBeUpdated.Metrics.Add(newMetric);
                     }
                 }
@@ -717,7 +721,7 @@ namespace WEBA_ASSIGNMENT.APIs
                 var metricsOfProduct = Database.Metrics
                     .Where(eachMetric => eachMetric.ProdId == id)
                     .Where(eachMetric => eachMetric.DeletedAt == null)
-                    .Include(eachMetric => eachMetric.Price);
+                    .Include(eachMetric => eachMetric.Prices);
                 
                     foreach (var Metric in metricsOfProduct)
                     {
@@ -877,7 +881,10 @@ namespace WEBA_ASSIGNMENT.APIs
             {
                 quantity += metric.Quantity;
                 Database.Metrics.Add(metric);
-                Database.Prices.Add(metric.Price); // Can work?
+                foreach (var price in metric.Prices)
+                {
+                    Database.Prices.Add(price);
+                }
             }
 
             // Set the product's total quantity here
