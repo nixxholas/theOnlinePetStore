@@ -116,7 +116,71 @@ namespace WEBA_ASSIGNMENT.APIs
                 return BadRequest(httpFailRequestResultMessage);
             }
         }
-        
+
+        // PUT api/values/5
+        [HttpPut("SetPrimary/{id}")]
+        public IActionResult Put(int id)
+        {
+            string customMessage = "";
+            try
+            {
+                //Find the category Entity through the Categories Entity Set
+                //by calling the Single() method.
+                //I learnt Single() method from this online reference:
+                //http://geekswithblogs.net/BlackRabbitCoder/archive/2011/04/14/c.net-little-wonders-first-and-single---similar-yet-different.aspx
+                var foundOneProductPhoto = Database.ProductPhotos
+                                    .Include(item => item.Product)
+                                    .Single(item => item.ProductPhotoId == id);
+
+                if (foundOneProductPhoto.isPrimaryPhoto == 1)
+                {
+                    customMessage = "This image is already a primary photo!.";
+                    object httpFailRequestResultMessage = new { Message = customMessage };
+                    //Return a bad http request message to the client
+                    return BadRequest(httpFailRequestResultMessage);
+                }
+
+                int prodId = foundOneProductPhoto.Product.ProdId;
+
+                var photosUnderProduct = Database.ProductPhotos
+                    .Where(item => item.ProdId == prodId)
+                    .Where(item => item.DeletedAt == null);
+
+                // Make sure all images are not primary first
+                foreach (var photo in photosUnderProduct)
+                {
+                    photo.isPrimaryPhoto = 0;
+                    Database.ProductPhotos.Update(photo);
+                }
+
+                // We'll then set the current photo of choice to be the primary photo
+                foundOneProductPhoto.isPrimaryPhoto = 1;
+                Database.ProductPhotos.Update(foundOneProductPhoto);
+                
+                //Tell the database model to commit/persist the changes to the database, 
+                //I use the following command.
+                Database.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+               
+            }//End of try .. catch block on saving data
+             //Construct a custom message for the client
+             //Create a success message anonymous object which has a 
+             //Message member variable (property)
+            var successRequestResultMessage = new
+            {
+                Message = "Your product photo record has been set been set as the primary product image!"
+            };
+
+            //Create a OkObjectResult class instance, httpOkResult.
+            //When creating the object, provide the previous message object into it.
+            OkObjectResult httpOkResult =
+                   new OkObjectResult(successRequestResultMessage);
+            //Send the OkObjectResult class object back to the client.
+            return httpOkResult;
+        }
+
         //POST /Api/Products/UploadProductPhotosAndSaveProductData
         [HttpPost("UploadNewUpdatedProductPhotos/{id}")]
         public async Task<IActionResult> UploadProductPhotosAndSaveProductData(int id, IList<IFormFile> fileInput)
@@ -129,19 +193,13 @@ namespace WEBA_ASSIGNMENT.APIs
                 .Where(Product => Product.ProdId == id)
                 .Include(Product => Product.ProductPhotos)
                 .Single();
-
-            // Define values for the isPrimaryPhoto Array
-            int fileDataIndex = 0;
-            int innerSystem = 0;
-            string fileDataValue = "";
-
+            
             //Add the Product record first, so that the newProduct
             //object's ProdId property is updated with the new record's
             //id.
 
             foreach (var oneFile in fileInput)
             {
-                fileDataValue = Request.Form["NEW_" + fileDataIndex.ToString()].ToString();
                 ProductPhoto newProductPhoto;
                 var fileName = ContentDispositionHeaderValue
                       .Parse(oneFile.ContentDisposition)
@@ -159,20 +217,11 @@ namespace WEBA_ASSIGNMENT.APIs
                     //newProductPhoto.ProdId = newProduct.ProdId;
                     newProductPhoto.CreatedById = _userManager.GetUserId(User);
                     // Attempt to test the isPrimaryPhoto variable
-                    if (fileDataValue == (innerSystem).ToString() && alreadyHasPrimary == false)
-                    {
-                        newProductPhoto.isPrimaryPhoto = 1;
-                        alreadyHasPrimary = true;
-                    }
-                    else
-                    {
-                        newProductPhoto.isPrimaryPhoto = 0;
-                    }
+                    
+                    newProductPhoto.isPrimaryPhoto = 0;
                     
                     Database.ProductPhotos.Add(newProductPhoto);
                 }
-                innerSystem = innerSystem + 2;
-                fileDataIndex += 1;
             }
 
             Database.Products.Update(foundProduct);
@@ -203,6 +252,15 @@ namespace WEBA_ASSIGNMENT.APIs
             {
                 var foundOneProductPhoto = Database.ProductPhotos
                            .Single(item => item.ProductPhotoId == id);
+
+                if (foundOneProductPhoto.isPrimaryPhoto == 1)
+                {
+                    customMessage = "You can't delete a primary photo!.";
+                    object httpFailRequestResultMessage = new { Message = customMessage };
+                    //Return a bad http request message to the client
+                    return BadRequest(httpFailRequestResultMessage);
+                }
+
                 foundOneProductPhoto.DeletedAt = DateTime.Now;
                 foundOneProductPhoto.DeletedById = _userManager.GetUserId(User);
 

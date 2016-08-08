@@ -32,7 +32,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-3"></label>
                     <div class="col-md-12">
-                        <div class="pull-right">
+                        <div class="pull-right" id="btnBox">
                             <input type="button" class="btn btn-primary" value="Save" id="saveButton" />
                             <a class="btn btn-default" asp-action="Index" asp-controler="Products">Cancel</a>
                         </div>
@@ -54,6 +54,9 @@
         var id = urlArray[urlArray.length - 1];
         return id;
     };
+
+    var btnBox = $('#btnBox');
+    btnBox.append('<a onClick="backPage()">Back</a>')
 
     //Note: jQuery.ajax(..) is also often written is $.ajax(..)
     $loadProductPhotosHandler = jQuery.ajax({
@@ -160,7 +163,7 @@
     var actionTemplate = '<div class="file-actions">\n' +
      '       <div class="file-footer-buttons">\n {delete} </div>\n' +
      '    <div class="file-upload-indicator" tabindex="-1" title="{indicatorTitle}">{indicator}</div>\n' +
-     '   <div class="radio"><input class="primaryRadioClass" id="isPrimaryRadioBox" name="isPrimaryRadioBox" type="radio" ><label for="isPrimaryRadioBox">Primary Photo</label></div>' +
+    // '   <div class="radio"><input class="primaryRadioClass" id="isPrimaryRadioBox" name="isPrimaryRadioBox" type="radio" ><label for="isPrimaryRadioBox">Primary Photo</label></div>' +
      '    <div class="clearfix"></div>\n' +
      '</div>';
 
@@ -181,46 +184,45 @@
         browseClass: 'btn btn-primary btn-md pull-right',
         previewFileIcon: '<i class="glyphicon glyphicon-king"></i>',
         allowedFileExtensions: ['jpg', 'jpeg', 'png'],
-        uploadExtraData: function () {
-            var out = {}, counter = 0, key, innerSystem = 0;
+        //uploadExtraData:
+        //    function () {
+        //    var out = {}, counter = 0, key, innerSystem = 0;
 
-            // InnerSystem System for Multi ProductPhotos
-            // Even numbers identify it as a primary photo
-            // Odd does the other way round
-            // Learnt alot from this
-            // And from Mr Tan's way of identifying the value for his fileinput
-            // http://plugins.krajee.com/file-input-ajax-demo/7
+        //    // InnerSystem System for Multi ProductPhotos
+        //    // Even numbers identify it as a primary photo
+        //    // Odd does the other way round
+        //    // Learnt alot from this
+        //    // And from Mr Tan's way of identifying the value for his fileinput
+        //    // http://plugins.krajee.com/file-input-ajax-demo/7
 
-            //in the array pack the value you want for the very exact parameter name you have in the UploadAsync method/function
-            //if UploadAsync(string mytext) then out['mytext']=THE_VALUE;
-            $('.primaryRadioClass').each(function () {
-                $el = $(this);
+        //    //in the array pack the value you want for the very exact parameter name you have in the UploadAsync method/function
+        //    //if UploadAsync(string mytext) then out['mytext']=THE_VALUE;
+        //    $('.primaryRadioClass').each(function () {
+        //        $el = $(this);
 
-                key = $el ? 'new_' + counter : 'init_' + counter;
-                if (($el[0].checked) = true) {
-                    out[key] = innerSystem; // Even is yes
-                } else {
-                    out[key] = innerSystem + 1; // odd is no
-                }
+        //        key = $el ? 'new_' + counter : 'init_' + counter;
+        //        if (($el[0].checked) = true) {
+        //            out[key] = innerSystem; // Even is yes
+        //        } else {
+        //            out[key] = innerSystem + 1; // odd is no
+        //        }
 
-                innerSystem = innerSystem + 2;
-                counter++;
-            });
-            return out;
-        }
+        //        innerSystem = innerSystem + 2;
+        //        counter++;
+        //    });
+        //    return out;
+        //}
     });
     $('#fileInput').on('filepreupload', function (event, data, previewId, index) {
-        var form = data.form, files = data.files, extra = data.uploadExtraData,
-            response = data.response, reader = data.reader;
+        var form = data.form, files = data.files, response = data.response, reader = data.reader;
     });
     $('#fileInput').on('filebatchpreupload', function (event, data, jqXHR) {
-        var form = data.form, files = data.files, extra = data.uploadExtraData,
-            response = data.response, reader = data.reader;
+        var form = data.form, files = data.files, response = data.response, reader = data.reader;
     });
     window.$productPhotoInputElement.on('filebatchuploadsuccess',
                          function (event, data, previewId, index) {
-                             var form = data.form, files = data.files, extra = data.extra,
-                                 response = data.response, reader = data.reader;
+                             var form = data.form, files = data.files, response = data.response, reader = data.reader;
+                             $('body').fadeOut(50, redirectPage);
                              swal("Hurray!", data.response.message, "Success");
                          });
 
@@ -267,19 +269,19 @@
         $setPrimaryProductPhotoHandler.done(function (data, textStatus, jqXHR) {
             swal({
                 title: "Success!",
-                text: data.response.message,
+                text: data.message,
                 type: "success",
                 showCancelButton: false,
                 closeOnConfirm: false,
                 showLoaderOnConfirm: true,
             },
             function () {
-                $('body').fadeOut(2000, redirectPage);
+                $('body').fadeOut(5, redirectPage);
             });
         });//end of $deleteEmployeeHandler.done()
 
         $setPrimaryProductPhotoHandler.fail(function (data, textStatus, jqXHR) {
-            swal("Oh no!", data.response.message, "error");
+            swal("Oh no!", data.responseJSON.message, "error");
         });//end of $deleteEmployeeHandler.fail()
     }
 
@@ -296,26 +298,31 @@
         $deleteProductPhotoHandler.done(function (data, textStatus, jqXHR) {
             swal({
                 title: "Success!",
-                text: data.response.message,
+                text: data.message,
                 type: "success",
                 showCancelButton: false,
                 closeOnConfirm: false,
                 showLoaderOnConfirm: true,
             },
             function () {
-                $('body').fadeOut(2000, redirectPage);
+                $('body').fadeOut(5, redirectPage);
             });
         });//end of $deleteEmployeeHandler.done()
 
         $deleteProductPhotoHandler.fail(function (data, textStatus, jqXHR) {
-            swal("Oh no!", data.response.message, "error");
+            swal("Oh no!", data.responseJSON.message, "error");
         });//end of $deleteEmployeeHandler.fail()
 
     }// end of $('#deleteButton').on('click', function () { ...}
 
     function redirectPage() {
-        location.replace('/ViewProductPhotos/' + g_prodId);
+        location.replace('/Products/ViewProductPhotos/' + g_prodId);
     }// end of redirectPage() method (function)
+
+    function backPage() {
+        location.replace('/Products/Update/' + g_prodId);
+    }// end of redirectPage() method (function)
+
     //----------------------------------------- Client-side Delete logic -(End)-------------------------------------------
 
     // Escape Characters System

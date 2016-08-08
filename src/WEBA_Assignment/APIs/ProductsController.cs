@@ -677,6 +677,17 @@ namespace WEBA_ASSIGNMENT.APIs
                     productToBeUpdated.ProductCategory.Add(newProductCategory);
                 }
                 
+                if (productChangeInput.Metrics.Count == 0) // If there are no metrics,
+                {
+                    // Reject this PUT
+                    customMessage = "Your product does not contain a metric.";
+                    //Create a fail message anonymous object that has one property, Message.
+                    //This anonymous object's Message property contains a simple string message
+                    object httpFailRequestResultMessage = new { Message = customMessage };
+                    //Return a bad http request message to the client
+                    return BadRequest(httpFailRequestResultMessage);
+                }
+
                 // Iterate through the metric list
                 foreach (var Metric in productChangeInput.Metrics)
                 {

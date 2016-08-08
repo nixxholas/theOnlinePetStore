@@ -10,7 +10,6 @@ namespace WEBA_ASSIGNMENT.Controllers
 {
     public class SpecialsController : Controller
     {
-        // GET: /<controller>/
         public IActionResult Index()
         {
             return View();
