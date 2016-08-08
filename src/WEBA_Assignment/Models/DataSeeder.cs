@@ -3548,18 +3548,18 @@ namespace WEBA_ASSIGNMENT.Models
                 ProdName = "AEOLUS TD901 HOSED DRYER",
                 SavingsOverview = "",
                 Description = "<p><strong>DESCRIPTION</strong></p>" +
-                "< hr />" +
-                "< p > &bull; Features & nbsp;: Variable wind speed control with heating option </ p >" +
-                    "< p > &bull; Air speed : 38m / s - 48m / s </ p >" +
-                       "< p > &bull; Power: 1600W </ p >" +
-                         "< p > &bull; Heat: approx 45 & deg; C - 65 & deg; C </ p >" +
-                                 "< p > &bull; Powerful, high velocity dryer delivers a high volume of warm air to blast water from coats </ p >" +
-                    "< p > &bull; Two - stage filtration and solid state variable speed controls </ p >" +
-                         "< p > &bull; Weighing just approximately 5 kg </ p >" +
-                            "< p > &bull; Puncture - resistant, triple reinforced flexible hose with option nozzle </ p >" +
-                                 "< p > &bull; Constructed of rugged, durable steel with non-skid tabs </ p >" +
-                                    "< p > &bull; Dual mounted legs allow both vertical and horizontal use </ p >" +
-                                       "< p > &bull; Washable and easy replace filter </ p > ",
+                "<hr />" +
+                "<p> &bull; Features & nbsp;: Variable wind speed control with heating option </p >" +
+                    "<p> &bull; Air speed : 38m /s - 48m /s </p >" +
+                       "<p> &bull; Power: 1600W </p>" +
+                         "<p> &bull; Heat: approx 45 & deg; C - 65 & deg; C </p >" +
+                                 "<p> &bull; Powerful, high velocity dryer delivers a high volume of warm air to blast water from coats </p >" +
+                    "<p> &bull; Two - stage filtration and solid state variable speed controls </p >" +
+                         "<p > &bull; Weighing just approximately 5 kg </p >" +
+                            "<p> &bull; Puncture - resistant, triple reinforced flexible hose with option nozzle </p >" +
+                                 "<p> &bull; Constructed of rugged, durable steel with non-skid tabs </p >" +
+                                    "<p> &bull; Dual mounted legs allow both vertical and horizontal use </p >" +
+                                       "<p> &bull; Washable and easy replace filter </p > ",
                 Brand = Aeolus,
                 ProductCategory = new List<ProductCategory>(),
                 Quantity = 50,
@@ -3645,6 +3645,8 @@ namespace WEBA_ASSIGNMENT.Models
 
             // ---------------------- END OF PRODUCT PHOTOS SEEDING -------------------- //
 
+
+            // Save the changes made, add all of the seeded data.
             db.SaveChanges();
 
 
