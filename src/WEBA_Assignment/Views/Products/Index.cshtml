@@ -64,6 +64,7 @@
             var TiQ = '';
             var Quantity = '';
             var Published = '';
+            var wordedPublished = '';
             var CreatedAt = "";
             var CreatedBy = "";
             var UpdatedAt = "";
@@ -99,6 +100,13 @@
                 UpdatedAt = product.updatedAt;
                 UpdatedBy = product.updatedBy;
 
+                // Word form for Published
+                if (Published == 1) {
+                    wordedPublished = "Yes";
+                } else {
+                    wordedPublished = "No";
+                }
+
                 //noofBrands = category.BrandCategory.length;
                 // Have not added BrandsOfCategories here
                 // noofProducts = brand.NoOfProducts;
@@ -132,7 +140,7 @@
                 $cellElement = $('<td></td>', { text: Quantity });
                 $rowElement.append($cellElement);
                 // Create the 6th cell element which displays the Published State
-                $cellElement = $('<td></td>', { text: Published });
+                $cellElement = $('<td></td>', { text: wordedPublished });
                 $rowElement.append($cellElement);
                 //Create the 7th cell element which display created at information
                 $cellElement = $('<td></td>', { text: moment(CreatedAt).format('DD/MM/YYYY HH:mm ZZ') });
@@ -148,16 +156,25 @@
                 $rowElement.append($cellElement);
                 if (deletedAt == null) {
                     //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
-                    $hyperLinkElement = $('<a>Update</a>').attr('href', '/Products/Update/' + ProdId);
+                    $hyperLinkElement = $('<a>Update</a><br />').attr('href', '/Products/Update/' + ProdId);
                     $hyperLinkElement.addClass('btn btn-primary');
+                    //---------------- Using jQuery() to create the 2nd hyperlink element using the <a></a> --------
+                    if (Published == 1) {
+                        $hyperLinkElement2 = $('<a id="' + ProdId + '" onClick="ModifyPublicity(this)">Unpublish</a><br />');
+                        $hyperLinkElement2.addClass('btn btn-primary');
+                    } else {
+                        $hyperLinkElement2 = $('<a id="' + ProdId + '" onClick="ModifyPublicity(this)">Publish</a><br />');
+                        $hyperLinkElement2.addClass('btn btn-primary');
+                    }
                     //-----------------Using jQuery() to creating the 6th cell for the row----------------------
                     $cellElement = $('<td></td>');
                     //-----------------Add the previous created hyperlink element, $hyperLinkElement
                     //                 into the newly created 6th cell.
                     $cellElement.append($hyperLinkElement);
+                    $cellElement.append($hyperLinkElement2);
                 } else {
                     //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
-                    $hyperLinkElement3 = $('<a name="restore" id=' + ProdId + ' onClick="restoreCat(' + ProdId + ')">Restore Product</a>'); // Placeholder
+                    $hyperLinkElement3 = $('<a name="restore" id=' + ProdId + ' onClick="restoreCat(' + ProdId + ')">Restore Product</a><br />'); // Placeholder
                     $hyperLinkElement3.addClass('btn btn-primary inline');
                     $cellElement = $('<td></td>');
                     $cellElement.append($hyperLinkElement3);
@@ -220,6 +237,26 @@
         this.CatId = inCatId;
     }
 
+    function ModifyPublicity(element) {
+        var prodId = element.id;
+
+        $updatePublishedHandler = jQuery.ajax({
+            type: 'PUT',
+            url: '/API/Products/ModifyPublicity/' + prodId,
+            dataType: 'json',
+            contentType: 'application/json;'
+        })//end of jQuery.ajax() call
+        $updatePublishedHandler.done(function (data, textStatus, jqXHR) {
+            swal("All's good!", data.message, "success");
+            $('body').fadeOut(1300, redirectPage);
+        });//end of $updateCategoryHandler.done()
+
+        $updatePublishedHandler.error(function (data, textStatus, jqXHR) {
+            swal("Oh no!", data.message, "error");
+        });//end of $updateCategoryHandler.error()
+
+    }
+
     function restoreCat(inCatId) {
         var CatId = inCatId;
         var webFormData = new WebFormData(CatId);
@@ -260,7 +297,7 @@
     }
 
     function redirectPage() {
-        location.replace('/Categories/Index');
+        location.replace('/Products/Index');
     }// end of redirectPage() method (function)
 
     $('#deleteButton').on('click', function () {

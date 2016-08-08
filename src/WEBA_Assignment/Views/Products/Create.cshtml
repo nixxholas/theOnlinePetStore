@@ -584,7 +584,7 @@
                          function (event, data, previewId, index) {
                              var form = data.form, files = data.files, extra = data.extra,
                                  response = data.response, reader = data.reader;
-                             swal("Hurray!", data.response.message, "Success");
+                             swal("Hurray!", data.response.message, "success");
                          });
 
     // End of Product Image Element
@@ -793,11 +793,11 @@
         if (!$('#consumableContainer').hasClass('hidden')) { // if the product is a consumable
             // Iterate through those boxes and take their stuff to make a consumable object
             //Consumable(inTypicalAnalysis, inGuranteedAnalysis, inIngredients, inActiveIngredients, inInActiveIngredients)
-            var collectedTypicalAnalysis = json_quote(tinyMCE.get('TypicalAnalysisBox').getContent());
-            var collectedGuranteedAnalysis = json_quote(tinyMCE.get('GuranteedAnalysisBox').getContent());
-            var collectedIngredients = json_quote(tinyMCE.get('IngredientsBox').getContent());
-            var collectedActiveIngredients = json_quote(tinyMCE.get('ActiveIngredientsBox').getContent());
-            var collectedInActiveIngredients = json_quote(tinyMCE.get('InActiveIngredientsBox').getContent());
+            var collectedTypicalAnalysis = json_quote(tinyMCE.get('typicalAnalysisBox').getContent({ format: 'raw' }));
+            var collectedGuranteedAnalysis = json_quote(tinyMCE.get('guranteedAnalysisBox').getContent({ format: 'raw' }));
+            var collectedIngredients = json_quote(tinyMCE.get('ingredientsBox').getContent({ format: 'raw' }));
+            var collectedActiveIngredients = json_quote(tinyMCE.get('activeIngredientsBox').getContent({ format: 'raw' }));
+            var collectedInActiveIngredients = json_quote(tinyMCE.get('inActiveIngredientsBox').getContent({ format: 'raw' }));
 
             var collectedConsumable = new Consumable(collectedTypicalAnalysis, collectedGuranteedAnalysis, collectedIngredients, collectedActiveIngredients, collectedInActiveIngredients);
         } else {

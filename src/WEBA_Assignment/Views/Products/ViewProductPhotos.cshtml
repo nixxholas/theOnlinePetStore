@@ -222,8 +222,9 @@
     window.$productPhotoInputElement.on('filebatchuploadsuccess',
                          function (event, data, previewId, index) {
                              var form = data.form, files = data.files, response = data.response, reader = data.reader;
-                             $('body').fadeOut(50, redirectPage);
+                             console.dir(data);
                              swal("Hurray!", data.response.message, "Success");
+                             $('body').fadeOut(50, redirectPage);
                          });
 
     //----------------------------------------- Client-side Upload logic ---(End)----------------------

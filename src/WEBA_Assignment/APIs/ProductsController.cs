@@ -600,7 +600,61 @@ namespace WEBA_ASSIGNMENT.APIs
                 return BadRequest(httpFailRequestResultMessage);
             }//End of Try..Catch block
         }//End of SaveNewProductInformationInSession() method
-        
+
+        // PUT api/values/5
+        [HttpPut("ModifyPublicity/{id}")]
+        public IActionResult Put(int id)
+        {
+            string customMessage = "";
+
+            try
+            {
+                //Find the category Entity through the Categories Entity Set
+                //by calling the Single() method.
+                //I learnt Single() method from this online reference:
+                //http://geekswithblogs.net/BlackRabbitCoder/archive/2011/04/14/c.net-little-wonders-first-and-single---similar-yet-different.aspx
+                var foundProduct = Database.Products
+                                    .Single(item => item.ProdId == id);
+
+                if (foundProduct.Published == 1)
+                {
+                    foundProduct.Published = 0;
+                    customMessage = "Your product has been unpublished!";
+                } else
+                {
+                    foundProduct.Published = 1;
+                    customMessage = "Your product has been published!";
+                }
+
+                foundProduct.UpdatedAt = DateTime.Now;
+                foundProduct.UpdatedById = _userManager.GetUserId(User);
+
+                Database.Products.Update(foundProduct);
+
+                //Tell the database model to commit/persist the changes to the database, 
+                //I use the following command.
+                Database.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                
+            }//End of try .. catch block on saving data
+             //Construct a custom message for the client
+             //Create a success message anonymous object which has a 
+             //Message member variable (property)
+            var successRequestResultMessage = new
+            {
+                Message = customMessage
+            };
+
+            //Create a OkObjectResult class instance, httpOkResult.
+            //When creating the object, provide the previous message object into it.
+            OkObjectResult httpOkResult =
+                   new OkObjectResult(successRequestResultMessage);
+            //Send the OkObjectResult class object back to the client.
+            return httpOkResult;
+        }
+
         // PUT /api/Products/SaveProductUpdateInformationIntoDatabase
         [HttpPut("SaveProductUpdateInformationIntoDatabase/{id}")]
         public IActionResult SaveProductUpdateInformationIntoDatabase(int id, [FromBody]string value)

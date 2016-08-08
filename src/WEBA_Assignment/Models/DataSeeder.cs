@@ -3541,7 +3541,7 @@ namespace WEBA_ASSIGNMENT.Models
             // End of Purchase With Purchase Brand Category
 
             // ----------------------- PRODUCTS SEEDING -------------------------------- //
-            Product AEOLUSTD901HOSEDDRYER;
+            Product AEOLUSTD901HOSEDDRYER, AEOLUSTD900X;
 
             AEOLUSTD901HOSEDDRYER = new Product()
             {
@@ -3574,10 +3574,29 @@ namespace WEBA_ASSIGNMENT.Models
             };
             db.Products.Add(AEOLUSTD901HOSEDDRYER);
 
+            AEOLUSTD900X = new Product()
+            {
+                ProdName = "AEOLUS TD900X HERCULES DUAL MOTOR DRYER",
+                SavingsOverview = "",
+                Description = "<p><strong>SAVINGS OVERVIEW<br /></strong></p><table border = \"0\" width = \"35%\" cellspacing = \"0\" cellpadding = \"2\"><tbody><tr><td><strong> RRP </strong ></td ><td>$420.00 </td ></tr ><tr><td><strong> TOPS Price </strong ></td ><td>$400.00 </td></tr ><tr><td><span style = \"color: #ff0000;\" ><strong> SAVINGS </strong ></span></td ><td><span style = \"color: #ff0000;\" >< strong >$20.00 </strong ></span ></td ></tr ></tbody></table><p> &nbsp;</p >",
+                Brand = Aeolus,
+                ProductCategory = new List<ProductCategory>(),
+                Quantity = 90,
+                ThresholdInvertoryQuantity = 10,
+                Published = 0,
+                Specials = new List<ProductSpecials>(),
+                isConsumable = 0,
+                Metrics = new List<Metrics>(),
+                ProductPhotos = new List<ProductPhoto>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = randyUser.Id
+            };
+            db.Products.Add(AEOLUSTD900X);
+
             // ---------------------- END OF PRODUCTS SEEDING -------------------------- //
 
             // ---------------------- PRODUCT CATEGORY SEEDING ------------------------- //
-            ProductCategory AEOLUSHOSEDDRYERTOGROOMING;
+            ProductCategory AEOLUSHOSEDDRYERTOGROOMING, AEOLUSTD900XTOGROOMING;
 
             AEOLUSHOSEDDRYERTOGROOMING = new ProductCategory()
             {
@@ -3586,11 +3605,18 @@ namespace WEBA_ASSIGNMENT.Models
             };
             db.ProductCategory.Add(AEOLUSHOSEDDRYERTOGROOMING);
 
+            AEOLUSTD900XTOGROOMING = new ProductCategory()
+            {
+                ProdId = AEOLUSTD900X.ProdId,
+                CatId = Grooming.CatId
+            };
+            db.ProductCategory.Add(AEOLUSTD900XTOGROOMING);
+
             // ---------------------- END OF PRODUCT CATEGORY SEEDING ------------------ //
 
             // -------------------------- METRICS SEEDING ----------------------------- //
 
-            Metrics AEOLUSHOSEDDRYERMETRIC1;
+            Metrics AEOLUSHOSEDDRYERMETRIC1, AEOLUSTD900XMETRIC1;
 
             AEOLUSHOSEDDRYERMETRIC1 = new Metrics()
             {
@@ -3606,11 +3632,25 @@ namespace WEBA_ASSIGNMENT.Models
             };
             db.Metrics.Add(AEOLUSHOSEDDRYERMETRIC1);
 
+            AEOLUSTD900XMETRIC1 = new Metrics()
+            {
+                MetricAmount = 1,
+                MetricType = Unit.MetricSubType,
+                PMetricId = Unit.PMetricId,
+                Quantity = 90,
+                ProdId = AEOLUSTD900X.ProdId,
+                StatusId = Available.StatusId,
+                Status = Available,
+                Prices = new List<Price>(),
+                CreatedById = randyUser.Id
+            };
+            db.Metrics.Add(AEOLUSTD900XMETRIC1);
+
             // ------------------------- END OF METRICS SEEDING ----------------------- //
 
             // -------------------------- PRICE SEEDING ----------------------------- //
 
-            Price AEOLUSHOSEDDRYERPRICE1;
+            Price AEOLUSHOSEDDRYERPRICE1, AEOLUSTD900XPRICE1;
 
             AEOLUSHOSEDDRYERPRICE1 = new Price()
             {
@@ -3621,11 +3661,20 @@ namespace WEBA_ASSIGNMENT.Models
             };
             db.Prices.Add(AEOLUSHOSEDDRYERPRICE1);
 
+            AEOLUSTD900XPRICE1 = new Price()
+            {
+                MetricId = AEOLUSTD900XMETRIC1.MetricId,
+                RRP = Convert.ToDecimal(238.00),
+                Value = Convert.ToDecimal(238.00),
+                CreatedById = randyUser.Id
+            };
+            db.Prices.Add(AEOLUSTD900XPRICE1);
+
             // ------------------------- END OF PRICE SEEDING ----------------------- //
 
             // ---------------------- PRODUCT PHOTOS SEEING ---------------------------- //
 
-            ProductPhoto AEOLUSHOSEDDRYERPHOTO1;
+            ProductPhoto AEOLUSHOSEDDRYERPHOTO1, AEOLUSTD900XPHOTO1;
 
             AEOLUSHOSEDDRYERPHOTO1 = new ProductPhoto()
             {
@@ -3642,6 +3691,22 @@ namespace WEBA_ASSIGNMENT.Models
                 CreatedById = randyUser.Id
             };
             db.ProductPhotos.Add(AEOLUSHOSEDDRYERPHOTO1);
+
+            AEOLUSTD900XPHOTO1 = new ProductPhoto()
+            {
+                ProdId = AEOLUSTD900X.ProdId,
+                PublicCloudinaryId = "Products/o3lncji8yebnosbntb4v",
+                Format = "jpg",
+                Height = 490,
+                ImageSize = 96597,
+                SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1470667256/Products/o3lncji8yebnosbntb4v.jpg",
+                Url = "http://res.cloudinary.com/nixxholas/image/upload/v1470667256/Products/o3lncji8yebnosbntb4v.jpg",
+                Version = 1470667256,
+                Width = 490,
+                isPrimaryPhoto = 1,
+                CreatedById = randyUser.Id
+            };
+            db.ProductPhotos.Add(AEOLUSTD900XPHOTO1);
 
             // ---------------------- END OF PRODUCT PHOTOS SEEDING -------------------- //
 
