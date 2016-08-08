@@ -142,6 +142,41 @@ namespace WEBA_ASSIGNMENT.APIs
             return new JsonResult(productPhotosList);
         }
 
+        // GET ViewProductPhotos
+        // Takes in an integer as a CatId
+        [HttpGet("VPUC/{id}")]
+        public JsonResult ViewProductsUnderCategory(int id)
+        {
+            List<object> productList = new List<object>();
+
+            var foundProductCategory = Database.ProductCategory
+                .Where(prodCat => prodCat.CatId == id)
+                .Include(prodCat => prodCat.Product)
+                .Include(prodCat => prodCat.Product.Brand)
+                .Include(prodCat => prodCat.Product.CreatedBy)
+                .Include(prodCat => prodCat.Product.UpdatedBy);
+
+            foreach (var oneProductCategory in foundProductCategory)
+            {
+
+                productList.Add(new
+                {
+                    ProdId = oneProductCategory.ProdId,
+                    ProdName = oneProductCategory.Product.ProdName,
+                    BrandName = oneProductCategory.Product.Brand.BrandName,
+                    Description = oneProductCategory.Product.Description,
+                    TiQ = oneProductCategory.Product.ThresholdInvertoryQuantity,
+                    Quantity = oneProductCategory.Product.Quantity,
+                    Published = oneProductCategory.Product.Published,
+                    CreatedAt = oneProductCategory.Product.CreatedAt,
+                    CreatedBy = oneProductCategory.Product.CreatedBy.FullName,
+                    UpdatedAt = oneProductCategory.Product.UpdatedAt,
+                    UpdatedBy = oneProductCategory.Product.UpdatedBy.FullName
+                });
+            }//end of foreach loop which builds the productsList .
+            return new JsonResult(productList);
+        }
+
         // GET api/values/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)

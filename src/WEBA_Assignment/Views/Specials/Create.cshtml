@@ -3,7 +3,7 @@
         <div id="alertingBox" class="alert alert-danger hidden" role="alert"></div>
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="panel-title">Create Category Record</div>
+                <div class="panel-title">Create Specials Record</div>
                 <div class="btn-group pull-right">
 
                 </div>
@@ -11,14 +11,10 @@
             <div class="panel-body">
                 <form id="dataForm" role="form" class="form-horizontal">
                     <div class="form-group col-md-12">
-                        <label class="control-label  col-md-4" for="catNameInput">Category Name</label>
+                        <label class="control-label  col-md-4" for="specialsNameInput">Specials Name</label>
 
-                        <input type="text" id="catNameInput" class="form-control font-bold"
-                               maxlength="50" placeholder="Category Name" value="" />
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="control-label  col-md-4" for="visibilityInput">Visibility</label>
-                        <div id="visibilityRadioList"></div>
+                        <input type="text" id="specialsNameInput" class="form-control font-bold"
+                               maxlength="50" placeholder="Specials Name" value="" />
                     </div>
                     <div class="form-group col-md-12 hidden" id="startDateSegment">
                         <label class="control-label col-md-4" for="startDateInput">Start Date</label>
@@ -33,7 +29,7 @@
                         <div class="col-md-10">
                             <div class="pull-right">
                                 <input type="button" class="btn btn-primary" value="Save" id="saveButton" />
-                                <a class="btn btn-default" asp-action="Index" asp-controler="Categories">Cancel</a>
+                                <a class="btn btn-default" asp-action="Index" asp-controler="Specials">Cancel</a>
                             </div>
                         </div>
                     </div>

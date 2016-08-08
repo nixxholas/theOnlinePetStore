@@ -30,9 +30,5 @@ namespace WEBA_ASSIGNMENT.Controllers
         {
             return View();
         }
-        public IActionResult ProductsUnderCategory()
-        {
-            return View();
-        }
     }
 }

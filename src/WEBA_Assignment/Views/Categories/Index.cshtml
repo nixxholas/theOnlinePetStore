@@ -130,17 +130,21 @@
                 $rowElement.append($cellElement);
                 if (deletedAt == null) {
                     //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
-                    $hyperLinkElement = $('<a>Update</a>').attr('href', '/Categories/Update/' + CatId);
+                    $hyperLinkElement = $('<a>Update</a></br>').attr('href', '/Categories/Update/' + CatId);
                     $hyperLinkElement.addClass('btn btn-primary');
                     //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
-                    $hyperLinkElement2 = $('<a>Manage Brands</a>').attr('href', '/Brands/BrandsUnderCategory/' + CatId); // Placeholder
+                    $hyperLinkElement2 = $('<a>Manage Brands</a></br>').attr('href', '/Brands/BrandsUnderCategory/' + CatId); // Placeholder
                     $hyperLinkElement2.addClass('btn btn-primary inline');
+                    //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
+                    $hyperLinkElement3 = $('<a>Manage Products</a></br>').attr('href', '/Products/ProductsUnderCategory/' + CatId); // Placeholder
+                    $hyperLinkElement3.addClass('btn btn-primary inline');
                     //-----------------Using jQuery() to creating the 6th cell for the row----------------------
                     $cellElement = $('<td></td>');
                     //-----------------Add the previous created hyperlink element, $hyperLinkElement
                     //                 into the newly created 6th cell.
                     $cellElement.append($hyperLinkElement);
                     $cellElement.append($hyperLinkElement2);
+                    $cellElement.append($hyperLinkElement3);
                 } else {
                     //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
                     $hyperLinkElement3 = $('<a name="restore" id=' + CatId + ' onClick="restoreCat(' + CatId + ')">Restore Category</a>'); // Placeholder

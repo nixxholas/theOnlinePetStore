@@ -103,7 +103,7 @@
     function loadProductsData() {
         //Note: jQuery.ajax(..) is also often written is $.ajax(..)
         $loadProductsDataHandler = jQuery.ajax({
-            url: '/Api/Categories/VPUC/' + g_catId,
+            url: '/Api/Products/VPUC/' + g_catId,
             method: 'GET',
             dataType: 'json',
             cache: false,
@@ -111,20 +111,23 @@
         $loadProductsDataHandler.done(function (data, textStatus, jqXHR) {
             var productsList = data;
             console.dir(data);
-            var brandCategory;
-            var categories = '';
-            var brandId = '';
-            var brandName = '';
-            var noofProducts = '';
-            var createdAt = "";
-            var updatedAt = "";
+            var Product;
+            var ProdId = '';
+            var ProdName = '';
+            var BrandName = '';
+            var TIQ = '';
+            var Quantity = '';
+            var CreatedAt = "";
+            var CreatedBy = "";
+            var UpdatedAt = "";
+            var UpdatedBy = "";
             var $tableElement = null;
             var $cellElement = null;
             var $rowElement = null;
             //-------- Find the table element -----------
             //I am using the $tableElement variable
             //to represent the found HTML element which has a matching id of brandTableBody
-            $tableBodyElement = $('#brandsTableBody');
+            $tableBodyElement = $('#productsTableBody');
 
             //I want to build rows and cells (using tr and td HTML elements) so that
             //I can display brand name, noofProducts, created at, updated at information
@@ -132,53 +135,54 @@
             //$tableBodyElement variable to represent (reference) the table element.
 
             //-------- Begin creating <tr> and <td> HTML element ------
-            for (index = 0; index < brandsList.length; index++) {
+            for (index = 0; index < productsList.length; index++) {
                 //Set this brand variable to reference a brand object
                 //inside the brandList Array.
-                brand = brandsList[index];
+                Product = productsList[index];
+
                 //Copy out the brand information
-                brandId = brand.brandId;
-                brandName = brand.brandName;
-                noofProducts = brand.noOfProducts;
-                createdAt = new Date(brand.createdAt).toDateString();
-                updatedAt = new Date(brand.updatedAt).toDateString();
-
-                // For each Brand Category in the Brand Category Table
-                for (i = 0; i < brandCategories.length; i++) {
-                    // If the Brand Id is equivalent to the one we have
-                    if (brandCategories[i].brandId == brandId) {
-                        // Add it into the column categories
-                        categories += brandCategories[i].catName;
-                        categories += ", ";
-                    }
-                }
-
-                // The loop causes the last two characters to be ", ". Let's remove it.
-                categories = categories.substring(0, categories.length - 2)
+                ProdId = Product.prodId;
+                ProdName = Product.prodName;
+                BrandName = Product.brandName;
+                TIQ = Product.tiQ;
+                Quantity = Product.quantity;
+                CreatedAt = new Date(Product.createdAt).toDateString();
+                CreatedBy = Product.createdBy;
+                UpdatedAt = new Date(Product.updatedAt).toDateString();
+                UpdatedBy = Product.updatedBy;
 
                 //Create new HTML <tr> element.
                 //At the same time let the $rowElement variable to represent it.
-                $rowElement = $('<tr id="row' + brandId + '"></tr>');
-                //Create the 1st cell element which display Brand Id
-                $cellElement = $('<td id="brandIdis' + brandId + '">' + brandId + '</td>');
+                $rowElement = $('<tr id="row' + ProdId + '"></tr>');
+                //Create the 1st cell element which display Product Id
+                $cellElement = $('<td id="prodId' + ProdId + '">' + ProdId + '</td>');
                 $rowElement.append($cellElement);
-                //Create the 2nd cell element which display brandName
-                $cellElement = $('<td></td>', { text: brandName });
+                //Create the 2nd cell element which display Product Name
+                $cellElement = $('<td></td>', { text: ProdName });
                 $rowElement.append($cellElement);
-                //Create the 3rd cell element which display the categories
-                $cellElement = $('<td></td>', { text: categories });
+                //Create the 3rd cell element which display the Brand Name
+                $cellElement = $('<td></td>', { text: BrandName });
                 $rowElement.append($cellElement);
-                //Create the 3rd cell element which display noofProducts
-                $cellElement = $('<td></td>', { text: noofProducts });
+                //Create the 3rd cell element which display TIQ
+                $cellElement = $('<td></td>', { text: TIQ });
                 $rowElement.append($cellElement);
-                //Create the 4th cell element which display created at information
-                $cellElement = $('<td></td>', { text: createdAt });
+                //Create the 4th cell element which display Quantity
+                $cellElement = $('<td></td>', { text: Quantity });
                 $rowElement.append($cellElement);
-                //Create the 5th cell element which display updated at information
-                $cellElement = $('<td></td>', { text: updatedAt });
+                //Create the 5th cell element which display created at information
+                $cellElement = $('<td></td>', { text: CreatedAt });
+                $rowElement.append($cellElement);
+                //Create the 6th cell element which display created by information
+                $cellElement = $('<td></td>', { text: CreatedBy });
+                $rowElement.append($cellElement);
+                //Create the 7th cell element which display updated at information
+                $cellElement = $('<td></td>', { text: UpdatedAt });
+                $rowElement.append($cellElement);
+                //Create the 8th cell element which display updated by information
+                $cellElement = $('<td></td>', { text: UpdatedBy });
                 $rowElement.append($cellElement);
                 //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
-                $hyperLinkElement = $('<a>Edit Brand</a>').attr('href', '/Brands/Update/' + brandId);
+                $hyperLinkElement = $('<a>Edit Product</a>').attr('href', '/Products/Update/' + ProdId);
                 $hyperLinkElement.addClass('btn btn-primary');
                 //-----------------Using jQuery() to creating the 6th cell for the row----------------------
                 $cellElement = $('<td></td>');
@@ -197,7 +201,7 @@
         }//end of JavaScript anonymous function
 
          )//end of the done() method;
-        $loadBrandsDataHandler.fail(function (data, textStatus, jqXHR) {
+        $loadProductsDataHandler.fail(function (data, textStatus, jqXHR) {
             swal("Oh no!", data.responseJSON.message, "error");
         })//end of $loadBrandDataHandler.fail()
     }
