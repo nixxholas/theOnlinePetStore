@@ -1,0 +1,245 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <div id="titleText" class="panel-title">
+                    <!-- Dynamic Title -->
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="dataTable" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Product Id</th>
+                                    <th>Product Name</th>
+                                    <th>Brand</th>
+                                    <th>Threshold Inventory Quantity</th>
+                                    <th>Quantity</th>
+                                    <th>Created At</th>
+                                    <th>Created By</th>
+                                    <th>Updated At</th>
+                                    <th>Updated By</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTableBody"></tbody>
+                        </table>
+
+                        <div class="btn-group pull-left">
+                            <a class="btn btn-default" asp-action="Index" asp-controller="Categories">Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- end of div element with class="panel-body" -->
+        </div><!-- end of div element with class="panel" -->
+    </div> <!-- end of div element with  class="col-md-offset-2  col-md-8"-->
+</div><!-- end of div element with class="row"-->
+
+
+<script>
+    var brandCategories;
+    var textTitle = document.getElementById('titleText');
+    var g_catId = getProdIdFromAddressBar();
+    function getProdIdFromAddressBar() {
+        //Get CatId from the url string in the browser's address bar
+        var urlArray = window.location.href.split('/');
+        var catId = urlArray[urlArray.length - 1];
+        return catId;
+    };
+
+    // Pulls Data from the selected category for use.
+    $loadCategoryHandler = jQuery.ajax({
+        type: 'GET',
+        url: '/API/Categories/' + g_catId,
+        dataType: 'json',
+        cache: false,
+    })
+    $loadCategoryHandler.done(function (data, textStatus, jqXHR) {
+        //After inspecting the data object with the console.log
+        //I have clear picture of the structure and used
+        //the following variable to reference(represent) the data variable.
+        var category = data;
+        // Pull the Category's Data
+        var catId = category.catId;
+        var catName = category.catName;
+        var visibilityId = category.visibilityId;
+        var startDate = category.startDate; // Format: yyyy-mm-dd
+        var endDate = category.endDate;
+
+        textTitle.innerHTML = 'PRODUCTS UNDER ' + catName;
+    })//end of the done() method;
+    $loadCategoryHandler.fail(function (data, textStatus, jqXHR) {
+        swal("Oh no!", data.responseJSON.message, "error");
+    });//end of $loadCategoryHandler.error()
+    // End of Pulling the category specific data
+
+    // Loads all the BrandCategories
+    $loadProductCategoryDataHandler = jQuery.ajax({
+        contentType: 'application/json',
+        method: 'get',
+        url: 'http://localhost:5008/API/ProductCategory',
+    })
+    $loadProductCategoryDataHandler.done(function (data, textStatus, jqXHR) {
+        //// Like the previous cshtml, let's define a variable for
+        //// the courseIdInput box
+        //var $visibilityRadioListElement = $('#visibilityRadioList');
+        //// We then initialize the element container
+        //// for each element
+        var parentElement = $("#productsTableBody");
+        var $categoryElement = null;
+        var brandId = '';
+
+        brandCategories = data;
+
+        loadProductsData();
+    }//end of JavaScript anonymous function
+          )//end of the done() method;
+    $loadProductCategoryDataHandler.fail(function (data, textStatus, jqXHR) {
+        swal("Oh no!", data.responseJSON.message, "error");
+    })//end of $loadBrandCategoryDataHandler.fail()
+
+    function loadProductsData() {
+        //Note: jQuery.ajax(..) is also often written is $.ajax(..)
+        $loadProductsDataHandler = jQuery.ajax({
+            url: '/Api/Categories/VPUC/' + g_catId,
+            method: 'GET',
+            dataType: 'json',
+            cache: false,
+        })
+        $loadProductsDataHandler.done(function (data, textStatus, jqXHR) {
+            var productsList = data;
+            console.dir(data);
+            var brandCategory;
+            var categories = '';
+            var brandId = '';
+            var brandName = '';
+            var noofProducts = '';
+            var createdAt = "";
+            var updatedAt = "";
+            var $tableElement = null;
+            var $cellElement = null;
+            var $rowElement = null;
+            //-------- Find the table element -----------
+            //I am using the $tableElement variable
+            //to represent the found HTML element which has a matching id of brandTableBody
+            $tableBodyElement = $('#brandsTableBody');
+
+            //I want to build rows and cells (using tr and td HTML elements) so that
+            //I can display brand name, noofProducts, created at, updated at information
+            //within the HTML table element, brandTableBody. Recall that, I have already asked the
+            //$tableBodyElement variable to represent (reference) the table element.
+
+            //-------- Begin creating <tr> and <td> HTML element ------
+            for (index = 0; index < brandsList.length; index++) {
+                //Set this brand variable to reference a brand object
+                //inside the brandList Array.
+                brand = brandsList[index];
+                //Copy out the brand information
+                brandId = brand.brandId;
+                brandName = brand.brandName;
+                noofProducts = brand.noOfProducts;
+                createdAt = new Date(brand.createdAt).toDateString();
+                updatedAt = new Date(brand.updatedAt).toDateString();
+
+                // For each Brand Category in the Brand Category Table
+                for (i = 0; i < brandCategories.length; i++) {
+                    // If the Brand Id is equivalent to the one we have
+                    if (brandCategories[i].brandId == brandId) {
+                        // Add it into the column categories
+                        categories += brandCategories[i].catName;
+                        categories += ", ";
+                    }
+                }
+
+                // The loop causes the last two characters to be ", ". Let's remove it.
+                categories = categories.substring(0, categories.length - 2)
+
+                //Create new HTML <tr> element.
+                //At the same time let the $rowElement variable to represent it.
+                $rowElement = $('<tr id="row' + brandId + '"></tr>');
+                //Create the 1st cell element which display Brand Id
+                $cellElement = $('<td id="brandIdis' + brandId + '">' + brandId + '</td>');
+                $rowElement.append($cellElement);
+                //Create the 2nd cell element which display brandName
+                $cellElement = $('<td></td>', { text: brandName });
+                $rowElement.append($cellElement);
+                //Create the 3rd cell element which display the categories
+                $cellElement = $('<td></td>', { text: categories });
+                $rowElement.append($cellElement);
+                //Create the 3rd cell element which display noofProducts
+                $cellElement = $('<td></td>', { text: noofProducts });
+                $rowElement.append($cellElement);
+                //Create the 4th cell element which display created at information
+                $cellElement = $('<td></td>', { text: createdAt });
+                $rowElement.append($cellElement);
+                //Create the 5th cell element which display updated at information
+                $cellElement = $('<td></td>', { text: updatedAt });
+                $rowElement.append($cellElement);
+                //---------------- Using jQuery() to create the hyperlink element using the <a></a> --------
+                $hyperLinkElement = $('<a>Edit Brand</a>').attr('href', '/Brands/Update/' + brandId);
+                $hyperLinkElement.addClass('btn btn-primary');
+                //-----------------Using jQuery() to creating the 6th cell for the row----------------------
+                $cellElement = $('<td></td>');
+                //-----------------Add the previous created hyperlink element, $hyperLinkElement
+                //                 into the newly created 6th cell.
+                $cellElement.append($hyperLinkElement);
+
+                //---------------Add the 6th cell into the row represented by the $rowElement
+                $rowElement.append($cellElement);
+                //Insert the $rowElement into the table element represented by $tableElement.
+                $tableBodyElement.append($rowElement);
+                //----End of creating one row to display one brand by using <tr> and <td> HTML element ---
+                //       Proceed to the next brand object in the brandList Array.
+                categories = '';
+            }//end of for loop.
+        }//end of JavaScript anonymous function
+
+         )//end of the done() method;
+        $loadBrandsDataHandler.fail(function (data, textStatus, jqXHR) {
+            swal("Oh no!", data.responseJSON.message, "error");
+        })//end of $loadBrandDataHandler.fail()
+    }
+
+    function WebFormData(inCatId) {
+        this.CatId = inCatId;
+    }
+
+    function restoreCat(inCatId) {
+        var CatId = inCatId;
+        var webFormData = new WebFormData(CatId);
+
+        //Convert the webFromData into a JSON string
+        var webFormDataInString = JSON.stringify(webFormData);
+
+        $updateCategoryHandler = jQuery.ajax({
+            type: 'PUT',
+            url: '/API/Categories/Restore/' + CatId,
+            dataType: 'json',
+            contentType: 'application/json;',
+            data: "'" + webFormDataInString + "'"
+        })//end of jQuery.ajax() call
+        $updateCategoryHandler.done(function (data, textStatus, jqXHR) {
+            swal({
+                title: "Hooray! The brand is restored!",
+                text: "I will close in 2 seconds.",
+                timer: 2000,
+                type: "success",
+                showConfirmButton: false
+            },
+            function () {
+                $('body').fadeOut(2000, redirectPage);
+            });
+        });//end of $updateCategoryHandler.done()
+
+        $updateCategoryHandler.error(function (data, textStatus, jqXHR) {
+            swal("Oh no!", data.responseJSON.message, "error");
+        });//end of $updateCategoryHandler.error()
+    }
+
+    function redirectPage() {
+        location.replace('/Categories/Index');
+    }// end of redirectPage() method (function)
+
+</script>

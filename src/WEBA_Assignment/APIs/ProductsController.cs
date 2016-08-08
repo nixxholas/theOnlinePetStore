@@ -142,7 +142,6 @@ namespace WEBA_ASSIGNMENT.APIs
             return new JsonResult(productPhotosList);
         }
 
-
         // GET api/values/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
