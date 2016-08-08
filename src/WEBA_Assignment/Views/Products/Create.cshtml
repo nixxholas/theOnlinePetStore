@@ -282,6 +282,7 @@
         dataType: 'json',
         displayField: 'metricSubType',
         valueField: 'metricSubType',
+        value: ['Unit'],
         groupBy: 'metricType',
         renderer: function (data) {
             return '<div style="padding: 5px;">' +
@@ -293,6 +294,7 @@
             '</div><div style="clear:both;"></div>'; // make sure we have closed our dom stuff
         }
     });
+    
 
     // Status Magic Suggest Initializer
     $('.statusSuggest').magicSuggest({

@@ -150,7 +150,7 @@ namespace WEBA_ASSIGNMENT.Models
             PresetMetric Millimetre, Centimetre, Metre, Kilometre,
                 Pounds, Tonnes, Milligrams, Grams, Kilograms, Millilitres,
                 Litres, Small, Medium, Large, XLarge, XXLarge, 
-                XXXLarge, XXXXLarge;
+                XXXLarge, XXXXLarge, Unit;
 
             Millimetre = new PresetMetric()
             {
@@ -239,6 +239,14 @@ namespace WEBA_ASSIGNMENT.Models
                 MetricCharacter = "l"
             };
             db.PresetMetrics.Add(Litres);
+
+            Unit = new PresetMetric()
+            {
+                MetricType = "Generic",
+                MetricSubType = "Unit",
+                MetricCharacter = "Unit"
+            };
+            db.PresetMetrics.Add(Unit);
 
             Small = new PresetMetric()
             {
@@ -3532,6 +3540,110 @@ namespace WEBA_ASSIGNMENT.Models
 
             // End of Purchase With Purchase Brand Category
 
+            // ----------------------- PRODUCTS SEEDING -------------------------------- //
+            Product AEOLUSTD901HOSEDDRYER;
+
+            AEOLUSTD901HOSEDDRYER = new Product()
+            {
+                ProdName = "AEOLUS TD901 HOSED DRYER",
+                SavingsOverview = "",
+                Description = "<p><strong>DESCRIPTION</strong></p>" +
+                "< hr />" +
+                "< p > &bull; Features & nbsp;: Variable wind speed control with heating option </ p >" +
+                    "< p > &bull; Air speed : 38m / s - 48m / s </ p >" +
+                       "< p > &bull; Power: 1600W </ p >" +
+                         "< p > &bull; Heat: approx 45 & deg; C - 65 & deg; C </ p >" +
+                                 "< p > &bull; Powerful, high velocity dryer delivers a high volume of warm air to blast water from coats </ p >" +
+                    "< p > &bull; Two - stage filtration and solid state variable speed controls </ p >" +
+                         "< p > &bull; Weighing just approximately 5 kg </ p >" +
+                            "< p > &bull; Puncture - resistant, triple reinforced flexible hose with option nozzle </ p >" +
+                                 "< p > &bull; Constructed of rugged, durable steel with non-skid tabs </ p >" +
+                                    "< p > &bull; Dual mounted legs allow both vertical and horizontal use </ p >" +
+                                       "< p > &bull; Washable and easy replace filter </ p > ",
+                Brand = Aeolus,
+                ProductCategory = new List<ProductCategory>(),
+                Quantity = 50,
+                ThresholdInvertoryQuantity = 25,
+                Published = 1,
+                Specials = new List<ProductSpecials>(),
+                isConsumable = 0,
+                Metrics = new List<Metrics>(),
+                ProductPhotos = new List<ProductPhoto>(),
+                CreatedById = randyUser.Id,
+                UpdatedById = randyUser.Id
+            };
+            db.Products.Add(AEOLUSTD901HOSEDDRYER);
+
+            // ---------------------- END OF PRODUCTS SEEDING -------------------------- //
+
+            // ---------------------- PRODUCT CATEGORY SEEDING ------------------------- //
+            ProductCategory AEOLUSHOSEDDRYERTOGROOMING;
+
+            AEOLUSHOSEDDRYERTOGROOMING = new ProductCategory()
+            {
+                ProdId = AEOLUSTD901HOSEDDRYER.ProdId,
+                CatId = Grooming.CatId
+            };
+            db.ProductCategory.Add(AEOLUSHOSEDDRYERTOGROOMING);
+
+            // ---------------------- END OF PRODUCT CATEGORY SEEDING ------------------ //
+
+            // -------------------------- METRICS SEEDING ----------------------------- //
+
+            Metrics AEOLUSHOSEDDRYERMETRIC1;
+
+            AEOLUSHOSEDDRYERMETRIC1 = new Metrics()
+            {
+                MetricAmount = 1,
+                MetricType = Unit.MetricSubType,
+                PMetricId = Unit.PMetricId,
+                Quantity = 50,
+                ProdId = AEOLUSTD901HOSEDDRYER.ProdId,
+                StatusId = Available.StatusId,
+                Status = Available,
+                Prices = new List<Price>(),
+                CreatedById = randyUser.Id
+            };
+            db.Metrics.Add(AEOLUSHOSEDDRYERMETRIC1);
+
+            // ------------------------- END OF METRICS SEEDING ----------------------- //
+
+            // -------------------------- PRICE SEEDING ----------------------------- //
+
+            Price AEOLUSHOSEDDRYERPRICE1;
+
+            AEOLUSHOSEDDRYERPRICE1 = new Price()
+            {
+                MetricId = AEOLUSHOSEDDRYERMETRIC1.MetricId,
+                RRP = Convert.ToDecimal(238.00),
+                Value = Convert.ToDecimal(238.00),
+                CreatedById = randyUser.Id
+            };
+            db.Prices.Add(AEOLUSHOSEDDRYERPRICE1);
+
+            // ------------------------- END OF PRICE SEEDING ----------------------- //
+
+            // ---------------------- PRODUCT PHOTOS SEEING ---------------------------- //
+
+            ProductPhoto AEOLUSHOSEDDRYERPHOTO1;
+
+            AEOLUSHOSEDDRYERPHOTO1 = new ProductPhoto()
+            {
+                ProdId = AEOLUSTD901HOSEDDRYER.ProdId,
+                PublicCloudinaryId = "Products/lpqew6uabr3axhxkjrvp",
+                Format = "jpg",
+                Height = 490,
+                ImageSize = 45260,
+                SecureUrl = "https://res.cloudinary.com/nixxholas/image/upload/v1470649649/Products/lpqew6uabr3axhxkjrvp.jpg",
+                Url = "http://res.cloudinary.com/nixxholas/image/upload/v1470649649/Products/lpqew6uabr3axhxkjrvp.jpg",
+                Version = 1470649649,
+                Width = 490,
+                isPrimaryPhoto = 1,
+                CreatedById = randyUser.Id
+            };
+            db.ProductPhotos.Add(AEOLUSHOSEDDRYERPHOTO1);
+
+            // ---------------------- END OF PRODUCT PHOTOS SEEDING -------------------- //
 
             db.SaveChanges();
 

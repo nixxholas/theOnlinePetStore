@@ -62,7 +62,8 @@ namespace WEBA_ASSIGNMENT.APIs
             .Include(eachBrandEntity => eachBrandEntity.BrandCategory)
             // Prepare for Products counting
             .Include(eachBrandEntity => eachBrandEntity.Products)
-            .Include(eachBrandEntity => eachBrandEntity.BrandPhoto).AsNoTracking();
+            .Include(eachBrandEntity => eachBrandEntity.BrandPhoto)
+            .OrderBy(eachBrandEntity => eachBrandEntity.BrandName).AsNoTracking();
 
             //After obtaining all the Brand entity rows (records) from the database,
             //the brandss variable will become an container holding these 
