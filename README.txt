@@ -1,4 +1,7 @@
-How to properly port your ASP .NET 5 RC 1 Project to ASP Core
+# The Online Pet Store Administration System
+### Built by a noob, for noobs.
+
+##How to properly port your ASP .NET 5 RC 1 Project to ASP Core
 
 1. Make sure you copy the whole project.json I have.
 
@@ -30,7 +33,7 @@ Set the SDK version to "1.0.0-preview1-002702"
 
 === Once you're done with everything till here, you need to replace LOTS of imports from your various classes. ===
 
-Youíre going to want to replace the namespaces, in factÖIíd just do a search and replace from ìusing Microsoft.AspNet.î to ìusing Microsoft.AspNetCore.î. 
+You‚Äôre going to want to replace the namespaces, in fact‚Ä¶I‚Äôd just do a search and replace from ‚Äúusing Microsoft.AspNet.‚Äù to ‚Äúusing Microsoft.AspNetCore.‚Äù. 
 
 There will be other namespaces that needs to be changed, but on the whole, adding Core will solve many problems. For example:
 
@@ -38,7 +41,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-Youíll find that other systems need renaming with Core but the main ones (Entity Framework and Identity) are covered next.
+You‚Äôll find that other systems need renaming with Core but the main ones (Entity Framework and Identity) are covered next.
 
 You'll want to apply the same think to
 
