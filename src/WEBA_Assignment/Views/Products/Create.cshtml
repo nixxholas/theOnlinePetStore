@@ -130,30 +130,30 @@
 
                                 <div class="form-group col-md-12 hidden" id="consumableContainer" name="consumableContainer">
                                     <!--<label class="control-label col-md-2" for="descBox">Description</label>-->
-                                    <label class="col-md-push-4 control-label left" for="typicalAnalysisBox">Typical Analysis</label>
+                                    <label class="col-md-push-4 control-label left" for="TypicalAnalysisEditor">Typical Analysis</label>
                                     </br>
                                     <div class="form-group col-md-12">
-                                        <textarea class="tinymceStart" name="typicalAnalysisBox" id="typicalAnalysisBox"></textarea>
+                                        <textarea class="tinymceStart" name="TypicalAnalysisEditor" id="TypicalAnalysisEditor"></textarea>
                                     </div>
-                                    <label class="col-md-push-4 control-label left" for="guranteedAnalysisBox">Guranteed Analysis</label>
+                                    <label class="col-md-push-4 control-label left" for="GuranteedAnalysisEditor">Guranteed Analysis</label>
                                     </br>
                                     <div class="form-group col-md-12">
-                                        <textarea class="tinymceStart" name="guranteedAnalysisBox" id="guranteedAnalysisBox"></textarea>
+                                        <textarea class="tinymceStart" name="GuranteedAnalysisEditor" id="GuranteedAnalysisEditor"></textarea>
                                     </div>
-                                    <label class="col-md-push-4 control-label left" for="ingredientsBox">Ingredients</label>
+                                    <label class="col-md-push-4 control-label left" for="IngredientsEditor">Ingredients</label>
                                     </br>
                                     <div class="form-group col-md-12">
-                                        <textarea class="tinymceStart" name="ingredientsBox" id="ingredientsBox"></textarea>
+                                        <textarea class="tinymceStart" name="IngredientsEditor" id="IngredientsEditor"></textarea>
                                     </div>
-                                    <label class="col-md-push-4 control-label left" for="activeIngredientsBox">Active Ingredients</label>
+                                    <label class="col-md-push-4 control-label left" for="ActiveIngredientsEditor">Active Ingredients</label>
                                     </br>
                                     <div class="form-group col-md-12">
-                                        <textarea class="tinymceStart" name="activeIngredientsBox" id="activeIngredientsBox"></textarea>
+                                        <textarea class="tinymceStart" name="ActiveIngredientsEditor" id="ActiveIngredientsEditor"></textarea>
                                     </div>
-                                    <label class="col-md-push-4 control-label left" for="inActiveIngredientsBox">In-Active Ingredients</label>
+                                    <label class="col-md-push-4 control-label left" for="InActiveIngredientsEditor">In-Active Ingredients</label>
                                     </br>
                                     <div class="form-group col-md-12">
-                                        <textarea class="tinymceStart" name="inActiveIngredientsBox" id="inActiveIngredientsBox"></textarea>
+                                        <textarea class="tinymceStart" name="InActiveIngredientsEditor" id="InActiveIngredientsEditor"></textarea>
                                     </div>
                                 </div>
 
@@ -793,11 +793,11 @@
         if (!$('#consumableContainer').hasClass('hidden')) { // if the product is a consumable
             // Iterate through those boxes and take their stuff to make a consumable object
             //Consumable(inTypicalAnalysis, inGuranteedAnalysis, inIngredients, inActiveIngredients, inInActiveIngredients)
-            var collectedTypicalAnalysis = json_quote(tinyMCE.get('typicalAnalysisBox').getContent({ format: 'raw' }));
-            var collectedGuranteedAnalysis = json_quote(tinyMCE.get('guranteedAnalysisBox').getContent({ format: 'raw' }));
-            var collectedIngredients = json_quote(tinyMCE.get('ingredientsBox').getContent({ format: 'raw' }));
-            var collectedActiveIngredients = json_quote(tinyMCE.get('activeIngredientsBox').getContent({ format: 'raw' }));
-            var collectedInActiveIngredients = json_quote(tinyMCE.get('inActiveIngredientsBox').getContent({ format: 'raw' }));
+            var collectedTypicalAnalysis = json_quote(tinyMCE.get('TypicalAnalysisEditor').getContent());
+            var collectedGuranteedAnalysis = json_quote(tinyMCE.get('GuranteedAnalysisEditor').getContent());
+            var collectedIngredients = json_quote(tinyMCE.get('IngredientsEditor').getContent());
+            var collectedActiveIngredients = json_quote(tinyMCE.get('ActiveIngredientsEditor').getContent());
+            var collectedInActiveIngredients = json_quote(tinyMCE.get('InActiveIngredientsEditor').getContent());
 
             var collectedConsumable = new Consumable(collectedTypicalAnalysis, collectedGuranteedAnalysis, collectedIngredients, collectedActiveIngredients, collectedInActiveIngredients);
         } else {
